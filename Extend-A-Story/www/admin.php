@@ -1183,7 +1183,11 @@ http://www.sir-toby.com/extend-a-story/
 ?>
 <A HREF="admin.php?command=listOrphans">List Orphaned Episodes</A><BR>
 <A HREF="admin.php?command=listDeadEnds">List Dead Ends</A><BR>
-<A HREF="admin.php?command=listRecentEdits">List Recent Edits</A><P>
+<A HREF="admin.php?command=listRecentEdits">List Recent Edits</A><BR>
+<FORM METHOD="get" ACTION="list-edits.php">
+View edits for episode: <INPUT TYPE="text" NAME="episode"> <INPUT TYPE="submit" VALUE="Go">
+</FORM>
+<P>
 <?php
 
   }
