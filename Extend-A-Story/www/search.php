@@ -36,7 +36,7 @@ http://www.sir-toby.com/extend-a-story/
     connectToDatabase( $error, $fatal );
 
   if ( empty( $error ) )
-    $sessionID = getSessionID( $error, $fatal );
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
 
   if ( empty( $error ) )
   {
@@ -73,7 +73,7 @@ The search is <B>NOT</B> case sensitive.
 
 </CENTER>
 
-<FORM ACTION="results.php" METHOD="POST">
+<FORM ACTION="results.php" METHOD="post">
 Select Search Method
 <SELECT NAME="method">
 <OPTION VALUE="title">Episode Title</OPTION>
@@ -86,21 +86,21 @@ Search Text :
 <INPUT TYPE="SUBMIT" VALUE="Search">
 </FORM>
 <P>
-<FORM ACTION="results.php" METHOD="POST">
+<FORM ACTION="results.php" METHOD="post">
 <INPUT TYPE="HIDDEN" NAME="method" VALUE="extendable">
 List Extendable Episodes
 <INPUT TYPE="SUBMIT" VALUE="Search">
 </FORM>
 <P>
-<FORM ACTION="results.php" METHOD="POST">
+<FORM ACTION="results.php" METHOD="post">
 <INPUT TYPE="HIDDEN" NAME="method" VALUE="linkable">
 List Linkable Episodes
 <INPUT TYPE="SUBMIT" VALUE="Search">
 </FORM>
 <P>
-<FORM ACTION="results.php" METHOD="POST">
+<FORM ACTION="results.php" METHOD="post">
 <INPUT TYPE="HIDDEN" NAME="method" VALUE="days">
-Search for new episodes in last
+Search for episodes created or edited within the last
 <INPUT TYPE="TEXT" NAME="days" SIZE="2" MAXLENGTH="2">
 days.
 <INPUT TYPE="SUBMIT" VALUE="Search">
