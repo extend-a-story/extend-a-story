@@ -12,7 +12,7 @@ with just one story:
 - Take the contents of the www directory and place them in a directory
   accessible to your web server.
 
-- Modify db.inc to contain the relevant login information for the database
+- Modify db.php to contain the relevant login information for the database
   you created.
 
 - Point your browser to <story root>/admin.php and login as the
@@ -69,7 +69,7 @@ with just one story:
 
   - search.php      : Allows various ways to search for episodes. If you want
                       to remove this functionality, be sure to delete
-                      results.php' as well.
+                      'results.php' as well.
 
   - story-tree.php  : Provides a listing of which episodes are available at
                       various levels of depth within the story.
