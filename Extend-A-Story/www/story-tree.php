@@ -31,6 +31,13 @@ http://www.sir-toby.com/extend-a-story/
   $error = "";
   $fatal = false;
 
+  $episode = $_GET[ "episode" ];
+
+  $episode = ( int ) $episode;
+
+  if ( $episode == 0 )
+    $episode = 1;
+
   // Connect to the database.
   if ( empty( $error ) )
     connectToDatabase( $error, $fatal );
@@ -67,7 +74,7 @@ http://www.sir-toby.com/extend-a-story/
 <?php
 
   $curLevel    = 0;
-  $curEpisodes = array( 1 );
+  $curEpisodes = array( $episode );
 
   while ( count( $curEpisodes ) > 0 )
   {
@@ -145,7 +152,10 @@ http://www.sir-toby.com/extend-a-story/
 
 ?>
   <TR>
-    <TD><A HREF="read.php?episode=<?php echo( $episode ); ?>"><?php echo( $episode ); ?> : <?php echo( $title ); ?></A></TD>
+    <TD>
+<A HREF="story-tree.php?episode=<?php echo( $episode ); ?>">View Tree</A> -
+<A HREF="read.php?episode=<?php echo( $episode ); ?>"><?php echo( $episode ); ?> : <?php echo( $title ); ?></A>
+    </TD>
     <TD><?php echo( $children ); ?></TD>
     <TD><A HREF="read.php?episode=<?php echo( $parent ); ?>"><?php echo( $parent ); ?></A></TD>
   </TR>
