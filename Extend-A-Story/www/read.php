@@ -161,6 +161,22 @@ http://www.sir-toby.com/extend-a-story/
       $minutes  = $diff / 60;
       $minutes  = ( int ) $minutes;
       $timeout  = 60 - $minutes;
+
+      if ( ( $status == 1 ) && ( $minutes > 300 ) )
+      {
+        $authorSessionID = 0;
+        $status = 0;
+
+        $result = mysql_query( "update Episode set " .
+                               "AuthorSessionID = 0, Status = 0, " .
+                               "LockDate = '-', LockKey = 0 " .
+                               "where EpisodeID = " . $episode );
+        if ( ! $result )
+        {
+          $error .= "Automatic unlock attempt failed.<BR>";
+          $fatal = true;
+        }
+      }
     }
   }
 
@@ -311,11 +327,15 @@ yet, and episode creation is currently disabled.
   <TR>
     <TD>
 This episode has not been created yet. If you want, you can create it now.
-If you do not wish to create it now, please select cancel.
+If you do not wish to create it now, you may go back to the previous episode.
 <P>
-<A HREF="create.php?episode=<?php echo( $episode ); ?>&command=Lock">Create this episode!</A>
+<FORM ACTION="create.php" METHOD="post">
+<INPUT TYPE="hidden" NAME="episode" VALUE="<?php echo( $episode ); ?>">
+<INPUT TYPE="hidden" NAME="command" VALUE="Lock">
+<INPUT TYPE="submit" VALUE="Create"> - Create this episode!
+</FORM>
 <P>
-<A HREF="read.php?episode=<?php echo( $parent ); ?>">Cancel</A> - Do <B>not</B> create this episode.
+<A HREF="read.php?episode=<?php echo( $parent ); ?>">Go Back</A> - Do <B>not</B> create this episode.
     </TD>
   </TR>
 </TABLE>
