@@ -31,7 +31,9 @@ Point your browser to <story root>/admin.php and login as the administrator:
 !!! CHANGE THE PASSWORD OF THE ADMIN ACCOUNT !!!
 
 Click on the 'Configure Story Settings' link and change the story
-configuration to suit your site. There is one new setting to configure:
+configuration to suit your site. If you disabled episode creation prior to
+upgrading the database, be sure to enable episode creation here via the
+'Is Writeable' setting. There is also one new setting to configure:
 
   - Max Edit Days    : The maximum number of days that an author will be
                        allowed to edit an episode after they have created it.
