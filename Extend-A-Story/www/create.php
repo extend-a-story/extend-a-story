@@ -960,7 +960,7 @@ You are trying to extend an episode that is not extendable.
     if ( $adminEmail != "-" )
     {
       // Send a notification email to the administrator.
-      extensionNotification( $error, $fatal, $adminEmail, $parentToUpdate, $episodeToUpdate );
+      extensionNotification( $error, $fatal, $adminEmail, $parentToUpdate, $episodeToUpdate, $authorName );
 
       // Send a notification email (if applicable) to the author of the parent episode.
       $result = mysql_query( "select AuthorNotify, AuthorEmail from Episode where EpisodeID = " . $parentToUpdate );
@@ -984,7 +984,7 @@ You are trying to extend an episode that is not extendable.
 
           if ( $tempAuthorNotify == "Y" )
           {
-            extensionNotification( $error, $fatal, $tempAuthorEmail, $parentToUpdate, $episodeToUpdate );
+            extensionNotification( $error, $fatal, $tempAuthorEmail, $parentToUpdate, $episodeToUpdate, $authorName );
           }
         }
       }

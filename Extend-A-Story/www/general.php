@@ -610,7 +610,7 @@ http://www.sir-toby.com/extend-a-story/
     return $nextUserID;
   }
 
-  function extensionNotification( &$error, &$fatal, $email, $parent, $episode )
+  function extensionNotification( &$error, &$fatal, $email, $parent, $episode, $authorName )
   {
     $storyName      = getStringValue( $error, $fatal, "StoryName"      );
     $storyHome      = getStringValue( $error, $fatal, "StoryHome"      );
@@ -622,6 +622,8 @@ http://www.sir-toby.com/extend-a-story/
       "\n" .
       "Episode " . $episode . ", a child of episode " . $parent . ", has been created.\n" .
       $readEpisodeURL . "?episode=" . $episode . "\n" .
+      "\n" .
+      "Author of the new episode: " . $authorName . "\n" .
       "\n" .
       "This email was automatically generated and sent because at some\n" .
       "point you created one or more episodes in the expandable story\n" .
