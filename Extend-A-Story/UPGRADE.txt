@@ -1,0 +1,52 @@
+===== Upgrading from V 2.0.0 to V 2.0.1 =====
+
+There are no database changes for this release.
+
+The code has changed for this release. Simply replace the story code on your
+web server with the contents of the www directory.
+
+There are no documentation changes for this release.
+
+
+
+
+===== Upgrading from V 2.0.1 to V 2.1.0 =====
+
+The database has changed for this release. You may want to disable episode
+creation before upgrading the database to ensure the database remains in a
+consistent state. Log in to the MySQL server using the ExtendAStory database,
+and issue this command:
+
+  UPDATE ExtendAStoryVariable
+     SET StringValue = 'N'
+   WHERE VariableName = 'IsWriteable'
+
+You may want to make a backup of the database before upgrading it, just in
+case you have any problems. To upgrade the database, run the database upgrade
+script '2.0.1_to_2.1.0.sql' in the existing database.
+
+The code has changed for this release. Simply replace the story code on your
+web server with the contents of the www directory. There are two new PHP
+scripts in this release that you may want to link to from your story's home
+page:
+
+  - admin.php       : Grants access to the administration and moderator
+                      functionality.
+
+  - list-locked.php : Displays all episodes that are currently locked for
+                      creation.
+
+Point your browser to <story root>/admin.php and login as the administrator:
+  - Login Name : admin
+  - Password   : change-me
+
+!!! CHANGE THE PASSWORD OF THE ADMIN ACCOUNT !!!
+
+Click on the 'Configure Story Settings' link and change the story
+configuration to suit your site. There is one new setting to configure:
+
+  - Max Edit Days    : The maximum number of days that an author will be
+                       allowed to edit an episode after they have created it.
+                       Moderators are not affected by this.
+
+There are no documentation changes for this release.
