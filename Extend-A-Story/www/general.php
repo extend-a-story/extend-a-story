@@ -596,11 +596,11 @@ http://www.sir-toby.com/extend-a-story/
 
     // Insert the user into the database.
     $result = mysql_query( "insert into User values( " .
-                                 $nextUserID                      .  ", " .
-                                 $permissionLevel                 .  ", " .
-                           "'" . $loginName                       . "', " .
-                 "password( '" . mysql_escape_string( $password ) . "' ), " .
-                           "'" . mysql_escape_string( $userName ) . "' )" );
+                                 $nextUserID                       .  ", " .
+                                 $permissionLevel                  .  ", " .
+                           "'" . mysql_escape_string( $loginName ) . "', " .
+                 "password( '" . mysql_escape_string( $password  ) . "' ), " .
+                           "'" . mysql_escape_string( $userName  ) . "' )" );
     if ( ! $result )
     {
       $error .= "Unable to insert the user into the database.<BR>";

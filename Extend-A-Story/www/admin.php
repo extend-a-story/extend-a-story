@@ -347,6 +347,11 @@ http://www.sir-toby.com/extend-a-story/
     $newPassword1       = $_POST[ "newPassword1"       ];
     $newPassword2       = $_POST[ "newPassword2"       ];
 
+    prepareParam( $newLoginName );
+    prepareParam( $newUserName  );
+    prepareParam( $newPassword1 );
+    prepareParam( $newPassword2 );
+
     if ( empty( $newLoginName ) )
       $message .= "You must enter the login name.<BR>";
 
