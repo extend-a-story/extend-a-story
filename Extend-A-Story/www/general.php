@@ -672,7 +672,9 @@ http://www.sir-toby.com/extend-a-story/
 
   function getEmailAddressTranslationTable( )
   {
-    return array( "\"" => "'" );
+    return array( "\"" => "'",
+                  "@"  => " at ",
+                  "."  => " dot " );
   }
 
   function canEditEpisode( $sessionID, $userID, $episodeID )
