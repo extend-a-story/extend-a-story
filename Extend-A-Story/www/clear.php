@@ -44,7 +44,7 @@ http://www.sir-toby.com/extend-a-story/
     connectToDatabase( $error, $fatal );
 
   if ( empty( $error ) )
-    $sessionID = getSessionID( $error, $fatal );
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
 
   if ( empty( $error ) )
   {
@@ -204,7 +204,7 @@ You have specified an episode that is not locked.
 <TABLE WIDTH="500">
   <TR>
     <TD>
-You have now cleared the lock on episode <?php echo( ( $status == 1 ) ? $parent : $episode ); ?>.
+You have now cleared the lock on episode <?php echo( $episode ); ?>.
 It is now ready to be <?php echo( ( $status == 1 ) ? "created" : "edited" ); ?> again.
 <P>
 <A HREF="read.php?episode=<?php echo( ( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>
