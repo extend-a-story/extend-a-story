@@ -141,7 +141,10 @@ http://www.sir-toby.com/extend-a-story/
         else
         {
           $color = "#008000";
-          array_push( $nextEpisodes, $target );
+          if ( ! in_array( $target, $nextEpisodes )
+          {
+            array_push( $nextEpisodes, $target );
+          }
         }
 
         $child = "<A HREF=\"read.php?episode=" . $target . "\"><FONT COLOR=\"" . $color . "\">" . $target . "</FONT></A>";
