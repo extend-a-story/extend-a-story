@@ -87,7 +87,7 @@ http://www.sir-toby.com/extend-a-story/
     if ( $method == "days" )
       $whereClause = "CreationTimestamp > subdate( now( ), interval " . $days . " day ) and ( Status = 2 or Status = 3 )";
 
-    $result = mysql_query( "select EpisodeID, Title from Episode where " . $whereClause . " order by EpisodeID" );
+    $result = mysql_query( "select EpisodeID, Title, AuthorName from Episode where " . $whereClause . " order by EpisodeID" );
     if ( ! $result )
     {
       $error .= "Problem retrieving the search results from the database.<BR>";
@@ -108,20 +108,34 @@ http://www.sir-toby.com/extend-a-story/
 <H1><?php echo( $storyName ); ?>: Search Results</H1>
 </CENTER>
 
+<TABLE>
+  <TR>
+    <TD><B>#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</B></TD>
+    <TD><B>Episode Number and Title</B></TD>
+    <TD><B>Author Name</B></TD>
+  </TR>
+
+
 <?php
 
   for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
   {
     $row = mysql_fetch_row( $result );
     $displayedTitle = htmlentities( $row[ 1 ] );
+    $displayedAuthorName = htmlentities( $row[ 2 ] );
 
 ?>
-<A HREF="read.php?episode=<?php echo( $row[ 0 ] ); ?>"><?php echo( $row[ 0 ] ); ?> - <?php echo( $displayedTitle ); ?></A><BR>
+  <TR>
+    <TD><?php echo( $i + 1 ); ?></TD>
+    <TD><A HREF="read.php?episode=<?php echo( $row[ 0 ] ); ?>"><?php echo( $row[ 0 ] ); ?> - <?php echo( $displayedTitle ); ?></A></TD>
+    <TD><?php echo( $displayedAuthorName ); ?></TD>
+  </TR>
 <?php
 
   }
 
 ?>
+</TABLE>
 <P>
 <A HREF="search.php">Search Again</A>
 <P>
