@@ -64,7 +64,7 @@ http://www.sir-toby.com/extend-a-story/
     prepareParam( $password  );
 
     $result = mysql_query( "select UserID from User where LoginName = '" . mysql_escape_string( $loginName ) . "' " .
-                           "and Password = password( '" . $password . "' )" );
+                           "and Password = password( '" . mysql_escape_string( $password ) . "' )" );
     if ( ! $result )
     {
       $error .= "Unable to query user table in database.<BR>";
