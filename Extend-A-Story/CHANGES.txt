@@ -4,6 +4,18 @@
 
 - Fixed bug # 847354: Old reference to db.inc in the readme file.
 
+- Fixed bug # 847362: Fatal error with single quote in password in admin
+  interface.
+
+- Fixed bug # 847375: Problems with single quotes configuring story settings.
+
+- Fixed bug # 855409: Problem creating user with a password with a single
+  quote.
+
+- Fixed bug # 855415: Fatal error when changing password with single quote.
+
+- Fixed bug # 855418: Quotes not handled when editing a user.
+
 ===== Changes between V 2.0.1 and V 2.1.0 =====
 
 - Added administration features:
