@@ -28,10 +28,10 @@ http://www.sir-toby.com/extend-a-story/
 
   require( "ExtendAStory.php" );
 
-  $episode = $_GET[ "episode" ];
-
   $error = "";
   $fatal = false;
+
+  $episode = $_GET[ "episode" ];
 
   $episode = ( int ) $episode;
 
