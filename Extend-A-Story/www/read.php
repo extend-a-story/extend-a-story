@@ -43,7 +43,7 @@ http://www.sir-toby.com/extend-a-story/
     connectToDatabase( $error, $fatal );
 
   if ( empty( $error ) )
-    $sessionID = getSessionID( $error, $fatal );
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
 
   if ( empty( $error ) )
   {
@@ -52,6 +52,31 @@ http://www.sir-toby.com/extend-a-story/
     $storyHome   = getStringValue( $error, $fatal, "StoryHome"   );
     $siteHome    = getStringValue( $error, $fatal, "SiteHome"    );
     $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
+  }
+
+  $permissionLevel = 0;
+
+  if ( ( $userID != 0 ) && ( empty( $error ) ) )
+  {
+    $result = mysql_query( "select PermissionLevel from User where UserID = " . $userID );
+    if ( ! $result )
+    {
+      $error .= "Unable to query user information from database.<BR>";
+      $fatal = true;
+    }
+    else
+    {
+      $row = mysql_fetch_row( $result );
+      if ( ! $row )
+      {
+        $error .= "Unable to fetch user information row from database.<BR>";
+        $fatal = true;
+      }
+      else
+      {
+        $permissionLevel = $row[ 0 ];
+      }
+    }
   }
 
   if ( empty( $error ) )
@@ -197,6 +222,31 @@ http://www.sir-toby.com/extend-a-story/
       else
       {
         $image = $row[ 0 ];
+      }
+    }
+  }
+
+  $canEdit = canEditEpisode( $sessionID, $userID, $episode );
+
+  if ( ( $canEdit ) && ( empty( $error ) ) )
+  {
+    $result = mysql_query( "select count( * ) from EpisodeEditLog where EpisodeID = " . $episode );
+    if ( ! $result )
+    {
+      $error = "Problem retrieving edit count from database.<BR>";
+      $fatal = true;
+    }
+    else
+    {
+      $row = mysql_fetch_row( $result );
+      if ( ! $row )
+      {
+        $error = "Problem fetching edit count row from database.<BR>";
+        $fatal = true;
+      }
+      else
+      {
+        $editCount = $row[ 0 ];
       }
     }
   }
@@ -516,7 +566,7 @@ Extending Enabled
 <?php echo( $countValue ); ?> episodes viewed since <?php echo( $countDate ); ?>.
 <?php
 
-    if ( ( $authorSessionID == $sessionID ) && ( $isWriteable == "Y" ) )
+    if ( ( $canEdit ) && ( $isWriteable == "Y" ) )
     {
 
 ?>
@@ -543,14 +593,14 @@ Extending Enabled
         {
 
 ?>
-<B>Someone else is currently editing it.</B><BR>
+<B>Someone else is currently editing it.</B>
 <?php
 
           if ( $timeout > 0 )
           {
 
 ?>
-<B>This lock can be manually cleared in <?php echo( $timeout ); ?> <?php echo( $timeout == 1 ? "minute" : "minutes" ); ?>.</B><BR>
+<B>This lock can be manually cleared in <?php echo( $timeout ); ?> <?php echo( $timeout == 1 ? "minute" : "minutes" ); ?>.</B>
 <?php
 
           }
@@ -571,9 +621,36 @@ Extending Enabled
       }
       else
       {
+
 ?>
 <A HREF="create.php?episode=<?php echo( $episode ); ?>&command=Edit">Edit</A>
 <?php
+
+        if ( $permissionLevel > 1 )
+        {
+?>
+<P>
+<B>Advanded Editing Functions</B><BR>
+<A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=AddLink">Add a Link</A><BR>
+<A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=DeleteLink">Delete a Link</A><BR>
+<A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=DeleteEpisode">Delete this Episode</A><BR>
+<A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=RevokeAuthor">Revoke Author's Edit Permissions</A><BR>
+<?php
+        }
+      }
+    }
+
+    if ( $canEdit )
+    {
+      if ( $editCount > 0 )
+      {
+
+?>
+<P>
+<B>This episode has been edited <?php echo( $editCount ) ?> times.</B><BR>
+<A HREF="list-edits.php?episode=<?php echo( $episode ); ?>">List Edits</A>
+<?php
+
       }
     }
 
