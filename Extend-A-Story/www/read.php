@@ -484,6 +484,8 @@ This episode was locked <?php echo( $minutes ); ?> minutes ago and is considered
 ?>
 <P>
 <A HREF="read.php?episode=<?php echo( $parent ); ?>">Go Back</A>
+<P>
+<A HREF="backstory-tree.php?episode=<?php echo( $episode ); ?>">View Back Story Tree</A>
 <?php
 
     }
