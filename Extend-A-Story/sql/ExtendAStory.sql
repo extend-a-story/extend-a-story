@@ -23,8 +23,11 @@
 
 drop table if exists ExtendAStoryVariable;
 drop table if exists Session;
+drop table if exists User;
 drop table if exists Episode;
 drop table if exists Link;
+drop table if exists EpisodeEditLog;
+drop table if exists LinkEditLog;
 drop table if exists Scheme;
 drop table if exists Image;
 
@@ -38,9 +41,25 @@ create table ExtendAStoryVariable
 create table Session
 (
   SessionID  int unsigned not null primary key,
+  UserID     int unsigned not null,
   SessionKey int unsigned not null,
   AccessDate datetime     not null
 );
+
+create table User
+(
+  UserID          int     unsigned not null primary key,
+  PermissionLevel tinyint unsigned not null,
+  LoginName       varchar( 255 )   not null,
+  Password        char   ( 16  )   not null,
+  UserName        varchar( 255 )   not null
+);
+
+# Description of PermissionLevel values:
+#   1 - Moderator       : Can edit any episode.
+#   2 - Super Moderator : As above, but can also modify link structure.
+#   3 - Manager         : As above, but can also change configuration values.
+#   4 - Administrator   : As above, but can also edit users.
 
 create table Episode
 (
@@ -79,8 +98,37 @@ create table Link
   IsCreated       char   ( 1   ) not null,
   IsBackLink      char   ( 1   ) not null,
   Description     varchar( 255 ) not null,
-  INDEX ( SourceEpisodeID ),
-  INDEX ( TargetEpisodeID )
+  INDEX( SourceEpisodeID ),
+  INDEX( TargetEpisodeID )
+);
+
+create table EpisodeEditLog
+(
+  EpisodeEditLogID  int     unsigned not null primary key,
+  EpisodeID         int     unsigned not null,
+  SchemeID          int     unsigned not null,
+  ImageID           int     unsigned not null,
+  IsLinkable        char   ( 1   )   not null,
+  IsExtendable      char   ( 1   )   not null,
+  AuthorMailto      char   ( 1   )   not null,
+  AuthorNotify      char   ( 1   )   not null,
+  Title             varchar( 255 )   not null,
+  Text              text             not null,
+  AuthorName        varchar( 255 )   not null,
+  AuthorEmail       varchar( 255 )   not null,
+  EditDate          varchar( 255 )   not null,
+  EditLogEntry      varchar( 255 )   not null,
+  INDEX( EpisodeID )
+);
+
+create table LinkEditLog
+(
+  LinkEditLogID    int unsigned   not null primary key,
+  EpisodeEditLogID int unsigned   not null,
+  TargetEpisodeID  int unsigned   not null,
+  IsBackLink       char   ( 1   ) not null,
+  Description      varchar( 255 ) not null,
+  INDEX( EpisodeEditLogID )
 );
 
 create table Scheme
@@ -105,22 +153,28 @@ create table Image
   ImageURL  varchar( 255 ) not null
 );
 
-insert into ExtendAStoryVariable values( "CountDate",      null, date_format( now( ), '%c/%e/%Y %l:%i:%s %p' ) );
-insert into ExtendAStoryVariable values( "CountValue",     0,    null );
-insert into ExtendAStoryVariable values( "NextSessionID",  1,    null );
-insert into ExtendAStoryVariable values( "NextEpisodeID",  2,    null );
-insert into ExtendAStoryVariable values( "NextLinkID",     1,    null );
-insert into ExtendAStoryVariable values( "NextSchemeID",   3,    null );
-insert into ExtendAStoryVariable values( "NextImageID",    1,    null );
+insert into ExtendAStoryVariable values( "CountDate",            null, date_format( now( ), '%c/%e/%Y %l:%i:%s %p' ) );
+insert into ExtendAStoryVariable values( "CountValue",           0,    null );
+insert into ExtendAStoryVariable values( "NextSessionID",        1,    null );
+insert into ExtendAStoryVariable values( "NextUserID",           2,    null );
+insert into ExtendAStoryVariable values( "NextEpisodeID",        2,    null );
+insert into ExtendAStoryVariable values( "NextLinkID",           1,    null );
+insert into ExtendAStoryVariable values( "NextEpisodeEditLogID", 1,    null );
+insert into ExtendAStoryVariable values( "NextLinkEditLogID",    1,    null );
+insert into ExtendAStoryVariable values( "NextSchemeID",         3,    null );
+insert into ExtendAStoryVariable values( "NextImageID",          1,    null );
 
-insert into ExtendAStoryVariable values( "StoryName",      null, "-"  );
-insert into ExtendAStoryVariable values( "SiteName",       null, "-"  );
-insert into ExtendAStoryVariable values( "StoryHome",      null, "-"  );
-insert into ExtendAStoryVariable values( "SiteHome",       null, "-"  );
-insert into ExtendAStoryVariable values( "ReadEpisodeURL", null, "-"  );
-insert into ExtendAStoryVariable values( "AdminEmail",     null, "-"  );
-insert into ExtendAStoryVariable values( "IsWriteable",    null, "Y"  );
-insert into ExtendAStoryVariable values( "MaxLinks",       10,   null );
+insert into ExtendAStoryVariable values( "StoryName",            null, "-"  );
+insert into ExtendAStoryVariable values( "SiteName",             null, "-"  );
+insert into ExtendAStoryVariable values( "StoryHome",            null, "-"  );
+insert into ExtendAStoryVariable values( "SiteHome",             null, "-"  );
+insert into ExtendAStoryVariable values( "ReadEpisodeURL",       null, "-"  );
+insert into ExtendAStoryVariable values( "AdminEmail",           null, "-"  );
+insert into ExtendAStoryVariable values( "IsWriteable",          null, "N"  );
+insert into ExtendAStoryVariable values( "MaxLinks",             10,   null );
+insert into ExtendAStoryVariable values( "MaxEditDays",          30,   null );
+
+insert into User values( 1, 4, "admin", password( "change-me" ), "Administrator" );
 
 insert into Episode values( 1, 1, 0, 0, 1, 0, 0, "N", "N", "N", "N", "-", "-", "-", "-", "-", "-", 0, null );
 
