@@ -36,4 +36,5 @@
 - Incorrect behaviour when editing episodes with options with quotes in their
   description has been fixed.
 
-- Creation date shows up incorrectly as current date when editing episodes.
+- The problem where creation date shows up incorrectly as current date when
+  editing episodes has been fixed.
