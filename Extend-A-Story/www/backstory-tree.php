@@ -141,7 +141,7 @@ http://www.sir-toby.com/extend-a-story/
         else
         {
           $color = "#008000";
-          if ( ! in_array( $target, $nextEpisodes )
+          if ( ! in_array( $target, $nextEpisodes ) )
           {
             array_push( $nextEpisodes, $target );
           }
