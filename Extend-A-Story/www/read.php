@@ -630,7 +630,7 @@ Extending Enabled
         {
 ?>
 <P>
-<B>Advanded Editing Functions</B><BR>
+<B>Advanced Editing Functions</B><BR>
 <A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=AddLink">Add a Link</A><BR>
 <A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=DeleteLink">Delete a Link</A><BR>
 <A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=DeleteEpisode">Delete this Episode</A><BR>
