@@ -1,5 +1,5 @@
 # Extend-A-Story - Interactive, Extendable, Choose Your Own Adventure Story
-# Copyright (C) 2002  Jeff Weston
+# Copyright (C) 2002 - 2003  Extend-A-Story Development Team
 #
 #
 # This program is free software; you can redistribute it and/or modify
