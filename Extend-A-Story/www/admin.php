@@ -218,7 +218,7 @@ http://www.sir-toby.com/extend-a-story/
     prepareParam( $newPassword2 );
 
     $result = mysql_query( "select count( * ) from User where UserID = " . $userID . " " .
-                           "and Password = password( '" . $curPassword . "' )" );
+                           "and Password = password( '" . mysql_escape_string( $curPassword ) . "' )" );
     if ( ! $result )
     {
       $error .= "Unable to query user record from database.<BR>";
@@ -246,7 +246,7 @@ http://www.sir-toby.com/extend-a-story/
           }
           else
           {
-            $result = mysql_query( "update User set Password = password( '" . $newPassword1 . "' ) where UserID = " . $userID );
+            $result = mysql_query( "update User set Password = password( '" . mysql_escape_string( $newPassword1 ) . "' ) where UserID = " . $userID );
             if ( ! $result )
             {
               $error .= "Unable to update user record.<BR>";
