@@ -97,17 +97,28 @@ http://www.sir-toby.com/extend-a-story/
     }
   }
 
-  function getSessionID( &$error, &$fatal )
+  function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
   {
-    $sessionID  = $_COOKIE[ "sessionID"  ];
-    $sessionKey = $_COOKIE[ "sessionKey" ];
+    // Logout all users after one hour of inactivity.
+    $result = mysql_query( "update Session set UserID = 0 where AccessDate < subdate( now( ), interval 1 hour )" );
+    if ( ! $result )
+    {
+      $error .= "Unable to logout inactive users.<BR>";
+      $fatal = true;
+      return;
+    }
 
-    $sessionID  = ( int ) $sessionID;
-    $sessionKey = ( int ) $sessionKey;
+    $originalSessionID  = $_COOKIE[ "sessionID"  ];
+    $originalSessionKey = $_COOKIE[ "sessionKey" ];
 
-    $actualSessionID = 0;
+    $originalSessionID  = ( int ) $originalSessionID;
+    $originalSessionKey = ( int ) $originalSessionKey;
 
-    $result = mysql_query( "select SessionKey from Session where SessionID = " . $sessionID );
+    $actualSessionID  = 0;
+    $actualUserID     = 0;
+    $actualSessionKey = 0;
+
+    $result = mysql_query( "select UserID, SessionKey from Session where SessionID = " . $originalSessionID );
     if ( ! $result )
     {
       $error .= "Problem retrieving your session from the database.<BR>";
@@ -119,15 +130,18 @@ http://www.sir-toby.com/extend-a-story/
       $row = mysql_fetch_row( $result );
       if ( $row )
       {
-        if ( $row[ 0 ] == $sessionKey )
+        if ( $row[ 1 ] == $originalSessionKey )
         {
-          $actualSessionID = $sessionID;
+          $actualSessionID  = $originalSessionID;
+          $actualUserID     = $row[ 0 ];
+          $actualSessionKey = $originalSessionKey;
 
           $result = mysql_query( "update Session set AccessDate = now( ) " .
-                                 "where SessionID = " . $sessionID );
+                                 "where SessionID = " . $originalSessionID );
           if ( ! $result )
           {
             $error .= "Problem updating your session in the database.<BR>";
+            $fatal = true;
           }
         }
       }
@@ -166,11 +180,11 @@ http://www.sir-toby.com/extend-a-story/
         return;
       }
 
-      $sessionKey = mt_rand( );
+      $newSessionKey = mt_rand( );
 
       // Insert the session into the database.
-      $result = mysql_query( "insert into Session values ( " .
-                             $nextSessionID . ", " . $sessionKey . ", now( ) )" );
+      $result = mysql_query( "insert into Session values( " .
+                             $nextSessionID . ", 0, " . $newSessionKey . ", now( ) )" );
       if ( ! $result )
       {
         $error .= "Unable to insert the session into the database.<BR>";
@@ -178,11 +192,12 @@ http://www.sir-toby.com/extend-a-story/
         return;
       }
 
-      $actualSessionID = $nextSessionID;
+      $actualSessionID  = $nextSessionID;
+      $actualSessionKey = $newSessionKey;
     }
 
-    setcookie( "sessionID",  $actualSessionID, time( ) + ( 60 * 60 * 24 * 370 ) );
-    setcookie( "sessionKey", $sessionKey,      time( ) + ( 60 * 60 * 24 * 370 ) );
+    setcookie( "sessionID",  $actualSessionID,  time( ) + ( 60 * 60 * 24 * 370 ) );
+    setcookie( "sessionKey", $actualSessionKey, time( ) + ( 60 * 60 * 24 * 370 ) );
 
     // Delete all sessions over 370 days old.
     $result = mysql_query( "delete from Session where AccessDate < subdate( now( ), interval 370 day )" );
@@ -193,7 +208,32 @@ http://www.sir-toby.com/extend-a-story/
       return;
     }
 
-    return $actualSessionID;
+    $sessionID = $actualSessionID;
+    $userID    = $actualUserID;
+  }
+
+  function setStringValue( &$error, &$fatal, $variableName, $variableValue )
+  {
+    $result = mysql_query( "update ExtendAStoryVariable set StringValue = " .
+                           "'" . mysql_escape_string( $variableValue ) . "' " .
+                           "where VariableName = '" . $variableName . "'" );
+    if ( ! $result )
+    {
+      $error .= "Problem setting the " . $variableName . " value in the database.<BR>";
+      $fatal = true;
+    }
+  }
+
+  function setIntValue( &$error, &$fatal, $variableName, $variableValue )
+  {
+    $result = mysql_query( "update ExtendAStoryVariable set IntValue = " .
+                           $variableValue . " " .
+                           "where VariableName = '" . $variableName . "'" );
+    if ( ! $result )
+    {
+      $error .= "Problem setting the " . $variableName . " value in the database.<BR>";
+      $fatal = true;
+    }
   }
 
   function getStringValue( &$error, &$fatal, $variableName )
@@ -368,6 +408,208 @@ http://www.sir-toby.com/extend-a-story/
     }
   }
 
+  function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
+  {
+    // Read the episode to log from the database.
+    $result = mysql_query( "select SchemeID, ImageID, IsLinkable, IsExtendable, AuthorMailto, AuthorNotify, " .
+                                  "Title, Text, AuthorName, AuthorEmail from Episode where EpisodeID = " . $episode );
+    if ( ! $result )
+    {
+      $error .= "Unable to query original episode from database.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    $row = mysql_fetch_row( $result );
+    if ( ! $row )
+    {
+      $error .= "Unable to fetch original episode row from database.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    $schemeID     = $row[ 0 ];
+    $imageID      = $row[ 1 ];
+    $isLinkable   = $row[ 2 ];
+    $isExtendable = $row[ 3 ];
+    $authorMailto = $row[ 4 ];
+    $authorNotify = $row[ 5 ];
+    $title        = $row[ 6 ];
+    $text         = $row[ 7 ];
+    $authorName   = $row[ 8 ];
+    $authorEmail  = $row[ 9 ];
+
+    // Get the NextEpisodeEditLogID from the database.
+    $result = mysql_query( "select IntValue from ExtendAStoryVariable " .
+                           "where VariableName = 'NextEpisodeEditLogID'" );
+    if ( ! $result )
+    {
+      $error .= "Unable to query the NextEpisodeEditLogID.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    $row = mysql_fetch_row( $result );
+    if ( ! $row )
+    {
+      $error .= "Unable to fetch the NextEpisodeEditLogID row.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    $nextEpisodeEditLogID = $row[ 0 ];
+
+    // Update the NextEpisodeEditLogID in the database.
+    $result = mysql_query( "update ExtendAStoryVariable set " .
+                           "IntValue = IntValue + 1 " .
+                           "where VariableName = 'NextEpisodeEditLogID'" );
+    if ( ! $result )
+    {
+      $error .= "Unable to update the NextEpisodeEditLogID.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    // Insert the episode edit log into the database.
+    $result = mysql_query( "insert into EpisodeEditLog values( " .
+                                 $nextEpisodeEditLogID                .  ", " .
+                                 $episode                             .  ", " .
+                                 $schemeID                            .  ", " .
+                                 $imageID                             .  ", " .
+                           "'" . $isLinkable                          . "', " .
+                           "'" . $isExtendable                        . "', " .
+                           "'" . $authorMailto                        . "', " .
+                           "'" . $authorNotify                        . "', " .
+                           "'" . mysql_escape_string( $title        ) . "', " .
+                           "'" . mysql_escape_string( $text         ) . "', " .
+                           "'" . mysql_escape_string( $authorName   ) . "', " .
+                           "'" . mysql_escape_string( $authorEmail  ) . "', " .
+                           "'" . date( "n/j/Y g:i:s A" )              . "', " .
+                           "'" . mysql_escape_string( $editLogEntry ) . "' )" );
+    if ( ! $result )
+    {
+      $error .= "Unable to insert the episode edit log into the database.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    // Read the options to log from the database.
+    $result = mysql_query( "select TargetEpisodeID, IsBackLink, Description from Link where SourceEpisodeID = " .
+                           $episode . " order by LinkID" );
+    if ( ! $result )
+    {
+      $error .= "Unable to query episode links from the database.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+    {
+      $row = mysql_fetch_row( $result );
+      createLinkEditLog( $error, $fatal, $nextEpisodeEditLogID, $row[ 0 ], $row[ 1 ], $row[ 2 ] );
+    }
+
+    return $nextEpisodeEditLogID;
+  }
+
+  function createLinkEditLog( &$error, &$fatal, $episodeEditLogID, $targetEpisodeID, $isBackLink, $description )
+  {
+    // Get the NextLinkEditLogID from the database.
+    $result = mysql_query( "select IntValue from ExtendAStoryVariable " .
+                           "where VariableName = 'NextLinkEditLogID'" );
+    if ( ! $result )
+    {
+      $error .= "Unable to query the NextLinkEditLogID.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    $row = mysql_fetch_row( $result );
+    if ( ! $row )
+    {
+      $error .= "Unable to fetch the NextLinkEditLogID row.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    $nextLinkEditLogID = $row[ 0 ];
+
+    // Update the NextLinkEditLogID in the database.
+    $result = mysql_query( "update ExtendAStoryVariable set " .
+                           "IntValue = IntValue + 1 " .
+                           "where VariableName = 'NextLinkEditLogID'" );
+    if ( ! $result )
+    {
+      $error .= "Unable to update the NextLinkEditLogID.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    // Insert the link edit log into the database.
+    $result = mysql_query( "insert into LinkEditLog values( " .
+                                 $nextLinkEditLogID                  .  ", " .
+                                 $episodeEditLogID                   .  ", " .
+                                 $targetEpisodeID                    .  ", " .
+                           "'" . $isBackLink                         . "', " .
+                           "'" . mysql_escape_string( $description ) . "' )" );
+    if ( ! $result )
+    {
+      $error .= "Unable to insert the link edit log into the database.<BR>";
+      $fatal = true;
+      return;
+    }
+    return $nextLinkEditLogID;
+  }
+
+  function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, $userName )
+  {
+    // Get the NextUserID from the database.
+    $result = mysql_query( "select IntValue from ExtendAStoryVariable " .
+                           "where VariableName = 'NextUserID'" );
+    if ( ! $result )
+    {
+      $error .= "Unable to query the NextUserID.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    $row = mysql_fetch_row( $result );
+    if ( ! $row )
+    {
+      $error .= "Unable to fetch the NextUserID row.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    $nextUserID = $row[ 0 ];
+
+    // Update the NextUserID in the database.
+    $result = mysql_query( "update ExtendAStoryVariable set " .
+                           "IntValue = IntValue + 1 " .
+                           "where VariableName = 'NextUserID'" );
+    if ( ! $result )
+    {
+      $error .= "Unable to update the NextUserID.<BR>";
+      $fatal = true;
+      return;
+    }
+
+    // Insert the user into the database.
+    $result = mysql_query( "insert into User values( " .
+                                 $nextUserID                      .  ", " .
+                                 $permissionLevel                 .  ", " .
+                           "'" . $loginName                       . "', " .
+                 "password( '" . mysql_escape_string( $password ) . "' ), " .
+                           "'" . mysql_escape_string( $userName ) . "' )" );
+    if ( ! $result )
+    {
+      $error .= "Unable to insert the user into the database.<BR>";
+      $fatal = true;
+      return;
+    }
+    return $nextUserID;
+  }
+
   function extensionNotification( &$error, &$fatal, $email, $parent, $episode )
   {
     $storyName      = getStringValue( $error, $fatal, "StoryName"      );
@@ -429,6 +671,49 @@ http://www.sir-toby.com/extend-a-story/
   function getEmailAddressTranslationTable( )
   {
     return array( "\"" => "'" );
+  }
+
+  function canEditEpisode( $sessionID, $userID, $episodeID )
+  {
+    if ( $userID != 0 )
+      return true;
+
+    $result = mysql_query( "select AuthorSessionID, CreationDate from Episode where EpisodeID = " . $episodeID );
+    if ( ! $result )
+      return false;
+
+    $row = mysql_fetch_row( $result );
+    if ( ! $row )
+      return false;
+
+    $authorSessionID = $row[ 0 ];
+    $creationDate    = $row[ 1 ];
+
+    if ( $sessionID == $authorSessionID )
+    {
+      $error = "";
+      $fatal = false;
+
+      $maxEditDays = getIntValue( $error, $fatal, "MaxEditDays" );
+
+      if ( ! empty( $error ) )
+        return false;
+
+      $creationTime = strtotime( $creationDate );
+      $curTime      = time( );
+      $seconds      = $curTime - $creationTime;
+      $minutes      = $seconds / 60;
+      $minutes      = ( int ) $minutes;
+      $hours        = $minutes / 60;
+      $hours        = ( int ) $hours;
+      $days         = $hours / 24;
+      $days         = ( int ) $days;
+
+      if ( $days < $maxEditDays )
+        return true;
+    }
+
+    return false;
   }
 
 ?>
