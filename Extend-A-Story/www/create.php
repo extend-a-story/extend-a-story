@@ -209,7 +209,7 @@ You are unable to create episodes while episode creation is disabled.
     }
     else
     {
-      $result = mysql_query( "select Parent, SchemeID, Status, IsExtendable, LockKey from Episode where EpisodeID = " . $episode );
+      $result = mysql_query( "select Parent, SchemeID, Status, IsExtendable, CreationDate, LockKey from Episode where EpisodeID = " . $episode );
       if ( ! $result )
       {
         $error .= "Problem retrieving the episode from the database.<BR>";
@@ -229,7 +229,8 @@ You are unable to create episodes while episode creation is disabled.
           $schemeID       = $row[ 1 ];
           $status         = $row[ 2 ];
           $isExtendable   = $row[ 3 ];
-          $episodeLockKey = $row[ 4 ];
+          $creationDate   = $row[ 4 ];
+          $episodeLockKey = $row[ 5 ];
 
           if ( ( $command == "Lock" ) || ( $command == "Extend" ) )
             $scheme = $schemeID;
@@ -611,6 +612,8 @@ You are trying to extend an episode that is not extendable.
           // If we are previewing or saving, read the backlinked episode from the form, otherwise read it from the database.
           $$var5 = ( ( ( $command == "EditPreview" ) || ( $command == "EditSave" ) ) ? $_POST[ $var5 ] : $$var2 );
 
+          prepareParam( $$var4 );
+
           $$var5 = ( int ) $$var5;
         }
       }
@@ -939,13 +942,13 @@ You are trying to extend an episode that is not extendable.
 
       if ( $$var2 == "Y" )
       {
-        $queryString = "update Link set TargetEpisodeID = "  . $$var4 . ", " .
-                                       "Description     = '" . $$var3 . "' " .
+        $queryString = "update Link set TargetEpisodeID = "  . $$var4                        . ", " .
+                                       "Description     = '" . mysql_escape_string( $$var3 ) . "' " .
                                  "where LinkID          = "  . $$var1;
       }
       else
       {
-        $queryString = "update Link set Description     = '" . $$var3 . "' " .
+        $queryString = "update Link set Description     = '" . mysql_escape_string( $$var3 ) . "' " .
                                  "where LinkID          = "  . $$var1;
       }
       $result = mysql_query( $queryString );
@@ -1261,7 +1264,7 @@ Please review your episode and correct any errors before saving.
     }
 
 ?>
-<?php echo( $command == "Edit" ? $creationDate : date( "n/j/Y g:i:s A" ) ); ?>
+<?php echo( $editing ? $creationDate : date( "n/j/Y g:i:s A" ) ); ?>
 <P>
 <?php
 
