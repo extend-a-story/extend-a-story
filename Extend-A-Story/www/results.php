@@ -87,7 +87,7 @@ http://www.sir-toby.com/extend-a-story/
     if ( $method == "days" )
       $whereClause = "CreationTimestamp > subdate( now( ), interval " . $days . " day ) and ( Status = 2 or Status = 3 )";
 
-    $result = mysql_query( "select EpisodeID, Title from Episode where " . $whereClause );
+    $result = mysql_query( "select EpisodeID, Title from Episode where " . $whereClause . " order by EpisodeID" );
     if ( ! $result )
     {
       $error .= "Problem retrieving the search results from the database.<BR>";
