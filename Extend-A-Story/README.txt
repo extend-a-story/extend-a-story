@@ -7,7 +7,7 @@ with just one story:
 
 - Set up a MySQL database to store the Extend-A-Story data.
 
-- In the new database, run the database creation script: 'ExtendAStory.sql'.
+- In the new database, run the database creation script 'ExtendAStory.sql'.
 
 - Take the contents of the www directory and place them in a directory
   accessible to your web server.
@@ -15,7 +15,8 @@ with just one story:
 - Modify db.inc to contain the relevant login information for the database
   you created.
 
-- Point your browser to <site root>/admin.php and login as the administrator:
+- Point your browser to <story root>/admin.php and login as the
+  administrator:
   - Login Name : admin
   - Password   : change-me
 
