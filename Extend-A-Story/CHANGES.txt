@@ -32,7 +32,7 @@
   from following the creation link and locking all episodes when they crawl
   the story.
 
-- Search results are now order by EpisodeID.
+- Search results are now ordered by EpisodeID.
 
 - The author name now appears in the search results.
 
