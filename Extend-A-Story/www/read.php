@@ -634,7 +634,18 @@ Extending Enabled
 <A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=AddLink">Add a Link</A><BR>
 <A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=DeleteLink">Delete a Link</A><BR>
 <A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=DeleteEpisode">Delete this Episode</A><BR>
+<?php
+
+          if ( $authorSessionID != 0 )
+          {
+
+?>
 <A HREF="edit.php?episode=<?php echo( $episode ); ?>&command=RevokeAuthor">Revoke Author's Edit Permissions</A><BR>
+<?php
+
+          }
+
+?>
 <?php
         }
       }
