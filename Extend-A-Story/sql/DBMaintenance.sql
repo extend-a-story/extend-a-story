@@ -1,5 +1,5 @@
 # Extend-A-Story - Interactive, Extendable, Choose Your Own Adventure Story
-# Copyright (C) 2002  Jeff Weston
+# Copyright (C) 2002 - 2003  Extend-A-Story Development Team
 #
 #
 # This program is free software; you can redistribute it and/or modify
@@ -38,20 +38,4 @@ from Episode, Link
 where Episode.EpisodeID = Link.TargetEpisodeID and
 ( ( Episode.Parent  = Link.SourceEpisodeID and Link.IsBackLink = "Y" ) or
   ( Episode.Parent != Link.SourceEpisodeID and Link.IsBackLink = "N" ) )
-order by Episode.EpisodeID;
-
-
-### Find all Episodes that have no link to them.
-
-select Episode.EpisodeID, Episode.Parent, Episode.Status
-from Link right outer join Episode on Link.IsBackLink = "N" and Link.TargetEpisodeID = Episode.EpisodeID
-where Link.LinkID is null and Episode.EpisodeID != 1
-order by Episode.EpisodeID;
-
-
-### Find all Episodes that have no link from them.
-
-select Episode.EpisodeID, Episode.Parent
-from Link right outer join Episode on Link.SourceEpisodeID = Episode.EpisodeID
-where Link.LinkID is null and ( Episode.Status = 2 or Episode.Status = 3 )
 order by Episode.EpisodeID;
