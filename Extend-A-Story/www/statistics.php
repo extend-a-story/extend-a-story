@@ -36,7 +36,7 @@ http://www.sir-toby.com/extend-a-story/
     connectToDatabase( $error, $fatal );
 
   if ( empty( $error ) )
-    $sessionID = getSessionID( $error, $fatal );
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
 
   if ( empty( $error ) )
   {
