@@ -43,7 +43,7 @@ http://www.sir-toby.com/extend-a-story/
     connectToDatabase( $error, $fatal );
 
   if ( empty( $error ) )
-    $sessionID = getSessionID( $error, $fatal );
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
 
   if ( empty( $error ) )
   {
@@ -113,7 +113,7 @@ http://www.sir-toby.com/extend-a-story/
       $parent = $row[ 0 ];
       $title  = $row[ 1 ];
 
-      $result = mysql_query( "select TargetEpisodeID, IsCreated, IsBackLink from Link where SourceEpisodeID = " . $episode );
+      $result = mysql_query( "select TargetEpisodeID, IsCreated, IsBackLink from Link where SourceEpisodeID = " . $episode . " order by LinkID" );
       if ( ! $result )
       {
         echo( "Problem retrieving children from database." );
