@@ -27,7 +27,8 @@ select Episode.EpisodeID, Episode.Status, Link.LinkID, Link.IsCreated, Link.Sour
 from Episode, Link
 where Episode.EpisodeID = Link.TargetEpisodeID and
 ( ( ( Episode.Status = 2 or Episode.Status = 3 ) and Link.IsCreated = "N" ) or
-  ( ( Episode.Status = 0 or Episode.Status = 1 ) and Link.IsCreated = "Y" ) );
+  ( ( Episode.Status = 0 or Episode.Status = 1 ) and Link.IsCreated = "Y" ) )
+order by Episode.EpisodeID;
 
 
 ### Find all Links that are incorrectly listed as BackLinked or Not-BackLinked.
@@ -36,18 +37,21 @@ select Episode.EpisodeID, Episode.Status, Link.LinkID, Link.IsBackLink, Link.Sou
 from Episode, Link
 where Episode.EpisodeID = Link.TargetEpisodeID and
 ( ( Episode.Parent  = Link.SourceEpisodeID and Link.IsBackLink = "Y" ) or
-  ( Episode.Parent != Link.SourceEpisodeID and Link.IsBackLink = "N" ) );
+  ( Episode.Parent != Link.SourceEpisodeID and Link.IsBackLink = "N" ) )
+order by Episode.EpisodeID;
 
 
 ### Find all Episodes that have no link to them.
 
-select Episode.EpisodeID, Episode.Parent, Episode.Status, Link.LinkID
+select Episode.EpisodeID, Episode.Parent, Episode.Status
 from Link right outer join Episode on Link.IsBackLink = "N" and Link.TargetEpisodeID = Episode.EpisodeID
-where Link.LinkID is null;
+where Link.LinkID is null and Episode.EpisodeID != 1
+order by Episode.EpisodeID;
 
 
 ### Find all Episodes that have no link from them.
 
-select Episode.EpisodeID, Episode.Parent, Link.LinkID
+select Episode.EpisodeID, Episode.Parent
 from Link right outer join Episode on Link.SourceEpisodeID = Episode.EpisodeID
-where Link.LinkID is null and ( Episode.Status = 2 or Episode.Status = 3 );
+where Link.LinkID is null and ( Episode.Status = 2 or Episode.Status = 3 )
+order by Episode.EpisodeID;
