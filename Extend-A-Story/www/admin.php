@@ -274,6 +274,13 @@ http://www.sir-toby.com/extend-a-story/
     $newMaxLinks       = $_POST[ "newMaxLinks"       ];
     $newMaxEditDays    = $_POST[ "newMaxEditDays"    ];
 
+    prepareParam( $newStoryName      );
+    prepareParam( $newSiteName       );
+    prepareParam( $newStoryHome      );
+    prepareParam( $newSiteHome       );
+    prepareParam( $newReadEpisodeURL );
+    prepareParam( $newAdminEmail     );
+
     $newMaxLinks    = ( int ) $newMaxLinks;
     $newMaxEditDays = ( int ) $newMaxEditDays;
 
