@@ -1,3 +1,17 @@
+===== Upgrading from V 2.1.0 to V 2.1.1 =====
+
+There are no database changes for this release.
+
+The code has changed for this release. Simply replace the story code on your
+web server with the contents of the www directory.
+
+The documenation has changed for this release. Simply replace the
+Extend-A-Story documentation directory on your web server with the contents
+of the docs directory.
+
+
+
+
 ===== Upgrading from V 2.0.1 to V 2.1.0 =====
 
 The database has changed for this release. You may want to disable episode

@@ -1,3 +1,9 @@
+===== Changes between V 2.1.0 and V 2.1.1 =====
+
+- Made the documentation HTML files XTHML 1.1 compliant.
+
+- Fixed bug # 847354: Old reference to db.inc in the readme file.
+
 ===== Changes between V 2.0.1 and V 2.1.0 =====
 
 - Added administration features:
