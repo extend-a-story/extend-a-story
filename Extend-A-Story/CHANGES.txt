@@ -1,3 +1,39 @@
-Changes between V 2.0.1 and V 2.1.0 :
+===== Changes between V 2.0.0 and V 2.0.1 =====
+
+- Incorrect behaviour when editing episodes with options with quotes in their
+  description has been fixed.
+
+- Creation date shows up incorrectly as current date when editing episodes.
+
+
+
+
+===== Changes between V 2.0.1 and V 2.1.0 =====
+
+- Added administration features:
+  - Add/edit adminstrator/moderator users.
+  - Configure story settings.
+  - View potential database problems.
+  - Super moderators can delete just about anything.
+  - Moderators can edit any episode.
+  - For each episode, a log of all editing done to that episode is now kept.
 
 - Added the ability to view the story tree from any starting episode.
+
+- Added the ability to view the back story of an episode. This maps out all
+  the episodes you can reach from an episode by following all back links that
+  link to it.
+
+- The author name is now included in extension notification email messages.
+
+- Email addresses are now obfuscated when displayed publicly.
+
+- Force the use of a form button to create episodes. This stops web crawlers
+  from following the creation link and locking all episodes when they crawl
+  the story.
+
+- Search results are now order by EpisodeID.
+
+- The author name now appears in the search results.
+
+- A result number has been added to the search results.
