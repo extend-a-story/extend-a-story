@@ -1,13 +1,3 @@
-===== Changes between V 2.0.0 and V 2.0.1 =====
-
-- Incorrect behaviour when editing episodes with options with quotes in their
-  description has been fixed.
-
-- Creation date shows up incorrectly as current date when editing episodes.
-
-
-
-
 ===== Changes between V 2.0.1 and V 2.1.0 =====
 
 - Added administration features:
@@ -37,3 +27,13 @@
 - The author name now appears in the search results.
 
 - A result number has been added to the search results.
+
+
+
+
+===== Changes between V 2.0.0 and V 2.0.1 =====
+
+- Incorrect behaviour when editing episodes with options with quotes in their
+  description has been fixed.
+
+- Creation date shows up incorrectly as current date when editing episodes.

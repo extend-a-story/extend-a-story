@@ -1,15 +1,3 @@
-===== Upgrading from V 2.0.0 to V 2.0.1 =====
-
-There are no database changes for this release.
-
-The code has changed for this release. Simply replace the story code on your
-web server with the contents of the www directory.
-
-There are no documentation changes for this release.
-
-
-
-
 ===== Upgrading from V 2.0.1 to V 2.1.0 =====
 
 The database has changed for this release. You may want to disable episode
@@ -48,5 +36,17 @@ configuration to suit your site. There is one new setting to configure:
   - Max Edit Days    : The maximum number of days that an author will be
                        allowed to edit an episode after they have created it.
                        Moderators are not affected by this.
+
+There are no documentation changes for this release.
+
+
+
+
+===== Upgrading from V 2.0.0 to V 2.0.1 =====
+
+There are no database changes for this release.
+
+The code has changed for this release. Simply replace the story code on your
+web server with the contents of the www directory.
 
 There are no documentation changes for this release.
