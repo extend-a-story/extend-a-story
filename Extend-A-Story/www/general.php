@@ -217,7 +217,7 @@ http://www.sir-toby.com/extend-a-story/
     $result = mysql_query( "update ExtendAStoryVariable set StringValue = " .
                            "'" . mysql_escape_string( $variableValue ) . "' " .
                            "where VariableName = " .
-                           '" . mysql_escape_string( $variableName ) . "'" );
+                           "'" . mysql_escape_string( $variableName ) . "'" );
     if ( ! $result )
     {
       $error .= "Problem setting the " . $variableName . " value in the database.<BR>";
@@ -230,7 +230,7 @@ http://www.sir-toby.com/extend-a-story/
     $result = mysql_query( "update ExtendAStoryVariable set IntValue = " .
                            $variableValue . " " .
                            "where VariableName = " .
-                           '" . mysql_escape_string( $variableName ) . "'" );
+                           "'" . mysql_escape_string( $variableName ) . "'" );
     if ( ! $result )
     {
       $error .= "Problem setting the " . $variableName . " value in the database.<BR>";
