@@ -180,7 +180,7 @@ You have specified an episode that is not locked.
                            ( ( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID" ) .
                            " = 0, Status = " .
                            ( ( $status == 1 ) ? 0 : 2 ) .
-                           " , LockDate = '-', LockKey = 0 " .
+                           ", LockDate = '-', LockKey = 0 " .
                            "where EpisodeID = " . $episode );
     if ( ! $result )
     {
