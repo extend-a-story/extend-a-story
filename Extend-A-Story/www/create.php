@@ -86,8 +86,34 @@ http://www.sir-toby.com/extend-a-story/
        ( $command != "EditPreview"   ) &&
        ( $command != "EditSave"      ) )
   {
-    $error .= "The specified command is not supported.<BR>";
-    $fatal = true;
+
+?>
+
+<HTML><HEAD>
+<TITLE>Creation Error - Command Not Supported</TITLE>
+</HEAD><BODY>
+
+<CENTER>
+<H1>Creation Error</H1>
+<H2>Command Not Supported</H2>
+
+<TABLE WIDTH="500">
+  <TR>
+    <TD>
+The command you selected is not supported.
+<P>
+<A HREF="read.php?episode=<?php echo( $episode ); ?>">Go Back</A>
+    </TD>
+  </TR>
+</TABLE>
+
+</CENTER>
+
+</BODY></HTML>
+
+<?php
+
+    exit;
   }
 
   if ( ( $command == "Extend"        ) ||
@@ -109,7 +135,7 @@ http://www.sir-toby.com/extend-a-story/
     connectToDatabase( $error, $fatal );
 
   if ( empty( $error ) )
-    $sessionID = getSessionID( $error, $fatal );
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
 
   if ( empty( $error ) )
   {
@@ -156,6 +182,59 @@ You are unable to create episodes while episode creation is disabled.
     exit;
   }
 
+  if ( ( empty( $error ) ) && ( $command == "Lock" ) && ( $episode != 1 ) )
+  {
+    $result = mysql_query( "select count( * ) from Link where TargetEpisodeID = " . $episode );
+    if ( ! $result )
+    {
+      $error .= "Unable to query orphan status from the database.<BR>";
+      $fatal = true;
+    }
+    else
+    {
+      $row = mysql_fetch_row( $result );
+      if ( ! $row )
+      {
+        $error .= "Unable to fetch link count row from the database.<BR>";
+        $fatal = true;
+      }
+      else
+      {
+        if ( $row[ 0 ] == 0 )
+        {
+
+?>
+
+<HTML><HEAD>
+<TITLE>Creation Error - Episode is an Orphan</TITLE>
+</HEAD><BODY>
+
+<CENTER>
+<H1>Creation Error</H1>
+<H2>Episode is an Orphan</H2>
+
+<TABLE WIDTH="500">
+  <TR>
+    <TD>
+The episode you are trying to create is an orphan (has no links to it) and cannot be created.
+<P>
+<A HREF="read.php?episode=<?php echo( $episode ); ?>">Go Back</A>
+    </TD>
+  </TR>
+</TABLE>
+
+</CENTER>
+
+</BODY></HTML>
+
+<?php
+
+          exit;
+        }
+      }
+    }
+  }
+
   if ( empty( $error ) )
   {
     $schemeList = mysql_query( "select SchemeID, SchemeName from Scheme" );
@@ -167,7 +246,7 @@ You are unable to create episodes while episode creation is disabled.
 
     if ( $command == "Edit" )
     {
-      $result = mysql_query( "select Parent, AuthorSessionID, SchemeID, Status, IsLinkable, IsExtendable, " .
+      $result = mysql_query( "select Parent, SchemeID, Status, IsLinkable, IsExtendable, " .
                                     "AuthorMailto, AuthorNotify, Title, Text, AuthorName, AuthorEmail, " .
                                     "CreationDate, LockKey from Episode where EpisodeID = " . $episode );
       if ( ! $result )
@@ -186,19 +265,18 @@ You are unable to create episodes while episode creation is disabled.
         else
         {
           $parent          = $row[ 0  ];
-          $authorSessionID = $row[ 1  ];
-          $scheme          = $row[ 2  ];
-          $status          = $row[ 3  ];
-          $linkable        = $row[ 4  ];
-          $extendable      = $row[ 5  ];
-          $mailto          = $row[ 6  ];
-          $notify          = $row[ 7  ];
-          $title           = $row[ 8  ];
-          $text            = $row[ 9  ];
-          $authorName      = $row[ 10 ];
-          $authorEmail     = $row[ 11 ];
-          $creationDate    = $row[ 12 ];
-          $episodeLockKey  = $row[ 13 ];
+          $scheme          = $row[ 1  ];
+          $status          = $row[ 2  ];
+          $linkable        = $row[ 3  ];
+          $extendable      = $row[ 4  ];
+          $mailto          = $row[ 5  ];
+          $notify          = $row[ 6  ];
+          $title           = $row[ 7  ];
+          $text            = $row[ 8  ];
+          $authorName      = $row[ 9  ];
+          $authorEmail     = $row[ 10 ];
+          $creationDate    = $row[ 11 ];
+          $episodeLockKey  = $row[ 12 ];
 
           $linkable   = ( $linkable   == "Y" ? 1 : 0 );
           $extendable = ( $extendable == "Y" ? 1 : 0 );
@@ -238,6 +316,8 @@ You are unable to create episodes while episode creation is disabled.
       }
     }
   }
+
+  $canEdit = canEditEpisode( $sessionID, $userID, $episode );
 
   // Verify that the selected scheme is in the database.
   if ( empty( $error ) )
@@ -314,7 +394,7 @@ currently working on. Wait a few moments and try again.
       exit;
     }
 
-    if ( ( $command == "Edit" ) && ( ( $status != 2 ) || ( $authorSessionID != $sessionID ) ) )
+    if ( ( $command == "Edit" ) && ( ( $status != 2 ) || ( ! $canEdit ) ) )
     {
 
 ?>
@@ -913,20 +993,52 @@ You are trying to extend an episode that is not extendable.
 
   if ( ( $command == "EditSave" ) && ( empty( $error ) ) )
   {
-    $result = mysql_query( "update Episode set EditorSessionID = "  . $sessionID                          .  ", " .
-                                              "SchemeID        = "  . $scheme                             .  ", " .
-                                              "Status          = 2, " .
-                                              "IsLinkable      = '" . ( $linkable   == 1 ? "Y" : "N" )    . "', " .
-                                              "IsExtendable    = '" . ( $extendable == 1 ? "Y" : "N" )    . "', " .
-                                              "AuthorMailto    = '" . ( $mailto     == 1 ? "Y" : "N" )    . "', " .
-                                              "AuthorNotify    = '" . ( $notify     == 1 ? "Y" : "N" )    . "', " .
-                                              "Title           = '" . mysql_escape_string( $title       ) . "', " .
-                                              "Text            = '" . mysql_escape_string( $text        ) . "', " .
-                                              "AuthorName      = '" . mysql_escape_string( $authorName  ) . "', " .
-                                              "AuthorEmail     = '" . mysql_escape_string( $authorEmail ) . "', " .
-                                              "LockDate        = '', " .
-                                              "LockKey         = 0 " .
-                                        "where EpisodeID       = "  . $episode );
+    // If the editor is a user, look up their name for the edit log.
+    if ( $userID != 0 )
+    {
+      $result = mysql_query( "select UserName from User where UserID = " . $userID );
+      if ( ! $result )
+      {
+        $error .= "Unable to query user from the database.<BR>";
+        $fatal = true;
+      }
+      else
+      {
+        $row = mysql_fetch_row( $result );
+        if ( ! $row )
+        {
+          $error .= "Unable to fetch user row from the database.<BR>";
+          $fatal = true;
+        }
+        else
+        {
+          $userName = $row[ 0 ];
+        }
+      }
+    }
+    else
+    {
+      $userName = "the author";
+    }
+
+    // Save the previous episode into the edit log.
+    createEpisodeEditLog( $error, $fatal, $episode, "Edited by " . $userName . "." );
+
+    $result = mysql_query( "update Episode set EditorSessionID   = "  . $sessionID                          .  ", " .
+                                              "SchemeID          = "  . $scheme                             .  ", " .
+                                              "Status            = 2, " .
+                                              "IsLinkable        = '" . ( $linkable   == 1 ? "Y" : "N" )    . "', " .
+                                              "IsExtendable      = '" . ( $extendable == 1 ? "Y" : "N" )    . "', " .
+                                              "AuthorMailto      = '" . ( $mailto     == 1 ? "Y" : "N" )    . "', " .
+                                              "AuthorNotify      = '" . ( $notify     == 1 ? "Y" : "N" )    . "', " .
+                                              "Title             = '" . mysql_escape_string( $title       ) . "', " .
+                                              "Text              = '" . mysql_escape_string( $text        ) . "', " .
+                                              "AuthorName        = '" . mysql_escape_string( $authorName  ) . "', " .
+                                              "AuthorEmail       = '" . mysql_escape_string( $authorEmail ) . "', " .
+                                              "LockDate          = '', " .
+                                              "LockKey           = 0, " .
+                                              "CreationTimestamp = now( ) " .
+                                        "where EpisodeID         = "  . $episode );
     if ( ! $result )
     {
       $error .= "Unable to update the episode record for editing.<BR>";
