@@ -16,6 +16,9 @@
 
 - Fixed bug # 855418: Quotes not handled when editing a user.
 
+
+
+
 ===== Changes between V 2.0.1 and V 2.1.0 =====
 
 - Added administration features:
