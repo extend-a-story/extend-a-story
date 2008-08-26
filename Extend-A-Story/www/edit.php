@@ -77,6 +77,8 @@ You are unable to perform advanced edit functions while episode creation is disa
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -134,6 +136,8 @@ You do not have permission to use the advanced editing features.
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -196,6 +200,8 @@ You are trying to edit an episode that someone else is currently editing.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -251,6 +257,8 @@ You are trying to edit an episode that has not been locked.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -282,6 +290,8 @@ You are trying to edit an episode that has been locked, but not by you.
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -672,6 +682,8 @@ The edit operation you requested has been completed.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -728,6 +740,8 @@ Linked Episode:<BR>
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -765,6 +779,8 @@ Linked Episode:<BR>
 </FORM>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -860,6 +876,8 @@ There are no links from this episode that you can delete.
 </FORM>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -961,6 +979,8 @@ This episode can be deleted. Are you sure you want to delete it?
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -1005,6 +1025,8 @@ author from being able to edit the episode afterwords. Are you sure?
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -1033,5 +1055,7 @@ The command you selected is not supported.
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>

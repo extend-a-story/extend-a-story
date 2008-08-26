@@ -143,4 +143,6 @@ http://www.sir-toby.com/extend-a-story/
 <P>
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>

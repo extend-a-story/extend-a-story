@@ -110,4 +110,6 @@ days.
 <P>
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>

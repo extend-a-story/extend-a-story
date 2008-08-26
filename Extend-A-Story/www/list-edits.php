@@ -93,6 +93,8 @@ You do not have permission to view the edits for this episode.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -143,5 +145,7 @@ Clicking on a <I>View Edit</I> link views the episode as it was <B>before</B> th
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>

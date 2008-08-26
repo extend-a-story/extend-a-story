@@ -109,6 +109,8 @@ The command you selected is not supported.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -175,6 +177,8 @@ You are unable to create episodes while episode creation is disabled.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -224,6 +228,8 @@ The episode you are trying to create is an orphan (has no links to it) and canno
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -387,6 +393,8 @@ currently working on. Wait a few moments and try again.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -419,6 +427,8 @@ or you don't have permission to edit this episode.
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -453,6 +463,8 @@ obtain a lock on this episode and then you may proceed with creating it.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -485,6 +497,8 @@ obtain a lock on this episode and then you may proceed with editing it.
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -520,6 +534,8 @@ on this episode, and then you may proceed with creating it.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -554,6 +570,8 @@ on this episode, and then you may proceed with editing it.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -585,6 +603,8 @@ You are trying to extend an episode that is not extendable.
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1099,6 +1119,8 @@ entry. Thank you for your addition to the story.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 <?php
 
@@ -1129,6 +1151,8 @@ has been created and is ready for entry. Thank you for your addition to the stor
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 <?php
 
@@ -1158,6 +1182,8 @@ entry. Thank you for your addition to the story.
 <A HREF="read.php?episode=<?php echo( $episode ); ?>">Enter Episode <?php echo( $episode ); ?></A>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 <?php
@@ -1551,4 +1577,7 @@ Some features require your email address:<BR>
   }
 
 ?>
+
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>

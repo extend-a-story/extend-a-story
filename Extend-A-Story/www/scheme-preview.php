@@ -154,4 +154,6 @@ Select another scheme to preview:<BR>
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>

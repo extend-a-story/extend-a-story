@@ -158,6 +158,8 @@ http://www.sir-toby.com/extend-a-story/
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 <?php
 
@@ -746,6 +748,8 @@ http://www.sir-toby.com/extend-a-story/
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 <?php
 
@@ -794,6 +798,8 @@ http://www.sir-toby.com/extend-a-story/
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 <?php
@@ -864,6 +870,8 @@ http://www.sir-toby.com/extend-a-story/
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 <?php
 
@@ -911,6 +919,8 @@ http://www.sir-toby.com/extend-a-story/
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 <?php
@@ -989,6 +999,8 @@ http://www.sir-toby.com/extend-a-story/
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 <?php
 
@@ -1050,6 +1062,8 @@ http://www.sir-toby.com/extend-a-story/
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 <?php
@@ -1118,6 +1132,8 @@ http://www.sir-toby.com/extend-a-story/
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 <?php
 
@@ -1157,6 +1173,8 @@ http://www.sir-toby.com/extend-a-story/
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 <?php
@@ -1284,5 +1302,7 @@ Delete User -
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>

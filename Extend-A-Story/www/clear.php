@@ -76,6 +76,8 @@ You are unable to clear locks while episode creation is disabled.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -135,6 +137,8 @@ correct key to unlock it at that time.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -166,6 +170,8 @@ You have specified an episode that is not locked.
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -213,5 +219,7 @@ It is now ready to be <?php echo( ( $status == 1 ) ? "created" : "edited" ); ?> 
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>

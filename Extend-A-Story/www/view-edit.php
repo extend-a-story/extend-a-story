@@ -82,6 +82,8 @@ http://www.sir-toby.com/extend-a-story/
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 <?php
 
@@ -128,6 +130,8 @@ You do not have permission to view this edit log.
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -380,5 +384,7 @@ Edit Date: <?php echo( $editDate ); ?>
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>

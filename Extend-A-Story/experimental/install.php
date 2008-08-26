@@ -230,5 +230,7 @@ Installtion of your Extend-A-Story database is complete. You should now
 delete this file from your Extend-A-Story web site directory to prevent
 others from running it.
 
+<?php require( "footer.php" ); ?>
+
   </body>
 </html>

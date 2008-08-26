@@ -136,4 +136,6 @@ http://www.sir-toby.com/extend-a-story/
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>

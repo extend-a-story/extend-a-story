@@ -125,7 +125,10 @@ http://www.sir-toby.com/extend-a-story/
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
+
 <?php
 
         exit;
@@ -306,6 +309,8 @@ yet, and episode creation is currently disabled.
 
 </CENTER>
 
+<?php require( "footer.php" ); ?>
+
 </BODY></HTML>
 
 <?php
@@ -341,6 +346,8 @@ If you do not wish to create it now, you may go back to the previous episode.
 </TABLE>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -419,6 +426,8 @@ This episode was locked <?php echo( $minutes ); ?> minutes ago and is considered
 
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -691,6 +700,8 @@ Extending Enabled
 ?>
 
 </CENTER>
+
+<?php require( "footer.php" ); ?>
 
 </BODY></HTML>
 
