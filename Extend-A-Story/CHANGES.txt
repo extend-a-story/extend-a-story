@@ -2,6 +2,7 @@
 
 - Added 'xmlns' attribute to the 'html' element in the documentation web
   pages since the W3C validator was complaining about it being missing.
+
 - Added functionality for including a common footer at the bottom of every
   page.
 
