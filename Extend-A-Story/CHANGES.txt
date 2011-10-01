@@ -1,4 +1,4 @@
-===== Changes between V 2.1.1 and Next Version =====
+===== Changes between V 2.1.1 and V 2.2.0 =====
 
 - Added 'xmlns' attribute to the 'html' element in the documentation web
   pages since the W3C validator was complaining about it being missing.
