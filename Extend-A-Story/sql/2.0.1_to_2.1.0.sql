@@ -21,49 +21,54 @@
 # http://www.sir-toby.com/extend-a-story/
 
 
-create table User
+CREATE TABLE User
 (
-  UserID          int     unsigned not null primary key,
-  PermissionLevel tinyint unsigned not null,
-  LoginName       varchar( 255 )   not null,
-  Password        char   ( 16  )   not null,
-  UserName        varchar( 255 )   not null
+    UserID           INT     UNSIGNED  NOT NULL  PRIMARY KEY,
+    PermissionLevel  TINYINT UNSIGNED  NOT NULL,
+    LoginName        VARCHAR( 255 )    NOT NULL,
+    Password         CHAR   ( 16  )    NOT NULL,
+    UserName         VARCHAR( 255 )    NOT NULL
 );
 
-create table EpisodeEditLog
+
+CREATE TABLE EpisodeEditLog
 (
-  EpisodeEditLogID  int     unsigned not null primary key,
-  EpisodeID         int     unsigned not null,
-  SchemeID          int     unsigned not null,
-  ImageID           int     unsigned not null,
-  IsLinkable        char   ( 1   )   not null,
-  IsExtendable      char   ( 1   )   not null,
-  AuthorMailto      char   ( 1   )   not null,
-  AuthorNotify      char   ( 1   )   not null,
-  Title             varchar( 255 )   not null,
-  Text              text             not null,
-  AuthorName        varchar( 255 )   not null,
-  AuthorEmail       varchar( 255 )   not null,
-  EditDate          varchar( 255 )   not null,
-  EditLogEntry      varchar( 255 )   not null,
-  INDEX( EpisodeID )
+    EpisodeEditLogID  INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    EpisodeID         INT UNSIGNED    NOT NULL,
+    SchemeID          INT UNSIGNED    NOT NULL,
+    ImageID           INT UNSIGNED    NOT NULL,
+    IsLinkable        CHAR   ( 1   )  NOT NULL,
+    IsExtendable      CHAR   ( 1   )  NOT NULL,
+    AuthorMailto      CHAR   ( 1   )  NOT NULL,
+    AuthorNotify      CHAR   ( 1   )  NOT NULL,
+    Title             VARCHAR( 255 )  NOT NULL,
+    Text              TEXT            NOT NULL,
+    AuthorName        VARCHAR( 255 )  NOT NULL,
+    AuthorEmail       VARCHAR( 255 )  NOT NULL,
+    EditDate          VARCHAR( 255 )  NOT NULL,
+    EditLogEntry      VARCHAR( 255 )  NOT NULL,
+    INDEX( EpisodeID )
 );
 
-create table LinkEditLog
+
+CREATE TABLE LinkEditLog
 (
-  LinkEditLogID    int unsigned   not null primary key,
-  EpisodeEditLogID int unsigned   not null,
-  TargetEpisodeID  int unsigned   not null,
-  IsBackLink       char   ( 1   ) not null,
-  Description      varchar( 255 ) not null,
-  INDEX( EpisodeEditLogID )
+    LinkEditLogID     INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    EpisodeEditLogID  INT UNSIGNED    NOT NULL,
+    TargetEpisodeID   INT UNSIGNED    NOT NULL,
+    IsBackLink        CHAR   ( 1   )  NOT NULL,
+    Description       VARCHAR( 255 )  NOT NULL,
+    INDEX( EpisodeEditLogID )
 );
 
-alter table Session add column UserID int unsigned not null after SessionID;
 
-insert into ExtendAStoryVariable values( "NextUserID",           2,  null );
-insert into ExtendAStoryVariable values( "NextEpisodeEditLogID", 1,  null );
-insert into ExtendAStoryVariable values( "NextLinkEditLogID",    1,  null );
-insert into ExtendAStoryVariable values( "MaxEditDays",          30, null );
+ALTER TABLE Session ADD COLUMN UserID INT UNSIGNED NOT NULL AFTER SessionID;
 
-insert into User values( 1, 4, "admin", password( "change-me" ), "Administrator" );
+
+INSERT INTO ExtendAStoryVariable VALUES( "NextUserID",           2,  NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeEditLogID", 1,  NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextLinkEditLogID",    1,  NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "MaxEditDays",          30, NULL );
+
+
+INSERT INTO User VALUES( 1, 4, "admin", password( "change-me" ), "Administrator" );

@@ -21,39 +21,43 @@
 # http://www.sir-toby.com/extend-a-story/
 
 
-drop table if exists ExtendAStoryVariable;
-drop table if exists Session;
-drop table if exists User;
-drop table if exists Episode;
-drop table if exists Link;
-drop table if exists EpisodeEditLog;
-drop table if exists LinkEditLog;
-drop table if exists Scheme;
-drop table if exists Image;
+DROP TABLE IF EXISTS ExtendAStoryVariable;
+DROP TABLE IF EXISTS Session;
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Episode;
+DROP TABLE IF EXISTS Link;
+DROP TABLE IF EXISTS EpisodeEditLog;
+DROP TABLE IF EXISTS LinkEditLog;
+DROP TABLE IF EXISTS Scheme;
+DROP TABLE IF EXISTS Image;
 
-create table ExtendAStoryVariable
+
+CREATE TABLE ExtendAStoryVariable
 (
-  VariableName varchar( 255 ) not null primary key,
-  IntValue     int unsigned,
-  StringValue  varchar( 255 )
+    VariableName  VARCHAR( 255 )  NOT NULL  PRIMARY KEY,
+    IntValue      INT UNSIGNED    NULL,
+    StringValue   VARCHAR( 255 )  NULL
 );
 
-create table Session
+
+CREATE TABLE Session
 (
-  SessionID  int unsigned not null primary key,
-  UserID     int unsigned not null,
-  SessionKey int unsigned not null,
-  AccessDate datetime     not null
+    SessionID   INT UNSIGNED  NOT NULL  PRIMARY KEY,
+    UserID      INT UNSIGNED  NOT NULL,
+    SessionKey  INT UNSIGNED  NOT NULL,
+    AccessDate  DATETIME      NOT NULL
 );
 
-create table User
+
+CREATE TABLE User
 (
-  UserID          int     unsigned not null primary key,
-  PermissionLevel tinyint unsigned not null,
-  LoginName       varchar( 255 )   not null,
-  Password        char   ( 16  )   not null,
-  UserName        varchar( 255 )   not null
+    UserID           INT     UNSIGNED  NOT NULL  PRIMARY KEY,
+    PermissionLevel  TINYINT UNSIGNED  NOT NULL,
+    LoginName        VARCHAR( 255 )    NOT NULL,
+    Password         CHAR   ( 16  )    NOT NULL,
+    UserName         VARCHAR( 255 )    NOT NULL
 );
+
 
 # Description of PermissionLevel values:
 #   1 - Moderator       : Can edit any episode.
@@ -61,28 +65,30 @@ create table User
 #   3 - Manager         : As above, but can also change configuration values.
 #   4 - Administrator   : As above, but can also edit users.
 
-create table Episode
+
+CREATE TABLE Episode
 (
-  EpisodeID         int     unsigned not null primary key,
-  Parent            int     unsigned not null,
-  AuthorSessionID   int     unsigned not null,
-  EditorSessionID   int     unsigned not null,
-  SchemeID          int     unsigned not null,
-  ImageID           int     unsigned not null,
-  Status            tinyint unsigned not null,
-  IsLinkable        char   ( 1   )   not null,
-  IsExtendable      char   ( 1   )   not null,
-  AuthorMailto      char   ( 1   )   not null,
-  AuthorNotify      char   ( 1   )   not null,
-  Title             varchar( 255 )   not null,
-  Text              text             not null,
-  AuthorName        varchar( 255 )   not null,
-  AuthorEmail       varchar( 255 )   not null,
-  CreationDate      varchar( 255 )   not null,
-  LockDate          varchar( 255 )   not null,
-  LockKey           int     unsigned not null,
-  CreationTimestamp datetime
+    EpisodeID          INT     UNSIGNED  NOT NULL  PRIMARY KEY,
+    Parent             INT     UNSIGNED  NOT NULL,
+    AuthorSessionID    INT     UNSIGNED  NOT NULL,
+    EditorSessionID    INT     UNSIGNED  NOT NULL,
+    SchemeID           INT     UNSIGNED  NOT NULL,
+    ImageID            INT     UNSIGNED  NOT NULL,
+    Status             TINYINT UNSIGNED  NOT NULL,
+    IsLinkable         CHAR   ( 1   )    NOT NULL,
+    IsExtendable       CHAR   ( 1   )    NOT NULL,
+    AuthorMailto       CHAR   ( 1   )    NOT NULL,
+    AuthorNotify       CHAR   ( 1   )    NOT NULL,
+    Title              VARCHAR( 255 )    NOT NULL,
+    Text               TEXT              NOT NULL,
+    AuthorName         VARCHAR( 255 )    NOT NULL,
+    AuthorEmail        VARCHAR( 255 )    NOT NULL,
+    CreationDate       VARCHAR( 255 )    NOT NULL,
+    LockDate           VARCHAR( 255 )    NOT NULL,
+    LockKey            INT     UNSIGNED  NOT NULL,
+    CreationTimestamp  DATETIME          NULL
 );
+
 
 # Description of Status values:
 #   0 - Not Created
@@ -90,93 +96,102 @@ create table Episode
 #   2 - Created
 #   3 - Created / Locked for Editing
 
-create table Link
+
+CREATE TABLE Link
 (
-  LinkID          int unsigned   not null primary key,
-  SourceEpisodeID int unsigned   not null,
-  TargetEpisodeID int unsigned   not null,
-  IsCreated       char   ( 1   ) not null,
-  IsBackLink      char   ( 1   ) not null,
-  Description     varchar( 255 ) not null,
-  INDEX( SourceEpisodeID ),
-  INDEX( TargetEpisodeID )
+    LinkID          INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    SourceEpisodeID INT UNSIGNED    NOT NULL,
+    TargetEpisodeID INT UNSIGNED    NOT NULL,
+    IsCreated       CHAR   ( 1   )  NOT NULL,
+    IsBackLink      CHAR   ( 1   )  NOT NULL,
+    Description     VARCHAR( 255 )  NOT NULL,
+    INDEX( SourceEpisodeID ),
+    INDEX( TargetEpisodeID )
 );
 
-create table EpisodeEditLog
+
+CREATE TABLE EpisodeEditLog
 (
-  EpisodeEditLogID  int     unsigned not null primary key,
-  EpisodeID         int     unsigned not null,
-  SchemeID          int     unsigned not null,
-  ImageID           int     unsigned not null,
-  IsLinkable        char   ( 1   )   not null,
-  IsExtendable      char   ( 1   )   not null,
-  AuthorMailto      char   ( 1   )   not null,
-  AuthorNotify      char   ( 1   )   not null,
-  Title             varchar( 255 )   not null,
-  Text              text             not null,
-  AuthorName        varchar( 255 )   not null,
-  AuthorEmail       varchar( 255 )   not null,
-  EditDate          varchar( 255 )   not null,
-  EditLogEntry      varchar( 255 )   not null,
-  INDEX( EpisodeID )
+    EpisodeEditLogID  INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    EpisodeID         INT UNSIGNED    NOT NULL,
+    SchemeID          INT UNSIGNED    NOT NULL,
+    ImageID           INT UNSIGNED    NOT NULL,
+    IsLinkable        CHAR   ( 1   )  NOT NULL,
+    IsExtendable      CHAR   ( 1   )  NOT NULL,
+    AuthorMailto      CHAR   ( 1   )  NOT NULL,
+    AuthorNotify      CHAR   ( 1   )  NOT NULL,
+    Title             VARCHAR( 255 )  NOT NULL,
+    Text              TEXT            NOT NULL,
+    AuthorName        VARCHAR( 255 )  NOT NULL,
+    AuthorEmail       VARCHAR( 255 )  NOT NULL,
+    EditDate          VARCHAR( 255 )  NOT NULL,
+    EditLogEntry      VARCHAR( 255 )  NOT NULL,
+    INDEX( EpisodeID )
 );
 
-create table LinkEditLog
+
+CREATE TABLE LinkEditLog
 (
-  LinkEditLogID    int unsigned   not null primary key,
-  EpisodeEditLogID int unsigned   not null,
-  TargetEpisodeID  int unsigned   not null,
-  IsBackLink       char   ( 1   ) not null,
-  Description      varchar( 255 ) not null,
-  INDEX( EpisodeEditLogID )
+    LinkEditLogID     INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    EpisodeEditLogID  INT UNSIGNED    NOT NULL,
+    TargetEpisodeID   INT UNSIGNED    NOT NULL,
+    IsBackLink        CHAR   ( 1   )  NOT NULL,
+    Description       VARCHAR( 255 )  NOT NULL,
+    INDEX( EpisodeEditLogID )
 );
 
-create table Scheme
+
+CREATE TABLE Scheme
 (
-  SchemeID       int unsigned   not null primary key,
-  SchemeName     varchar( 255 ) not null,
-  bgcolor        varchar( 255 ) not null,
-  text           varchar( 255 ) not null,
-  link           varchar( 255 ) not null,
-  vlink          varchar( 255 ) not null,
-  alink          varchar( 255 ) not null,
-  background     varchar( 255 ) not null,
-  UncreatedLink  varchar( 255 ) not null,
-  CreatedLink    varchar( 255 ) not null,
-  BackLinkedLink varchar( 255 ) not null
+    SchemeID        INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    SchemeName      VARCHAR( 255 )  NOT NULL,
+    bgcolor         VARCHAR( 255 )  NOT NULL,
+    text            VARCHAR( 255 )  NOT NULL,
+    link            VARCHAR( 255 )  NOT NULL,
+    vlink           VARCHAR( 255 )  NOT NULL,
+    alink           VARCHAR( 255 )  NOT NULL,
+    background      VARCHAR( 255 )  NOT NULL,
+    UncreatedLink   VARCHAR( 255 )  NOT NULL,
+    CreatedLink     VARCHAR( 255 )  NOT NULL,
+    BackLinkedLink  VARCHAR( 255 )  NOT NULL
 );
 
-create table Image
+
+CREATE TABLE Image
 (
-  ImageID   int unsigned   not null primary key,
-  ImageName varchar( 255 ) not null,
-  ImageURL  varchar( 255 ) not null
+    ImageID    INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    ImageName  VARCHAR( 255 )  NOT NULL,
+    ImageURL   VARCHAR( 255 )  NOT NULL
 );
 
-insert into ExtendAStoryVariable values( "CountDate",            null, date_format( now( ), '%c/%e/%Y %l:%i:%s %p' ) );
-insert into ExtendAStoryVariable values( "CountValue",           0,    null );
-insert into ExtendAStoryVariable values( "NextSessionID",        1,    null );
-insert into ExtendAStoryVariable values( "NextUserID",           2,    null );
-insert into ExtendAStoryVariable values( "NextEpisodeID",        2,    null );
-insert into ExtendAStoryVariable values( "NextLinkID",           1,    null );
-insert into ExtendAStoryVariable values( "NextEpisodeEditLogID", 1,    null );
-insert into ExtendAStoryVariable values( "NextLinkEditLogID",    1,    null );
-insert into ExtendAStoryVariable values( "NextSchemeID",         3,    null );
-insert into ExtendAStoryVariable values( "NextImageID",          1,    null );
 
-insert into ExtendAStoryVariable values( "StoryName",            null, "-"  );
-insert into ExtendAStoryVariable values( "SiteName",             null, "-"  );
-insert into ExtendAStoryVariable values( "StoryHome",            null, "-"  );
-insert into ExtendAStoryVariable values( "SiteHome",             null, "-"  );
-insert into ExtendAStoryVariable values( "ReadEpisodeURL",       null, "-"  );
-insert into ExtendAStoryVariable values( "AdminEmail",           null, "-"  );
-insert into ExtendAStoryVariable values( "IsWriteable",          null, "N"  );
-insert into ExtendAStoryVariable values( "MaxLinks",             10,   null );
-insert into ExtendAStoryVariable values( "MaxEditDays",          30,   null );
+INSERT INTO ExtendAStoryVariable VALUES( "CountDate",            NULL, date_format( now( ), '%c/%e/%Y %l:%i:%s %p' ) );
+INSERT INTO ExtendAStoryVariable VALUES( "CountValue",           0,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextSessionID",        1,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextUserID",           2,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeID",        2,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextLinkID",           1,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeEditLogID", 1,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextLinkEditLogID",    1,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextSchemeID",         3,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "NextImageID",          1,    NULL );
 
-insert into User values( 1, 4, "admin", password( "change-me" ), "Administrator" );
+INSERT INTO ExtendAStoryVariable VALUES( "StoryName",            NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES( "SiteName",             NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES( "StoryHome",            NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES( "SiteHome",             NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES( "ReadEpisodeURL",       NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES( "AdminEmail",           NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES( "IsWriteable",          NULL, "N"  );
+INSERT INTO ExtendAStoryVariable VALUES( "MaxLinks",             10,   NULL );
+INSERT INTO ExtendAStoryVariable VALUES( "MaxEditDays",          30,   NULL );
 
-insert into Episode values( 1, 1, 0, 0, 1, 0, 0, "N", "N", "N", "N", "-", "-", "-", "-", "-", "-", 0, null );
 
-insert into Scheme values( 1, "Black Text on White Background",  "#FFFFFF", "#000000", "#0000FF", "#FF0000", "#00FF00", "",                  "images/red.gif",             "images/green.gif",         "images/blue.gif"             );
-insert into Scheme values( 2, "White Text on Black Background",  "#000000", "#FFFFFF", "#00FF00", "#FF0000", "#0000FF", "",                  "images/red.gif",             "images/green.gif",         "images/blue.gif"             );
+INSERT INTO User VALUES( 1, 4, "admin", password( "change-me" ), "Administrator" );
+
+
+INSERT INTO Episode VALUES( 1, 1, 0, 0, 1, 0, 0, "N", "N", "N", "N", "-", "-", "-", "-", "-", "-", 0, NULL );
+
+
+INSERT INTO Scheme VALUES( 1, "Black Text on White Background", "#FFFFFF", "#000000", "#0000FF", "#FF0000", "#00FF00", "", "images/red.gif", "images/green.gif", "images/blue.gif" );
+INSERT INTO Scheme VALUES( 2, "White Text on Black Background", "#000000", "#FFFFFF", "#00FF00", "#FF0000", "#0000FF", "", "images/red.gif", "images/green.gif", "images/blue.gif" );

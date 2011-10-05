@@ -23,19 +23,25 @@
 
 ### Find all Links that are incorrectly listed as Created or Not-Created.
 
-select Episode.EpisodeID, Episode.Status, Link.LinkID, Link.IsCreated, Link.SourceEpisodeID, Link.TargetEpisodeID
-from Episode, Link
-where Episode.EpisodeID = Link.TargetEpisodeID and
-( ( ( Episode.Status = 2 or Episode.Status = 3 ) and Link.IsCreated = "N" ) or
-  ( ( Episode.Status = 0 or Episode.Status = 1 ) and Link.IsCreated = "Y" ) )
-order by Episode.EpisodeID;
+SELECT Episode.EpisodeID, Episode.Status, Link.LinkID, Link.IsCreated, Link.SourceEpisodeID, Link.TargetEpisodeID
+  FROM Episode, Link
+ WHERE ( Episode.EpisodeID = Link.TargetEpisodeID ) AND
+       (((( Episode.Status = 2 ) OR
+          ( Episode.Status = 3 )) AND
+         ( Link.IsCreated = "N" )) OR
+        ((( Episode.Status = 0 ) OR
+          ( Episode.Status = 1 )) AND
+         ( Link.IsCreated = "Y" )))
+ ORDER BY Episode.EpisodeID;
 
 
 ### Find all Links that are incorrectly listed as BackLinked or Not-BackLinked.
 
-select Episode.EpisodeID, Episode.Status, Link.LinkID, Link.IsBackLink, Link.SourceEpisodeID, Link.TargetEpisodeID
-from Episode, Link
-where Episode.EpisodeID = Link.TargetEpisodeID and
-( ( Episode.Parent  = Link.SourceEpisodeID and Link.IsBackLink = "Y" ) or
-  ( Episode.Parent != Link.SourceEpisodeID and Link.IsBackLink = "N" ) )
-order by Episode.EpisodeID;
+SELECT Episode.EpisodeID, Episode.Status, Link.LinkID, Link.IsBackLink, Link.SourceEpisodeID, Link.TargetEpisodeID
+  FROM Episode, Link
+ WHERE ( Episode.EpisodeID = Link.TargetEpisodeID ) AND
+       ((( Episode.Parent = Link.SourceEpisodeID ) AND
+         ( Link.IsBackLink = "Y" )) OR
+        (( Episode.Parent != Link.SourceEpisodeID ) AND
+         ( Link.IsBackLink = "N" )))
+ ORDER BY Episode.EpisodeID;
