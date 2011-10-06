@@ -3,8 +3,8 @@
 - Added 'xmlns' attribute to the 'html' element in the documentation web
   pages since the W3C validator was complaining about it being missing.
 
-- Added functionality for including a common footer at the bottom of every
-  page.
+- Added functionality for including a common footer at the bottom of
+  every page.
 
 - Fixed bug # 3419172: Cannot log in using admin interface.
 
@@ -20,12 +20,14 @@
 - Fixed bug # 847362: Fatal error with single quote in password in admin
   interface.
 
-- Fixed bug # 847375: Problems with single quotes configuring story settings.
+- Fixed bug # 847375: Problems with single quotes configuring story
+  settings.
 
-- Fixed bug # 855409: Problem creating user with a password with a single
+- Fixed bug # 855409: Problem creating user with a password with a
+  single quote.
+
+- Fixed bug # 855415: Fatal error when changing password with single
   quote.
-
-- Fixed bug # 855415: Fatal error when changing password with single quote.
 
 - Fixed bug # 855418: Quotes not handled when editing a user.
 
@@ -40,21 +42,23 @@
   - View potential database problems.
   - Super moderators can delete just about anything.
   - Moderators can edit any episode.
-  - For each episode, a log of all editing done to that episode is now kept.
+  - For each episode, a log of all editing done to that episode is now
+    kept.
 
 - Added the ability to view the story tree from any starting episode.
 
-- Added the ability to view the back story of an episode. This maps out all
-  the episodes you can reach from an episode by following all back links that
-  link to it.
+- Added the ability to view the back story of an episode. This maps out
+  all the episodes you can reach from an episode by following all back
+  links that link to it.
 
-- The author name is now included in extension notification email messages.
+- The author name is now included in extension notification email
+  messages.
 
 - Email addresses are now obfuscated when displayed publicly.
 
-- Force the use of a form button to create episodes. This stops web crawlers
-  from following the creation link and locking all episodes when they crawl
-  the story.
+- Force the use of a form button to create episodes. This stops web
+  crawlers from following the creation link and locking all episodes
+  when they crawl the story.
 
 - Search results are now ordered by EpisodeID.
 
@@ -67,8 +71,8 @@
 
 ===== Changes between V 2.0.0 and V 2.0.1 =====
 
-- Incorrect behaviour when editing episodes with options with quotes in their
-  description has been fixed.
+- Incorrect behaviour when editing episodes with options with quotes in
+  their description has been fixed.
 
-- The problem where creation date shows up incorrectly as current date when
-  editing episodes has been fixed.
+- The problem where creation date shows up incorrectly as current date
+  when editing episodes has been fixed.
