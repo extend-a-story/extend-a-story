@@ -37,7 +37,7 @@
 ===== Changes between V 2.0.1 and V 2.1.0 =====
 
 - Added administration features:
-  - Add/edit adminstrator/moderator users.
+  - Add/edit administrator/moderator users.
   - Configure story settings.
   - View potential database problems.
   - Super moderators can delete just about anything.
@@ -71,7 +71,7 @@
 
 ===== Changes between V 2.0.0 and V 2.0.1 =====
 
-- Incorrect behaviour when editing episodes with options with quotes in
+- Incorrect behavior when editing episodes with options with quotes in
   their description has been fixed.
 
 - The problem where creation date shows up incorrectly as current date
