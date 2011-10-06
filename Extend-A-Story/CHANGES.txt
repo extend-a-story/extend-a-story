@@ -6,6 +6,8 @@
 - Added functionality for including a common footer at the bottom of every
   page.
 
+- Fixed bug # 3419172: Cannot log in using admin interface.
+
 
 
 

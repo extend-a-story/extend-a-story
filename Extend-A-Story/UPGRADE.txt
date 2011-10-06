@@ -1,3 +1,52 @@
+===== Upgrading from V 2.1.1 to V 2.2.0 =====
+
+The database has changed for this release. You may want to disable
+episode creation before upgrading the database to ensure the database
+remains in a consistent state. To do so, log in to the Extend-A-Story
+admin interface, select 'Configure Story Settings', and set 'Is
+Writeable' to 'No'. You may want to make a backup of the database before
+upgrading it, just in case you have any problems. To upgrade the
+database, run the database upgrade script '2.1.1_to_2.2.0.sql' in the
+existing database.
+
+The code has changed for this release. Simply replace the story code on your
+web server with the contents of the www directory.
+
+The documenation has changed for this release. Simply replace the
+Extend-A-Story documentation directory on your web server with the contents
+of the docs directory.
+
+This version of Extend-A-Story fixes an issue encountered with recent
+versions of MySQL. This issue prevents all users from logging in to the
+Extend-A-Story admin interface. While the database upgrade script
+updates the database structure to accommodate recent versions of MySQL,
+there is an additional step you must perform if you are currently
+experiencing this issue. The additional step requires resetting the
+passwords of all users in your Extend-A-Story database. To do so, run
+the following SQL statement in your Extend-A-Story database for each of
+your users:
+
+UPDATE User SET Password = password( '<new password>' ) WHERE LoginName = '<username>';
+
+For example, to change the password of the admin account to the
+'change-me' password, you would run the following statement in your
+Extend-A-Story database:
+
+UPDATE User SET Password = password( 'change-me' ) WHERE LoginName = 'admin';
+
+You only have to perform this step if you are currently experiencing
+this issue. If you are running an older version of MySQL, it is possible
+that you are not currently experiencing this issue, but will encounter
+it after upgrading MySQL. If you encounter this issue after upgrading
+MySQL, perform this step at that time. If you have applied the
+workaround specified in the following thread, you do not have to perform
+this step a second time:
+
+http://www.sir-toby.com/phpbb/viewtopic.php?t=1091
+
+
+
+
 ===== Upgrading from V 2.1.0 to V 2.1.1 =====
 
 There are no database changes for this release.

@@ -54,7 +54,7 @@ CREATE TABLE User
     UserID           INT     UNSIGNED  NOT NULL  PRIMARY KEY,
     PermissionLevel  TINYINT UNSIGNED  NOT NULL,
     LoginName        VARCHAR( 255 )    NOT NULL,
-    Password         CHAR   ( 16  )    NOT NULL,
+    Password         VARCHAR( 255 )    NOT NULL,
     UserName         VARCHAR( 255 )    NOT NULL
 );
 
