@@ -12,7 +12,7 @@ existing database.
 The code has changed for this release. Simply replace the story code on your
 web server with the contents of the www directory.
 
-The documenation has changed for this release. Simply replace the
+The documentation has changed for this release. Simply replace the
 Extend-A-Story documentation directory on your web server with the contents
 of the docs directory.
 
@@ -54,7 +54,7 @@ There are no database changes for this release.
 The code has changed for this release. Simply replace the story code on your
 web server with the contents of the www directory.
 
-The documenation has changed for this release. Simply replace the
+The documentation has changed for this release. Simply replace the
 Extend-A-Story documentation directory on your web server with the contents
 of the docs directory.
 
