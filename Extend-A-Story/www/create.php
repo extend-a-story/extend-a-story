@@ -1479,7 +1479,7 @@ Enter a title for this episode:<BR>
 <INPUT TYPE="text" NAME="title" SIZE="60" MAXLENGTH="255" VALUE="<?php echo( htmlentities( $title ) ); ?>">
 <P>
 Describe the scenario:<BR>
-<TEXTAREA NAME="text" ROWS="10" COLS="75" WRAP="hard"><?php echo( htmlentities( $text ) ); ?></TEXTAREA>
+<TEXTAREA NAME="text" ROWS="10" COLS="75"><?php echo( htmlentities( $text ) ); ?></TEXTAREA>
 <P>
 Now, enter the options a reader will have at the end of this episode. Use
 only as many options as needed and leave the rest blank.

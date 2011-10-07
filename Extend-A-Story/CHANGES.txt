@@ -8,6 +8,8 @@
 
 - Fixed bug # 3419172: Cannot log in using admin interface.
 
+- Fixed bug # 3415911: Glitch with hyphenated words.
+
 
 
 
