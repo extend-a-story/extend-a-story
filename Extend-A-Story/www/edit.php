@@ -431,7 +431,7 @@ You are trying to edit an episode that has been locked, but not by you.
     $result = mysql_query( "select SourceEpisodeID, IsCreated, IsBackLink, Description from Link where LinkID = " . $linkID );
     if ( ! $result )
     {
-      $error .= "Problem querying databae for link information.<BR>";
+      $error .= "Problem querying database for link information.<BR>";
       $fatal = true;
     }
     else
