@@ -167,7 +167,6 @@ http://www.sir-toby.com/extend-a-story/
 <A HREF="read.php?episode=<?php echo( $episode ); ?>"><?php echo( $episode ); ?> : <?php echo( $title ); ?></A>
     </TD>
     <TD><?php echo( $children ); ?></TD>
-    <TD><A HREF="read.php?episode=<?php echo( $parent ); ?>"><?php echo( $parent ); ?></A></TD>
   </TR>
 <?php
 
