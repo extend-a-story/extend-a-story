@@ -115,11 +115,18 @@ http://www.sir-toby.com/extend-a-story/
             return;
         }
 
-        $originalSessionID  = $_COOKIE[ "sessionID"  ];
-        $originalSessionKey = $_COOKIE[ "sessionKey" ];
+        $originalSessionID  = 0;
+        $originalSessionKey = 0;
 
-        $originalSessionID  = (int) $originalSessionID;
-        $originalSessionKey = (int) $originalSessionKey;
+        if ( isset( $_COOKIE[ "sessionID" ] ))
+        {
+            $originalSessionID = (int) $_COOKIE[ "sessionID" ];
+        }
+
+        if ( isset( $_COOKIE[ "sessionKey" ] ))
+        {
+            $originalSessionKey = (int) $_COOKIE[ "sessionKey" ];
+        }
 
         $actualSessionID  = 0;
         $actualUserID     = 0;
