@@ -162,48 +162,13 @@ http://www.sir-toby.com/extend-a-story/
 
         if ( $actualSessionID == 0 )
         {
-            // get the NextSessionID from the database
-            $result = mysql_query( "SELECT IntValue " .
-                                     "FROM ExtendAStoryVariable " .
-                                    "WHERE VariableName = 'NextSessionID'" );
-
-            if ( ! $result )
-            {
-                $error .= "Unable to query the NextSessionID.<BR>";
-                $fatal = true;
-                return;
-            }
-
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Unable to fetch the NextSessionID row.<BR>";
-                $fatal = true;
-                return;
-            }
-
-            $nextSessionID = $row[ 0 ];
-
-            // update the NextSessionID in the database
-            $result = mysql_query( "UPDATE ExtendAStoryVariable " .
-                                      "SET IntValue = IntValue + 1 " .
-                                    "WHERE VariableName = 'NextSessionID'" );
-
-            if ( ! $result )
-            {
-                $error .= "Unable to update the NextSessionID.<BR>";
-                $fatal = true;
-                return;
-            }
-
+            // generate random session key
             $newSessionKey = mt_rand();
 
             // insert the session into the database
             $result = mysql_query( "INSERT " .
-                                     "INTO Session " .
-                                   "VALUES ( " . $nextSessionID . ", " .
-                                                 "0"            . ", " .
+                                     "INTO Session ( UserID, SessionKey, AccessDate ) " .
+                                   "VALUES ( " . "0"            . ", " .
                                                  $newSessionKey . ", " .
                                                  "NOW()"        . " )" );
 
@@ -214,7 +179,26 @@ http://www.sir-toby.com/extend-a-story/
                 return;
             }
 
-            $actualSessionID  = $nextSessionID;
+            // get the new SessionID from the database
+            $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+
+            if ( ! $result )
+            {
+                $error .= "Unable to query the new SessionID.<BR>";
+                $fatal = true;
+                return;
+            }
+
+            $row = mysql_fetch_row( $result );
+
+            if ( ! $row )
+            {
+                $error .= "Unable to fetch the new SessionID row.<BR>";
+                $fatal = true;
+                return;
+            }
+
+            $actualSessionID  = $row[ 0 ];
             $actualSessionKey = $newSessionKey;
         }
 

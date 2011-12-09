@@ -21,4 +21,8 @@
 # http://www.sir-toby.com/extend-a-story/
 
 
-ALTER TABLE User MODIFY COLUMN Password VARCHAR( 256 ) NOT NULL;
+ALTER TABLE User MODIFY COLUMN Password VARCHAR( 256 )  NOT NULL;
+
+ALTER TABLE Session MODIFY COLUMN SessionID INT UNSIGNED  NOT NULL  AUTO_INCREMENT;
+
+DELETE FROM ExtendAStoryVariable WHERE VariableName = 'NextSessionID';

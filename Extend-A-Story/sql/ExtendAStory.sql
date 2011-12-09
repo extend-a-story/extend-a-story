@@ -42,7 +42,7 @@ CREATE TABLE ExtendAStoryVariable
 
 CREATE TABLE Session
 (
-    SessionID   INT UNSIGNED  NOT NULL  PRIMARY KEY,
+    SessionID   INT UNSIGNED  NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
     UserID      INT UNSIGNED  NOT NULL,
     SessionKey  INT UNSIGNED  NOT NULL,
     AccessDate  DATETIME      NOT NULL
@@ -167,7 +167,6 @@ CREATE TABLE Image
 
 INSERT INTO ExtendAStoryVariable VALUES( "CountDate",            NULL, date_format( now( ), '%c/%e/%Y %l:%i:%s %p' ) );
 INSERT INTO ExtendAStoryVariable VALUES( "CountValue",           0,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextSessionID",        1,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES( "NextUserID",           2,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeID",        2,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES( "NextLinkID",           1,    NULL );
