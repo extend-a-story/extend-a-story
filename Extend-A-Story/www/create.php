@@ -623,7 +623,7 @@ You are trying to extend an episode that is not extendable.
   if ( $extending )
   {
     if ( empty( $extendedLink ) )
-      $warning .= "You must enter the decription for the new option.<BR>";
+      $warning .= "You must enter the description for the new option.<BR>";
 
     if ( strlen( $extendedLink ) > 255 )
       $warning .= "The description for the new option cannot be longer than 255 characters.<BR>";
