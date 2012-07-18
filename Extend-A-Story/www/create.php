@@ -954,7 +954,6 @@ You are trying to extend an episode that is not extendable.
     if ( ! $result )
     {
       $error .= "Unable to update the link record.<BR>";
-      echo( mysql_error( ) );
       $fatal = true;
     }
 
