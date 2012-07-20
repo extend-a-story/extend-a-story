@@ -1,0 +1,82 @@
+- create.php:
+   - Verify that the "episode" parameter defaults to 1 when it is not set.
+   - Verify that the "scheme" parameter defaults to 1 when it is not set.
+   - Set the "command" parameter to an invalid value.
+   - Extend an episode to completion.
+   - Edit an episode to completion, changing all values.
+   - Create an episode to completion.
+   - Access the page when the database is inaccessible.
+   - Access the page when episode creation is disabled.
+   - Create an episode that is an orphan.
+   - Edit an episode that:
+      - Is linkable and is not.
+      - Is extendable and is not.
+      - Makes the author's signature a mailto link and does not.
+      - Mails the author on extension and does not.
+   - Verify that the scheme defaults to the scheme of the parent episode when:
+      - Creating an episode.
+      - Extending an episode.
+   - Specify a scheme that does not exist.
+   - Create an episode that is already created or locked.
+   - Edit an episode that is already being edited and one that you cannot edit.
+   - When creating an episode that is not locked, preview and save the episode.
+   - When editing an episode that is not locked, preview and save the episode.
+   - When creating an episode that is locked by someone else, preview and save the episode.
+   - When editing an episode that is locked by someone else, preview and save the episode.
+   - Extend, preview, and save an episode with a parent that is not extendable.
+   - When creating, extending, or editing an episode:
+      - Error cases:
+         - For the title:
+            - Leave it blank.
+            - Enter more than 255 characters.
+            - Use a word with more than 30 characters.
+         - For the episode description:
+            - Leave it blank.
+            - Enter more than 65535 characters.
+            - Use a word with more than 30 characters.
+         - For the author name:
+            - Leave blank when specifying that the author name be turned into a mailto link to the
+              author's email address.
+            - Enter more than 255 characters.
+            - Use a word with more than 30 characters.
+         - For the author email:
+            - Leave blank when specifying that the author name be turned into a mailto link to the
+              author's email address.
+            - Leave blank when specifying that the author be notified of extensions.
+            - Enter more than 255 characters.
+         - Specify an option with more than 255 characters.
+         - Specify an option with a word with more than 30 characters.
+         - Specify no option text for a back link.
+         - Back link to an episode that does not exist.
+         - Back link to an episode that is not linkable.
+         - Enter no options.
+         - Specify two or more back links to the same episode.
+      - Success cases:
+         - Specify at least one back link.
+         - Set the episode to be extendable and not.
+         - Set the episode to be linkable and not.
+         - Set the author's signature to be a mailto link and not.
+         - Set the extension notification flag and not.
+      - Verify that the episode is saved correctly.
+   - When creating or extending an episode:
+      - Verify that the link from the parent episode to the new episode shows that the new episode
+         has been created.
+      - Verify that an extension notification is sent to the administrator.
+      - Verify that an extension notification is sent to author of the parent episode.
+   - When creating an episode:
+      - Verify that you cannot save when problems exist during the preview.
+      - Verify that previewing the episode updates the lock date on the episode.
+   - When extending an episode:
+      - For the description for the new option:
+         - Leave it blank.
+         - Enter more than 255 characters.
+         - Use a word with more than 30 characters.
+      - Verify that you cannot save when problems exist during the preview.
+   - When editing an episode:
+      - Leave one of the options blank.
+      - Update a back link to point to the same episode you are editing.
+      - Verify that you cannot save when problems exist during the preview.
+      - Verify that previewing the episode updates the lock date on the episode.
+      - Edit the episode as a user.
+      - Edit the episode as the author.
+      - Verify that the episode edit log is updated correctly.
