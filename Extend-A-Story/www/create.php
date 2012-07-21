@@ -28,36 +28,92 @@ http://www.sir-toby.com/extend-a-story/
 
     require( "ExtendAStory.php" );
 
-    $command = $_REQUEST[ "command" ];
-    $episode = $_REQUEST[ "episode" ];
+    $command         = "";
+    $episode         = 1;
+    $lockKey         = 0;
+    $commandModifier = "";
+    $extendedLink    = "";
+    $title           = "";
+    $text            = "";
+    $scheme          = 1;
+    $authorName      = "";
+    $authorEmail     = "";
+    $mailto          = "";
+    $notify          = "";
+    $linkable        = 0;
+    $extendable      = 0;
 
-    $lockKey         = $_POST[ "lockKey"         ];
-    $commandModifier = $_POST[ "commandModifier" ];
-    $extendedLink    = $_POST[ "extendedLink"    ];
-    $title           = $_POST[ "title"           ];
-    $text            = $_POST[ "text"            ];
-    $scheme          = $_POST[ "scheme"          ];
-    $authorName      = $_POST[ "authorName"      ];
-    $authorEmail     = $_POST[ "authorEmail"     ];
-    $mailto          = $_POST[ "mailto"          ];
-    $notify          = $_POST[ "notify"          ];
-    $linkable        = $_POST[ "linkable"        ];
-    $extendable      = $_POST[ "extendable"      ];
+    if ( isset( $_REQUEST[ "command" ] ))
+    {
+        $command = $_REQUEST[ "command" ];
+    }
 
-    $episode = (int) $episode;
-    $scheme  = (int) $scheme;
+    if ( isset( $_REQUEST[ "episode" ] ))
+    {
+        $episode = (int) $_REQUEST[ "episode" ];
+    }
+
+    if ( isset( $_POST[ "lockKey" ] ))
+    {
+        $lockKey = (int) $_POST[ "lockKey" ];
+    }
+
+    if ( isset( $_POST[ "commandModifier" ] ))
+    {
+        $commandModifier = $_POST[ "commandModifier" ];
+    }
+
+    if ( isset( $_POST[ "extendedLink" ] ))
+    {
+        $extendedLink = $_POST[ "extendedLink" ];
+    }
+
+    if ( isset( $_POST[ "title" ] ))
+    {
+        $title = $_POST[ "title" ];
+    }
+
+    if ( isset( $_POST[ "text" ] ))
+    {
+        $text = $_POST[ "text" ];
+    }
+
+    if ( isset( $_POST[ "scheme" ] ))
+    {
+        $scheme = (int) $_POST[ "scheme" ];
+    }
+
+    if ( isset( $_POST[ "authorName" ] ))
+    {
+        $authorName = $_POST[ "authorName" ];
+    }
+
+    if ( isset( $_POST[ "authorEmail" ] ))
+    {
+        $authorEmail = $_POST[ "authorEmail" ];
+    }
+
+    if ( isset( $_POST[ "mailto" ] ))
+    {
+        $mailto = $_POST[ "mailto" ];
+    }
+
+    if ( isset( $_POST[ "notify" ] ))
+    {
+        $notify = $_POST[ "notify" ];
+    }
+
+    if ( isset( $_POST[ "linkable" ] ))
+    {
+        $linkable = (int) $_POST[ "linkable" ];
+    }
+
+    if ( isset( $_POST[ "extendable" ] ))
+    {
+        $extendable = (int) $_POST[ "extendable" ];
+    }
 
     $linkCount = 0;
-
-    if ( $episode == 0 )
-    {
-        $episode = 1;
-    }
-
-    if ( $scheme == 0 )
-    {
-        $scheme = 1;
-    }
 
     $error = "";
     $fatal = false;
@@ -122,19 +178,13 @@ The command you selected is not supported.
         exit;
     }
 
-    if (( $command == "Extend"        ) ||
-        ( $command == "ExtendPreview" ) ||
-        ( $command == "ExtendSave"    ))
-    {
-        $extending = true;
-    }
+    $extending = ( $command == "Extend"        ) ||
+                 ( $command == "ExtendPreview" ) ||
+                 ( $command == "ExtendSave"    );
 
-    if (( $command == "Edit"        ) ||
-        ( $command == "EditPreview" ) ||
-        ( $command == "EditSave"    ))
-    {
-        $editing = true;
-    }
+    $editing = ( $command == "Edit"        ) ||
+               ( $command == "EditPreview" ) ||
+               ( $command == "EditSave"    );
 
     // connect to the database
     if ( empty( $error ))
@@ -844,15 +894,29 @@ You are trying to extend an episode that is not extendable.
 
             for ( $i = 0; $i < $linkCount; $i++ )
             {
-                $var1 = "option"   . $i;
-                $var2 = "backlink" . $i;
+                $var1 = "linkID"          . $i;
+                $var2 = "targetEpisodeID" . $i;
+                $var3 = "isBackLink"      . $i;
+                $var4 = "option"          . $i;
+                $var5 = "backlink"        . $i;
 
-                $$var1 = $_POST[ $var1 ];
-                $$var2 = $_POST[ $var2 ];
+                $$var1 = 0;
+                $$var2 = 0;
+                $$var3 = "N";
+                $$var4 = "";
+                $$var5 = 0;
 
-                prepareParam( $$var1 );
+                if ( isset( $_POST[ $var4 ] ))
+                {
+                    $$var4 = $_POST[ $var4 ];
+                }
 
-                $$var2 = (int) $$var2;
+                if ( isset( $_POST[ $var5 ] ))
+                {
+                    $$var5 = (int) $_POST[ $var5 ];
+                }
+
+                prepareParam( $$var4 );
             }
         }
     }
