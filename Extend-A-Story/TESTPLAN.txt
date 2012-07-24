@@ -107,7 +107,7 @@
       - Enter a blank description.
       - Enter more than 255 characters for the description.
       - Enter a word with more than 30 characters for the description.
-      - Enter the current episode as the linked episode. [FAIL]
+      - Enter the current episode as the linked episode.
       - Enter a linked episode that already has a link from the episode you are editing.
       - Enter a linked episode that does not exist.
       - Enter a linked episode that is not linkable.

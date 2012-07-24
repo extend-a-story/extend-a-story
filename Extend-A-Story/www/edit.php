@@ -374,6 +374,11 @@ You are trying to edit an episode that has been locked, but not by you.
 
         if ( $linkEpisode != 0 )
         {
+            if ( $linkEpisode == $episode )
+            {
+                $message .= "The link cannot link back to the same episode you are editing.<BR>";
+            }
+
             $result = mysql_query( "SELECT COUNT( * ) " .
                                      "FROM Link " .
                                     "WHERE SourceEpisodeID = " . $episode . " " .
