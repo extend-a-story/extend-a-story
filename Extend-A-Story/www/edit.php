@@ -28,15 +28,23 @@ http://www.sir-toby.com/extend-a-story/
 
     require( "ExtendAStory.php" );
 
-    $episode = $_REQUEST[ "episode" ];
-    $command = $_REQUEST[ "command" ];
-    $lockKey = $_REQUEST[ "lockKey" ];
+    $command = "";
+    $episode = 1;
+    $lockKey = 0;
 
-    $episode = (int) $episode;
-
-    if ( $episode == 0 )
+    if ( isset( $_REQUEST[ "command" ] ))
     {
-        $episode = 1;
+        $command = $_REQUEST[ "command" ];
+    }
+
+    if ( isset( $_REQUEST[ "episode" ] ))
+    {
+        $episode = (int) $_REQUEST[ "episode" ];
+    }
+
+    if ( isset( $_REQUEST[ "lockKey" ] ))
+    {
+        $lockKey = (int) $_REQUEST[ "lockKey" ];
     }
 
     $error = "";
@@ -335,6 +343,9 @@ You are trying to edit an episode that has been locked, but not by you.
     }
 
     $message = "";
+
+    $linkDescription = "";
+    $linkEpisode     = 0;
 
     if ( $command == "AddLinkSave" )
     {
