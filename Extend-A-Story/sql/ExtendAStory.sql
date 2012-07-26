@@ -165,7 +165,7 @@ CREATE TABLE Image
 );
 
 
-INSERT INTO ExtendAStoryVariable VALUES( "CountDate",            NULL, date_format( now( ), '%c/%e/%Y %l:%i:%s %p' ) );
+INSERT INTO ExtendAStoryVariable VALUES( "CountDate",            NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
 INSERT INTO ExtendAStoryVariable VALUES( "CountValue",           0,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES( "NextUserID",           2,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeID",        2,    NULL );
