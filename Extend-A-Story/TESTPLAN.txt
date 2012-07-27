@@ -141,3 +141,71 @@
    - When revoking the author's edit permission:
       - Verify that author's edit permission was revoked correctly.
       - Very that the episode edit log is updated correctly.
+- read.php:
+   - Verify that the "episode" parameter defaults to 1 when it is not set.
+   - Access the page when the database is inaccessible.
+   - Read an episode that does not exist.
+   - Read an uncreated episode that was locked more than five hours ago and verify that it is
+     automatically unlocked.
+   - When episode creation is disabled:
+      - Read an episode that is not created and not locked.
+      - Read an episode that is not created and locked.
+      - Read an episode that is extendable and verify that you are not allowed to add a new option.
+      - Read an episode that you have permission to edit and verify that you are not allowed to edit
+        the episode.
+   - Read an episode that is not created and not locked.
+   - Read an episode that is not created and locked:
+      - Locked by you.
+      - Locked by someone else less than one hour ago.
+      - Locked by someone else more than one hour ago but less than five hours ago.
+   - Read episodes with various schemes and verify that the schemes are displayed correctly.
+   - Read an episode with a scheme that does not specify a background image.
+   - Read an episode with a scheme that does specify a background image.
+   - Read an episode with an image.
+   - Read an episode without an image.
+   - Verify that the three types of links show up correctly:
+      - Link to uncreated episode.
+      - Link to created episode.
+      - Back link.
+   - Read an episode that is extendable and verify that you are prompted to add a new option.
+   - When reading episode one, verify that you do not have a link to "go back".
+   - When reading any episode besides episode one, verify that you have a link to "go back".
+   - When reading episode one, verify that you have options to view the backward and forward story
+     trees. [FAIL]
+   - When reading any episode besides episode one, verify that you have options to view the backward
+     and forward story trees.
+   - Read an episode with zero back links leading to it and verify that you are not prompted to view
+     all links to the episode.
+   - Ensure episode one has exactly one back link leading to it. Read episode one and verify that
+     you are prompted to view all links to the episode. [FAIL] 
+   - Read an episode (other than episode one) with one or more back links leading to it and verify
+     that you are prompted to view all links to the episode.
+   - Read an episode where the author's name is not displayed.
+   - Read an episode where the author's name is displayed:
+      Y Author's name is a "mailto" link.
+      Y Author's name is not a "mailto" link.
+   - Read an episode where linking is enabled and verify that "linking enabled" is displayed.
+   - Read an episode where linking is disabled and verify that "linking enabled" is not displayed.
+   - Read an episode where extending is enabled and verify that "extending enabled" is displayed.
+   - Read an episode where extending is disabled and verify that "extending enabled" is not
+     displayed.
+   - Verify that the episode view count is incremented each time you read an episode.
+   - If you don't have permission to edit an episode:
+      - Verify that you are not allowed to edit the episode.
+      - Verify that the advanced editing functions are not displayed.
+      - Verify that the option to view the edit log is not displayed.
+   - If you have permission to edit an episode:
+      - Verify that you are allowed to edit the episode.
+      - Read an episode that is locked for editing:
+         - Locked by you.
+         - Locked by someone else less than one hour ago.
+         - Locked by someone else more than one hour ago.
+      - If you don't have permission to use the advanced editing functions:
+         - Verify that the advanced editing functions are not displayed.
+      - If you have permission to use the advanced editing functions:
+         - Verify that the advanced editing functions are displayed.
+         - Verify that the option for revoking an author's edit permission is not displayed if the
+           author's edit permission has already been revoked.
+      - Verify that the option to view the edit log is displayed if the episode has been edited.
+      - Verify that the option to view the edit log is not displayed if the episode has not been
+        edited.
