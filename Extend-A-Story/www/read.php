@@ -614,14 +614,39 @@ manually unlock it, if you wish.
 
 <?php
 
-        if ( $linkCount > 1 )
+        if (( $linkCount > 1 ) || (( $linkCount > 0 ) && ( $episode == 1  )))
         {
 
 ?>
 
 <P>
 <A HREF="link-trace.php?episode=<?php echo( $episode ); ?>">
+
+<?php
+
+            if ( $linkCount == 1 )
+            {
+
+?>
+
+    Display Link to this Episode
+
+<?php
+
+            }
+            else
+            {
+
+?>
+
     Display All <?php echo( $linkCount ); ?> Links to this Episode
+
+
+<?php
+
+            }
+
+?>
 </A>
 
 <?php
