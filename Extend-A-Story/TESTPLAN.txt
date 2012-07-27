@@ -171,7 +171,7 @@
    - When reading episode one, verify that you do not have a link to "go back".
    - When reading any episode besides episode one, verify that you have a link to "go back".
    - When reading episode one, verify that you have options to view the backward and forward story
-     trees. [FAIL]
+     trees.
    - When reading any episode besides episode one, verify that you have options to view the backward
      and forward story trees.
    - Read an episode with zero back links leading to it and verify that you are not prompted to view

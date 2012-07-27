@@ -601,13 +601,18 @@ manually unlock it, if you wish.
 
 <P>
 <A HREF="read.php?episode=<?php echo( $parent ); ?>">Go Back</A>
+
+<?php
+
+        }
+
+?>
+
 <P>
 <A HREF="story-tree.php?episode=<?php echo( $episode ); ?>">View Forward Story Tree</A><BR>
 <A HREF="backstory-tree.php?episode=<?php echo( $episode ); ?>">View Back Story Tree</A>
 
 <?php
-
-        }
 
         if ( $linkCount > 1 )
         {
