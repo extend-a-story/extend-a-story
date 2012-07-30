@@ -177,7 +177,7 @@
    - Read an episode with zero back links leading to it and verify that you are not prompted to view
      all links to the episode.
    - Ensure episode one has exactly one back link leading to it. Read episode one and verify that
-     you are prompted to view the single link to the episode. 
+     you are prompted to view the single link to the episode.
    - Read an episode (other than episode one) with one or more back links leading to it and verify
      that you are prompted to view all links to the episode.
    - Read an episode where the author's name is not displayed.
