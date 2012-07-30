@@ -83,7 +83,9 @@
 - edit.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Set the "command" parameter to an invalid value.
-   - Access the page when the database is inaccessible. [FAIL]
+   - Access the page when the database is inaccessible.
+     [FAIL] - You see an error message regarding insufficient privileges rather than an inaccessible
+              database.
    - Access the page when episode creation is disabled.
    - Access the page when you are not logged in.
    - Access the page with insufficient privileges to use the advanced editing features.
