@@ -532,11 +532,11 @@ http://www.sir-toby.com/extend-a-story/
         {
             if ( $command == "deleteUser" )
             {
-                $message = "You must select an user to delete.";
+                $message = "You must select a user to delete.";
             }
             else
             {
-                $message = "You must select an user to edit.";
+                $message = "You must select a user to edit.";
             }
 
             $command = "";
@@ -740,7 +740,7 @@ http://www.sir-toby.com/extend-a-story/
 
         if ( $deletedUserID == 0 )
         {
-            $message = "You must select an user to delete.";
+            $message = "You must select a user to delete.";
         }
         else if ( $deletedUserID == $userID )
         {
