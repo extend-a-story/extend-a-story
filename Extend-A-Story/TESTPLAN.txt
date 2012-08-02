@@ -137,13 +137,13 @@
          - Verify that you can log out.
    - Change your password:
       - Specify an invalid current password.
-      - Enter a blank password for both password inputs.
+      - Enter a blank password for both of the new password inputs.
         [FAIL] - This does not generate an error.
-      - Enter a blank password for the first password input and a non-blank password for the second
-        password input.
-      - Enter a non-blank password for the first password input and a blank password for the second
-        password input.
-      - Enter non-blank, non-identical passwords for both password inputs.
+      - Enter a blank password for the first new password input and a non-blank password for the
+        second new password input.
+      - Enter a non-blank password for the first new password input and a blank password for the
+        second new password input.
+      - Enter non-blank, non-identical passwords for both new password inputs.
       - Change your password successfully and verify that it works.
       - Verify that you can change your password when your current password is longer than 255
         characters.
@@ -167,8 +167,8 @@
       - Enter a number smaller than 1 for max links.
       - Enter a number smaller than 1 for max edit days.
       - Configure the story settings successfully and verify that it works.
-        [FAIL] - Settings are saved correctly in the database but are not displayed correctly on the
-                 admin home page until after the page is refreshed.
+        [FAIL] - The changes are saved correctly in the database, but are not displayed correctly
+                 on the admin home page until after the page is refreshed.
    - Add a user:
       - Enter a blank login name.
       - Enter a blank user name.
@@ -181,7 +181,8 @@
                  characters.
       - Enter a blank password for the first password input and a non-blank password for the second
         password input.
-        [FAIL] - Displays the wrong error message: "blank password" versus "passwords don't match".
+        [FAIL] - Incorrectly displays the "blank password" error message in addition to the
+                 "passwords don't match" error message.
       - Enter a non-blank password for the first password input and a blank password for the second
         password input.
       - Enter non-blank and non-identical passwords for both password inputs.
@@ -223,7 +224,8 @@
          - Enter a blank password for both password inputs.
          - Enter a blank password for the first password input and a non-blank password for the
            second password input.
-           [FAIL] - Complains about a blank password when it should not.
+           [FAIL] - Incorrectly displays the "blank password" error message in addition to the
+                    "passwords don't match" error message.
          - Enter a non-blank password for the first password input and a blank password for the
            second password input.
          - Enter non-blank and non-identical passwords for both password inputs.
@@ -232,6 +234,9 @@
       - When editing yourself:
          - Select a permission level that is different than the current permission level.
          - Change your password.
+         - Verify that you can change your login name and user name.
+           [FAIL] - The changes are saved correctly in the database, but are not displayed correctly
+                    on the admin home page until after the page is refreshed.
       - Select an invalid value for the permission level.
       - Enter a duplicate login name that is not the current login name of the user.
       - Edit a user successfully and verify that it works.
