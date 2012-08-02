@@ -28,7 +28,12 @@ http://www.sir-toby.com/extend-a-story/
 
     require( "ExtendAStory.php" );
 
-    $command = $_REQUEST[ "command" ];
+    $command = "";
+
+    if ( isset( $_REQUEST[ "command" ] ))
+    {
+        $command = $_REQUEST[ "command" ];
+    }
 
     $error = "";
     $fatal = false;
@@ -516,7 +521,12 @@ http://www.sir-toby.com/extend-a-story/
         ( $command == "editUserSave" ) ||
         ( $command == "deleteUser"   ))
     {
-        $editedUserID = (int) $_POST[ "userID" ];
+        $editedUserID = 0;
+
+        if ( isset( $_POST[ "userID" ] ))
+        {
+            $editedUserID = (int) $_POST[ "userID" ];
+        }
 
         if ( $editedUserID == 0 )
         {
@@ -573,7 +583,6 @@ http://www.sir-toby.com/extend-a-story/
         $newLoginName       = $_POST[ "newLoginName"       ];
         $newUserName        = $_POST[ "newUserName"        ];
         $newPermissionLevel = $_POST[ "newPermissionLevel" ];
-        $setNewPassword     = $_POST[ "setNewPassword"     ];
         $newPassword1       = $_POST[ "newPassword1"       ];
         $newPassword2       = $_POST[ "newPassword2"       ];
 
@@ -583,7 +592,13 @@ http://www.sir-toby.com/extend-a-story/
         prepareParam( $newPassword2 );
 
         $newPermissionLevel = (int) $newPermissionLevel;
-        $setNewPassword     = (int) $setNewPassword;
+
+        $setNewPassword = 0;
+
+        if ( isset( $_POST[ "setNewPassword" ] ))
+        {
+            $setNewPassword = $_POST[ "setNewPassword" ];
+        }
 
         if ( empty( $newLoginName ))
         {
@@ -716,7 +731,12 @@ http://www.sir-toby.com/extend-a-story/
 
     if (( $command == "deleteUserSave" ) && ( empty( $error )))
     {
-        $deletedUserID = (int) $_POST[ "userID" ];
+        $deletedUserID = 0;
+
+        if ( isset( $_POST[ "userID" ] ))
+        {
+            $deletedUserID = (int) $_POST[ "userID" ];
+        }
 
         if ( $deletedUserID == 0 )
         {
@@ -811,7 +831,12 @@ http://www.sir-toby.com/extend-a-story/
             }
         }
 
-        $start = (int) $_REQUEST[ "start" ];
+        $start = 0;
+
+        if ( isset( $_REQUEST[ "start" ] ))
+        {
+            $start = (int) $_REQUEST[ "start" ];
+        }
 
         if (( $start < 1 ) || ( $start > $maxEpisodeEditLogID ))
         {
