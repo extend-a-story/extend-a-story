@@ -1,3 +1,259 @@
+- admin.php:
+   - Set the "command" parameter to an invalid value.
+     [FAIL] - Defaults to admin home page when an invalid command parameter is specified.
+   - Access the page when the database is inaccessible.
+   - Log in:
+      - Specify an invalid user name.
+      - Specify an invalid password.
+      - Log in successfully and verify that it works.
+      - Verify that you can log in using a password with more than 255 characters.
+   - Log out and verify that it works.
+   - Permission check:
+      - As a moderator:
+         - Verify that you cannot view the link to list orphaned episodes.
+         - Verify that you cannot view the link to list dead ends.
+         - Verify that you can view the link to list recent edits.
+           [FAIL] - Link not displayed.
+         - Verify that you can view the form to view the edits for an episode.
+           [FAIL] - Form not displayed.
+         - Verify that you cannot view the link to configure the story settings.
+         - Verify that you cannot view the link to add a user.
+         - Verify that you cannot view the form to edit a user.
+         - Verify that you cannot view the form to delete a user.
+         - Verify that you can view the link to change your password.
+         - Verify that you can view the link to log out.
+         - Verify that you cannot list orphaned episodes.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot list dead ends.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you can list recent edits.
+         - Verify that you cannot start configuring the story settings.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish configuring the story settings.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot start adding a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish adding a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot start editing a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish editing a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot start deleting a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish deleting a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you can start changing your password.
+         - Verify that you can finish changing your password.
+         - Verify that you can log out.
+      - As a super moderator:
+         - Verify that you can view the link to list orphaned episodes.
+         - Verify that you can view the link to list dead ends.
+         - Verify that you can view the link to list recent edits.
+         - Verify that you can view the form to view the edits for an episode.
+         - Verify that you cannot view the link to configure the story settings.
+         - Verify that you cannot view the link to add a user.
+         - Verify that you cannot view the form to edit a user.
+         - Verify that you cannot view the form to delete a user.
+         - Verify that you can view the link to change your password.
+         - Verify that you can view the link to log out.
+         - Verify that you can list orphaned episodes.
+         - Verify that you can list dead ends.
+         - Verify that you can list recent edits.
+         - Verify that you cannot start configuring the story settings.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish configuring the story settings.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot start adding a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish adding a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot start editing a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish editing a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot start deleting a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish deleting a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you can start changing your password.
+         - Verify that you can finish changing your password.
+         - Verify that you can log out.
+      - As a manager:
+         - Verify that you can view the link to list orphaned episodes.
+         - Verify that you can view the link to list dead ends.
+         - Verify that you can view the link to list recent edits.
+         - Verify that you can view the form to view the edits for an episode.
+         - Verify that you can view the link to configure the story settings.
+         - Verify that you cannot view the link to add a user.
+         - Verify that you cannot view the form to edit a user.
+         - Verify that you cannot view the form to delete a user.
+         - Verify that you can view the link to change your password.
+         - Verify that you can view the link to log out.
+         - Verify that you can list orphaned episodes.
+         - Verify that you can list dead ends.
+         - Verify that you can list recent edits.
+         - Verify that you can start configuring the story settings.
+         - Verify that you can finish configuring the story settings.
+         - Verify that you cannot start adding a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish adding a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot start editing a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish editing a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot start deleting a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you cannot finish deleting a user.
+           [FAIL] - While you are prevented from performing the action, no error is displayed.
+         - Verify that you can start changing your password.
+         - Verify that you can finish changing your password.
+         - Verify that you can log out.
+      - As an administrator:
+         - Verify that you can view the link to list orphaned episodes.
+         - Verify that you can view the link to list dead ends.
+         - Verify that you can view the link to list recent edits.
+         - Verify that you can view the form to view the edits for an episode.
+         - Verify that you can view the link to configure the story settings.
+         - Verify that you can view the link to add a user.
+         - Verify that you can view the form to edit a user.
+         - Verify that you can view the form to delete a user.
+         - Verify that you can view the link to change your password.
+         - Verify that you can view the link to log out.
+         - Verify that you can list orphaned episodes.
+         - Verify that you can list dead ends.
+         - Verify that you can list recent edits.
+         - Verify that you can start configuring the story settings.
+         - Verify that you can finish configuring the story settings.
+         - Verify that you can start adding a user.
+         - Verify that you can finish adding a user.
+         - Verify that you can start editing a user.
+         - Verify that you can finish editing a user.
+         - Verify that you can start deleting a user.
+         - Verify that you can finish deleting a user.
+         - Verify that you can start changing your password.
+         - Verify that you can finish changing your password.
+         - Verify that you can log out.
+   - Change your password:
+      - Specify an invalid current password.
+      - Enter a blank password for both password inputs.
+        [FAIL] - This does not generate an error.
+      - Enter a blank password for the first password input and a non-blank password for the second
+        password input.
+      - Enter a non-blank password for the first password input and a blank password for the second
+        password input.
+      - Enter non-blank, non-identical passwords for both password inputs.
+      - Change your password successfully and verify that it works.
+      - Verify that you can change your password when your current password is longer than 255
+        characters.
+      - Verify that you can change your password to a password with more than 255 characters.
+   - Configure story settings:
+      - Verify that the current story settings are populated correctly.
+      - Enter a blank story name.
+      - Enter a blank site name.
+      - Enter a blank story home.
+      - Enter a blank site home.
+      - Enter a blank read episode URL.
+      - Enter a blank admin email.
+      - Enter more than 255 characters for the story name.
+      - Enter more than 255 characters for the site name.
+      - Enter more than 255 characters for the story home.
+      - Enter more than 255 characters for the site home.
+      - Enter more than 255 characters for the read episode URL.
+      - Enter more than 255 characters for the admin email.
+        [FAIL] - This does not generate an error.
+      - Select an invalid value for the "is writeable" setting.
+      - Enter a number smaller than 1 for max links.
+      - Enter a number smaller than 1 for max edit days.
+      - Configure the story settings successfully and verify that it works.
+        [FAIL] - Settings are saved correctly in the database but are not displayed correctly on the
+                 admin home page until after the page is refreshed.
+   - Add a user:
+      - Enter a blank login name.
+      - Enter a blank user name.
+      - Enter a blank password for both password inputs.
+      - Enter more than 255 characters for the login name.
+        [FAIL] - The proper error message is displayed but the field is not limited to 255
+                 characters.
+      - Enter more than 255 characters for the user name.
+        [FAIL] - The proper error message is displayed but the field is not limited to 255
+                 characters.
+      - Enter a blank password for the first password input and a non-blank password for the second
+        password input.
+        [FAIL] - Displays the wrong error message: "blank password" versus "passwords don't match".
+      - Enter a non-blank password for the first password input and a blank password for the second
+        password input.
+      - Enter non-blank and non-identical passwords for both password inputs.
+      - Select an invalid value for the permission level.
+      - Enter a duplicate login name.
+      - Add a user successfully and verify that it works.
+      - Verify that you can specify a password with more than 255 characters.
+   - Select a user to edit:
+      - Do not select a user.
+      - Select an invalid user.
+        [FAIL] - Does not handle this condition cleanly.
+   - Select a user to delete:
+      - Do not select a user.
+      - Select yourself.
+      - Select an invalid user.
+        [FAIL] - Does not handle this condition cleanly.
+   - Edit a user:
+      - Verify that the current user details are populated correctly.
+      - Do not set the "userID" parameter.
+      - Specify an invalid user.
+        [FAIL] - Does not handle this condition cleanly.
+      - Enter a blank login name.
+      - Enter a blank user name.
+      - Enter more than 255 characters for the login name.
+        [FAIL] - The proper error message is displayed but the field is not limited to 255
+                 characters.
+      - Enter more than 255 characters for the user name.
+        [FAIL] - The proper error message is displayed but the field is not limited to 255
+                 characters.
+      - With the "set new password" checkbox unchecked:
+         - Enter a blank password for both password inputs.
+         - Enter a blank password for the first password input and a non-blank password for the
+           second password input.
+         - Enter a non-blank password for the first password input and a blank password for the
+           second password input.
+         - Enter non-blank, non-identical passwords for both password inputs.
+         - Verify that the password is not changed when saving.
+      - With the "set new password" checkbox checked:
+         - Enter a blank password for both password inputs.
+         - Enter a blank password for the first password input and a non-blank password for the
+           second password input.
+           [FAIL] - Complains about a blank password when it should not.
+         - Enter a non-blank password for the first password input and a blank password for the
+           second password input.
+         - Enter non-blank and non-identical passwords for both password inputs.
+         - Verify that the password is changed when saving.
+         - Verify that you can specify a password with more than 255 characters.
+      - When editing yourself:
+         - Select a permission level that is different than the current permission level.
+         - Change your password.
+      - Select an invalid value for the permission level.
+      - Enter a duplicate login name that is not the current login name of the user.
+      - Edit a user successfully and verify that it works.
+   - Delete a user:
+      - Do not set the "userID" parameter.
+      - Specify an invalid user.
+        [FAIL] - This does not generate an error.
+      - Specify your user.
+      - Verify that the user is deleted when you select the "yes" button.
+      - Verify that the user is not deleted when you select the "no" button.
+   - List orphaned episodes:
+      - Verify that orphaned episodes are displayed correctly.
+      - Verify that the "edited" column correctly displays the number of edits and links to the
+        episode edit log for all orphaned episodes that have been edited.
+   - Verify that listing dead ends works correctly.
+   - List recent edits:
+      - Verify that recent edits are displayed correctly.
+      - Verify that the listing defaults to starting at the most recent edit.
+      - Verify that the "previous 20 edits" link is displayed when there are older edits available.
+      - Verify that the "previous 20 edits" link is not displayed when there are no older edits
+        available.
+      - Verify that the "previous 20 edits" link works correctly.
 - create.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Verify that the "scheme" parameter defaults to 1 when it is not set.
