@@ -9,9 +9,9 @@
    - Log out and verify that it works.
    - Permission check:
       - While logged out:
+         - Verify that you cannot list recent edits.
          - Verify that you cannot list orphaned episodes.
          - Verify that you cannot list dead ends.
-         - Verify that you cannot list recent edits.
          - Verify that you cannot start configuring the story settings.
          - Verify that you cannot finish configuring the story settings.
          - Verify that you cannot start adding a user.
@@ -24,23 +24,21 @@
          - Verify that you cannot finish changing your password.
          - Verify that you can log out.
       - As a moderator:
+         - Verify that you can view the link to list recent edits.
+         - Verify that you can view the form to view the edits for an episode.
          - Verify that you cannot view the link to list orphaned episodes.
          - Verify that you cannot view the link to list dead ends.
-         - Verify that you can view the link to list recent edits.
-           [FAIL] - Link not displayed.
-         - Verify that you can view the form to view the edits for an episode.
-           [FAIL] - Form not displayed.
          - Verify that you cannot view the link to configure the story settings.
          - Verify that you cannot view the link to add a user.
          - Verify that you cannot view the form to edit a user.
          - Verify that you cannot view the form to delete a user.
          - Verify that you can view the link to change your password.
          - Verify that you can view the link to log out.
+         - Verify that you can list recent edits.
          - Verify that you cannot list orphaned episodes.
            [FAIL] - While you are prevented from performing the action, no error is displayed.
          - Verify that you cannot list dead ends.
            [FAIL] - While you are prevented from performing the action, no error is displayed.
-         - Verify that you can list recent edits.
          - Verify that you cannot start configuring the story settings.
            [FAIL] - While you are prevented from performing the action, no error is displayed.
          - Verify that you cannot finish configuring the story settings.
@@ -61,19 +59,19 @@
          - Verify that you can finish changing your password.
          - Verify that you can log out.
       - As a super moderator:
-         - Verify that you can view the link to list orphaned episodes.
-         - Verify that you can view the link to list dead ends.
          - Verify that you can view the link to list recent edits.
          - Verify that you can view the form to view the edits for an episode.
+         - Verify that you can view the link to list orphaned episodes.
+         - Verify that you can view the link to list dead ends.
          - Verify that you cannot view the link to configure the story settings.
          - Verify that you cannot view the link to add a user.
          - Verify that you cannot view the form to edit a user.
          - Verify that you cannot view the form to delete a user.
          - Verify that you can view the link to change your password.
          - Verify that you can view the link to log out.
+         - Verify that you can list recent edits.
          - Verify that you can list orphaned episodes.
          - Verify that you can list dead ends.
-         - Verify that you can list recent edits.
          - Verify that you cannot start configuring the story settings.
            [FAIL] - While you are prevented from performing the action, no error is displayed.
          - Verify that you cannot finish configuring the story settings.
@@ -94,19 +92,19 @@
          - Verify that you can finish changing your password.
          - Verify that you can log out.
       - As a manager:
-         - Verify that you can view the link to list orphaned episodes.
-         - Verify that you can view the link to list dead ends.
          - Verify that you can view the link to list recent edits.
          - Verify that you can view the form to view the edits for an episode.
+         - Verify that you can view the link to list orphaned episodes.
+         - Verify that you can view the link to list dead ends.
          - Verify that you can view the link to configure the story settings.
          - Verify that you cannot view the link to add a user.
          - Verify that you cannot view the form to edit a user.
          - Verify that you cannot view the form to delete a user.
          - Verify that you can view the link to change your password.
          - Verify that you can view the link to log out.
+         - Verify that you can list recent edits.
          - Verify that you can list orphaned episodes.
          - Verify that you can list dead ends.
-         - Verify that you can list recent edits.
          - Verify that you can start configuring the story settings.
          - Verify that you can finish configuring the story settings.
          - Verify that you cannot start adding a user.
@@ -125,19 +123,19 @@
          - Verify that you can finish changing your password.
          - Verify that you can log out.
       - As an administrator:
-         - Verify that you can view the link to list orphaned episodes.
-         - Verify that you can view the link to list dead ends.
          - Verify that you can view the link to list recent edits.
          - Verify that you can view the form to view the edits for an episode.
+         - Verify that you can view the link to list orphaned episodes.
+         - Verify that you can view the link to list dead ends.
          - Verify that you can view the link to configure the story settings.
          - Verify that you can view the link to add a user.
          - Verify that you can view the form to edit a user.
          - Verify that you can view the form to delete a user.
          - Verify that you can view the link to change your password.
          - Verify that you can view the link to log out.
+         - Verify that you can list recent edits.
          - Verify that you can list orphaned episodes.
          - Verify that you can list dead ends.
-         - Verify that you can list recent edits.
          - Verify that you can start configuring the story settings.
          - Verify that you can finish configuring the story settings.
          - Verify that you can start adding a user.
