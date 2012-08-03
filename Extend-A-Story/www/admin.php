@@ -662,7 +662,7 @@ http://www.sir-toby.com/extend-a-story/
 
         if ( $setNewPassword == 1 )
         {
-            if ( empty( $newPassword1 ))
+            if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
             {
                 $message .= "You must enter a password when setting a new password.<BR>";
             }

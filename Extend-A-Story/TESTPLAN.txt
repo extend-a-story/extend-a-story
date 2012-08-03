@@ -195,8 +195,6 @@
          - Enter a blank password for both password inputs.
          - Enter a blank password for the first password input and a non-blank password for the
            second password input.
-           [FAIL] - Incorrectly displays the "blank password" error message in addition to the
-                    "passwords don't match" error message.
          - Enter a non-blank password for the first password input and a blank password for the
            second password input.
          - Enter non-blank and non-identical passwords for both password inputs.
