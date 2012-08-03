@@ -244,28 +244,21 @@ http://www.sir-toby.com/extend-a-story/
         }
     }
 
-    if (( $permissionLevel < 2         ) &&
-        (( $command == "listOrphans"  ) ||
-         ( $command == "listDeadEnds" )))
+    if ((( $permissionLevel < 2           ) &&
+         (( $command == "listOrphans"    ) ||
+          ( $command == "listDeadEnds"   ))) ||
+        (( $permissionLevel < 3           ) &&
+         (( $command == "configureSave"  ) ||
+          ( $command == "configure"      ))) ||
+        (( $permissionLevel < 4           ) &&
+         (( $command == "addUserSave"    ) ||
+          ( $command == "addUser"        ) ||
+          ( $command == "editUserSave"   ) ||
+          ( $command == "editUser"       ) ||
+          ( $command == "deleteUser"     ) ||
+          ( $command == "deleteUserSave" ))))
     {
-        $command = "";
-    }
-
-    if (( $permissionLevel < 3         ) &&
-       (( $command == "configureSave" ) ||
-        ( $command == "configure"     )))
-    {
-        $command = "";
-    }
-
-    if (( $permissionLevel < 4           ) &&
-        (( $command == "addUserSave"    ) ||
-         ( $command == "addUser"        ) ||
-         ( $command == "editUserSave"   ) ||
-         ( $command == "editUser"       ) ||
-         ( $command == "deleteUser"     ) ||
-         ( $command == "deleteUserSave" )))
-    {
+        $message = "You don't have permission to perform this operation.";
         $command = "";
     }
 
