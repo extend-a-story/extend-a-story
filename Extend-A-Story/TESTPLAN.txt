@@ -204,8 +204,6 @@
          - Select a permission level that is different than the current permission level.
          - Change your password.
          - Verify that you can change your login name and user name.
-           [FAIL] - The changes are saved correctly in the database, but are not displayed correctly
-                    on the admin home page until after the page is refreshed.
       - Select an invalid value for the permission level.
       - Enter a duplicate login name that is not the current login name of the user.
       - Edit a user successfully and verify that it works.

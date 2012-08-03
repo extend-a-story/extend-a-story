@@ -760,6 +760,11 @@ http://www.sir-toby.com/extend-a-story/
             }
             else
             {
+                if ( $userID == $editedUserID )
+                {
+                    $userName = $newUserName;
+                }
+
                 $message = "User Edited";
             }
         }
