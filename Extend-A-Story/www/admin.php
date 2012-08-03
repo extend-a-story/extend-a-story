@@ -409,6 +409,11 @@ http://www.sir-toby.com/extend-a-story/
             $message .= "The read episode URL cannot be longer than 255 characters.<BR>";
         }
 
+        if ( strlen( $newAdminEmail ) > 255 )
+        {
+            $message .= "The admin email cannot be longer than 255 characters.<BR>";
+        }
+
         if (( $newIsWriteable != 0 ) && ( $newIsWriteable != 1 ))
         {
             $message .= "Your chosen 'is writeable' setting is not recognized.<BR>";

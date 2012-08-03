@@ -149,7 +149,6 @@
       - Enter more than 255 characters for the site home.
       - Enter more than 255 characters for the read episode URL.
       - Enter more than 255 characters for the admin email.
-        [FAIL] - This does not generate an error.
       - Select an invalid value for the "is writeable" setting.
       - Enter a number smaller than 1 for max links.
       - Enter a number smaller than 1 for max edit days.
