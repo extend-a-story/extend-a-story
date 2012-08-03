@@ -1,6 +1,5 @@
 - admin.php:
    - Set the "command" parameter to an invalid value.
-     [FAIL] - Defaults to admin home page when an invalid command parameter is specified.
    - Access the page when the database is inaccessible.
    - Log in:
       - Specify an invalid user name.
@@ -9,6 +8,21 @@
       - Verify that you can log in using a password with more than 255 characters.
    - Log out and verify that it works.
    - Permission check:
+      - While logged out:
+         - Verify that you cannot list orphaned episodes.
+         - Verify that you cannot list dead ends.
+         - Verify that you cannot list recent edits.
+         - Verify that you cannot start configuring the story settings.
+         - Verify that you cannot finish configuring the story settings.
+         - Verify that you cannot start adding a user.
+         - Verify that you cannot finish adding a user.
+         - Verify that you cannot start editing a user.
+         - Verify that you cannot finish editing a user.
+         - Verify that you cannot start deleting a user.
+         - Verify that you cannot finish deleting a user.
+         - Verify that you cannot start changing your password.
+         - Verify that you cannot finish changing your password.
+         - Verify that you can log out.
       - As a moderator:
          - Verify that you cannot view the link to list orphaned episodes.
          - Verify that you cannot view the link to list dead ends.

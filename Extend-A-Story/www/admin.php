@@ -64,6 +64,27 @@ http://www.sir-toby.com/extend-a-story/
 
     $message = "";
 
+    if (( $command != ""                   ) &&
+        ( $command != "addUser"            ) &&
+        ( $command != "addUserSave"        ) &&
+        ( $command != "changePassword"     ) &&
+        ( $command != "changePasswordSave" ) &&
+        ( $command != "deleteUser"         ) &&
+        ( $command != "deleteUserSave"     ) &&
+        ( $command != "editUser"           ) &&
+        ( $command != "editUserSave"       ) &&
+        ( $command != "configure"          ) &&
+        ( $command != "configureSave"      ) &&
+        ( $command != "listDeadEnds"       ) &&
+        ( $command != "listOrphans"        ) &&
+        ( $command != "listRecentEdits"    ) &&
+        ( $command != "login"              ) &&
+        ( $command != "logout"             ))
+    {
+        $message = "Invalid Command";
+        $command = "";
+    }
+
     if (( $command == "login" ) && ( empty( $error )))
     {
         $loginName = $_POST[ "loginName" ];
@@ -127,6 +148,13 @@ http://www.sir-toby.com/extend-a-story/
 
     if (( $userID == 0 ) && empty( $error ))
     {
+        if (( $command != ""                   ) &&
+            ( $command != "login"              ) &&
+            ( $command != "logout"             ))
+        {
+            $message = "Invalid Command";
+            $command = "";
+        }
 
 ?>
 
