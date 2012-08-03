@@ -300,7 +300,11 @@ http://www.sir-toby.com/extend-a-story/
                 }
                 else
                 {
-                    if ( $newPassword1 != $newPassword2 )
+                    if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
+                    {
+                        $message = "Error: You must enter a new password.";
+                    }
+                    else if ( $newPassword1 != $newPassword2 )
                     {
                         $message = "Error: New passwords do not match.";
                     }

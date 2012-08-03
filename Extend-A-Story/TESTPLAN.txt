@@ -126,7 +126,6 @@
    - Change your password:
       - Specify an invalid current password.
       - Enter a blank password for both of the new password inputs.
-        [FAIL] - This does not generate an error.
       - Enter a blank password for the first new password input and a non-blank password for the
         second new password input.
       - Enter a non-blank password for the first new password input and a blank password for the
