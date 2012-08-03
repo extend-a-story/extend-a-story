@@ -484,7 +484,7 @@ http://www.sir-toby.com/extend-a-story/
             $message .= "You must enter the user name.<BR>";
         }
 
-        if ( empty( $newPassword1 ))
+        if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
         {
             $message .= "You must enter a password.<BR>";
         }
