@@ -153,8 +153,6 @@
       - Enter a number smaller than 1 for max links.
       - Enter a number smaller than 1 for max edit days.
       - Configure the story settings successfully and verify that it works.
-        [FAIL] - The changes are saved correctly in the database, but are not displayed correctly
-                 on the admin home page until after the page is refreshed.
    - Add a user:
       - Enter a blank login name.
       - Enter a blank user name.

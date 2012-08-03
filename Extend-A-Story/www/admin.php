@@ -441,6 +441,16 @@ http://www.sir-toby.com/extend-a-story/
             setIntValue(    $error, $fatal, "MaxLinks",       $newMaxLinks                        );
             setIntValue(    $error, $fatal, "MaxEditDays",    $newMaxEditDays                     );
 
+            $storyName      = $newStoryName;
+            $siteName       = $newSiteName;
+            $storyHome      = $newStoryHome;
+            $siteHome       = $newSiteHome;
+            $readEpisodeURL = $newReadEpisodeURL;
+            $adminEmail     = $newAdminEmail;
+            $isWriteable    = ( $newIsWriteable == 1 ? "Y" : "N" );
+            $maxLinks       = $newMaxLinks;
+            $maxEditDays    = $newMaxEditDays;
+
             $message = "Configuration Saved";
         }
         else
