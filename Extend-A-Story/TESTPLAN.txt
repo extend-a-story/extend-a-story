@@ -158,11 +158,7 @@
       - Enter a blank user name.
       - Enter a blank password for both password inputs.
       - Enter more than 255 characters for the login name.
-        [FAIL] - The proper error message is displayed but the field is not limited to 255
-                 characters.
       - Enter more than 255 characters for the user name.
-        [FAIL] - The proper error message is displayed but the field is not limited to 255
-                 characters.
       - Enter a blank password for the first password input and a non-blank password for the second
         password input.
         [FAIL] - Incorrectly displays the "blank password" error message in addition to the

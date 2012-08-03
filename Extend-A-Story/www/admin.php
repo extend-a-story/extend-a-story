@@ -1331,11 +1331,11 @@ http://www.sir-toby.com/extend-a-story/
 <TABLE>
     <TR>
         <TD>Login Name:</TD>
-        <TD><INPUT TYPE="text" NAME="newLoginName"></TD>
+        <TD><INPUT TYPE="text" MAXLENGTH="255" NAME="newLoginName"></TD>
     </TR>
     <TR>
         <TD>User Name:</TD>
-        <TD><INPUT TYPE="text" NAME="newUserName"></TD>
+        <TD><INPUT TYPE="text" MAXLENGTH="255" NAME="newUserName"></TD>
     </TR>
     <TR>
         <TD>Permission Level:</TD>
