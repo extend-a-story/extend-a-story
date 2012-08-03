@@ -605,8 +605,8 @@ http://www.sir-toby.com/extend-a-story/
 
                 if ( ! $row )
                 {
-                    $error .= "Unable to fetch user row for editing from database.<BR>";
-                    $fatal = true;
+                    $message = "The specified user does not exist.";
+                    $command = "";
                 }
                 else
                 {
@@ -794,6 +794,10 @@ http://www.sir-toby.com/extend-a-story/
             {
                 $error .= "Problem deleting user from the database.<BR>";
                 $fatal = true;
+            }
+            else if ( mysql_affected_rows() == 0 )
+            {
+                $message = "The specified user does not exist.";
             }
             else
             {
