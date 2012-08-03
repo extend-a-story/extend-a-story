@@ -1402,11 +1402,17 @@ http://www.sir-toby.com/extend-a-story/
 <TABLE>
     <TR>
         <TD>Login Name:</TD>
-        <TD><INPUT TYPE="text" NAME="newLoginName" VALUE="<?php echo( $oldLoginName ); ?>"></TD>
+        <TD>
+            <INPUT TYPE="text" MAXLENGTH="255" NAME="newLoginName"
+                   VALUE="<?php echo( $oldLoginName ); ?>">
+        </TD>
     </TR>
     <TR>
         <TD>User Name:</TD>
-        <TD><INPUT TYPE="text" NAME="newUserName" VALUE="<?php echo( $oldUserName ); ?>"></TD>
+        <TD>
+            <INPUT TYPE="text" MAXLENGTH="255" NAME="newUserName"
+                   VALUE="<?php echo( $oldUserName ); ?>">
+        </TD>
     </TR>
     <TR>
         <TD>Permission Level:</TD>
