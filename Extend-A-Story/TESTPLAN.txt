@@ -233,6 +233,7 @@
       - Green for the first time they are encountered.
       - Red for subsequent encounters.
    - Verify that the true parent of each episode shows up in bold.
+   - Verify that the parents of an episode with no parents are displayed correctly.
 - clear.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Access the page when the database is inaccessible.

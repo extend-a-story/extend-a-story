@@ -192,7 +192,7 @@ http://www.sir-toby.com/extend-a-story/
     <?php echo( $episode ); ?> : <?php echo( $title ); ?>
 </A>
         </TD>
-        <TD><?php echo( $children ); ?></TD>
+        <TD><?php echo( empty( $children ) ? "&nbsp;" : $children ); ?></TD>
     </TR>
 
 <?php
