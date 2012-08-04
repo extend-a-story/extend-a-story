@@ -121,6 +121,40 @@ You are unable to clear locks while episode creation is disabled.
         }
     }
 
+    if (( $status != 1 ) && ( $status != 3 ))
+    {
+
+?>
+
+<HTML><HEAD>
+<TITLE>Clearing Error - Episode <?php echo( $episode ); ?> Not Available For Clearing</TITLE>
+</HEAD><BODY>
+
+<CENTER>
+<H1>Creation Error</H1>
+<H2>Episode <?php echo( $episode ); ?> Not Available For Clearing</H2>
+
+<TABLE WIDTH="500">
+    <TR>
+        <TD>
+You have specified an episode that is not locked.
+<P>
+<A HREF="read.php?episode=<?php echo(( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>.
+        </TD>
+    </TR>
+</TABLE>
+
+</CENTER>
+
+<?php require( "footer.php" ); ?>
+
+</BODY></HTML>
+
+<?php
+
+        exit;
+    }
+
     if ( $lockKey != $episodeLockKey )
     {
 
@@ -142,40 +176,6 @@ unlock it. Please wait for the episode to time out. You will be given the
 correct key to unlock it at that time.
 <P>
 <A HREF="read.php?episode=<?php echo(( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>
-        </TD>
-    </TR>
-</TABLE>
-
-</CENTER>
-
-<?php require( "footer.php" ); ?>
-
-</BODY></HTML>
-
-<?php
-
-        exit;
-    }
-
-    if (( $status != 1 ) && ( $status != 3 ))
-    {
-
-?>
-
-<HTML><HEAD>
-<TITLE>Clearing Error - Episode <?php echo( $episode ); ?> Not Available For Clearing</TITLE>
-</HEAD><BODY>
-
-<CENTER>
-<H1>Creation Error</H1>
-<H2>Episode <?php echo( $episode ); ?> Not Available For Clearing</H2>
-
-<TABLE WIDTH="500">
-    <TR>
-        <TD>
-You have specified an episode that is not locked.
-<P>
-<A HREF="read.php?episode=<?php echo(( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>.
         </TD>
     </TR>
 </TABLE>

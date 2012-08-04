@@ -243,8 +243,6 @@
               episode, rather than the episode on which you were trying to clear the lock.
    - Try to clear the "edit" lock on an episode that is locked by someone else.
    - Try to clear the lock on an episode that is not locked.
-     [FAIL] - You see an error message regarding a wrong key rather than the fact that the episode
-              is not locked.
    - Clear the "create" lock on an episode.
      [FAIL] - The lock is successfully cleared, but the "go back" link leads to the parent episode,
               rather than the episode on which you were trying to clear the lock.
