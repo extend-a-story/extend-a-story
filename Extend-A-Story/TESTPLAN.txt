@@ -461,6 +461,9 @@
          - Verify that the advanced editing functions are displayed.
          - Verify that the option for revoking an author's edit permission is not displayed if the
            author's edit permission has already been revoked.
-      - Verify that the option to view the edit log is displayed if the episode has been edited.
+      - Verify that the option to view the edit log is displayed correctly if the episode has been
+        edited once.
+      - Verify that the option to view the edit log is displayed correctly if the episode has been
+        edited more than once.
       - Verify that the option to view the edit log is not displayed if the episode has not been
         edited.

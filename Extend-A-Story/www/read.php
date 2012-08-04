@@ -850,7 +850,10 @@ Extending Enabled
 ?>
 
 <P>
-<B>This episode has been edited <?php echo( $editCount ) ?> times.</B><BR>
+<B>
+    This episode has been edited <?php echo( $editCount ) ?>
+    time<?php echo( $editCount == 1 ? "" : "s" ) ?>.
+</B><BR>
 <A HREF="list-edits.php?episode=<?php echo( $episode ); ?>">List Edits</A>
 
 <?php
