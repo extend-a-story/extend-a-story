@@ -225,6 +225,14 @@
       - Verify that the "previous 20 edits" link is not displayed when there are no older edits
         available.
       - Verify that the "previous 20 edits" link works correctly.
+- backstory-tree.php:
+   - Verify that the "episode" parameter defaults to 1 when it is not set.
+   - Access the page when the database is inaccessible.
+   - View a back-story tree that includes more than one level.
+   - Verify that parent episodes show up with the right color:
+      - Green for the first time they are encountered.
+      - Red for subsequent encounters.
+   - Verify that the true parent of each episode shows up in bold.
 - create.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Verify that the "scheme" parameter defaults to 1 when it is not set.
