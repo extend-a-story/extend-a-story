@@ -26,33 +26,39 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-  require( "ExtendAStory.php" );
+    require( "ExtendAStory.php" );
 
-  $episode = $_POST[ "episode" ];
-  $lockKey = $_POST[ "lockKey" ];
+    $episode = $_POST[ "episode" ];
+    $lockKey = $_POST[ "lockKey" ];
 
-  $error = "";
-  $fatal = false;
+    $error = "";
+    $fatal = false;
 
-  $episode = ( int ) $episode;
+    $episode = (int) $episode;
 
-  if ( $episode == 0 )
-    $episode = 1;
+    if ( $episode == 0 )
+    {
+        $episode = 1;
+    }
 
-  // Connect to the database.
-  if ( empty( $error ) )
-    connectToDatabase( $error, $fatal );
+    // connect to the database
+    if ( empty( $error ))
+    {
+        connectToDatabase( $error, $fatal );
+    }
 
-  if ( empty( $error ) )
-    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+    if ( empty( $error ))
+    {
+        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+    }
 
-  if ( empty( $error ) )
-  {
-    $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
-  }
+    if ( empty( $error ))
+    {
+        $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
+    }
 
-  if ( $isWriteable == "N" )
-  {
+    if ( $isWriteable == "N" )
+    {
 
 ?>
 
@@ -65,13 +71,13 @@ http://www.sir-toby.com/extend-a-story/
 <H2>Episode Creation Disabled</H2>
 
 <TABLE WIDTH="500">
-  <TR>
-    <TD>
+    <TR>
+        <TD>
 You are unable to clear locks while episode creation is disabled.
 <P>
 <A HREF="read.php?episode=<?php echo( $episode ); ?>">Go Back</A>
-    </TD>
-  </TR>
+        </TD>
+    </TR>
 </TABLE>
 
 </CENTER>
@@ -82,36 +88,42 @@ You are unable to clear locks while episode creation is disabled.
 
 <?php
 
-    exit;
-  }
-
-  if ( empty( $error ) )
-  {
-    $result = mysql_query( "select Parent, Status, LockKey from Episode where EpisodeID = " . $episode );
-    if ( ! $result )
-    {
-      $error .= "Problem retrieving the episode from the database.<BR>";
-      $fatal = true;
+        exit;
     }
-    else
-    {
-      $row = mysql_fetch_row( $result );
-      if ( ! $row )
-      {
-        $error .= "Problem fetching episode row from the database.<BR>";
-        $fatal = true;
-      }
-      else
-      {
-        $parent         = $row[ 0 ];
-        $status         = $row[ 1 ];
-        $episodeLockKey = $row[ 2 ];
-      }
-    }
-  }
 
-  if ( $lockKey != $episodeLockKey )
-  {
+    if ( empty( $error ))
+    {
+        $result = mysql_query( "SELECT Parent, " .
+                                      "Status, " .
+                                      "LockKey " .
+                                 "FROM Episode " .
+                                "WHERE EpisodeID = " . $episode );
+
+        if ( ! $result )
+        {
+            $error .= "Problem retrieving the episode from the database.<BR>";
+            $fatal = true;
+        }
+        else
+        {
+            $row = mysql_fetch_row( $result );
+
+            if ( ! $row )
+            {
+                $error .= "Problem fetching episode row from the database.<BR>";
+                $fatal = true;
+            }
+            else
+            {
+                $parent         = $row[ 0 ];
+                $status         = $row[ 1 ];
+                $episodeLockKey = $row[ 2 ];
+            }
+        }
+    }
+
+    if ( $lockKey != $episodeLockKey )
+    {
 
 ?>
 
@@ -124,15 +136,15 @@ You are unable to clear locks while episode creation is disabled.
 <H2>Wrong Key to Unlock Episode <?php echo( $episode ); ?></H2>
 
 <TABLE WIDTH="500">
-  <TR>
-    <TD>
+    <TR>
+        <TD>
 You are trying to unlock an episode, but you don't have the correct key to
 unlock it. Please wait for the episode to time out. You will be given the
 correct key to unlock it at that time.
 <P>
-<A HREF="read.php?episode=<?php echo( ( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>
-    </TD>
-  </TR>
+<A HREF="read.php?episode=<?php echo(( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>
+        </TD>
+    </TR>
 </TABLE>
 
 </CENTER>
@@ -143,11 +155,11 @@ correct key to unlock it at that time.
 
 <?php
 
-    exit;
-  }
+        exit;
+    }
 
-  if ( ( $status != 1 ) && ( $status != 3 ) )
-  {
+    if (( $status != 1 ) && ( $status != 3 ))
+    {
 
 ?>
 
@@ -160,13 +172,13 @@ correct key to unlock it at that time.
 <H2>Episode <?php echo( $episode ); ?> Not Available For Clearing</H2>
 
 <TABLE WIDTH="500">
-  <TR>
-    <TD>
+    <TR>
+        <TD>
 You have specified an episode that is not locked.
 <P>
-<A HREF="read.php?episode=<?php echo( ( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>.
-    </TD>
-  </TR>
+<A HREF="read.php?episode=<?php echo(( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>.
+        </TD>
+    </TR>
 </TABLE>
 
 </CENTER>
@@ -177,26 +189,32 @@ You have specified an episode that is not locked.
 
 <?php
 
-    exit;
-  }
-
-  if ( empty( $error ) )
-  {
-    $result = mysql_query( "update Episode set " .
-                           ( ( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID" ) .
-                           " = 0, Status = " .
-                           ( ( $status == 1 ) ? 0 : 2 ) .
-                           ", LockDate = '-', LockKey = 0 " .
-                           "where EpisodeID = " . $episode );
-    if ( ! $result )
-    {
-      $error .= "Unable to unlock the episode record.<BR>";
-      $fatal = true;
+        exit;
     }
-  }
 
-  if ( ! empty( $error ) )
-    displayError( $error, $fatal );
+    if ( empty( $error ))
+    {
+        $sessionColumn = ( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID";
+        $statusValue = ( $status == 1 ) ? 0 : 2;
+
+        $result = mysql_query( "UPDATE Episode " .
+                                  "SET " . $sessionColumn . " = 0, " .
+                                      "Status = " . $statusValue . ", " .
+                                      "LockDate = '-', " .
+                                      "LockKey = 0 " .
+                                "WHERE EpisodeID = " . $episode );
+
+        if ( ! $result )
+        {
+            $error .= "Unable to unlock the episode record.<BR>";
+            $fatal = true;
+        }
+    }
+
+    if ( ! empty( $error ))
+    {
+        displayError( $error, $fatal );
+    }
 
 ?>
 
@@ -208,14 +226,14 @@ You have specified an episode that is not locked.
 <H1>Cleared Episode <?php echo( $episode ); ?> Lock</H1>
 
 <TABLE WIDTH="500">
-  <TR>
-    <TD>
+    <TR>
+        <TD>
 You have now cleared the lock on episode <?php echo( $episode ); ?>.
-It is now ready to be <?php echo( ( $status == 1 ) ? "created" : "edited" ); ?> again.
+It is now ready to be <?php echo(( $status == 1 ) ? "created" : "edited" ); ?> again.
 <P>
-<A HREF="read.php?episode=<?php echo( ( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>
-    </TD>
-  </TR>
+<A HREF="read.php?episode=<?php echo(( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>
+        </TD>
+    </TR>
 </TABLE>
 
 </CENTER>
