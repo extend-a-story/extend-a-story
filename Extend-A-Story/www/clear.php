@@ -28,18 +28,17 @@ http://www.sir-toby.com/extend-a-story/
 
     require( "ExtendAStory.php" );
 
-    $episode = $_POST[ "episode" ];
+    $episode = 1;
+
+    if ( isset( $_POST[ "episode" ] ))
+    {
+        $episode = (int) $_POST[ "episode" ];
+    }
+
     $lockKey = $_POST[ "lockKey" ];
 
     $error = "";
     $fatal = false;
-
-    $episode = (int) $episode;
-
-    if ( $episode == 0 )
-    {
-        $episode = 1;
-    }
 
     // connect to the database
     if ( empty( $error ))
