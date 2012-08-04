@@ -387,6 +387,10 @@
    - When revoking the author's edit permission:
       - Verify that author's edit permission was revoked correctly.
       - Very that the episode edit log is updated correctly.
+- link-trace.php:
+   - Verify that the "episode" parameter defaults to 1 when it is not set.
+   - Access the page when the database is inaccessible.
+   - View the link trace on an episode.
 - read.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Access the page when the database is inaccessible.
