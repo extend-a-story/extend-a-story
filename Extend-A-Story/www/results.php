@@ -26,77 +26,108 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-  require( "ExtendAStory.php" );
+    require( "ExtendAStory.php" );
 
-  $method = $_POST[ "method" ];
-  $text   = $_POST[ "text"   ];
-  $days   = $_POST[ "days"   ];
+    $method = $_POST[ "method" ];
+    $text   = $_POST[ "text"   ];
+    $days   = $_POST[ "days"   ];
 
-  $days = ( int ) $days;
+    $days = (int) $days;
 
-  $error = "";
-  $fatal = false;
+    $error = "";
+    $fatal = false;
 
-  if ( ( $method != "title"      ) &&
-       ( $method != "text"       ) &&
-       ( $method != "author"     ) &&
-       ( $method != "time"       ) &&
-       ( $method != "extendable" ) &&
-       ( $method != "linkable"   ) &&
-       ( $method != "days"       ) )
-  {
-    $error .= "The specified search method is not supported.<BR>";
-    $fatal = true;
-  }
-
-  // Connect to the database.
-  if ( empty( $error ) )
-    connectToDatabase( $error, $fatal );
-
-  if ( empty( $error ) )
-    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-
-  if ( empty( $error ) )
-  {
-    $storyName = getStringValue( $error, $fatal, "StoryName" );
-    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-  }
-
-  if ( empty( $error ) )
-  {
-    if ( $method == "title" )
-      $whereClause = "Title like '%" . mysql_escape_string( $text ) . "%' and ( Status = 2 or Status = 3 )";
-
-    if ( $method == "text" )
-      $whereClause = "Text like '%" . mysql_escape_string( $text ) . "%' and ( Status = 2 or Status = 3 )";
-
-    if ( $method == "author" )
-      $whereClause = "AuthorName like '%" . mysql_escape_string( $text ) . "%' and ( Status = 2 or Status = 3 )";
-
-    if ( $method == "time" )
-      $whereClause = "CreationDate like '%" . mysql_escape_string( $text ) . "%' and ( Status = 2 or Status = 3 )";
-
-    if ( $method == "extendable" )
-      $whereClause = "IsExtendable = 'Y' and ( Status = 2 or Status = 3 )";
-
-    if ( $method == "linkable" )
-      $whereClause = "IsLinkable = 'Y' and ( Status = 2 or Status = 3 )";
-
-    if ( $method == "days" )
-      $whereClause = "CreationTimestamp > subdate( now( ), interval " . $days . " day ) and ( Status = 2 or Status = 3 )";
-
-    $result = mysql_query( "select EpisodeID, Title, AuthorName from Episode where " . $whereClause . " order by EpisodeID" );
-    if ( ! $result )
+    if (( $method != "title"      ) &&
+        ( $method != "text"       ) &&
+        ( $method != "author"     ) &&
+        ( $method != "time"       ) &&
+        ( $method != "extendable" ) &&
+        ( $method != "linkable"   ) &&
+        ( $method != "days"       ))
     {
-      $error .= "Problem retrieving the search results from the database.<BR>";
-      $fatal = true;
+        $error .= "The specified search method is not supported.<BR>";
+        $fatal = true;
     }
-  }
 
-  if ( ! empty( $error ) )
-    displayError( $error, $fatal );
+    // connect to the database
+    if ( empty( $error ))
+    {
+        connectToDatabase( $error, $fatal );
+    }
+
+    if ( empty( $error ))
+    {
+        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+    }
+
+    if ( empty( $error ))
+    {
+        $storyName = getStringValue( $error, $fatal, "StoryName" );
+        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+    }
+
+    if ( empty( $error ))
+    {
+        if ( $method == "title" )
+        {
+            $whereClause = "Title LIKE '%" . mysql_escape_string( $text ) . "%' " .
+                       "AND ( Status = 2 OR Status = 3 )";
+        }
+
+        if ( $method == "text" )
+        {
+            $whereClause = "Text LIKE '%" . mysql_escape_string( $text ) . "%' " .
+                       "AND ( Status = 2 OR Status = 3 )";
+        }
+
+        if ( $method == "author" )
+        {
+            $whereClause = "AuthorName LIKE '%" . mysql_escape_string( $text ) . "%' " .
+                       "AND ( Status = 2 OR Status = 3 )";
+        }
+
+        if ( $method == "time" )
+        {
+            $whereClause = "CreationDate LIKE '%" . mysql_escape_string( $text ) . "%' " .
+                       "AND ( Status = 2 OR Status = 3 )";
+        }
+
+        if ( $method == "extendable" )
+        {
+            $whereClause = "IsExtendable = 'Y' AND ( Status = 2 OR Status = 3 )";
+        }
+
+        if ( $method == "linkable" )
+        {
+            $whereClause = "IsLinkable = 'Y' AND ( Status = 2 OR Status = 3 )";
+        }
+
+        if ( $method == "days" )
+        {
+            $whereClause = "CreationTimestamp > SUBDATE( NOW(), INTERVAL " . $days . " DAY ) " .
+                       "AND ( Status = 2 OR Status = 3 )";
+        }
+
+        $result = mysql_query( "SELECT EpisodeID, " .
+                                      "Title, " .
+                                      "AuthorName " .
+                                 "FROM Episode " .
+                                "WHERE " . $whereClause . " " .
+                                "ORDER BY EpisodeID" );
+
+        if ( ! $result )
+        {
+            $error .= "Problem retrieving the search results from the database.<BR>";
+            $fatal = true;
+        }
+    }
+
+    if ( ! empty( $error ))
+    {
+        displayError( $error, $fatal );
+    }
 
 ?>
 
@@ -109,32 +140,39 @@ http://www.sir-toby.com/extend-a-story/
 </CENTER>
 
 <TABLE>
-  <TR>
-    <TD><B>#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</B></TD>
-    <TD><B>Episode Number and Title</B></TD>
-    <TD><B>Author Name</B></TD>
-  </TR>
-
+    <TR>
+        <TD><B>#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</B></TD>
+        <TD><B>Episode Number and Title</B></TD>
+        <TD><B>Author Name</B></TD>
+    </TR>
 
 <?php
 
-  for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
-  {
-    $row = mysql_fetch_row( $result );
-    $displayedTitle = htmlentities( $row[ 1 ] );
-    $displayedAuthorName = htmlentities( $row[ 2 ] );
+    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+    {
+        $row = mysql_fetch_row( $result );
+
+        $displayedTitle      = htmlentities( $row[ 1 ] );
+        $displayedAuthorName = htmlentities( $row[ 2 ] );
 
 ?>
-  <TR>
-    <TD><?php echo( $i + 1 ); ?></TD>
-    <TD><A HREF="read.php?episode=<?php echo( $row[ 0 ] ); ?>"><?php echo( $row[ 0 ] ); ?> - <?php echo( $displayedTitle ); ?></A></TD>
-    <TD><?php echo( $displayedAuthorName ); ?></TD>
-  </TR>
+
+    <TR>
+        <TD><?php echo( $i + 1 ); ?></TD>
+        <TD>
+            <A HREF="read.php?episode=<?php echo( $row[ 0 ] ); ?>">
+                <?php echo( $row[ 0 ] ); ?> - <?php echo( $displayedTitle ); ?>
+            </A>
+        </TD>
+        <TD><?php echo( $displayedAuthorName ); ?></TD>
+    </TR>
+
 <?php
 
-  }
+    }
 
 ?>
+
 </TABLE>
 <P>
 <A HREF="search.php">Search Again</A>
