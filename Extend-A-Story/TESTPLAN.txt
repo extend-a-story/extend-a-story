@@ -397,6 +397,9 @@
    - Access the page when the database is inaccessible.
    - Try to view the edits for an episode that you don't have permission to edit.
    - View the edits for an episode.
+- list-locked.php:
+   - Access the page when the database is inaccessible.
+   - Verify that locked episodes are listed correctly.
 - read.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Access the page when the database is inaccessible.
