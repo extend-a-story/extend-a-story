@@ -31,13 +31,11 @@ http://www.sir-toby.com/extend-a-story/
     $error = "";
     $fatal = false;
 
-    $episode = $_GET[ "episode" ];
+    $episode = 1;
 
-    $episode = (int) $episode;
-
-    if ( $episode == 0 )
+    if ( isset( $_GET[ "episode" ] ))
     {
-        $episode = 1;
+        $episode = (int) $_GET[ "episode" ];
     }
 
     // connect to the database
