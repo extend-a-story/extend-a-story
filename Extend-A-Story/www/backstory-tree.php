@@ -26,35 +26,43 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-  require( "ExtendAStory.php" );
+    require( "ExtendAStory.php" );
 
-  $error = "";
-  $fatal = false;
+    $error = "";
+    $fatal = false;
 
-  $episode = $_GET[ "episode" ];
+    $episode = $_GET[ "episode" ];
 
-  $episode = ( int ) $episode;
+    $episode = (int) $episode;
 
-  if ( $episode == 0 )
-    $episode = 1;
+    if ( $episode == 0 )
+    {
+        $episode = 1;
+    }
 
-  // Connect to the database.
-  if ( empty( $error ) )
-    connectToDatabase( $error, $fatal );
+    // connect to the database
+    if ( empty( $error ))
+    {
+        connectToDatabase( $error, $fatal );
+    }
 
-  if ( empty( $error ) )
-    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+    if ( empty( $error ))
+    {
+        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+    }
 
-  if ( empty( $error ) )
-  {
-    $storyName = getStringValue( $error, $fatal, "StoryName" );
-    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-  }
+    if ( empty( $error ))
+    {
+        $storyName = getStringValue( $error, $fatal, "StoryName" );
+        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+    }
 
-  if ( ! empty( $error ) )
-    displayError( $error, $fatal );
+    if ( ! empty( $error ))
+    {
+        displayError( $error, $fatal );
+    }
 
 ?>
 
@@ -64,7 +72,11 @@ http://www.sir-toby.com/extend-a-story/
 
 <CENTER>
 <H1><?php echo( $storyName ); ?>: Back Story Tree</H1>
-<H2>Color Key for Parent Episodes: <FONT COLOR="#008000">First Time Encountered</FONT>, <FONT COLOR="#FF0000">Already Encountered</FONT></H2>
+<H2>
+    Color Key for Parent Episodes:
+    <FONT COLOR="#008000">First Time Encountered</FONT>,
+    <FONT COLOR="#FF0000">Already Encountered</FONT>
+</H2>
 <H2>Bold episodes indicate the primary parent, all others are backlinks.</H2>
 
 <A HREF="<?php echo( $storyHome ); ?>"><?php echo( $storyName ); ?> Home</A>
@@ -74,111 +86,130 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-  $curLevel        = 0;
-  $curEpisodes     = array( $episode );
-  $visitedEpisodes = array( );
+    $curLevel        = 0;
+    $curEpisodes     = array( $episode );
+    $visitedEpisodes = array();
 
-  while ( count( $curEpisodes ) > 0 )
-  {
+    while ( count( $curEpisodes ) > 0 )
+    {
 
 ?>
-<H2>Level: <?php echo( $curLevel ); ?>, Episodes: <?php echo( count( $curEpisodes ) ); ?></H2>
+
+<H2>Level: <?php echo( $curLevel ); ?>, Episodes: <?php echo( count( $curEpisodes )); ?></H2>
 <TABLE BORDER="1" CELLSPACING="0" WIDTH="100%">
-  <TR>
-    <TH width="50%">Episode Number and Title</TH>
-    <TH width="50%">Parents of this Episode</TH>
-  <TR>
+    <TR>
+        <TH width="50%">Episode Number and Title</TH>
+        <TH width="50%">Parents of this Episode</TH>
+    <TR>
+
 <?php
 
-    sort( $curEpisodes, SORT_NUMERIC );
-    $nextEpisodes = array( );
+        sort( $curEpisodes, SORT_NUMERIC );
+        $nextEpisodes = array();
 
-    for ( $i = 0; $i < count( $curEpisodes ); $i++ )
-    {
-      array_push( $visitedEpisodes, $curEpisodes[ $i ] );
-    }
-
-    for ( $i = 0; $i < count( $curEpisodes ); $i++ )
-    {
-      $episode = $curEpisodes[ $i ];
-
-      $result = mysql_query( "select Title from Episode where EpisodeID = " . $episode );
-      if ( ! $result )
-      {
-        echo( "Problem retrieving episode from database." );
-        exit;
-      }
-
-      $row = mysql_fetch_row( $result );
-      if ( ! $row )
-      {
-        echo( "Problem fetching episode row from database." );
-        exit;
-      }
-
-      $title  = $row[ 0 ];
-
-      $result = mysql_query( "select SourceEpisodeID, IsBackLink from Link where TargetEpisodeID = " . $episode . " order by SourceEpisodeID" );
-      if ( ! $result )
-      {
-        echo( "Problem retrieving parents from database." );
-        exit;
-      }
-
-      $children = "";
-
-      for ( $j = 0; $j < mysql_num_rows( $result ); $j++ )
-      {
-        $row = mysql_fetch_row( $result );
-        $target = $row[ 0 ];
-        $visited = in_array( $target, $visitedEpisodes );
-        $isBackLink = $row[ 1 ];
-
-        if ( $visited )
+        for ( $i = 0; $i < count( $curEpisodes ); $i++ )
         {
-          $color = "#FF0000";
-        }
-        else
-        {
-          $color = "#008000";
-          if ( ! in_array( $target, $nextEpisodes ) )
-          {
-            array_push( $nextEpisodes, $target );
-          }
+            array_push( $visitedEpisodes, $curEpisodes[ $i ] );
         }
 
-        $child = "<A HREF=\"read.php?episode=" . $target . "\"><FONT COLOR=\"" . $color . "\">" . $target . "</FONT></A>";
-
-        if ( $isBackLink == "N" )
+        for ( $i = 0; $i < count( $curEpisodes ); $i++ )
         {
-          $child = "<B>" . $child . "</B>";
-        }
+            $episode = $curEpisodes[ $i ];
 
-        if ( $j != 0 )
-          $children .= ", ";
+            $result = mysql_query( "SELECT Title FROM Episode WHERE EpisodeID = " . $episode );
 
-        $children .= $child;
-      }
+            if ( ! $result )
+            {
+                echo( "Problem retrieving episode from database." );
+                exit;
+            }
+
+            $row = mysql_fetch_row( $result );
+
+            if ( ! $row )
+            {
+                echo( "Problem fetching episode row from database." );
+                exit;
+            }
+
+            $title  = $row[ 0 ];
+
+            $result = mysql_query( "SELECT SourceEpisodeID, " .
+                                          "IsBackLink " .
+                                     "FROM Link " .
+                                    "WHERE TargetEpisodeID = " . $episode . " " .
+                                    "ORDER BY SourceEpisodeID" );
+
+            if ( ! $result )
+            {
+                echo( "Problem retrieving parents from database." );
+                exit;
+            }
+
+            $children = "";
+
+            for ( $j = 0; $j < mysql_num_rows( $result ); $j++ )
+            {
+                $row = mysql_fetch_row( $result );
+                $target = $row[ 0 ];
+                $visited = in_array( $target, $visitedEpisodes );
+                $isBackLink = $row[ 1 ];
+
+                if ( $visited )
+                {
+                    $color = "#FF0000";
+                }
+                else
+                {
+                    $color = "#008000";
+
+                    if ( ! in_array( $target, $nextEpisodes ))
+                    {
+                        array_push( $nextEpisodes, $target );
+                    }
+                }
+
+                $child = "<A HREF=\"read.php?episode=" . $target . "\"><FONT COLOR=\"" .
+                         $color . "\">" . $target . "</FONT></A>";
+
+                if ( $isBackLink == "N" )
+                {
+                    $child = "<B>" . $child . "</B>";
+                }
+
+                if ( $j != 0 )
+                {
+                    $children .= ", ";
+                }
+
+                $children .= $child;
+            }
 
 ?>
-  <TR>
-    <TD>
+
+    <TR>
+        <TD>
 <A HREF="backstory-tree.php?episode=<?php echo( $episode ); ?>">View Tree</A> -
-<A HREF="read.php?episode=<?php echo( $episode ); ?>"><?php echo( $episode ); ?> : <?php echo( $title ); ?></A>
-    </TD>
-    <TD><?php echo( $children ); ?></TD>
-  </TR>
+<A HREF="read.php?episode=<?php echo( $episode ); ?>">
+    <?php echo( $episode ); ?> : <?php echo( $title ); ?>
+</A>
+        </TD>
+        <TD><?php echo( $children ); ?></TD>
+    </TR>
+
 <?php
 
-    }
+        }
 
 ?>
+
 </TABLE>
+
 <?php
 
-    $curEpisodes = $nextEpisodes;
-    $curLevel++;
-  }
+        $curEpisodes = $nextEpisodes;
+        $curLevel++;
+    }
 
 ?>
 
