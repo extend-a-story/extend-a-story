@@ -400,6 +400,16 @@
 - list-locked.php:
    - Access the page when the database is inaccessible.
    - Verify that locked episodes are listed correctly.
+- results.php:
+   - Set the "method" parameter to an invalid value.
+   - Access the page when the database is inaccessible.
+   - Verify that a search by episode title works correctly.
+   - Verify that a search by episode body works correctly.
+   - Verify that a search by author name works correctly.
+   - Verify that a search by creation time works correctly.
+   - Verify that a search for extendable episodes works correctly.
+   - Verify that a search for linkable episodes works correctly.
+   - Verify that a search for episodes created within the specified number of days works correctly.
 - read.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Access the page when the database is inaccessible.
