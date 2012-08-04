@@ -233,6 +233,22 @@
       - Green for the first time they are encountered.
       - Red for subsequent encounters.
    - Verify that the true parent of each episode shows up in bold.
+- clear.php:
+   Y Verify that the "episode" parameter defaults to 1 when it is not set.
+   N Access the page when the database is inaccessible.
+     [FAIL] - You see an error message regarding a wrong key rather than an inaccessible database.
+   Y Try to clear the lock on an episode when episode creation is disabled.
+   N Try to clear the "create" lock on an episode that is locked by someone else.
+     [FAIL] - The correct error message is displayed, but the "go back" link leads to the parent
+              episode, rather than the episode on which you were trying to clear the lock.
+   Y Try to clear the "edit" lock on an episode that is locked by someone else.
+   N Try to clear the lock on an episode that is not locked.
+     [FAIL] - You see an error message regarding a wrong key rather than the fact that the episode
+              is not locked.
+   N Clear the "create" lock on an episode.
+     [FAIL] - The lock is successfully cleared, but the "go back" link leads to the parent episode,
+              rather than the episode on which you were trying to clear the lock.
+   Y Clear the "edit" lock on an episode.
 - create.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Verify that the "scheme" parameter defaults to 1 when it is not set.
