@@ -26,51 +26,64 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-  require( "ExtendAStory.php" );
+    require( "ExtendAStory.php" );
 
-  $error = "";
-  $fatal = false;
+    $error = "";
+    $fatal = false;
 
-  $episode = $_GET[ "episode" ];
+    $episode = $_GET[ "episode" ];
 
-  $episode = ( int ) $episode;
+    $episode = (int) $episode;
 
-  if ( $episode == 0 )
-    $episode = 1;
-
-  // Connect to the database.
-  if ( empty( $error ) )
-    connectToDatabase( $error, $fatal );
-
-  if ( empty( $error ) )
-    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-
-  if ( empty( $error ) )
-  {
-    $storyName = getStringValue( $error, $fatal, "StoryName" );
-    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-  }
-
-  if ( empty( $error ) )
-  {
-    $result = mysql_query( "select EpisodeEditLogID, EditDate, EditLogEntry from EpisodeEditLog " .
-                           "where EpisodeID = " . $episode . " order by EpisodeEditLogID" );
-    if ( ! $result )
+    if ( $episode == 0 )
     {
-      $error .= "Problem retrieving edit list from the database.<BR>";
-      $fatal = true;
+        $episode = 1;
     }
-  }
 
-  $canEdit = canEditEpisode( $sessionID, $userID, $episode );
+    // connect to the database
+    if ( empty( $error ))
+    {
+        connectToDatabase( $error, $fatal );
+    }
 
-  if ( ! empty( $error ) )
-    displayError( $error, $fatal );
+    if ( empty( $error ))
+    {
+        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+    }
 
-  if ( ! $canEdit )
-  {
+    if ( empty( $error ))
+    {
+        $storyName = getStringValue( $error, $fatal, "StoryName" );
+        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+    }
+
+    if ( empty( $error ))
+    {
+        $result = mysql_query( "SELECT EpisodeEditLogID, " .
+                                      "EditDate, " .
+                                      "EditLogEntry " .
+                                 "FROM EpisodeEditLog " .
+                                "WHERE EpisodeID = " . $episode . " " .
+                                "ORDER BY EpisodeEditLogID" );
+
+        if ( ! $result )
+        {
+            $error .= "Problem retrieving edit list from the database.<BR>";
+            $fatal = true;
+        }
+    }
+
+    $canEdit = canEditEpisode( $sessionID, $userID, $episode );
+
+    if ( ! empty( $error ))
+    {
+        displayError( $error, $fatal );
+    }
+
+    if ( ! $canEdit )
+    {
 
 ?>
 
@@ -82,13 +95,13 @@ http://www.sir-toby.com/extend-a-story/
 <H1>List Edits - Error</H1>
 
 <TABLE WIDTH="500">
-  <TR>
-    <TD>
+    <TR>
+        <TD>
 You do not have permission to view the edits for this episode.
 <P>
 <A HREF="read.php?episode=<?php echo( $episode ); ?>">Go Back</A>
-    </TD>
-  </TR>
+        </TD>
+    </TR>
 </TABLE>
 
 </CENTER>
@@ -99,8 +112,8 @@ You do not have permission to view the edits for this episode.
 
 <?php
 
-    exit;
-  }
+        exit;
+    }
 
 ?>
 
@@ -114,28 +127,38 @@ You do not have permission to view the edits for this episode.
 Clicking on a <I>View Edit</I> link views the episode as it was <B>before</B> that edit took place.
 <P>
 <TABLE>
-  <TR>
-    <TH>#</TH>
-    <TH>Date</TH>
-    <TH>Log Entry</TH>
-  </TR>
+    <TR>
+        <TH>#</TH>
+        <TH>Date</TH>
+        <TH>Log Entry</TH>
+    </TR>
+
 <?php
 
-  for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
-  {
-    $row = mysql_fetch_row( $result );
+    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+    {
+        $row = mysql_fetch_row( $result );
 
 ?>
-  <TR>
-    <TD><A HREF="view-edit.php?episodeEditLogID=<?php echo( $row[ 0 ] ); ?>">View Edit #<?php echo( $i + 1 ); ?></A></TD>
-    <TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo( $row[ 1 ] ); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-    <TD><?php echo( $row[ 2 ] ); ?></TD>
-  </TR>
+
+    <TR>
+        <TD>
+            <A HREF="view-edit.php?episodeEditLogID=<?php echo( $row[ 0 ] ); ?>">
+                View Edit #<?php echo( $i + 1 ); ?>
+            </A>
+        </TD>
+        <TD>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo( $row[ 1 ] ); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </TD>
+        <TD><?php echo( $row[ 2 ] ); ?></TD>
+    </TR>
+
 <?php
 
-  }
+    }
 
 ?>
+
 </TABLE>
 <P>
 <A HREF="read.php?episode=<?php echo( $episode ); ?>">Go Back</A>
