@@ -28,17 +28,15 @@ http://www.sir-toby.com/extend-a-story/
 
     require( "ExtendAStory.php" );
 
-    $episode = $_GET[ "episode" ];
+    $episode = 1;
+
+    if ( isset( $_GET[ "episode" ] ))
+    {
+        $episode = (int) $_GET[ "episode" ];
+    }
 
     $error = "";
     $fatal = false;
-
-    $episode = (int) $episode;
-
-    if ( $episode == 0 )
-    {
-        $episode = 1;
-    }
 
     // connect to the database
     if ( empty( $error ))
