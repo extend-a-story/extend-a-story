@@ -239,13 +239,9 @@
      [FAIL] - You see an error message regarding a wrong key rather than an inaccessible database.
    - Try to clear the lock on an episode when episode creation is disabled.
    - Try to clear the "create" lock on an episode that is locked by someone else.
-     [FAIL] - The correct error message is displayed, but the "go back" link leads to the parent
-              episode, rather than the episode on which you were trying to clear the lock.
    - Try to clear the "edit" lock on an episode that is locked by someone else.
    - Try to clear the lock on an episode that is not locked.
    - Clear the "create" lock on an episode.
-     [FAIL] - The lock is successfully cleared, but the "go back" link leads to the parent episode,
-              rather than the episode on which you were trying to clear the lock.
    - Clear the "edit" lock on an episode.
 - create.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.

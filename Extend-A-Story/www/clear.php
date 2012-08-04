@@ -139,7 +139,7 @@ You are unable to clear locks while episode creation is disabled.
         <TD>
 You have specified an episode that is not locked.
 <P>
-<A HREF="read.php?episode=<?php echo(( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>.
+<A HREF="read.php?episode=<?php echo( $episode ); ?>">Go Back</A>
         </TD>
     </TR>
 </TABLE>
@@ -175,7 +175,7 @@ You are trying to unlock an episode, but you don't have the correct key to
 unlock it. Please wait for the episode to time out. You will be given the
 correct key to unlock it at that time.
 <P>
-<A HREF="read.php?episode=<?php echo(( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>
+<A HREF="read.php?episode=<?php echo( $episode ); ?>">Go Back</A>
         </TD>
     </TR>
 </TABLE>
@@ -230,7 +230,7 @@ correct key to unlock it at that time.
 You have now cleared the lock on episode <?php echo( $episode ); ?>.
 It is now ready to be <?php echo(( $status == 1 ) ? "created" : "edited" ); ?> again.
 <P>
-<A HREF="read.php?episode=<?php echo(( $status == 1 ) ? $parent : $episode ); ?>">Go Back</A>
+<A HREF="read.php?episode=<?php echo( $episode ); ?>">Go Back</A>
         </TD>
     </TR>
 </TABLE>
