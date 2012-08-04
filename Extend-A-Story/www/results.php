@@ -28,11 +28,24 @@ http://www.sir-toby.com/extend-a-story/
 
     require( "ExtendAStory.php" );
 
-    $method = $_POST[ "method" ];
-    $text   = $_POST[ "text"   ];
-    $days   = $_POST[ "days"   ];
+    $method = "";
+    $text   = "";
+    $days   = 0;
 
-    $days = (int) $days;
+    if ( isset( $_POST[ "method" ] ))
+    {
+        $method = $_POST[ "method" ];
+    }
+
+    if ( isset( $_POST[ "text" ] ))
+    {
+        $text = $_POST[ "text" ];
+    }
+
+    if ( isset( $_POST[ "days" ] ))
+    {
+        $days = (int) $_POST[ "days" ];
+    }
 
     $error = "";
     $fatal = false;
