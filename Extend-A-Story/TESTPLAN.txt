@@ -238,9 +238,8 @@
    - Access the page when the database is inaccessible.
      [FAIL] - You see an error message regarding a wrong key rather than an inaccessible database.
    - Try to clear the lock on an episode when episode creation is disabled.
-   - Try to clear the "create" lock on an episode that is locked by someone else.
-   - Try to clear the "edit" lock on an episode that is locked by someone else.
    - Try to clear the lock on an episode that is not locked.
+   - Try to clear the lock on an episode that is locked by someone else.
    - Clear the "create" lock on an episode.
    - Clear the "edit" lock on an episode.
 - create.php:
