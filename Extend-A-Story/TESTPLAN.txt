@@ -481,3 +481,7 @@
         edited more than once.
       - Verify that the option to view the edit log is not displayed if the episode has not been
         edited.
+- scheme-preview.php:
+   - Verify that the "scheme" parameter defaults to 1 when it is not set.
+   - Access the page when the database is inaccessible.
+   - Verify that schemes are displayed correctly.
