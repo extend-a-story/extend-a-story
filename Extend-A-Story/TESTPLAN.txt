@@ -488,3 +488,6 @@
 - search.php
    - Access the page when the database is inaccessible.
    - Verify that the search form is displayed correctly.
+- statistics.php
+   - Access the page when the database is inaccessible.
+   - Verify that the statistics are displayed correctly.
