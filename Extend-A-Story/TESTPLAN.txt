@@ -500,4 +500,3 @@
       - Red for non-created episodes.
       - Blue for back-linked episodes.
    - Verify that the children of an episode with no children are displayed correctly.
-     [FAIL] - Minor display issue.
