@@ -500,3 +500,41 @@
       - Red for non-created episodes.
       - Blue for back-linked episodes.
    - Verify that the children of an episode with no children are displayed correctly.
+- view-edit.php
+   - Verify that the "episodeEditLogID" parameter defaults to 1 when it is not set.
+   - Access the page when the database is inaccessible.
+     [FAIL] - You see an error message regarding insufficient privileges rather than an inaccessible
+              database.
+   - View an edit that does not exist.
+   - View an edit for an episode when you don't have permission to edit the episode.
+   - View edits with various schemes and verify that the schemes are displayed correctly.
+   - View an edit with a scheme that does not specify a background image.
+   - View an edit with a scheme that does specify a background image.
+   - View an edit with an image.
+   - View an edit without an image.
+   - Verify that links show up correctly:
+      - Normal links (both created and uncreated links show up as uncreated).
+      - Back links.
+   - View an edit that is extendable and verify that you are prompted to add a new option.
+   - When viewing an edit for episode one, verify that you do not have a link to "go back".
+   - When viewing an edit for any episode besides episode one, verify that you have a link to "go
+     back".
+   - View an edit for an episode with zero back links leading to it and verify that you are not
+     prompted to view all links to the episode.
+   - Ensure episode one has exactly one back link leading to it. View an edit for episode one and
+     verify that you are prompted to view the single link to the episode.
+     [FAIL] - Link not displayed.
+   - View an edit for an episode (other than episode one) with one or more back links leading to it
+     and verify that you are prompted to view all links to the episode.
+   - View an edit for an episode where the author's name is not displayed.
+   - View an edit for an episode where the author's name is displayed:
+      - Author's name is a "mailto" link.
+      - Author's name is not a "mailto" link.
+   - View an edit for an episode where linking is enabled and verify that "Is Linkable" is shown as
+     "Y".
+   - View an edit for an episode where linking is disabled and verify that "Is Linkable" is shown as
+     "N".
+   - View an edit for an episode where extending is enabled and verify that "Is Extendable" is shown
+     as "Y".
+   - View an edit for an episode where extending is disabled and verify that "Is Extendable" is
+     shown as "N".
