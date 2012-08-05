@@ -388,6 +388,14 @@
    - When revoking the author's edit permission:
       - Verify that author's edit permission was revoked correctly.
       - Very that the episode edit log is updated correctly.
+- general.php:
+   - Verify that users are logged out after one hour of inactivity.
+   - Verify that your session access data is correctly updated.
+   - Create a new session.
+   - Verify that sessions older than 370 days are deleted.
+   - Verify that you can edit an episode when logged in.
+   - Verify that you can edit an episode when you are the author and within the edit window.
+   - Verify that you cannot edit an episode when the above conditions are not met.
 - link-trace.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Access the page when the database is inaccessible.
