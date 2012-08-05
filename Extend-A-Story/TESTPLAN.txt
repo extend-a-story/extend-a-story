@@ -451,8 +451,8 @@
      that you are prompted to view all links to the episode.
    - Read an episode where the author's name is not displayed.
    - Read an episode where the author's name is displayed:
-      Y Author's name is a "mailto" link.
-      Y Author's name is not a "mailto" link.
+      - Author's name is a "mailto" link.
+      - Author's name is not a "mailto" link.
    - Read an episode where linking is enabled and verify that "linking enabled" is displayed.
    - Read an episode where linking is disabled and verify that "linking enabled" is not displayed.
    - Read an episode where extending is enabled and verify that "extending enabled" is displayed.
