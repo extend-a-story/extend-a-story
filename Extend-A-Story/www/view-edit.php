@@ -412,13 +412,40 @@ You do not have permission to view this edit log.
 
     }
 
-    if ( $linkCount > 1 )
+    if (( $linkCount > 1 ) || (( $linkCount > 0 ) && ( $episode == 1  )))
     {
 
 ?>
 
 <P>
-<A HREF="link-trace.php?episode=<?php echo( $episode ); ?>">Display All <?php echo( $linkCount ); ?> Links to this Episode</A>
+<A HREF="link-trace.php?episode=<?php echo( $episode ); ?>">
+
+<?php
+
+            if ( $linkCount == 1 )
+            {
+
+?>
+
+    Display Link to this Episode
+
+<?php
+
+            }
+            else
+            {
+
+?>
+
+    Display All <?php echo( $linkCount ); ?> Links to this Episode
+
+
+<?php
+
+            }
+
+?>
+</A>
 
 <?php
 

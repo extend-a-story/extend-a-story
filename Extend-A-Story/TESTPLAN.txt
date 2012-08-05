@@ -523,7 +523,6 @@
      prompted to view all links to the episode.
    - Ensure episode one has exactly one back link leading to it. View an edit for episode one and
      verify that you are prompted to view the single link to the episode.
-     [FAIL] - Link not displayed.
    - View an edit for an episode (other than episode one) with one or more back links leading to it
      and verify that you are prompted to view all links to the episode.
    - View an edit for an episode where the author's name is not displayed.
