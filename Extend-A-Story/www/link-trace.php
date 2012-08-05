@@ -106,7 +106,11 @@ for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
 
 ?>
 
-        <LI><A HREF="read.php?episode=<?php echo( $source ); ?>"><?php echo( $title ); ?></A></LI>
+                <LI>
+                    <A HREF="read.php?episode=<?php echo( $source ); ?>">
+                        <?php echo( $title ); ?>
+                    </A>
+                </LI>
 
 <?php
 
