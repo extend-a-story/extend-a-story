@@ -491,3 +491,13 @@
 - statistics.php:
    - Access the page when the database is inaccessible.
    - Verify that the statistics are displayed correctly.
+- story-tree.php:
+   - Verify that the "episode" parameter defaults to 1 when it is not set.
+   - Access the page when the database is inaccessible.
+   - View a story tree that includes more than one level.
+   - Verify that child episodes show up with the right color:
+      - Green for created episodes.
+      - Red for non-created episodes.
+      - Blue for back-linked episodes.
+   - Verify that the children of an episode with no children are displayed correctly.
+     [FAIL] - Minor display issue.
