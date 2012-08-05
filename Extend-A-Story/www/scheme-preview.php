@@ -28,16 +28,14 @@ http://www.sir-toby.com/extend-a-story/
 
     require( "ExtendAStory.php" );
 
-    $scheme = $_POST[ "scheme" ];
-
     $error = "";
     $fatal = false;
 
-    $scheme = (int) $scheme;
+    $scheme = 1;
 
-    if ( $scheme == 0 )
+    if ( isset( $_POST[ "scheme" ] ))
     {
-        $scheme = 1;
+        $scheme = (int) $_POST[ "scheme" ];
     }
 
     // connect to the database
