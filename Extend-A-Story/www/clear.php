@@ -26,38 +26,38 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
-    $episode = 1;
+$episode = 1;
 
-    if ( isset( $_POST[ "episode" ] ))
-    {
-        $episode = (int) $_POST[ "episode" ];
-    }
+if ( isset( $_POST[ "episode" ] ))
+{
+    $episode = (int) $_POST[ "episode" ];
+}
 
-    $lockKey = $_POST[ "lockKey" ];
+$lockKey = $_POST[ "lockKey" ];
 
-    $error = "";
-    $fatal = false;
+$error = "";
+$fatal = false;
 
-    // connect to the database
-    if ( empty( $error ))
-    {
-        connectToDatabase( $error, $fatal );
-    }
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
 
-    if ( empty( $error ))
-    {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-    }
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
 
-    if ( empty( $error ))
-    {
-        $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
-    }
+if ( empty( $error ))
+{
+    $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
+}
 
-    if ( $isWriteable == "N" )
-    {
+if ( $isWriteable == "N" )
+{
 
 ?>
 
@@ -87,42 +87,42 @@ You are unable to clear locks while episode creation is disabled.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( empty( $error ))
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT Parent, " .
+                                  "Status, " .
+                                  "LockKey " .
+                             "FROM Episode " .
+                            "WHERE EpisodeID = " . $episode );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT Parent, " .
-                                      "Status, " .
-                                      "LockKey " .
-                                 "FROM Episode " .
-                                "WHERE EpisodeID = " . $episode );
+        $error .= "Problem retrieving the episode from the database.<BR>";
+        $fatal = true;
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
 
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error .= "Problem retrieving the episode from the database.<BR>";
+            $error .= "Problem fetching episode row from the database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Problem fetching episode row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $parent         = $row[ 0 ];
-                $status         = $row[ 1 ];
-                $episodeLockKey = $row[ 2 ];
-            }
+            $parent         = $row[ 0 ];
+            $status         = $row[ 1 ];
+            $episodeLockKey = $row[ 2 ];
         }
     }
+}
 
-    if (( $status != 1 ) && ( $status != 3 ))
-    {
+if (( $status != 1 ) && ( $status != 3 ))
+{
 
 ?>
 
@@ -152,11 +152,11 @@ You have specified an episode that is not locked.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( $lockKey != $episodeLockKey )
-    {
+if ( $lockKey != $episodeLockKey )
+{
 
 ?>
 
@@ -188,32 +188,32 @@ correct key to unlock it at that time.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( empty( $error ))
+if ( empty( $error ))
+{
+    $sessionColumn = ( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID";
+    $statusValue = ( $status == 1 ) ? 0 : 2;
+
+    $result = mysql_query( "UPDATE Episode " .
+                              "SET " . $sessionColumn . " = 0, " .
+                                  "Status = " . $statusValue . ", " .
+                                  "LockDate = '-', " .
+                                  "LockKey = 0 " .
+                            "WHERE EpisodeID = " . $episode );
+
+    if ( ! $result )
     {
-        $sessionColumn = ( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID";
-        $statusValue = ( $status == 1 ) ? 0 : 2;
-
-        $result = mysql_query( "UPDATE Episode " .
-                                  "SET " . $sessionColumn . " = 0, " .
-                                      "Status = " . $statusValue . ", " .
-                                      "LockDate = '-', " .
-                                      "LockKey = 0 " .
-                                "WHERE EpisodeID = " . $episode );
-
-        if ( ! $result )
-        {
-            $error .= "Unable to unlock the episode record.<BR>";
-            $fatal = true;
-        }
+        $error .= "Unable to unlock the episode record.<BR>";
+        $fatal = true;
     }
+}
 
-    if ( ! empty( $error ))
-    {
-        displayError( $error, $fatal );
-    }
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
 
 ?>
 

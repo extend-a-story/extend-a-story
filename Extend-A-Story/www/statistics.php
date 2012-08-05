@@ -26,109 +26,109 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
-    $error = "";
-    $fatal = false;
+$error = "";
+$fatal = false;
 
-    // connect to the database
-    if ( empty( $error ))
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
+
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
+
+if ( empty( $error ))
+{
+    $storyName = getStringValue( $error, $fatal, "StoryName" );
+    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+}
+
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT COUNT( * ) FROM Episode WHERE Status = 2 OR Status = 3" );
+
+    if ( ! $result )
     {
-        connectToDatabase( $error, $fatal );
+        $error .= "Problem retrieving created episode count from the database.<BR>";
+        $fatal = true;
     }
-
-    if ( empty( $error ))
+    else
     {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-    }
+        $row = mysql_fetch_row( $result );
 
-    if ( empty( $error ))
-    {
-        $storyName = getStringValue( $error, $fatal, "StoryName" );
-        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-    }
-
-    if ( empty( $error ))
-    {
-        $result = mysql_query( "SELECT COUNT( * ) FROM Episode WHERE Status = 2 OR Status = 3" );
-
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error .= "Problem retrieving created episode count from the database.<BR>";
+            $error .= "Problem fetching created episode count row from the database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Problem fetching created episode count row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $created = $row[ 0 ];
-            }
+            $created = $row[ 0 ];
         }
     }
+}
 
-    if ( empty( $error ))
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT COUNT( * ) FROM Episode WHERE Status = 0 OR Status = 1" );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT COUNT( * ) FROM Episode WHERE Status = 0 OR Status = 1" );
+        $error .= "Problem retrieving empty episode count from the database.<BR>";
+        $fatal = true;
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
 
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error .= "Problem retrieving empty episode count from the database.<BR>";
+            $error .= "Problem fetching empty episode count row from the database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Problem fetching empty episode count row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $empty = $row[ 0 ];
-            }
+            $empty = $row[ 0 ];
         }
     }
+}
 
-    if ( empty( $error ))
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT COUNT( * ) FROM Episode" );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT COUNT( * ) FROM Episode" );
+        $error .= "Problem retrieving episode count from the database.<BR>";
+        $fatal = true;
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
 
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error .= "Problem retrieving episode count from the database.<BR>";
+            $error .= "Problem fetching episode count row from the database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Problem fetching episode count row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $count = $row[ 0 ];
-            }
+            $count = $row[ 0 ];
         }
     }
+}
 
-    if ( ! empty( $error ))
-    {
-        displayError( $error, $fatal );
-    }
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
 
 ?>
 

@@ -26,58 +26,58 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
-    $episode = 1;
+$episode = 1;
 
-    if ( isset( $_GET[ "episode" ] ))
+if ( isset( $_GET[ "episode" ] ))
+{
+    $episode = (int) $_GET[ "episode" ];
+}
+
+$error = "";
+$fatal = false;
+
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
+
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
+
+if ( empty( $error ))
+{
+    $storyName = getStringValue( $error, $fatal, "StoryName" );
+    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+}
+
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT Link.SourceEpisodeID, " .
+                                  "Episode.Title " .
+                             "FROM Link " .
+                             "JOIN Episode " .
+                               "ON Link.SourceEpisodeID = Episode.EpisodeID " .
+                            "WHERE Link.TargetEpisodeID = " . $episode . " " .
+                            "ORDER BY Episode.EpisodeID" );
+
+    if ( ! $result )
     {
-        $episode = (int) $_GET[ "episode" ];
+        $error .= "Problem retrieving the back link trace from the database.<BR>";
+        $fatal = true;
     }
+}
 
-    $error = "";
-    $fatal = false;
-
-    // connect to the database
-    if ( empty( $error ))
-    {
-        connectToDatabase( $error, $fatal );
-    }
-
-    if ( empty( $error ))
-    {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-    }
-
-    if ( empty( $error ))
-    {
-        $storyName = getStringValue( $error, $fatal, "StoryName" );
-        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-    }
-
-    if ( empty( $error ))
-    {
-        $result = mysql_query( "SELECT Link.SourceEpisodeID, " .
-                                      "Episode.Title " .
-                                 "FROM Link " .
-                                 "JOIN Episode " .
-                                   "ON Link.SourceEpisodeID = Episode.EpisodeID " .
-                                "WHERE Link.TargetEpisodeID = " . $episode . " " .
-                                "ORDER BY Episode.EpisodeID" );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving the back link trace from the database.<BR>";
-            $fatal = true;
-        }
-    }
-
-    if ( ! empty( $error ))
-    {
-        displayError( $error, $fatal );
-    }
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
 
 ?>
 
@@ -95,14 +95,14 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
-    {
-        $row = mysql_fetch_row( $result );
+for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+{
+    $row = mysql_fetch_row( $result );
 
-        $source = $row[ 0 ];
-        $title  = $row[ 1 ];
+    $source = $row[ 0 ];
+    $title  = $row[ 1 ];
 
-        $title = htmlentities( $title );
+    $title = htmlentities( $title );
 
 ?>
 
@@ -110,7 +110,7 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-    }
+}
 
 ?>
 

@@ -26,34 +26,34 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
-    $error = "";
-    $fatal = false;
+$error = "";
+$fatal = false;
 
-    // connect to the database
-    if ( empty( $error ))
-    {
-        connectToDatabase( $error, $fatal );
-    }
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
 
-    if ( empty( $error ))
-    {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-    }
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
 
-    if ( empty( $error ))
-    {
-        $storyName = getStringValue( $error, $fatal, "StoryName" );
-        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-    }
+if ( empty( $error ))
+{
+    $storyName = getStringValue( $error, $fatal, "StoryName" );
+    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+}
 
-    if ( ! empty( $error ))
-    {
-        displayError( $error, $fatal );
-    }
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
 
 ?>
 

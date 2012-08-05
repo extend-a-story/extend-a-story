@@ -26,105 +26,105 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
-    $error = "";
-    $fatal = false;
+$error = "";
+$fatal = false;
 
-    $scheme = 1;
+$scheme = 1;
 
-    if ( isset( $_POST[ "scheme" ] ))
+if ( isset( $_POST[ "scheme" ] ))
+{
+    $scheme = (int) $_POST[ "scheme" ];
+}
+
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
+
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
+
+if ( empty( $error ))
+{
+    $storyName = getStringValue( $error, $fatal, "StoryName" );
+    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+}
+
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT SchemeName, " .
+                                  "bgcolor, " .
+                                  "text, " .
+                                  "link, " .
+                                  "vlink, " .
+                                  "alink, " .
+                                  "background, " .
+                                  "UncreatedLink, " .
+                                  "CreatedLink, " .
+                                  "BackLinkedLink " .
+                             "FROM Scheme " .
+                            "WHERE SchemeID = " . $scheme );
+
+    if ( ! $result )
     {
-        $scheme = (int) $_POST[ "scheme" ];
+        $error .= "Problem retrieving the scheme from the database.<BR>";
+        $fatal = true;
     }
-
-    // connect to the database
-    if ( empty( $error ))
+    else
     {
-        connectToDatabase( $error, $fatal );
-    }
+        $row = mysql_fetch_row( $result );
 
-    if ( empty( $error ))
-    {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-    }
-
-    if ( empty( $error ))
-    {
-        $storyName = getStringValue( $error, $fatal, "StoryName" );
-        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-    }
-
-    if ( empty( $error ))
-    {
-        $result = mysql_query( "SELECT SchemeName, " .
-                                      "bgcolor, " .
-                                      "text, " .
-                                      "link, " .
-                                      "vlink, " .
-                                      "alink, " .
-                                      "background, " .
-                                      "UncreatedLink, " .
-                                      "CreatedLink, " .
-                                      "BackLinkedLink " .
-                                 "FROM Scheme " .
-                                "WHERE SchemeID = " . $scheme );
-
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error .= "Problem retrieving the scheme from the database.<BR>";
+            $error .= "Problem fetching scheme row from the database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $schemeName     = $row[ 0 ];
+            $bgcolor        = $row[ 1 ];
+            $text           = $row[ 2 ];
+            $link           = $row[ 3 ];
+            $vlink          = $row[ 4 ];
+            $alink          = $row[ 5 ];
+            $background     = $row[ 6 ];
+            $uncreatedLink  = $row[ 7 ];
+            $createdLink    = $row[ 8 ];
+            $backLinkedLink = $row[ 9 ];
 
-            if ( ! $row )
-            {
-                $error .= "Problem fetching scheme row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $schemeName     = $row[ 0 ];
-                $bgcolor        = $row[ 1 ];
-                $text           = $row[ 2 ];
-                $link           = $row[ 3 ];
-                $vlink          = $row[ 4 ];
-                $alink          = $row[ 5 ];
-                $background     = $row[ 6 ];
-                $uncreatedLink  = $row[ 7 ];
-                $createdLink    = $row[ 8 ];
-                $backLinkedLink = $row[ 9 ];
-
-                $body = "<BODY BGCOLOR=\"" . $bgcolor . "\" " .
-                              "TEXT=\""    . $text    . "\" " .
-                              "LINK=\""    . $link    . "\" " .
-                              "VLINK=\""   . $vlink   . "\" " .
-                              "ALINK=\""   . $alink   . "\""  .
-                              ( empty( $background ) ? ">" :
-                                                       " BACKGROUND=\"" . $background . "\">" );
-            }
+            $body = "<BODY BGCOLOR=\"" . $bgcolor . "\" " .
+                          "TEXT=\""    . $text    . "\" " .
+                          "LINK=\""    . $link    . "\" " .
+                          "VLINK=\""   . $vlink   . "\" " .
+                          "ALINK=\""   . $alink   . "\""  .
+                          ( empty( $background ) ? ">" :
+                                                   " BACKGROUND=\"" . $background . "\">" );
         }
     }
+}
 
-    if ( empty( $error ))
+if ( empty( $error ))
+{
+    $result = mysql_query( "select SchemeID, SchemeName from Scheme" );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "select SchemeID, SchemeName from Scheme" );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving the list of schemes from the database.<BR>";
-            $fatal = true;
-        }
+        $error .= "Problem retrieving the list of schemes from the database.<BR>";
+        $fatal = true;
     }
+}
 
-    if ( ! empty( $error ))
-    {
-        displayError( $error, $fatal );
-    }
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
 
 ?>
 
@@ -164,10 +164,10 @@ Select another scheme to preview:<BR>
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
-    {
-        $row = mysql_fetch_row( $result );
-        $selected = ( $scheme == $row[ 0 ] ) ? " SELECTED" : "";
+for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+{
+    $row = mysql_fetch_row( $result );
+    $selected = ( $scheme == $row[ 0 ] ) ? " SELECTED" : "";
 
 ?>
 
@@ -177,7 +177,7 @@ Select another scheme to preview:<BR>
 
 <?php
 
-    }
+}
 
 ?>
 

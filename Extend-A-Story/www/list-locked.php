@@ -26,48 +26,48 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
-    $error = "";
-    $fatal = false;
+$error = "";
+$fatal = false;
 
-    // connect to the database
-    if ( empty( $error ))
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
+
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
+
+if ( empty( $error ))
+{
+    $storyName = getStringValue( $error, $fatal, "StoryName" );
+    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+}
+
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT EpisodeID " .
+                             "FROM Episode " .
+                            "WHERE Status = 1 " .
+                            "ORDER BY EpisodeID" );
+
+    if ( ! $result )
     {
-        connectToDatabase( $error, $fatal );
+        $error .= "Problem retrieving locked episode list from the database.<BR>";
+        $fatal = true;
     }
+}
 
-    if ( empty( $error ))
-    {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-    }
-
-    if ( empty( $error ))
-    {
-        $storyName = getStringValue( $error, $fatal, "StoryName" );
-        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-    }
-
-    if ( empty( $error ))
-    {
-        $result = mysql_query( "SELECT EpisodeID " .
-                                 "FROM Episode " .
-                                "WHERE Status = 1 " .
-                                "ORDER BY EpisodeID" );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving locked episode list from the database.<BR>";
-            $fatal = true;
-        }
-    }
-
-    if ( ! empty( $error ))
-    {
-        displayError( $error, $fatal );
-    }
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
 
 ?>
 
@@ -83,9 +83,9 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
-    {
-        $row = mysql_fetch_row( $result );
+for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+{
+    $row = mysql_fetch_row( $result );
 
 ?>
 
@@ -93,7 +93,7 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-    }
+}
 
 ?>
 

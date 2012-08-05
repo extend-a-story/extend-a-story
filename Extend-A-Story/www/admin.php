@@ -26,135 +26,135 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
+$command = "";
+
+if ( isset( $_REQUEST[ "command" ] ))
+{
+    $command = $_REQUEST[ "command" ];
+}
+
+$error = "";
+$fatal = false;
+
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
+
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
+
+if ( empty( $error ))
+{
+    $storyName      = getStringValue( $error, $fatal, "StoryName"      );
+    $siteName       = getStringValue( $error, $fatal, "SiteName"       );
+    $storyHome      = getStringValue( $error, $fatal, "StoryHome"      );
+    $siteHome       = getStringValue( $error, $fatal, "SiteHome"       );
+    $readEpisodeURL = getStringValue( $error, $fatal, "ReadEpisodeURL" );
+    $adminEmail     = getStringValue( $error, $fatal, "AdminEmail"     );
+    $isWriteable    = getStringValue( $error, $fatal, "IsWriteable"    );
+    $maxLinks       = getIntValue(    $error, $fatal, "MaxLinks"       );
+    $maxEditDays    = getIntValue(    $error, $fatal, "MaxEditDays"    );
+}
+
+$message = "";
+
+if (( $command != ""                   ) &&
+    ( $command != "addUser"            ) &&
+    ( $command != "addUserSave"        ) &&
+    ( $command != "changePassword"     ) &&
+    ( $command != "changePasswordSave" ) &&
+    ( $command != "deleteUser"         ) &&
+    ( $command != "deleteUserSave"     ) &&
+    ( $command != "editUser"           ) &&
+    ( $command != "editUserSave"       ) &&
+    ( $command != "configure"          ) &&
+    ( $command != "configureSave"      ) &&
+    ( $command != "listDeadEnds"       ) &&
+    ( $command != "listOrphans"        ) &&
+    ( $command != "listRecentEdits"    ) &&
+    ( $command != "login"              ) &&
+    ( $command != "logout"             ))
+{
+    $message = "Invalid Command";
     $command = "";
+}
 
-    if ( isset( $_REQUEST[ "command" ] ))
+if (( $command == "login" ) && ( empty( $error )))
+{
+    $loginName = $_POST[ "loginName" ];
+    $password  = $_POST[ "password"  ];
+
+    prepareParam( $loginName );
+    prepareParam( $password  );
+
+    $result = mysql_query(
+            "SELECT UserID " .
+              "FROM User " .
+             "WHERE LoginName = '" . mysql_escape_string( $loginName ) . "' " .
+               "AND Password = PASSWORD( '" . mysql_escape_string( $password ) . "' )" );
+
+    if ( ! $result )
     {
-        $command = $_REQUEST[ "command" ];
+        $error .= "Unable to query user table in database.<BR>";
+        $fatal = true;
     }
-
-    $error = "";
-    $fatal = false;
-
-    // connect to the database
-    if ( empty( $error ))
+    else
     {
-        connectToDatabase( $error, $fatal );
-    }
+        $row = mysql_fetch_row( $result );
 
-    if ( empty( $error ))
+        if ( ! $row )
+        {
+            $message = "Invalid login name and/or password.";
+        }
+        else
+        {
+            $message = "Successfully logged in.";
+            $userID = $row[ 0 ];
+
+            $result = mysql_query( "UPDATE Session " .
+                                      "SET UserID = " . $userID . " " .
+                                    "WHERE SessionID = " . $sessionID );
+
+            if ( ! $result )
+            {
+                $error .= "Unable to update session record.<BR>";
+                $fatal = true;
+            }
+        }
+    }
+}
+
+if (( $command == "logout" ) && ( empty( $error )))
+{
+    $result = mysql_query( "UPDATE Session SET UserID = 0 WHERE SessionID = " . $sessionID );
+
+    if ( ! $result )
     {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+        $error .= "Unable to update session record.<BR>";
+        $fatal = true;
     }
-
-    if ( empty( $error ))
+    else
     {
-        $storyName      = getStringValue( $error, $fatal, "StoryName"      );
-        $siteName       = getStringValue( $error, $fatal, "SiteName"       );
-        $storyHome      = getStringValue( $error, $fatal, "StoryHome"      );
-        $siteHome       = getStringValue( $error, $fatal, "SiteHome"       );
-        $readEpisodeURL = getStringValue( $error, $fatal, "ReadEpisodeURL" );
-        $adminEmail     = getStringValue( $error, $fatal, "AdminEmail"     );
-        $isWriteable    = getStringValue( $error, $fatal, "IsWriteable"    );
-        $maxLinks       = getIntValue(    $error, $fatal, "MaxLinks"       );
-        $maxEditDays    = getIntValue(    $error, $fatal, "MaxEditDays"    );
+        $message = "Successfully logged out.";
+        $userID = 0;
     }
+}
 
-    $message = "";
-
+if (( $userID == 0 ) && empty( $error ))
+{
     if (( $command != ""                   ) &&
-        ( $command != "addUser"            ) &&
-        ( $command != "addUserSave"        ) &&
-        ( $command != "changePassword"     ) &&
-        ( $command != "changePasswordSave" ) &&
-        ( $command != "deleteUser"         ) &&
-        ( $command != "deleteUserSave"     ) &&
-        ( $command != "editUser"           ) &&
-        ( $command != "editUserSave"       ) &&
-        ( $command != "configure"          ) &&
-        ( $command != "configureSave"      ) &&
-        ( $command != "listDeadEnds"       ) &&
-        ( $command != "listOrphans"        ) &&
-        ( $command != "listRecentEdits"    ) &&
         ( $command != "login"              ) &&
         ( $command != "logout"             ))
     {
         $message = "Invalid Command";
         $command = "";
     }
-
-    if (( $command == "login" ) && ( empty( $error )))
-    {
-        $loginName = $_POST[ "loginName" ];
-        $password  = $_POST[ "password"  ];
-
-        prepareParam( $loginName );
-        prepareParam( $password  );
-
-        $result = mysql_query(
-                "SELECT UserID " .
-                  "FROM User " .
-                 "WHERE LoginName = '" . mysql_escape_string( $loginName ) . "' " .
-                   "AND Password = PASSWORD( '" . mysql_escape_string( $password ) . "' )" );
-
-        if ( ! $result )
-        {
-            $error .= "Unable to query user table in database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $message = "Invalid login name and/or password.";
-            }
-            else
-            {
-                $message = "Successfully logged in.";
-                $userID = $row[ 0 ];
-
-                $result = mysql_query( "UPDATE Session " .
-                                          "SET UserID = " . $userID . " " .
-                                        "WHERE SessionID = " . $sessionID );
-
-                if ( ! $result )
-                {
-                    $error .= "Unable to update session record.<BR>";
-                    $fatal = true;
-                }
-            }
-        }
-    }
-
-    if (( $command == "logout" ) && ( empty( $error )))
-    {
-        $result = mysql_query( "UPDATE Session SET UserID = 0 WHERE SessionID = " . $sessionID );
-
-        if ( ! $result )
-        {
-            $error .= "Unable to update session record.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $message = "Successfully logged out.";
-            $userID = 0;
-        }
-    }
-
-    if (( $userID == 0 ) && empty( $error ))
-    {
-        if (( $command != ""                   ) &&
-            ( $command != "login"              ) &&
-            ( $command != "logout"             ))
-        {
-            $message = "Invalid Command";
-            $command = "";
-        }
 
 ?>
 
@@ -170,8 +170,8 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        if ( ! empty( $message ))
-        {
+    if ( ! empty( $message ))
+    {
 
 ?>
 
@@ -179,7 +179,7 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -212,306 +212,491 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( empty( $error ))
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT PermissionLevel, " .
+                                  "UserName " .
+                             "FROM User " .
+                            "WHERE UserID = " . $userID );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT PermissionLevel, " .
-                                      "UserName " .
-                                 "FROM User " .
-                                "WHERE UserID = " . $userID );
+        $error .= "Unable to query user information from database.<BR>";
+        $fatal = true;
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
 
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error .= "Unable to query user information from database.<BR>";
+            $error .= "Unable to fetch user information row from database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Unable to fetch user information row from database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $permissionLevel = $row[ 0 ];
-                $userName        = $row[ 1 ];
-            }
+            $permissionLevel = $row[ 0 ];
+            $userName        = $row[ 1 ];
         }
     }
+}
 
-    if ((( $permissionLevel < 2           ) &&
-         (( $command == "listOrphans"    ) ||
-          ( $command == "listDeadEnds"   ))) ||
-        (( $permissionLevel < 3           ) &&
-         (( $command == "configureSave"  ) ||
-          ( $command == "configure"      ))) ||
-        (( $permissionLevel < 4           ) &&
-         (( $command == "addUserSave"    ) ||
-          ( $command == "addUser"        ) ||
-          ( $command == "editUserSave"   ) ||
-          ( $command == "editUser"       ) ||
-          ( $command == "deleteUser"     ) ||
-          ( $command == "deleteUserSave" ))))
+if ((( $permissionLevel < 2           ) &&
+     (( $command == "listOrphans"    ) ||
+      ( $command == "listDeadEnds"   ))) ||
+    (( $permissionLevel < 3           ) &&
+     (( $command == "configureSave"  ) ||
+      ( $command == "configure"      ))) ||
+    (( $permissionLevel < 4           ) &&
+     (( $command == "addUserSave"    ) ||
+      ( $command == "addUser"        ) ||
+      ( $command == "editUserSave"   ) ||
+      ( $command == "editUser"       ) ||
+      ( $command == "deleteUser"     ) ||
+      ( $command == "deleteUserSave" ))))
+{
+    $message = "You don't have permission to perform this operation.";
+    $command = "";
+}
+
+if (( $command == "changePasswordSave" ) && ( empty( $error )))
+{
+    $curPassword  = $_POST[ "curPassword"  ];
+    $newPassword1 = $_POST[ "newPassword1" ];
+    $newPassword2 = $_POST[ "newPassword2" ];
+
+    prepareParam( $curPassword  );
+    prepareParam( $newPassword1 );
+    prepareParam( $newPassword2 );
+
+    $result = mysql_query(
+            "SELECT COUNT( * ) " .
+              "FROM User " .
+             "WHERE UserID = " . $userID . " " .
+               "AND Password = PASSWORD( '" . mysql_escape_string( $curPassword ) . "' )" );
+
+    if ( ! $result )
     {
-        $message = "You don't have permission to perform this operation.";
-        $command = "";
+        $error .= "Unable to query user record from database.<BR>";
+        $fatal = true;
     }
-
-    if (( $command == "changePasswordSave" ) && ( empty( $error )))
+    else
     {
-        $curPassword  = $_POST[ "curPassword"  ];
-        $newPassword1 = $_POST[ "newPassword1" ];
-        $newPassword2 = $_POST[ "newPassword2" ];
+        $row = mysql_fetch_row( $result );
 
-        prepareParam( $curPassword  );
-        prepareParam( $newPassword1 );
-        prepareParam( $newPassword2 );
-
-        $result = mysql_query(
-                "SELECT COUNT( * ) " .
-                  "FROM User " .
-                 "WHERE UserID = " . $userID . " " .
-                   "AND Password = PASSWORD( '" . mysql_escape_string( $curPassword ) . "' )" );
-
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error .= "Unable to query user record from database.<BR>";
+            $error .= "Unable to fetch user count row from database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
+            if ( $row[ 0 ] != 1 )
             {
-                $error .= "Unable to fetch user count row from database.<BR>";
-                $fatal = true;
+                $message = "Error: Old password is incorrect.";
             }
             else
             {
-                if ( $row[ 0 ] != 1 )
+                if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
                 {
-                    $message = "Error: Old password is incorrect.";
+                    $message = "Error: You must enter a new password.";
+                }
+                else if ( $newPassword1 != $newPassword2 )
+                {
+                    $message = "Error: New passwords do not match.";
                 }
                 else
                 {
-                    if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
+                    $result = mysql_query(
+                            "UPDATE User " .
+                               "SET Password = PASSWORD( '" .
+                                               mysql_escape_string( $newPassword1 ) . "' ) " .
+                             "WHERE UserID = " . $userID );
+
+                    if ( ! $result )
                     {
-                        $message = "Error: You must enter a new password.";
-                    }
-                    else if ( $newPassword1 != $newPassword2 )
-                    {
-                        $message = "Error: New passwords do not match.";
+                        $error .= "Unable to update user record.<BR>";
+                        $fatal = true;
                     }
                     else
                     {
-                        $result = mysql_query(
-                                "UPDATE User " .
-                                   "SET Password = PASSWORD( '" .
-                                                   mysql_escape_string( $newPassword1 ) . "' ) " .
-                                 "WHERE UserID = " . $userID );
-
-                        if ( ! $result )
-                        {
-                            $error .= "Unable to update user record.<BR>";
-                            $fatal = true;
-                        }
-                        else
-                        {
-                            $message = "Password successfully changed.";
-                        }
+                        $message = "Password successfully changed.";
                     }
                 }
             }
         }
     }
+}
 
-    if (( $command == "configureSave" ) && ( empty( $error )))
+if (( $command == "configureSave" ) && ( empty( $error )))
+{
+    $newStoryName      = $_POST[ "newStoryName"      ];
+    $newSiteName       = $_POST[ "newSiteName"       ];
+    $newStoryHome      = $_POST[ "newStoryHome"      ];
+    $newSiteHome       = $_POST[ "newSiteHome"       ];
+    $newReadEpisodeURL = $_POST[ "newReadEpisodeURL" ];
+    $newAdminEmail     = $_POST[ "newAdminEmail"     ];
+    $newIsWriteable    = $_POST[ "newIsWriteable"    ];
+    $newMaxLinks       = $_POST[ "newMaxLinks"       ];
+    $newMaxEditDays    = $_POST[ "newMaxEditDays"    ];
+
+    prepareParam( $newStoryName      );
+    prepareParam( $newSiteName       );
+    prepareParam( $newStoryHome      );
+    prepareParam( $newSiteHome       );
+    prepareParam( $newReadEpisodeURL );
+    prepareParam( $newAdminEmail     );
+
+    $newIsWriteable = (int) $newIsWriteable;
+    $newMaxLinks    = (int) $newMaxLinks;
+    $newMaxEditDays = (int) $newMaxEditDays;
+
+    if ( empty( $newStoryName ))
     {
-        $newStoryName      = $_POST[ "newStoryName"      ];
-        $newSiteName       = $_POST[ "newSiteName"       ];
-        $newStoryHome      = $_POST[ "newStoryHome"      ];
-        $newSiteHome       = $_POST[ "newSiteHome"       ];
-        $newReadEpisodeURL = $_POST[ "newReadEpisodeURL" ];
-        $newAdminEmail     = $_POST[ "newAdminEmail"     ];
-        $newIsWriteable    = $_POST[ "newIsWriteable"    ];
-        $newMaxLinks       = $_POST[ "newMaxLinks"       ];
-        $newMaxEditDays    = $_POST[ "newMaxEditDays"    ];
+        $message .= "You must enter the story name.<BR>";
+    }
 
-        prepareParam( $newStoryName      );
-        prepareParam( $newSiteName       );
-        prepareParam( $newStoryHome      );
-        prepareParam( $newSiteHome       );
-        prepareParam( $newReadEpisodeURL );
-        prepareParam( $newAdminEmail     );
+    if ( empty( $newSiteName ))
+    {
+        $message .= "You must enter the site name.<BR>";
+    }
 
-        $newIsWriteable = (int) $newIsWriteable;
-        $newMaxLinks    = (int) $newMaxLinks;
-        $newMaxEditDays = (int) $newMaxEditDays;
+    if ( empty( $newStoryHome ))
+    {
+        $message .= "You must enter the story home.<BR>";
+    }
 
-        if ( empty( $newStoryName ))
+    if ( empty( $newSiteHome ))
+    {
+        $message .= "You must enter the site home.<BR>";
+    }
+
+    if ( empty( $newReadEpisodeURL ))
+    {
+        $message .= "You must enter the read episode URL.<BR>";
+    }
+
+    if ( empty( $newAdminEmail ))
+    {
+        $message .= "You must enter the admin email.<BR>";
+    }
+
+    if ( strlen( $newStoryName ) > 255 )
+    {
+        $message .= "The story name cannot be longer than 255 characters.<BR>";
+    }
+
+    if ( strlen( $newSiteName ) > 255 )
+    {
+        $message .= "The site name cannot be longer than 255 characters.<BR>";
+    }
+
+    if ( strlen( $newStoryHome ) > 255 )
+    {
+        $message .= "The story home cannot be longer than 255 characters.<BR>";
+    }
+
+    if ( strlen( $newSiteHome ) > 255 )
+    {
+        $message .= "The site home cannot be longer than 255 characters.<BR>";
+    }
+
+    if ( strlen( $newReadEpisodeURL ) > 255 )
+    {
+        $message .= "The read episode URL cannot be longer than 255 characters.<BR>";
+    }
+
+    if ( strlen( $newAdminEmail ) > 255 )
+    {
+        $message .= "The admin email cannot be longer than 255 characters.<BR>";
+    }
+
+    if (( $newIsWriteable != 0 ) && ( $newIsWriteable != 1 ))
+    {
+        $message .= "Your chosen 'is writeable' setting is not recognized.<BR>";
+    }
+
+    if ( $newMaxLinks <= 0 )
+    {
+        $message .= "Max links must be a positive number.<BR>";
+    }
+
+    if ( $newMaxEditDays <= 0 )
+    {
+        $message .= "Max edit days must be a positive number.<BR>";
+    }
+
+    if ( empty( $message ))
+    {
+        setStringValue( $error, $fatal, "StoryName",      $newStoryName                       );
+        setStringValue( $error, $fatal, "SiteName",       $newSiteName                        );
+        setStringValue( $error, $fatal, "StoryHome",      $newStoryHome                       );
+        setStringValue( $error, $fatal, "SiteHome",       $newSiteHome                        );
+        setStringValue( $error, $fatal, "ReadEpisodeURL", $newReadEpisodeURL                  );
+        setStringValue( $error, $fatal, "AdminEmail",     $newAdminEmail                      );
+        setStringValue( $error, $fatal, "IsWriteable",    ( $newIsWriteable == 1 ? "Y" : "N" ));
+        setIntValue(    $error, $fatal, "MaxLinks",       $newMaxLinks                        );
+        setIntValue(    $error, $fatal, "MaxEditDays",    $newMaxEditDays                     );
+
+        $storyName      = $newStoryName;
+        $siteName       = $newSiteName;
+        $storyHome      = $newStoryHome;
+        $siteHome       = $newSiteHome;
+        $readEpisodeURL = $newReadEpisodeURL;
+        $adminEmail     = $newAdminEmail;
+        $isWriteable    = ( $newIsWriteable == 1 ? "Y" : "N" );
+        $maxLinks       = $newMaxLinks;
+        $maxEditDays    = $newMaxEditDays;
+
+        $message = "Configuration Saved";
+    }
+    else
+    {
+        $message = "Problems saving configuration:<P>" . $message;
+    }
+}
+
+if (( $command == "addUserSave" ) && ( empty( $error )))
+{
+    $newLoginName       = $_POST[ "newLoginName"       ];
+    $newUserName        = $_POST[ "newUserName"        ];
+    $newPermissionLevel = $_POST[ "newPermissionLevel" ];
+    $newPassword1       = $_POST[ "newPassword1"       ];
+    $newPassword2       = $_POST[ "newPassword2"       ];
+
+    prepareParam( $newLoginName );
+    prepareParam( $newUserName  );
+    prepareParam( $newPassword1 );
+    prepareParam( $newPassword2 );
+
+    $newPermissionLevel = (int) $newPermissionLevel;
+
+    if ( empty( $newLoginName ))
+    {
+        $message .= "You must enter the login name.<BR>";
+    }
+
+    if ( empty( $newUserName ))
+    {
+        $message .= "You must enter the user name.<BR>";
+    }
+
+    if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
+    {
+        $message .= "You must enter a password.<BR>";
+    }
+
+    if ( strlen( $newLoginName ) > 255 )
+    {
+        $message .= "The login name cannot exceed 255 characters.<BR>";
+    }
+
+    if ( strlen( $newUserName ) > 255 )
+    {
+        $message .= "The user name cannot exceed 255 characters.<BR>";
+    }
+
+    if ( $newPassword1 != $newPassword2 )
+    {
+        $message .= "The passwords do not match.<BR>";
+    }
+
+    if (( $newPermissionLevel != 1 ) &&
+        ( $newPermissionLevel != 2 ) &&
+        ( $newPermissionLevel != 3 ) &&
+        ( $newPermissionLevel != 4 ))
+    {
+        $message .= "Your chosen 'permission level' setting is not recognized.<BR>";
+    }
+
+    $count = -1;
+
+    $result = mysql_query(
+            "SELECT COUNT( * ) " .
+              "FROM User " .
+             "WHERE LoginName = '" . mysql_escape_string( $newLoginName ) . "'" );
+
+    if ( ! $result )
+    {
+        $error .= "Unable to query database for existing login name.<BR>";
+        $fatal = true;
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
         {
-            $message .= "You must enter the story name.<BR>";
-        }
-
-        if ( empty( $newSiteName ))
-        {
-            $message .= "You must enter the site name.<BR>";
-        }
-
-        if ( empty( $newStoryHome ))
-        {
-            $message .= "You must enter the story home.<BR>";
-        }
-
-        if ( empty( $newSiteHome ))
-        {
-            $message .= "You must enter the site home.<BR>";
-        }
-
-        if ( empty( $newReadEpisodeURL ))
-        {
-            $message .= "You must enter the read episode URL.<BR>";
-        }
-
-        if ( empty( $newAdminEmail ))
-        {
-            $message .= "You must enter the admin email.<BR>";
-        }
-
-        if ( strlen( $newStoryName ) > 255 )
-        {
-            $message .= "The story name cannot be longer than 255 characters.<BR>";
-        }
-
-        if ( strlen( $newSiteName ) > 255 )
-        {
-            $message .= "The site name cannot be longer than 255 characters.<BR>";
-        }
-
-        if ( strlen( $newStoryHome ) > 255 )
-        {
-            $message .= "The story home cannot be longer than 255 characters.<BR>";
-        }
-
-        if ( strlen( $newSiteHome ) > 255 )
-        {
-            $message .= "The site home cannot be longer than 255 characters.<BR>";
-        }
-
-        if ( strlen( $newReadEpisodeURL ) > 255 )
-        {
-            $message .= "The read episode URL cannot be longer than 255 characters.<BR>";
-        }
-
-        if ( strlen( $newAdminEmail ) > 255 )
-        {
-            $message .= "The admin email cannot be longer than 255 characters.<BR>";
-        }
-
-        if (( $newIsWriteable != 0 ) && ( $newIsWriteable != 1 ))
-        {
-            $message .= "Your chosen 'is writeable' setting is not recognized.<BR>";
-        }
-
-        if ( $newMaxLinks <= 0 )
-        {
-            $message .= "Max links must be a positive number.<BR>";
-        }
-
-        if ( $newMaxEditDays <= 0 )
-        {
-            $message .= "Max edit days must be a positive number.<BR>";
-        }
-
-        if ( empty( $message ))
-        {
-            setStringValue( $error, $fatal, "StoryName",      $newStoryName                       );
-            setStringValue( $error, $fatal, "SiteName",       $newSiteName                        );
-            setStringValue( $error, $fatal, "StoryHome",      $newStoryHome                       );
-            setStringValue( $error, $fatal, "SiteHome",       $newSiteHome                        );
-            setStringValue( $error, $fatal, "ReadEpisodeURL", $newReadEpisodeURL                  );
-            setStringValue( $error, $fatal, "AdminEmail",     $newAdminEmail                      );
-            setStringValue( $error, $fatal, "IsWriteable",    ( $newIsWriteable == 1 ? "Y" : "N" ));
-            setIntValue(    $error, $fatal, "MaxLinks",       $newMaxLinks                        );
-            setIntValue(    $error, $fatal, "MaxEditDays",    $newMaxEditDays                     );
-
-            $storyName      = $newStoryName;
-            $siteName       = $newSiteName;
-            $storyHome      = $newStoryHome;
-            $siteHome       = $newSiteHome;
-            $readEpisodeURL = $newReadEpisodeURL;
-            $adminEmail     = $newAdminEmail;
-            $isWriteable    = ( $newIsWriteable == 1 ? "Y" : "N" );
-            $maxLinks       = $newMaxLinks;
-            $maxEditDays    = $newMaxEditDays;
-
-            $message = "Configuration Saved";
+            $error .= "Unable to fetch existing login name count row from database.<BR>";
+            $fatal = true;
         }
         else
         {
-            $message = "Problems saving configuration:<P>" . $message;
+            $count = $row[ 0 ];
         }
     }
 
-    if (( $command == "addUserSave" ) && ( empty( $error )))
+    if ( $count != 0 )
     {
-        $newLoginName       = $_POST[ "newLoginName"       ];
-        $newUserName        = $_POST[ "newUserName"        ];
-        $newPermissionLevel = $_POST[ "newPermissionLevel" ];
-        $newPassword1       = $_POST[ "newPassword1"       ];
-        $newPassword2       = $_POST[ "newPassword2"       ];
+        $message .= "The login name you selected is already in use.<BR>";
+    }
 
-        prepareParam( $newLoginName );
-        prepareParam( $newUserName  );
-        prepareParam( $newPassword1 );
-        prepareParam( $newPassword2 );
+    if ( empty( $message ))
+    {
+        createUser( $error, $fatal, $newPermissionLevel, $newLoginName, $newPassword1,
+                    $newUserName );
 
-        $newPermissionLevel = (int) $newPermissionLevel;
+        $message = "User Added";
+    }
+    else
+    {
+        $message = "Problems adding user:<P>" . $message;
+    }
+}
 
-        if ( empty( $newLoginName ))
+if (( $command == "editUser"     ) ||
+    ( $command == "editUserSave" ) ||
+    ( $command == "deleteUser"   ))
+{
+    $editedUserID = 0;
+
+    if ( isset( $_POST[ "userID" ] ))
+    {
+        $editedUserID = (int) $_POST[ "userID" ];
+    }
+
+    if ( $editedUserID == 0 )
+    {
+        if ( $command == "deleteUser" )
         {
-            $message .= "You must enter the login name.<BR>";
+            $message = "You must select a user to delete.";
+        }
+        else
+        {
+            $message = "You must select a user to edit.";
         }
 
-        if ( empty( $newUserName ))
-        {
-            $message .= "You must enter the user name.<BR>";
-        }
+        $command = "";
+    }
+    else if (( $command == "deleteUser" ) && ( $editedUserID == $userID ))
+    {
+        $message = "You cannot delete yourself.";
+        $command = "";
+    }
+    else
+    {
+        $result = mysql_query( "SELECT PermissionLevel, " .
+                                      "LoginName, " .
+                                      "UserName " .
+                                 "FROM User " .
+                                "WHERE UserID = " . $editedUserID );
 
+        if ( ! $result )
+        {
+            $error .= "Unable to query user for editing from database.<BR>";
+            $fatal = true;
+        }
+        else
+        {
+            $row = mysql_fetch_row( $result );
+
+            if ( ! $row )
+            {
+                $message = "The specified user does not exist.";
+                $command = "";
+            }
+            else
+            {
+                $oldPermissionLevel = $row[ 0 ];
+                $oldLoginName       = $row[ 1 ];
+                $oldUserName        = $row[ 2 ];
+            }
+        }
+    }
+}
+
+if (( $command == "editUserSave" ) && ( empty( $error )))
+{
+    $newLoginName       = $_POST[ "newLoginName"       ];
+    $newUserName        = $_POST[ "newUserName"        ];
+    $newPermissionLevel = $_POST[ "newPermissionLevel" ];
+    $newPassword1       = $_POST[ "newPassword1"       ];
+    $newPassword2       = $_POST[ "newPassword2"       ];
+
+    prepareParam( $newLoginName );
+    prepareParam( $newUserName  );
+    prepareParam( $newPassword1 );
+    prepareParam( $newPassword2 );
+
+    $newPermissionLevel = (int) $newPermissionLevel;
+
+    $setNewPassword = 0;
+
+    if ( isset( $_POST[ "setNewPassword" ] ))
+    {
+        $setNewPassword = $_POST[ "setNewPassword" ];
+    }
+
+    if ( empty( $newLoginName ))
+    {
+        $message .= "You must enter the login name.<BR>";
+    }
+
+    if ( empty( $newUserName ))
+    {
+        $message .= "You must enter the user name.<BR>";
+    }
+
+    if ( strlen( $newLoginName ) > 255 )
+    {
+        $message .= "The login name cannot exceed 255 characters.<BR>";
+    }
+
+    if ( strlen( $newUserName ) > 255 )
+    {
+        $message .= "The user name cannot exceed 255 characters.<BR>";
+    }
+
+    if ( $setNewPassword == 1 )
+    {
         if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
         {
-            $message .= "You must enter a password.<BR>";
-        }
-
-        if ( strlen( $newLoginName ) > 255 )
-        {
-            $message .= "The login name cannot exceed 255 characters.<BR>";
-        }
-
-        if ( strlen( $newUserName ) > 255 )
-        {
-            $message .= "The user name cannot exceed 255 characters.<BR>";
+            $message .= "You must enter a password when setting a new password.<BR>";
         }
 
         if ( $newPassword1 != $newPassword2 )
         {
             $message .= "The passwords do not match.<BR>";
         }
+    }
 
-        if (( $newPermissionLevel != 1 ) &&
-            ( $newPermissionLevel != 2 ) &&
-            ( $newPermissionLevel != 3 ) &&
-            ( $newPermissionLevel != 4 ))
+    if ( $userID == $editedUserID )
+    {
+        if ( $oldPermissionLevel != $newPermissionLevel )
         {
-            $message .= "Your chosen 'permission level' setting is not recognized.<BR>";
+            $message .= "You cannot change your own permission level.<BR>";
         }
 
+        if ( $setNewPassword == 1 )
+        {
+            $message .= "You cannot change your own password here. Use the Change Password " .
+                        "function instead.<BR>";
+        }
+    }
+
+    if (( $newPermissionLevel != 1 ) &&
+        ( $newPermissionLevel != 2 ) &&
+        ( $newPermissionLevel != 3 ) &&
+        ( $newPermissionLevel != 4 ))
+    {
+        $message .= "Your chosen 'permission level' setting is not recognized.<BR>";
+    }
+
+    if ( $oldLoginName != $newLoginName )
+    {
         $count = -1;
 
         $result = mysql_query(
@@ -543,389 +728,204 @@ http://www.sir-toby.com/extend-a-story/
         {
             $message .= "The login name you selected is already in use.<BR>";
         }
-
-        if ( empty( $message ))
-        {
-            createUser( $error, $fatal, $newPermissionLevel, $newLoginName, $newPassword1,
-                        $newUserName );
-
-            $message = "User Added";
-        }
-        else
-        {
-            $message = "Problems adding user:<P>" . $message;
-        }
     }
 
-    if (( $command == "editUser"     ) ||
-        ( $command == "editUserSave" ) ||
-        ( $command == "deleteUser"   ))
+    if ( empty( $message ))
     {
-        $editedUserID = 0;
-
-        if ( isset( $_POST[ "userID" ] ))
-        {
-            $editedUserID = (int) $_POST[ "userID" ];
-        }
-
-        if ( $editedUserID == 0 )
-        {
-            if ( $command == "deleteUser" )
-            {
-                $message = "You must select a user to delete.";
-            }
-            else
-            {
-                $message = "You must select a user to edit.";
-            }
-
-            $command = "";
-        }
-        else if (( $command == "deleteUser" ) && ( $editedUserID == $userID ))
-        {
-            $message = "You cannot delete yourself.";
-            $command = "";
-        }
-        else
-        {
-            $result = mysql_query( "SELECT PermissionLevel, " .
-                                          "LoginName, " .
-                                          "UserName " .
-                                     "FROM User " .
-                                    "WHERE UserID = " . $editedUserID );
-
-            if ( ! $result )
-            {
-                $error .= "Unable to query user for editing from database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $row = mysql_fetch_row( $result );
-
-                if ( ! $row )
-                {
-                    $message = "The specified user does not exist.";
-                    $command = "";
-                }
-                else
-                {
-                    $oldPermissionLevel = $row[ 0 ];
-                    $oldLoginName       = $row[ 1 ];
-                    $oldUserName        = $row[ 2 ];
-                }
-            }
-        }
-    }
-
-    if (( $command == "editUserSave" ) && ( empty( $error )))
-    {
-        $newLoginName       = $_POST[ "newLoginName"       ];
-        $newUserName        = $_POST[ "newUserName"        ];
-        $newPermissionLevel = $_POST[ "newPermissionLevel" ];
-        $newPassword1       = $_POST[ "newPassword1"       ];
-        $newPassword2       = $_POST[ "newPassword2"       ];
-
-        prepareParam( $newLoginName );
-        prepareParam( $newUserName  );
-        prepareParam( $newPassword1 );
-        prepareParam( $newPassword2 );
-
-        $newPermissionLevel = (int) $newPermissionLevel;
-
-        $setNewPassword = 0;
-
-        if ( isset( $_POST[ "setNewPassword" ] ))
-        {
-            $setNewPassword = $_POST[ "setNewPassword" ];
-        }
-
-        if ( empty( $newLoginName ))
-        {
-            $message .= "You must enter the login name.<BR>";
-        }
-
-        if ( empty( $newUserName ))
-        {
-            $message .= "You must enter the user name.<BR>";
-        }
-
-        if ( strlen( $newLoginName ) > 255 )
-        {
-            $message .= "The login name cannot exceed 255 characters.<BR>";
-        }
-
-        if ( strlen( $newUserName ) > 255 )
-        {
-            $message .= "The user name cannot exceed 255 characters.<BR>";
-        }
-
         if ( $setNewPassword == 1 )
         {
-            if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
-            {
-                $message .= "You must enter a password when setting a new password.<BR>";
-            }
-
-            if ( $newPassword1 != $newPassword2 )
-            {
-                $message .= "The passwords do not match.<BR>";
-            }
-        }
-
-        if ( $userID == $editedUserID )
-        {
-            if ( $oldPermissionLevel != $newPermissionLevel )
-            {
-                $message .= "You cannot change your own permission level.<BR>";
-            }
-
-            if ( $setNewPassword == 1 )
-            {
-                $message .= "You cannot change your own password here. Use the Change Password " .
-                            "function instead.<BR>";
-            }
-        }
-
-        if (( $newPermissionLevel != 1 ) &&
-            ( $newPermissionLevel != 2 ) &&
-            ( $newPermissionLevel != 3 ) &&
-            ( $newPermissionLevel != 4 ))
-        {
-            $message .= "Your chosen 'permission level' setting is not recognized.<BR>";
-        }
-
-        if ( $oldLoginName != $newLoginName )
-        {
-            $count = -1;
-
-            $result = mysql_query(
-                    "SELECT COUNT( * ) " .
-                      "FROM User " .
-                     "WHERE LoginName = '" . mysql_escape_string( $newLoginName ) . "'" );
-
-            if ( ! $result )
-            {
-                $error .= "Unable to query database for existing login name.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $row = mysql_fetch_row( $result );
-
-                if ( ! $row )
-                {
-                    $error .= "Unable to fetch existing login name count row from database.<BR>";
-                    $fatal = true;
-                }
-                else
-                {
-                    $count = $row[ 0 ];
-                }
-            }
-
-            if ( $count != 0 )
-            {
-                $message .= "The login name you selected is already in use.<BR>";
-            }
-        }
-
-        if ( empty( $message ))
-        {
-            if ( $setNewPassword == 1 )
-            {
-                $sql = "UPDATE User " .
-                          "SET PermissionLevel = "  . $newPermissionLevel                  .  ", " .
-                              "LoginName       = '" . mysql_escape_string( $newLoginName ) . "', " .
-                              "Password        = PASSWORD( '" .
-                                                 mysql_escape_string( $newPassword1 ) . "' ), "    .
-                              "UserName        = '" . mysql_escape_string( $newUserName  ) . "' "  .
-                        "WHERE UserID = " . $editedUserID;
-            }
-            else
-            {
-                $sql = "UPDATE User " .
-                          "SET PermissionLevel = "  . $newPermissionLevel                  .  ", " .
-                              "LoginName       = '" . mysql_escape_string( $newLoginName ) . "', " .
-                              "UserName        = '" . mysql_escape_string( $newUserName  ) . "' "  .
-                        "WHERE UserID = " . $editedUserID;
-            }
-
-            $result = mysql_query( $sql );
-
-            if ( ! $result )
-            {
-                $error .= "Unable to update user record.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                if ( $userID == $editedUserID )
-                {
-                    $userName = $newUserName;
-                }
-
-                $message = "User Edited";
-            }
+            $sql = "UPDATE User " .
+                      "SET PermissionLevel = "  . $newPermissionLevel                  .  ", " .
+                          "LoginName       = '" . mysql_escape_string( $newLoginName ) . "', " .
+                          "Password        = PASSWORD( '" .
+                                             mysql_escape_string( $newPassword1 ) . "' ), "    .
+                          "UserName        = '" . mysql_escape_string( $newUserName  ) . "' "  .
+                    "WHERE UserID = " . $editedUserID;
         }
         else
         {
-            $message = "Problems editing user:<P>" . $message;
-        }
-    }
-
-    if (( $command == "deleteUserSave" ) && ( empty( $error )))
-    {
-        $deletedUserID = 0;
-
-        if ( isset( $_POST[ "userID" ] ))
-        {
-            $deletedUserID = (int) $_POST[ "userID" ];
+            $sql = "UPDATE User " .
+                      "SET PermissionLevel = "  . $newPermissionLevel                  .  ", " .
+                          "LoginName       = '" . mysql_escape_string( $newLoginName ) . "', " .
+                          "UserName        = '" . mysql_escape_string( $newUserName  ) . "' "  .
+                    "WHERE UserID = " . $editedUserID;
         }
 
-        if ( $deletedUserID == 0 )
+        $result = mysql_query( $sql );
+
+        if ( ! $result )
         {
-            $message = "You must select a user to delete.";
-        }
-        else if ( $deletedUserID == $userID )
-        {
-            $message = "You cannot delete yourself.";
+            $error .= "Unable to update user record.<BR>";
+            $fatal = true;
         }
         else
         {
-            $result = mysql_query( "DELETE FROM User WHERE UserID = " . $deletedUserID );
+            if ( $userID == $editedUserID )
+            {
+                $userName = $newUserName;
+            }
 
-            if ( ! $result )
-            {
-                $error .= "Problem deleting user from the database.<BR>";
-                $fatal = true;
-            }
-            else if ( mysql_affected_rows() == 0 )
-            {
-                $message = "The specified user does not exist.";
-            }
-            else
-            {
-                $message = "User Deleted";
-            }
+            $message = "User Edited";
         }
     }
-
-    if (( $command == "listOrphans" ) && ( empty( $error )))
+    else
     {
-        $orphans = mysql_query( "SELECT Episode.EpisodeID, " .
-                                       "Episode.Parent, " .
-                                       "Episode.Status, " .
-                                       "COUNT( * )" .
-                                  "FROM Link " .
-                      "RIGHT OUTER JOIN Episode " .
-                                    "ON Link.IsBackLink = 'N' " .
-                                   "AND Link.TargetEpisodeID = Episode.EpisodeID " .
-                       "LEFT OUTER JOIN EpisodeEditLog " .
-                                    "ON Episode.EpisodeID = EpisodeEditLog.EpisodeID " .
-                                 "WHERE Link.LinkID IS NULL " .
-                                   "AND Episode.EpisodeID != 1 " .
-                                 "GROUP BY Episode.EpisodeID " .
-                                 "ORDER BY Episode.EpisodeID" );
+        $message = "Problems editing user:<P>" . $message;
+    }
+}
 
-        if ( ! $orphans )
+if (( $command == "deleteUserSave" ) && ( empty( $error )))
+{
+    $deletedUserID = 0;
+
+    if ( isset( $_POST[ "userID" ] ))
+    {
+        $deletedUserID = (int) $_POST[ "userID" ];
+    }
+
+    if ( $deletedUserID == 0 )
+    {
+        $message = "You must select a user to delete.";
+    }
+    else if ( $deletedUserID == $userID )
+    {
+        $message = "You cannot delete yourself.";
+    }
+    else
+    {
+        $result = mysql_query( "DELETE FROM User WHERE UserID = " . $deletedUserID );
+
+        if ( ! $result )
         {
-            $error .= "Unable to query list of orphans from the database.<BR>";
+            $error .= "Problem deleting user from the database.<BR>";
             $fatal = true;
         }
+        else if ( mysql_affected_rows() == 0 )
+        {
+            $message = "The specified user does not exist.";
+        }
+        else
+        {
+            $message = "User Deleted";
+        }
     }
+}
 
-    if (( $command == "listDeadEnds" ) && ( empty( $error )))
+if (( $command == "listOrphans" ) && ( empty( $error )))
+{
+    $orphans = mysql_query( "SELECT Episode.EpisodeID, " .
+                                   "Episode.Parent, " .
+                                   "Episode.Status, " .
+                                   "COUNT( * )" .
+                              "FROM Link " .
+                  "RIGHT OUTER JOIN Episode " .
+                                "ON Link.IsBackLink = 'N' " .
+                               "AND Link.TargetEpisodeID = Episode.EpisodeID " .
+                   "LEFT OUTER JOIN EpisodeEditLog " .
+                                "ON Episode.EpisodeID = EpisodeEditLog.EpisodeID " .
+                             "WHERE Link.LinkID IS NULL " .
+                               "AND Episode.EpisodeID != 1 " .
+                             "GROUP BY Episode.EpisodeID " .
+                             "ORDER BY Episode.EpisodeID" );
+
+    if ( ! $orphans )
     {
-        $deadEnds = mysql_query( "SELECT Episode.EpisodeID " .
-                                 "FROM Link " .
-                     "RIGHT OUTER JOIN Episode " .
-                                   "ON Link.SourceEpisodeID = Episode.EpisodeID " .
-                                "WHERE Link.LinkID IS NULL " .
-                                  "AND ( Episode.Status = 2 OR Episode.Status = 3 ) " .
-                                "ORDER BY Episode.EpisodeID" );
-
-        if ( ! $deadEnds )
-        {
-            $error .= "Unable to query list of dead ends from the database.<BR>";
-            $fatal = true;
-        }
+        $error .= "Unable to query list of orphans from the database.<BR>";
+        $fatal = true;
     }
+}
 
-    if ( $command == "listRecentEdits" )
+if (( $command == "listDeadEnds" ) && ( empty( $error )))
+{
+    $deadEnds = mysql_query( "SELECT Episode.EpisodeID " .
+                             "FROM Link " .
+                 "RIGHT OUTER JOIN Episode " .
+                               "ON Link.SourceEpisodeID = Episode.EpisodeID " .
+                            "WHERE Link.LinkID IS NULL " .
+                              "AND ( Episode.Status = 2 OR Episode.Status = 3 ) " .
+                            "ORDER BY Episode.EpisodeID" );
+
+    if ( ! $deadEnds )
     {
-        if ( empty( $error ))
-        {
-            $result = mysql_query( "SELECT MAX( EpisodeEditLogID ) FROM EpisodeEditLog" );
-
-            if ( ! $result )
-            {
-                $error .= "Unable to query the max EpisodeEditLogID from database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $row = mysql_fetch_row( $result );
-
-                if ( ! $row )
-                {
-                    $error .= "Unable to retrieve the max EpisodeEditLogID record from " .
-                              "database.<BR>";
-                    $fatal = true;
-                }
-                else
-                {
-                    $maxEpisodeEditLogID = (int) $row[ 0 ];
-                }
-            }
-        }
-
-        $start = 0;
-
-        if ( isset( $_REQUEST[ "start" ] ))
-        {
-            $start = (int) $_REQUEST[ "start" ];
-        }
-
-        if (( $start < 1 ) || ( $start > $maxEpisodeEditLogID ))
-        {
-            $start = $maxEpisodeEditLogID;
-        }
-
-        $edits = mysql_query( "SELECT EpisodeEditLogID, " .
-                                     "EpisodeID, " .
-                                     "EditDate, " .
-                                     "EditLogEntry " .
-                                "FROM EpisodeEditLog " .
-                               "WHERE EpisodeEditLogID <= " . $start . " " .
-                               "ORDER BY EpisodeEditLogID DESC " .
-                               "LIMIT 20" );
-
-        if ( ! $edits )
-        {
-            $error .= "Unable to query list of recent edits from the database.<BR>";
-            $fatal = true;
-        }
+        $error .= "Unable to query list of dead ends from the database.<BR>";
+        $fatal = true;
     }
+}
 
+if ( $command == "listRecentEdits" )
+{
     if ( empty( $error ))
     {
-        $users = mysql_query( "SELECT UserID, LoginName FROM User ORDER BY UserID" );
+        $result = mysql_query( "SELECT MAX( EpisodeEditLogID ) FROM EpisodeEditLog" );
 
-        if ( ! $users )
+        if ( ! $result )
         {
-            $error .= "Unable to query user list from database.<BR>";
+            $error .= "Unable to query the max EpisodeEditLogID from database.<BR>";
             $fatal = true;
+        }
+        else
+        {
+            $row = mysql_fetch_row( $result );
+
+            if ( ! $row )
+            {
+                $error .= "Unable to retrieve the max EpisodeEditLogID record from " .
+                          "database.<BR>";
+                $fatal = true;
+            }
+            else
+            {
+                $maxEpisodeEditLogID = (int) $row[ 0 ];
+            }
         }
     }
 
-    if ( ! empty( $error ))
+    $start = 0;
+
+    if ( isset( $_REQUEST[ "start" ] ))
     {
-        displayError( $error, $fatal );
+        $start = (int) $_REQUEST[ "start" ];
     }
 
-    if ( $command == "listOrphans" )
+    if (( $start < 1 ) || ( $start > $maxEpisodeEditLogID ))
     {
+        $start = $maxEpisodeEditLogID;
+    }
+
+    $edits = mysql_query( "SELECT EpisodeEditLogID, " .
+                                 "EpisodeID, " .
+                                 "EditDate, " .
+                                 "EditLogEntry " .
+                            "FROM EpisodeEditLog " .
+                           "WHERE EpisodeEditLogID <= " . $start . " " .
+                           "ORDER BY EpisodeEditLogID DESC " .
+                           "LIMIT 20" );
+
+    if ( ! $edits )
+    {
+        $error .= "Unable to query list of recent edits from the database.<BR>";
+        $fatal = true;
+    }
+}
+
+if ( empty( $error ))
+{
+    $users = mysql_query( "SELECT UserID, LoginName FROM User ORDER BY UserID" );
+
+    if ( ! $users )
+    {
+        $error .= "Unable to query user list from database.<BR>";
+        $fatal = true;
+    }
+}
+
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
+
+if ( $command == "listOrphans" )
+{
 
 ?>
 
@@ -949,14 +949,14 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        for ( $i = 0; $i < mysql_num_rows( $orphans ); $i++ )
-        {
-            $row = mysql_fetch_row( $orphans );
+    for ( $i = 0; $i < mysql_num_rows( $orphans ); $i++ )
+    {
+        $row = mysql_fetch_row( $orphans );
 
-            $edits = (( $row[ 3 ] > 1 ) ?
-                     "<A HREF=\"list-edits.php?episode=" .
-                             $row[ 0 ] . "\">Yes - " . $row[ 3 ] . " Times</A>" :
-                     "No" );
+        $edits = (( $row[ 3 ] > 1 ) ?
+                 "<A HREF=\"list-edits.php?episode=" .
+                         $row[ 0 ] . "\">Yes - " . $row[ 3 ] . " Times</A>" :
+                 "No" );
 
 ?>
 
@@ -984,7 +984,7 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -1004,11 +1004,11 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( $command == "listDeadEnds" )
-    {
+if ( $command == "listDeadEnds" )
+{
 
 ?>
 
@@ -1028,9 +1028,9 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        for ( $i = 0; $i < mysql_num_rows( $deadEnds ); $i++ )
-        {
-            $row = mysql_fetch_row( $deadEnds );
+    for ( $i = 0; $i < mysql_num_rows( $deadEnds ); $i++ )
+    {
+        $row = mysql_fetch_row( $deadEnds );
 
 ?>
 
@@ -1038,7 +1038,7 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -1060,11 +1060,11 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( $command == "listRecentEdits" )
-    {
+if ( $command == "listRecentEdits" )
+{
 
 ?>
 
@@ -1088,9 +1088,9 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        for ( $i = 0; $i < mysql_num_rows( $edits ); $i++ )
-        {
-            $row = mysql_fetch_row( $edits );
+    for ( $i = 0; $i < mysql_num_rows( $edits ); $i++ )
+    {
+        $row = mysql_fetch_row( $edits );
 
 ?>
 
@@ -1118,7 +1118,7 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -1126,8 +1126,8 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        if ( $start > 20 )
-        {
+    if ( $start > 20 )
+    {
 
 ?>
 
@@ -1138,7 +1138,7 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -1157,11 +1157,11 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( $command == "changePassword" )
-    {
+if ( $command == "changePassword" )
+{
 
 ?>
 
@@ -1208,11 +1208,11 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( $command == "configure" )
-    {
+if ( $command == "configure" )
+{
 
 ?>
 
@@ -1316,11 +1316,11 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( $command == "addUser" )
-    {
+if ( $command == "addUser" )
+{
 
 ?>
 
@@ -1382,11 +1382,11 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( $command == "editUser" )
-    {
+if ( $command == "editUser" )
+{
 
 ?>
 
@@ -1467,11 +1467,11 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ( $command == "deleteUser" )
-    {
+if ( $command == "deleteUser" )
+{
 
 ?>
 
@@ -1510,8 +1510,8 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
 ?>
 
@@ -1527,8 +1527,8 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-    if ( ! empty( $message ))
-    {
+if ( ! empty( $message ))
+{
 
 ?>
 
@@ -1536,7 +1536,7 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-    }
+}
 
 ?>
 
@@ -1552,8 +1552,8 @@ View edits for episode: <INPUT TYPE="text" NAME="episode"> <INPUT TYPE="submit" 
 
 <?php
 
-    if ( $permissionLevel >= 2 )
-    {
+if ( $permissionLevel >= 2 )
+{
 
 ?>
 
@@ -1563,10 +1563,10 @@ View edits for episode: <INPUT TYPE="text" NAME="episode"> <INPUT TYPE="submit" 
 
 <?php
 
-    }
+}
 
-    if ( $permissionLevel >= 3 )
-    {
+if ( $permissionLevel >= 3 )
+{
 
 ?>
 
@@ -1574,10 +1574,10 @@ View edits for episode: <INPUT TYPE="text" NAME="episode"> <INPUT TYPE="submit" 
 
 <?php
 
-    }
+}
 
-    if ( $permissionLevel >= 4 )
-    {
+if ( $permissionLevel >= 4 )
+{
 
 ?>
 
@@ -1591,9 +1591,9 @@ Edit User -
 
 <?php
 
-        for ( $i = 0; $i < mysql_num_rows( $users ); $i++ )
-        {
-            $row = mysql_fetch_row( $users );
+    for ( $i = 0; $i < mysql_num_rows( $users ); $i++ )
+    {
+        $row = mysql_fetch_row( $users );
 
 ?>
 
@@ -1601,9 +1601,9 @@ Edit User -
 
 <?php
 
-        }
+    }
 
-        mysql_data_seek( $users, 0 );
+    mysql_data_seek( $users, 0 );
 
 ?>
 
@@ -1619,9 +1619,9 @@ Delete User -
 
 <?php
 
-        for ( $i = 0; $i < mysql_num_rows( $users ); $i++ )
-        {
-            $row = mysql_fetch_row( $users );
+    for ( $i = 0; $i < mysql_num_rows( $users ); $i++ )
+    {
+        $row = mysql_fetch_row( $users );
 
 ?>
 
@@ -1629,7 +1629,7 @@ Delete User -
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -1639,7 +1639,7 @@ Delete User -
 
 <?php
 
-    }
+}
 
 ?>
 

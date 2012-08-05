@@ -26,121 +26,121 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
-    $method = "";
-    $text   = "";
-    $days   = 0;
+$method = "";
+$text   = "";
+$days   = 0;
 
-    if ( isset( $_POST[ "method" ] ))
+if ( isset( $_POST[ "method" ] ))
+{
+    $method = $_POST[ "method" ];
+}
+
+if ( isset( $_POST[ "text" ] ))
+{
+    $text = $_POST[ "text" ];
+}
+
+if ( isset( $_POST[ "days" ] ))
+{
+    $days = (int) $_POST[ "days" ];
+}
+
+$error = "";
+$fatal = false;
+
+if (( $method != "title"      ) &&
+    ( $method != "text"       ) &&
+    ( $method != "author"     ) &&
+    ( $method != "time"       ) &&
+    ( $method != "extendable" ) &&
+    ( $method != "linkable"   ) &&
+    ( $method != "days"       ))
+{
+    $error .= "The specified search method is not supported.<BR>";
+    $fatal = true;
+}
+
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
+
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
+
+if ( empty( $error ))
+{
+    $storyName = getStringValue( $error, $fatal, "StoryName" );
+    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+}
+
+if ( empty( $error ))
+{
+    if ( $method == "title" )
     {
-        $method = $_POST[ "method" ];
+        $whereClause = "Title LIKE '%" . mysql_escape_string( $text ) . "%' " .
+                   "AND ( Status = 2 OR Status = 3 )";
     }
 
-    if ( isset( $_POST[ "text" ] ))
+    if ( $method == "text" )
     {
-        $text = $_POST[ "text" ];
+        $whereClause = "Text LIKE '%" . mysql_escape_string( $text ) . "%' " .
+                   "AND ( Status = 2 OR Status = 3 )";
     }
 
-    if ( isset( $_POST[ "days" ] ))
+    if ( $method == "author" )
     {
-        $days = (int) $_POST[ "days" ];
+        $whereClause = "AuthorName LIKE '%" . mysql_escape_string( $text ) . "%' " .
+                   "AND ( Status = 2 OR Status = 3 )";
     }
 
-    $error = "";
-    $fatal = false;
-
-    if (( $method != "title"      ) &&
-        ( $method != "text"       ) &&
-        ( $method != "author"     ) &&
-        ( $method != "time"       ) &&
-        ( $method != "extendable" ) &&
-        ( $method != "linkable"   ) &&
-        ( $method != "days"       ))
+    if ( $method == "time" )
     {
-        $error .= "The specified search method is not supported.<BR>";
+        $whereClause = "CreationDate LIKE '%" . mysql_escape_string( $text ) . "%' " .
+                   "AND ( Status = 2 OR Status = 3 )";
+    }
+
+    if ( $method == "extendable" )
+    {
+        $whereClause = "IsExtendable = 'Y' AND ( Status = 2 OR Status = 3 )";
+    }
+
+    if ( $method == "linkable" )
+    {
+        $whereClause = "IsLinkable = 'Y' AND ( Status = 2 OR Status = 3 )";
+    }
+
+    if ( $method == "days" )
+    {
+        $whereClause = "CreationTimestamp > SUBDATE( NOW(), INTERVAL " . $days . " DAY ) " .
+                   "AND ( Status = 2 OR Status = 3 )";
+    }
+
+    $result = mysql_query( "SELECT EpisodeID, " .
+                                  "Title, " .
+                                  "AuthorName " .
+                             "FROM Episode " .
+                            "WHERE " . $whereClause . " " .
+                            "ORDER BY EpisodeID" );
+
+    if ( ! $result )
+    {
+        $error .= "Problem retrieving the search results from the database.<BR>";
         $fatal = true;
     }
+}
 
-    // connect to the database
-    if ( empty( $error ))
-    {
-        connectToDatabase( $error, $fatal );
-    }
-
-    if ( empty( $error ))
-    {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-    }
-
-    if ( empty( $error ))
-    {
-        $storyName = getStringValue( $error, $fatal, "StoryName" );
-        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-    }
-
-    if ( empty( $error ))
-    {
-        if ( $method == "title" )
-        {
-            $whereClause = "Title LIKE '%" . mysql_escape_string( $text ) . "%' " .
-                       "AND ( Status = 2 OR Status = 3 )";
-        }
-
-        if ( $method == "text" )
-        {
-            $whereClause = "Text LIKE '%" . mysql_escape_string( $text ) . "%' " .
-                       "AND ( Status = 2 OR Status = 3 )";
-        }
-
-        if ( $method == "author" )
-        {
-            $whereClause = "AuthorName LIKE '%" . mysql_escape_string( $text ) . "%' " .
-                       "AND ( Status = 2 OR Status = 3 )";
-        }
-
-        if ( $method == "time" )
-        {
-            $whereClause = "CreationDate LIKE '%" . mysql_escape_string( $text ) . "%' " .
-                       "AND ( Status = 2 OR Status = 3 )";
-        }
-
-        if ( $method == "extendable" )
-        {
-            $whereClause = "IsExtendable = 'Y' AND ( Status = 2 OR Status = 3 )";
-        }
-
-        if ( $method == "linkable" )
-        {
-            $whereClause = "IsLinkable = 'Y' AND ( Status = 2 OR Status = 3 )";
-        }
-
-        if ( $method == "days" )
-        {
-            $whereClause = "CreationTimestamp > SUBDATE( NOW(), INTERVAL " . $days . " DAY ) " .
-                       "AND ( Status = 2 OR Status = 3 )";
-        }
-
-        $result = mysql_query( "SELECT EpisodeID, " .
-                                      "Title, " .
-                                      "AuthorName " .
-                                 "FROM Episode " .
-                                "WHERE " . $whereClause . " " .
-                                "ORDER BY EpisodeID" );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving the search results from the database.<BR>";
-            $fatal = true;
-        }
-    }
-
-    if ( ! empty( $error ))
-    {
-        displayError( $error, $fatal );
-    }
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
 
 ?>
 
@@ -161,12 +161,12 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
-    {
-        $row = mysql_fetch_row( $result );
+for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+{
+    $row = mysql_fetch_row( $result );
 
-        $displayedTitle      = htmlentities( $row[ 1 ] );
-        $displayedAuthorName = htmlentities( $row[ 2 ] );
+    $displayedTitle      = htmlentities( $row[ 1 ] );
+    $displayedAuthorName = htmlentities( $row[ 2 ] );
 
 ?>
 
@@ -182,7 +182,7 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-    }
+}
 
 ?>
 

@@ -26,62 +26,62 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
-    $error = "";
-    $fatal = false;
+$error = "";
+$fatal = false;
 
-    $episode = 1;
+$episode = 1;
 
-    if ( isset( $_GET[ "episode" ] ))
+if ( isset( $_GET[ "episode" ] ))
+{
+    $episode = (int) $_GET[ "episode" ];
+}
+
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
+
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
+
+if ( empty( $error ))
+{
+    $storyName = getStringValue( $error, $fatal, "StoryName" );
+    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
+    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
+    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
+}
+
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT EpisodeEditLogID, " .
+                                  "EditDate, " .
+                                  "EditLogEntry " .
+                             "FROM EpisodeEditLog " .
+                            "WHERE EpisodeID = " . $episode . " " .
+                            "ORDER BY EpisodeEditLogID" );
+
+    if ( ! $result )
     {
-        $episode = (int) $_GET[ "episode" ];
+        $error .= "Problem retrieving edit list from the database.<BR>";
+        $fatal = true;
     }
+}
 
-    // connect to the database
-    if ( empty( $error ))
-    {
-        connectToDatabase( $error, $fatal );
-    }
+$canEdit = canEditEpisode( $sessionID, $userID, $episode );
 
-    if ( empty( $error ))
-    {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-    }
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
 
-    if ( empty( $error ))
-    {
-        $storyName = getStringValue( $error, $fatal, "StoryName" );
-        $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-        $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-        $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-    }
-
-    if ( empty( $error ))
-    {
-        $result = mysql_query( "SELECT EpisodeEditLogID, " .
-                                      "EditDate, " .
-                                      "EditLogEntry " .
-                                 "FROM EpisodeEditLog " .
-                                "WHERE EpisodeID = " . $episode . " " .
-                                "ORDER BY EpisodeEditLogID" );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving edit list from the database.<BR>";
-            $fatal = true;
-        }
-    }
-
-    $canEdit = canEditEpisode( $sessionID, $userID, $episode );
-
-    if ( ! empty( $error ))
-    {
-        displayError( $error, $fatal );
-    }
-
-    if ( ! $canEdit )
-    {
+if ( ! $canEdit )
+{
 
 ?>
 
@@ -110,8 +110,8 @@ You do not have permission to view the edits for this episode.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
 ?>
 
@@ -133,9 +133,9 @@ Clicking on a <I>View Edit</I> link views the episode as it was <B>before</B> th
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
-    {
-        $row = mysql_fetch_row( $result );
+for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+{
+    $row = mysql_fetch_row( $result );
 
 ?>
 
@@ -153,7 +153,7 @@ Clicking on a <I>View Edit</I> link views the episode as it was <B>before</B> th
 
 <?php
 
-    }
+}
 
 ?>
 

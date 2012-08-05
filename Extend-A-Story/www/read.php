@@ -26,115 +26,115 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-    require( "ExtendAStory.php" );
+require( "ExtendAStory.php" );
 
-    $error = "";
-    $fatal = false;
+$error = "";
+$fatal = false;
 
-    $episode = 1;
+$episode = 1;
 
-    if ( isset( $_GET[ "episode" ] ))
+if ( isset( $_GET[ "episode" ] ))
+{
+    $episode = (int) $_GET[ "episode" ];
+}
+
+// connect to the database
+if ( empty( $error ))
+{
+    connectToDatabase( $error, $fatal );
+}
+
+if ( empty( $error ))
+{
+    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
+}
+
+if ( empty( $error ))
+{
+    $storyName   = getStringValue( $error, $fatal, "StoryName"   );
+    $siteName    = getStringValue( $error, $fatal, "SiteName"    );
+    $storyHome   = getStringValue( $error, $fatal, "StoryHome"   );
+    $siteHome    = getStringValue( $error, $fatal, "SiteHome"    );
+    $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
+}
+
+$permissionLevel = 0;
+
+if (( $userID != 0 ) && ( empty( $error )))
+{
+    $result = mysql_query( "SELECT PermissionLevel FROM User WHERE UserID = " . $userID );
+
+    if ( ! $result )
     {
-        $episode = (int) $_GET[ "episode" ];
+        $error .= "Unable to query user information from database.<BR>";
+        $fatal = true;
     }
-
-    // connect to the database
-    if ( empty( $error ))
+    else
     {
-        connectToDatabase( $error, $fatal );
-    }
-
-    if ( empty( $error ))
-    {
-        getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-    }
-
-    if ( empty( $error ))
-    {
-        $storyName   = getStringValue( $error, $fatal, "StoryName"   );
-        $siteName    = getStringValue( $error, $fatal, "SiteName"    );
-        $storyHome   = getStringValue( $error, $fatal, "StoryHome"   );
-        $siteHome    = getStringValue( $error, $fatal, "SiteHome"    );
-        $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
-    }
-
-    $permissionLevel = 0;
-
-    if (( $userID != 0 ) && ( empty( $error )))
-    {
-        $result = mysql_query( "SELECT PermissionLevel FROM User WHERE UserID = " . $userID );
-
-        if ( ! $result )
-        {
-            $error .= "Unable to query user information from database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Unable to fetch user information row from database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $permissionLevel = $row[ 0 ];
-            }
-        }
-    }
-
-    if ( empty( $error ))
-    {
-        $result = mysql_query( "SELECT COUNT( * ) FROM Link where TargetEpisodeID = " . $episode );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving link count from the database.<BR>";
-            $fatal = true;
-        }
-
         $row = mysql_fetch_row( $result );
 
         if ( ! $row )
         {
-            $error .= "Problem fetching link count row from the database.<BR>";
-            $fatal = true;
-        }
-
-        $linkCount = (int) $row[ 0 ];
-
-        $result = mysql_query( "SELECT Parent, " .
-                                      "AuthorSessionID, " .
-                                      "EditorSessionID, " .
-                                      "SchemeID, " .
-                                      "ImageID, " .
-                                      "Status, " .
-                                      "IsLinkable, " .
-                                      "IsExtendable, " .
-                                      "AuthorMailto, " .
-                                      "Title, " .
-                                      "Text, " .
-                                      "AuthorName, " .
-                                      "AuthorEmail, " .
-                                      "CreationDate, " .
-                                      "LockDate, " .
-                                      "LockKey " .
-                                 "FROM Episode " .
-                                "WHERE EpisodeID = " . $episode );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving the episode from the database.<BR>";
+            $error .= "Unable to fetch user information row from database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $permissionLevel = $row[ 0 ];
+        }
+    }
+}
 
-            if ( ! $row )
-            {
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT COUNT( * ) FROM Link where TargetEpisodeID = " . $episode );
+
+    if ( ! $result )
+    {
+        $error .= "Problem retrieving link count from the database.<BR>";
+        $fatal = true;
+    }
+
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        $error .= "Problem fetching link count row from the database.<BR>";
+        $fatal = true;
+    }
+
+    $linkCount = (int) $row[ 0 ];
+
+    $result = mysql_query( "SELECT Parent, " .
+                                  "AuthorSessionID, " .
+                                  "EditorSessionID, " .
+                                  "SchemeID, " .
+                                  "ImageID, " .
+                                  "Status, " .
+                                  "IsLinkable, " .
+                                  "IsExtendable, " .
+                                  "AuthorMailto, " .
+                                  "Title, " .
+                                  "Text, " .
+                                  "AuthorName, " .
+                                  "AuthorEmail, " .
+                                  "CreationDate, " .
+                                  "LockDate, " .
+                                  "LockKey " .
+                             "FROM Episode " .
+                            "WHERE EpisodeID = " . $episode );
+
+    if ( ! $result )
+    {
+        $error .= "Problem retrieving the episode from the database.<BR>";
+        $fatal = true;
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
 
 ?>
 
@@ -156,190 +156,190 @@ http://www.sir-toby.com/extend-a-story/
 
 <?php
 
-                exit;
-            }
+            exit;
+        }
 
-            $parent          = $row[ 0  ];
-            $authorSessionID = $row[ 1  ];
-            $editorSessionID = $row[ 2  ];
-            $scheme          = $row[ 3  ];
-            $image           = $row[ 4  ];
-            $status          = $row[ 5  ];
-            $isLinkable      = $row[ 6  ];
-            $isExtendable    = $row[ 7  ];
-            $authorMailto    = $row[ 8  ];
-            $title           = $row[ 9  ];
-            $text            = $row[ 10 ];
-            $authorName      = $row[ 11 ];
-            $authorEmail     = $row[ 12 ];
-            $creationDate    = $row[ 13 ];
-            $lockDate        = $row[ 14 ];
-            $lockKey         = $row[ 15 ];
+        $parent          = $row[ 0  ];
+        $authorSessionID = $row[ 1  ];
+        $editorSessionID = $row[ 2  ];
+        $scheme          = $row[ 3  ];
+        $image           = $row[ 4  ];
+        $status          = $row[ 5  ];
+        $isLinkable      = $row[ 6  ];
+        $isExtendable    = $row[ 7  ];
+        $authorMailto    = $row[ 8  ];
+        $title           = $row[ 9  ];
+        $text            = $row[ 10 ];
+        $authorName      = $row[ 11 ];
+        $authorEmail     = $row[ 12 ];
+        $creationDate    = $row[ 13 ];
+        $lockDate        = $row[ 14 ];
+        $lockKey         = $row[ 15 ];
 
-            $title      = htmlentities( $title      );
-            $text       = htmlentities( $text       );
-            $authorName = htmlentities( $authorName );
+        $title      = htmlentities( $title      );
+        $text       = htmlentities( $text       );
+        $authorName = htmlentities( $authorName );
 
-            $text        = strtr( $text,        getEpisodeBodyTranslationTable()  );
-            $authorEmail = strtr( $authorEmail, getEmailAddressTranslationTable() );
+        $text        = strtr( $text,        getEpisodeBodyTranslationTable()  );
+        $authorEmail = strtr( $authorEmail, getEmailAddressTranslationTable() );
 
-            $lockTime = strtotime( $lockDate );
-            $curTime  = time();
-            $diff     = $curTime - $lockTime;
-            $minutes  = $diff / 60;
-            $minutes  = (int) $minutes;
-            $timeout  = 60 - $minutes;
+        $lockTime = strtotime( $lockDate );
+        $curTime  = time();
+        $diff     = $curTime - $lockTime;
+        $minutes  = $diff / 60;
+        $minutes  = (int) $minutes;
+        $timeout  = 60 - $minutes;
 
-            if (( $status == 1 ) && ( $minutes > 300 ))
+        if (( $status == 1 ) && ( $minutes > 300 ))
+        {
+            $authorSessionID = 0;
+            $status = 0;
+
+            $result = mysql_query( "UPDATE Episode " .
+                                      "SET AuthorSessionID = 0, " .
+                                          "Status = 0, " .
+                                          "LockDate = '-', " .
+                                          "LockKey = 0 " .
+                                    "WHERE EpisodeID = " . $episode );
+
+            if ( ! $result )
             {
-                $authorSessionID = 0;
-                $status = 0;
-
-                $result = mysql_query( "UPDATE Episode " .
-                                          "SET AuthorSessionID = 0, " .
-                                              "Status = 0, " .
-                                              "LockDate = '-', " .
-                                              "LockKey = 0 " .
-                                        "WHERE EpisodeID = " . $episode );
-
-                if ( ! $result )
-                {
-                    $error .= "Automatic unlock attempt failed.<BR>";
-                    $fatal = true;
-                }
+                $error .= "Automatic unlock attempt failed.<BR>";
+                $fatal = true;
             }
         }
     }
+}
 
-    if ( empty( $error ))
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT bgcolor, " .
+                                  "text, " .
+                                  "link, " .
+                                  "vlink, " .
+                                  "alink, " .
+                                  "background, " .
+                                  "UncreatedLink, " .
+                                  "CreatedLink, " .
+                                  "BackLinkedLink " .
+                             "FROM Scheme " .
+                            "WHERE SchemeID = " . $scheme );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT bgcolor, " .
-                                      "text, " .
-                                      "link, " .
-                                      "vlink, " .
-                                      "alink, " .
-                                      "background, " .
-                                      "UncreatedLink, " .
-                                      "CreatedLink, " .
-                                      "BackLinkedLink " .
-                                 "FROM Scheme " .
-                                "WHERE SchemeID = " . $scheme );
+        $error .= "Problem retrieving the scheme from the database.<BR>";
+        $fatal = true;
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
 
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error .= "Problem retrieving the scheme from the database.<BR>";
+            $error .= "Problem fetching scheme row from the database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $bgcolorColor   = $row[ 0 ];
+            $textColor      = $row[ 1 ];
+            $linkColor      = $row[ 2 ];
+            $vlinkColor     = $row[ 3 ];
+            $alinkColor     = $row[ 4 ];
+            $background     = $row[ 5 ];
+            $uncreatedLink  = $row[ 6 ];
+            $createdLink    = $row[ 7 ];
+            $backLinkedLink = $row[ 8 ];
 
-            if ( ! $row )
-            {
-                $error .= "Problem fetching scheme row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $bgcolorColor   = $row[ 0 ];
-                $textColor      = $row[ 1 ];
-                $linkColor      = $row[ 2 ];
-                $vlinkColor     = $row[ 3 ];
-                $alinkColor     = $row[ 4 ];
-                $background     = $row[ 5 ];
-                $uncreatedLink  = $row[ 6 ];
-                $createdLink    = $row[ 7 ];
-                $backLinkedLink = $row[ 8 ];
-
-                $body = "<BODY BGCOLOR=\"" . $bgcolorColor . "\" " .
-                              "TEXT=\""    . $textColor    . "\" " .
-                              "LINK=\""    . $linkColor    . "\" " .
-                              "VLINK=\""   . $vlinkColor   . "\" " .
-                              "ALINK=\""   . $alinkColor   . "\""  .
-                              ( empty( $background ) ? ">" :
-                                " BACKGROUND=\"" . $background . "\">" );
-            }
+            $body = "<BODY BGCOLOR=\"" . $bgcolorColor . "\" " .
+                          "TEXT=\""    . $textColor    . "\" " .
+                          "LINK=\""    . $linkColor    . "\" " .
+                          "VLINK=\""   . $vlinkColor   . "\" " .
+                          "ALINK=\""   . $alinkColor   . "\""  .
+                          ( empty( $background ) ? ">" :
+                            " BACKGROUND=\"" . $background . "\">" );
         }
     }
+}
 
-    if (( empty( $error )) && ( $image != 0 ))
+if (( empty( $error )) && ( $image != 0 ))
+{
+    $result = mysql_query( "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
+        $error .= "Problem retrieving the image from the database.<BR>";
+        $fatal = true;
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
 
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error .= "Problem retrieving the image from the database.<BR>";
+            $error .= "Problem fetching image row from the database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Problem fetching image row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $image = $row[ 0 ];
-            }
+            $image = $row[ 0 ];
         }
     }
+}
 
-    $canEdit = canEditEpisode( $sessionID, $userID, $episode );
+$canEdit = canEditEpisode( $sessionID, $userID, $episode );
 
-    if (( $canEdit ) && ( empty( $error )))
+if (( $canEdit ) && ( empty( $error )))
+{
+    $result = mysql_query( "SELECT COUNT( * ) " .
+                             "FROM EpisodeEditLog " .
+                            "WHERE EpisodeID = " . $episode );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT COUNT( * ) " .
-                                 "FROM EpisodeEditLog " .
-                                "WHERE EpisodeID = " . $episode );
+        $error = "Problem retrieving edit count from database.<BR>";
+        $fatal = true;
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
 
-        if ( ! $result )
+        if ( ! $row )
         {
-            $error = "Problem retrieving edit count from database.<BR>";
+            $error = "Problem fetching edit count row from database.<BR>";
             $fatal = true;
         }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error = "Problem fetching edit count row from database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $editCount = $row[ 0 ];
-            }
+            $editCount = $row[ 0 ];
         }
     }
+}
 
-    if ( empty( $error ))
+if ( empty( $error ))
+{
+    $result = mysql_query( "SELECT TargetEpisodeID, " .
+                                  "IsCreated, " .
+                                  "IsBackLink, " .
+                                  "Description " .
+                             "FROM Link " .
+                            "WHERE SourceEpisodeID = " . $episode . " " .
+                            "ORDER BY LinkID" );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT TargetEpisodeID, " .
-                                      "IsCreated, " .
-                                      "IsBackLink, " .
-                                      "Description " .
-                                 "FROM Link " .
-                                "WHERE SourceEpisodeID = " . $episode . " " .
-                                "ORDER BY LinkID" );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving links from database.<BR>";
-            $fatal = true;
-        }
+        $error .= "Problem retrieving links from database.<BR>";
+        $fatal = true;
     }
+}
 
-    if ( ! empty( $error ))
-    {
-        displayError( $error, $fatal );
-    }
+if ( ! empty( $error ))
+{
+    displayError( $error, $fatal );
+}
 
-    if (( $isWriteable == "N" ) && (( $status == 0 ) || ( $status == 1 )))
-    {
+if (( $isWriteable == "N" ) && (( $status == 0 ) || ( $status == 1 )))
+{
 
 ?>
 
@@ -369,9 +369,9 @@ yet, and episode creation is currently disabled.
 
 <?php
 
-    }
-    else if ( $status == 0 )
-    {
+}
+else if ( $status == 0 )
+{
 
 ?>
 
@@ -409,9 +409,9 @@ If you do not wish to create it now, you may go back to the previous episode.
 
 <?php
 
-    }
-    else if ( $status == 1 )
-    {
+}
+else if ( $status == 1 )
+{
 
 ?>
 
@@ -431,8 +431,8 @@ and try reading it again.
 
 <?php
 
-        if ( $authorSessionID == $sessionID )
-        {
+    if ( $authorSessionID == $sessionID )
+    {
 
 ?>
 
@@ -448,11 +448,11 @@ it will disrupt your work.
 
 <?php
 
-        }
-        else
+    }
+    else
+    {
+        if ( $timeout > 0 )
         {
-            if ( $timeout > 0 )
-            {
 
 ?>
 
@@ -462,9 +462,9 @@ This lock can be manually cleared in
 
 <?php
 
-            }
-            else
-            {
+        }
+        else
+        {
 
 ?>
 
@@ -479,8 +479,8 @@ manually unlock it, if you wish.
 
 <?php
 
-            }
         }
+    }
 
 ?>
 
@@ -498,11 +498,11 @@ manually unlock it, if you wish.
 
 <?php
 
-    }
-    else
-    {
-        $countDate = getStringValue( $error, $fatal, "CountDate" );
-        $countValue = getAndIncrementIntValue( $error, $fatal, "CountValue" );
+}
+else
+{
+    $countDate = getStringValue( $error, $fatal, "CountDate" );
+    $countValue = getAndIncrementIntValue( $error, $fatal, "CountValue" );
 
 ?>
 
@@ -523,8 +523,8 @@ manually unlock it, if you wish.
 
 <?php
 
-        if ( ! empty( $image ))
-        {
+    if ( ! empty( $image ))
+    {
 
 ?>
 
@@ -535,7 +535,7 @@ manually unlock it, if you wish.
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -544,26 +544,26 @@ manually unlock it, if you wish.
 
 <?php
 
-        for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+    {
+        $row = mysql_fetch_row( $result );
+
+        $description = $row[ 3 ];
+        $description = htmlentities( $description );
+        $description = strtr( $description, getOptionTranslationTable() );
+
+        if ( $row[ 2 ] == "Y" )
         {
-            $row = mysql_fetch_row( $result );
-
-            $description = $row[ 3 ];
-            $description = htmlentities( $description );
-            $description = strtr( $description, getOptionTranslationTable() );
-
-            if ( $row[ 2 ] == "Y" )
-            {
-                $image = $backLinkedLink;
-            }
-            else if ( $row[ 1 ] == "Y" )
-            {
-                $image = $createdLink;
-            }
-            else
-            {
-                $image = $uncreatedLink;
-            }
+            $image = $backLinkedLink;
+        }
+        else if ( $row[ 1 ] == "Y" )
+        {
+            $image = $createdLink;
+        }
+        else
+        {
+            $image = $uncreatedLink;
+        }
 
 ?>
 
@@ -574,7 +574,7 @@ manually unlock it, if you wish.
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -582,8 +582,8 @@ manually unlock it, if you wish.
 
 <?php
 
-        if (( $isExtendable == "Y" ) && ( $isWriteable == "Y" ))
-        {
+    if (( $isExtendable == "Y" ) && ( $isWriteable == "Y" ))
+    {
 
 ?>
 
@@ -592,10 +592,10 @@ manually unlock it, if you wish.
 
 <?php
 
-        }
+    }
 
-        if ( $episode != 1 )
-        {
+    if ( $episode != 1 )
+    {
 
 ?>
 
@@ -604,7 +604,7 @@ manually unlock it, if you wish.
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -614,8 +614,8 @@ manually unlock it, if you wish.
 
 <?php
 
-        if (( $linkCount > 1 ) || (( $linkCount > 0 ) && ( $episode == 1  )))
-        {
+    if (( $linkCount > 1 ) || (( $linkCount > 0 ) && ( $episode == 1  )))
+    {
 
 ?>
 
@@ -624,8 +624,8 @@ manually unlock it, if you wish.
 
 <?php
 
-            if ( $linkCount == 1 )
-            {
+        if ( $linkCount == 1 )
+        {
 
 ?>
 
@@ -633,9 +633,9 @@ manually unlock it, if you wish.
 
 <?php
 
-            }
-            else
-            {
+        }
+        else
+        {
 
 ?>
 
@@ -644,14 +644,14 @@ manually unlock it, if you wish.
 
 <?php
 
-            }
+        }
 
 ?>
 </A>
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -663,24 +663,24 @@ manually unlock it, if you wish.
 
 <?php
 
-        if ( ! empty( $authorName ))
+    if ( ! empty( $authorName ))
+    {
+        if (( ! empty( $authorEmail )) && ( $authorMailto == "Y" ))
         {
-            if (( ! empty( $authorEmail )) && ( $authorMailto == "Y" ))
-            {
-                $author = "<A HREF=\"mailto:" . $authorEmail . "\">" . $authorName . "</A>";
-            }
-            else
-            {
-                $author = $authorName;
-            }
+            $author = "<A HREF=\"mailto:" . $authorEmail . "\">" . $authorName . "</A>";
         }
         else
         {
-            $author = "";
+            $author = $authorName;
         }
+    }
+    else
+    {
+        $author = "";
+    }
 
-        if ( ! empty( $author ))
-        {
+    if ( ! empty( $author ))
+    {
 
 ?>
 
@@ -689,7 +689,7 @@ manually unlock it, if you wish.
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -698,8 +698,8 @@ manually unlock it, if you wish.
 
 <?php
 
-        if ( $isLinkable == "Y" )
-        {
+    if ( $isLinkable == "Y" )
+    {
 
 ?>
 
@@ -708,10 +708,10 @@ Linking Enabled
 
 <?php
 
-        }
+    }
 
-        if ( $isExtendable == "Y" )
-        {
+    if ( $isExtendable == "Y" )
+    {
 
 ?>
 
@@ -720,7 +720,7 @@ Extending Enabled
 
 <?php
 
-        }
+    }
 
 ?>
 
@@ -732,8 +732,8 @@ Extending Enabled
 
 <?php
 
-        if (( $canEdit ) && ( $isWriteable == "Y" ))
-        {
+    if (( $canEdit ) && ( $isWriteable == "Y" ))
+    {
 
 ?>
 
@@ -742,10 +742,10 @@ Extending Enabled
 
 <?php
 
-            if ( $status == 3 )
+        if ( $status == 3 )
+        {
+            if ( $editorSessionID == $sessionID )
             {
-                if ( $editorSessionID == $sessionID )
-                {
 
 ?>
 
@@ -759,9 +759,9 @@ Extending Enabled
 
 <?php
 
-                }
-                else
-                {
+            }
+            else
+            {
 
 ?>
 
@@ -769,8 +769,8 @@ Extending Enabled
 
 <?php
 
-                    if ( $timeout > 0 )
-                    {
+                if ( $timeout > 0 )
+                {
 
 ?>
 
@@ -781,9 +781,9 @@ Extending Enabled
 
 <?php
 
-                    }
-                    else
-                    {
+                }
+                else
+                {
 
 ?>
 
@@ -799,11 +799,11 @@ Extending Enabled
 
 <?php
 
-                    }
                 }
             }
-            else
-            {
+        }
+        else
+        {
 
 ?>
 
@@ -811,8 +811,8 @@ Extending Enabled
 
 <?php
 
-                if ( $permissionLevel > 1 )
-                {
+            if ( $permissionLevel > 1 )
+            {
 
 ?>
 
@@ -826,8 +826,8 @@ Extending Enabled
 
 <?php
 
-                    if ( $authorSessionID != 0 )
-                    {
+                if ( $authorSessionID != 0 )
+                {
 
 ?>
 
@@ -837,15 +837,15 @@ Extending Enabled
 
 <?php
 
-                    }
                 }
             }
         }
+    }
 
-        if ( $canEdit )
+    if ( $canEdit )
+    {
+        if ( $editCount > 0 )
         {
-            if ( $editCount > 0 )
-            {
 
 ?>
 
@@ -858,8 +858,8 @@ Extending Enabled
 
 <?php
 
-            }
         }
+    }
 
 ?>
 
@@ -871,6 +871,6 @@ Extending Enabled
 
 <?php
 
-    }
+}
 
 ?>
