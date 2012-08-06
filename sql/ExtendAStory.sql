@@ -99,7 +99,7 @@ CREATE TABLE Episode
 
 CREATE TABLE Link
 (
-    LinkID          INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    LinkID          INT UNSIGNED    NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
     SourceEpisodeID INT UNSIGNED    NOT NULL,
     TargetEpisodeID INT UNSIGNED    NOT NULL,
     IsCreated       CHAR   ( 1   )  NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE Link
 
 CREATE TABLE EpisodeEditLog
 (
-    EpisodeEditLogID  INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    EpisodeEditLogID  INT UNSIGNED    NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
     EpisodeID         INT UNSIGNED    NOT NULL,
     SchemeID          INT UNSIGNED    NOT NULL,
     ImageID           INT UNSIGNED    NOT NULL,
