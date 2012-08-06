@@ -185,7 +185,20 @@ INSERT INTO ExtendAStoryVariable VALUES ( "MaxLinks",             10,   NULL );
 INSERT INTO ExtendAStoryVariable VALUES ( "MaxEditDays",          30,   NULL );
 
 
-INSERT INTO User ( PermissionLevel, LoginName, Password, UserName ) VALUES ( 4, "admin", PASSWORD( "change-me" ), "Administrator" );
+INSERT INTO User
+            (
+                PermissionLevel,
+                LoginName,
+                Password,
+                UserName
+            )
+     VALUES
+            (
+                4,
+                "admin",
+                PASSWORD( "change-me" ),
+                "Administrator"
+            );
 
 
 INSERT INTO Episode VALUES ( 1, 1, 0, 0, 1, 0, 0, "N", "N", "N", "N", "-", "-", "-", "-", "-", "-", 0, NULL );
