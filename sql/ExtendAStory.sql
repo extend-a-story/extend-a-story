@@ -132,7 +132,7 @@ CREATE TABLE EpisodeEditLog
 
 CREATE TABLE LinkEditLog
 (
-    LinkEditLogID     INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    LinkEditLogID     INT UNSIGNED    NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
     EpisodeEditLogID  INT UNSIGNED    NOT NULL,
     TargetEpisodeID   INT UNSIGNED    NOT NULL,
     IsBackLink        CHAR   ( 1   )  NOT NULL,
@@ -167,7 +167,6 @@ CREATE TABLE Image
 
 INSERT INTO ExtendAStoryVariable VALUES ( "CountDate",            NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
 INSERT INTO ExtendAStoryVariable VALUES ( "CountValue",           0,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES ( "NextLinkEditLogID",    1,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES ( "NextSchemeID",         3,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES ( "NextImageID",          1,    NULL );
 

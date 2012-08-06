@@ -589,49 +589,22 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
 function createLinkEditLog( &$error, &$fatal, $episodeEditLogID, $targetEpisodeID, $isBackLink,
                             $description )
 {
-    // get the NextLinkEditLogID from the database
-    $result = mysql_query( "SELECT IntValue " .
-                             "FROM ExtendAStoryVariable " .
-                            "WHERE VariableName = 'NextLinkEditLogID'" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to query the NextLinkEditLogID.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    $row = mysql_fetch_row( $result );
-
-    if ( ! $row )
-    {
-        $error .= "Unable to fetch the NextLinkEditLogID row.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    $nextLinkEditLogID = $row[ 0 ];
-
-    // update the NextLinkEditLogID in the database
-    $result = mysql_query( "UPDATE ExtendAStoryVariable " .
-                              "SET IntValue = IntValue + 1 " .
-                            "WHERE VariableName = 'NextLinkEditLogID'" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to update the NextLinkEditLogID.<BR>";
-        $fatal = true;
-        return;
-    }
-
     // insert the link edit log into the database
     $result = mysql_query( "INSERT " .
                              "INTO LinkEditLog " .
-                           "VALUES ( " . $nextLinkEditLogID                  .  ", " .
-                                         $episodeEditLogID                   .  ", " .
-                                         $targetEpisodeID                    .  ", " .
-                                   "'" . $isBackLink                         . "', " .
-                                   "'" . mysql_escape_string( $description ) . "' )" );
+                                  "( " .
+                                      "EpisodeEditLogID, " .
+                                      "TargetEpisodeID, " .
+                                      "IsBackLink, " .
+                                      "Description " .
+                                  ") " .
+                           "VALUES " .
+                                  "( " .
+                                            $episodeEditLogID                   .  ", " .
+                                            $targetEpisodeID                    .  ", " .
+                                      "'" . $isBackLink                         . "', " .
+                                      "'" . mysql_escape_string( $description ) . "' " .
+                                  ")" );
 
     if ( ! $result )
     {
@@ -640,7 +613,26 @@ function createLinkEditLog( &$error, &$fatal, $episodeEditLogID, $targetEpisodeI
         return;
     }
 
-    return $nextLinkEditLogID;
+    // get the new LinkEditLogID from the database
+    $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+
+    if ( ! $result )
+    {
+        $error .= "Unable to query the new LinkEditLogID.<BR>";
+        $fatal = true;
+        return;
+    }
+
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        $error .= "Unable to fetch the new LinkEditLogID row.<BR>";
+        $fatal = true;
+        return;
+    }
+
+    return $row[ 0 ];
 }
 
 function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, $userName )
