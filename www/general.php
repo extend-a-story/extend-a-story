@@ -174,10 +174,18 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
 
         // insert the session into the database
         $result = mysql_query( "INSERT " .
-                                 "INTO Session ( UserID, SessionKey, AccessDate ) " .
-                               "VALUES ( " . "0"            . ", " .
-                                             $newSessionKey . ", " .
-                                             "NOW()"        . " )" );
+                                 "INTO Session " .
+                                      "( " .
+                                          "UserID, " .
+                                          "SessionKey, " .
+                                          "AccessDate " .
+                                      ") " .
+                               "VALUES ".
+                                      "( " .
+                                          "0, " .
+                                          $newSessionKey . ", " .
+                                          "NOW() " .
+                                      ")" );
 
         if ( ! $result )
         {
