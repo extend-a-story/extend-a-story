@@ -498,14 +498,54 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
     $authorName   = $row[ 8 ];
     $authorEmail  = $row[ 9 ];
 
-    // get the NextEpisodeEditLogID from the database
-    $result = mysql_query( "SELECT IntValue " .
-                             "FROM ExtendAStoryVariable " .
-                            "WHERE VariableName = 'NextEpisodeEditLogID'" );
+    // insert the episode edit log into the database
+    $result = mysql_query( "INSERT " .
+                             "INTO EpisodeEditLog " .
+                                  "( " .
+                                      "EpisodeID, " .
+                                      "SchemeID, " .
+                                      "ImageID, " .
+                                      "IsLinkable, " .
+                                      "IsExtendable, " .
+                                      "AuthorMailto, " .
+                                      "AuthorNotify, " .
+                                      "Title, " .
+                                      "Text, " .
+                                      "AuthorName, " .
+                                      "AuthorEmail, " .
+                                      "EditDate, " .
+                                      "EditLogEntry " .
+                                  ") " .
+                           "VALUES " .
+                                  "( " .
+                                            $episode                             .  ", " .
+                                            $schemeID                            .  ", " .
+                                            $imageID                             .  ", " .
+                                      "'" . $isLinkable                          . "', " .
+                                      "'" . $isExtendable                        . "', " .
+                                      "'" . $authorMailto                        . "', " .
+                                      "'" . $authorNotify                        . "', " .
+                                      "'" . mysql_escape_string( $title        ) . "', " .
+                                      "'" . mysql_escape_string( $text         ) . "', " .
+                                      "'" . mysql_escape_string( $authorName   ) . "', " .
+                                      "'" . mysql_escape_string( $authorEmail  ) . "', " .
+                                      "'" . date( "n/j/Y g:i:s A" )              . "', " .
+                                      "'" . mysql_escape_string( $editLogEntry ) . "' "  .
+                                  ")" );
 
     if ( ! $result )
     {
-        $error .= "Unable to query the NextEpisodeEditLogID.<BR>";
+        $error .= "Unable to insert the episode edit log into the database.<BR>";
+        $fatal = true;
+        return;
+    }
+
+    // get the new EpisodeEditLogID from the database
+    $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+
+    if ( ! $result )
+    {
+        $error .= "Unable to query the new EpisodeEditLogID.<BR>";
         $fatal = true;
         return;
     }
@@ -514,49 +554,12 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
 
     if ( ! $row )
     {
-        $error .= "Unable to fetch the NextEpisodeEditLogID row.<BR>";
+        $error .= "Unable to fetch the new EpisodeEditLogID row.<BR>";
         $fatal = true;
         return;
     }
 
     $nextEpisodeEditLogID = $row[ 0 ];
-
-    // update the NextEpisodeEditLogID in the database
-    $result = mysql_query( "UPDATE ExtendAStoryVariable " .
-                              "SET IntValue = IntValue + 1 " .
-                            "WHERE VariableName = 'NextEpisodeEditLogID'" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to update the NextEpisodeEditLogID.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    // insert the episode edit log into the database
-    $result = mysql_query( "INSERT " .
-                             "INTO EpisodeEditLog " .
-                           "VALUES ( " . $nextEpisodeEditLogID                .  ", " .
-                                         $episode                             .  ", " .
-                                         $schemeID                            .  ", " .
-                                         $imageID                             .  ", " .
-                                   "'" . $isLinkable                          . "', " .
-                                   "'" . $isExtendable                        . "', " .
-                                   "'" . $authorMailto                        . "', " .
-                                   "'" . $authorNotify                        . "', " .
-                                   "'" . mysql_escape_string( $title        ) . "', " .
-                                   "'" . mysql_escape_string( $text         ) . "', " .
-                                   "'" . mysql_escape_string( $authorName   ) . "', " .
-                                   "'" . mysql_escape_string( $authorEmail  ) . "', " .
-                                   "'" . date( "n/j/Y g:i:s A" )              . "', " .
-                                   "'" . mysql_escape_string( $editLogEntry ) . "' )" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to insert the episode edit log into the database.<BR>";
-        $fatal = true;
-        return;
-    }
 
     // read the options to log from the database
     $result = mysql_query( "SELECT TargetEpisodeID, " .

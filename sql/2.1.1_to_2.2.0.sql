@@ -34,3 +34,6 @@ DELETE FROM ExtendAStoryVariable WHERE VariableName = 'NextEpisodeID';
 
 ALTER TABLE Link MODIFY COLUMN LinkID  INT UNSIGNED  NOT NULL  AUTO_INCREMENT;
 DELETE FROM ExtendAStoryVariable WHERE VariableName = 'NextLinkID';
+
+ALTER TABLE EpisodeEditLog MODIFY COLUMN EpisodeEditLogID  INT UNSIGNED  NOT NULL  AUTO_INCREMENT;
+DELETE FROM ExtendAStoryVariable WHERE VariableName = 'NextEpisodeEditLogID';
