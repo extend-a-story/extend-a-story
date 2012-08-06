@@ -400,7 +400,7 @@ function createEpisode( &$error, &$fatal, $parent, $scheme )
                                       "'-'"          . ", " .
                                       "0"            . ", " .
                                       "null"         .  " " .
-                                  ") " );
+                                  ")" );
 
     if ( ! $result )
     {
