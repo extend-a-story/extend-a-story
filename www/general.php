@@ -436,50 +436,24 @@ function createLink( &$error, &$fatal, $sourceEpisode, $targetEpisode, $descript
 {
     $description = mysql_escape_string( $description );
 
-    // get the NextLinkID from the database
-    $result = mysql_query( "SELECT IntValue " .
-                             "FROM ExtendAStoryVariable " .
-                            "WHERE VariableName = 'NextLinkID'" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to query the NextLinkID.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    $row = mysql_fetch_row( $result );
-
-    if ( ! $row )
-    {
-        $error .= "Unable to fetch the NextLinkID row.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    $nextLinkID = $row[ 0 ];
-
-    // update the NextLinkID in the database
-    $result = mysql_query( "UPDATE ExtendAStoryVariable " .
-                              "SET IntValue = IntValue + 1 " .
-                            "WHERE VariableName = 'NextLinkID'" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to update the NextLinkID.<BR>";
-        $fatal = true;
-        return;
-    }
-
     // insert the link into the database
     $result = mysql_query( "INSERT " .
                              "INTO Link " .
-                           "VALUES ( " . $nextLinkID               .  ", " .
-                                         $sourceEpisode            .  ", " .
-                                         $targetEpisode            .  ", " .
-                                 "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
-                                 "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
-                                   "'" . $description              . "' )" );
+                                  "( " .
+                                      "SourceEpisodeID, " .
+                                      "TargetEpisodeID, " .
+                                      "IsCreated, " .
+                                      "IsBackLink, " .
+                                      "Description " .
+                                  ") " .
+                           "VALUES " .
+                                  "( " .
+                                              $sourceEpisode            .  ", " .
+                                              $targetEpisode            .  ", " .
+                                      "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
+                                      "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
+                                      "'" .   $description              . "' "  .
+                                  ")" );
 
     if ( ! $result )
     {
