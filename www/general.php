@@ -357,63 +357,50 @@ function getIntValueInternal( &$error, &$fatal, $variableName, $increment )
 
 function createEpisode( &$error, &$fatal, $parent, $scheme )
 {
-    // get the NextEpisodeID from the database
-    $result = mysql_query( "SELECT IntValue " .
-                             "FROM ExtendAStoryVariable " .
-                            "WHERE VariableName = 'NextEpisodeID'" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to query the NextEpisodeID.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    $row = mysql_fetch_row( $result );
-
-    if ( ! $row )
-    {
-        $error .= "Unable to fetch the NextEpisodeID row.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    $nextEpisodeID = $row[ 0 ];
-
-    // update the NextEpisodeID in the database
-    $result = mysql_query( "UPDATE ExtendAStoryVariable " .
-                              "SET IntValue = IntValue + 1 " .
-                            "WHERE VariableName = 'NextEpisodeID'" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to update the NextEpisodeID.<BR>";
-        $fatal = true;
-        return;
-    }
-
     // insert the episode into the database
     $result = mysql_query( "INSERT " .
                              "INTO Episode " .
-                           "VALUES ( " . $nextEpisodeID . ", " .
-                                         $parent        . ", " .
-                                         "0"            . ", " .
-                                         "0"            . ", " .
-                                         $scheme        . ", " .
-                                         "0"            . ", " .
-                                         "0"            . ", " .
-                                         "'N'"          . ", " .
-                                         "'N'"          . ", " .
-                                         "'N'"          . ", " .
-                                         "'N'"          . ", " .
-                                         "'-'"          . ", " .
-                                         "'-'"          . ", " .
-                                         "'-'"          . ", " .
-                                         "'-'"          . ", " .
-                                         "'-'"          . ", " .
-                                         "'-'"          . ", " .
-                                         "0"            . ", " .
-                                         "null"         . " )" );
+                                  "( " .
+                                      "Parent, " .
+                                      "AuthorSessionID, " .
+                                      "EditorSessionID, " .
+                                      "SchemeID, " .
+                                      "ImageID, " .
+                                      "Status, " .
+                                      "IsLinkable, " .
+                                      "IsExtendable, " .
+                                      "AuthorMailto, " .
+                                      "AuthorNotify, " .
+                                      "Title, " .
+                                      "Text, " .
+                                      "AuthorName, " .
+                                      "AuthorEmail, " .
+                                      "CreationDate, " .
+                                      "LockDate, " .
+                                      "LockKey, " .
+                                      "CreationTimestamp " .
+                                  ") " .
+                           "VALUES " .
+                                  "( " .
+                                      $parent        . ", " .
+                                      "0"            . ", " .
+                                      "0"            . ", " .
+                                      $scheme        . ", " .
+                                      "0"            . ", " .
+                                      "0"            . ", " .
+                                      "'N'"          . ", " .
+                                      "'N'"          . ", " .
+                                      "'N'"          . ", " .
+                                      "'N'"          . ", " .
+                                      "'-'"          . ", " .
+                                      "'-'"          . ", " .
+                                      "'-'"          . ", " .
+                                      "'-'"          . ", " .
+                                      "'-'"          . ", " .
+                                      "'-'"          . ", " .
+                                      "0"            . ", " .
+                                      "null"         .  " " .
+                                  ") " );
 
     if ( ! $result )
     {
@@ -422,7 +409,26 @@ function createEpisode( &$error, &$fatal, $parent, $scheme )
         return;
     }
 
-    return $nextEpisodeID;
+    // get the new EpisodeID from the database
+    $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+
+    if ( ! $result )
+    {
+        $error .= "Unable to query the new EpisodeID.<BR>";
+        $fatal = true;
+        return;
+    }
+
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        $error .= "Unable to fetch the new EpisodeID row.<BR>";
+        $fatal = true;
+        return;
+    }
+
+    return $row[ 0 ];
 }
 
 function createLink( &$error, &$fatal, $sourceEpisode, $targetEpisode, $description,

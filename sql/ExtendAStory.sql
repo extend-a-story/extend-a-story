@@ -68,7 +68,7 @@ CREATE TABLE User
 
 CREATE TABLE Episode
 (
-    EpisodeID          INT     UNSIGNED  NOT NULL  PRIMARY KEY,
+    EpisodeID          INT     UNSIGNED  NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
     Parent             INT     UNSIGNED  NOT NULL,
     AuthorSessionID    INT     UNSIGNED  NOT NULL,
     EditorSessionID    INT     UNSIGNED  NOT NULL,
@@ -167,7 +167,6 @@ CREATE TABLE Image
 
 INSERT INTO ExtendAStoryVariable VALUES ( "CountDate",            NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
 INSERT INTO ExtendAStoryVariable VALUES ( "CountValue",           0,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES ( "NextEpisodeID",        2,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES ( "NextLinkID",           1,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES ( "NextEpisodeEditLogID", 1,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES ( "NextLinkEditLogID",    1,    NULL );
@@ -201,7 +200,48 @@ INSERT INTO User
             );
 
 
-INSERT INTO Episode VALUES ( 1, 1, 0, 0, 1, 0, 0, "N", "N", "N", "N", "-", "-", "-", "-", "-", "-", 0, NULL );
+INSERT INTO Episode
+            (
+                Parent,
+                AuthorSessionID,
+                EditorSessionID,
+                SchemeID,
+                ImageID,
+                Status,
+                IsLinkable,
+                IsExtendable,
+                AuthorMailto,
+                AuthorNotify,
+                Title,
+                Text,
+                AuthorName,
+                AuthorEmail,
+                CreationDate,
+                LockDate,
+                LockKey,
+                CreationTimestamp
+            )
+     VALUES
+            (
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                "N",
+                "N",
+                "N",
+                "N",
+                "-",
+                "-",
+                "-",
+                "-",
+                "-",
+                "-",
+                0,
+                NULL
+            );
 
 
 INSERT INTO Scheme VALUES ( 1, "Black Text on White Background", "#FFFFFF", "#000000", "#0000FF", "#FF0000", "#00FF00", "", "images/red.gif", "images/green.gif", "images/blue.gif" );
