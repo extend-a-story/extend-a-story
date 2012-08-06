@@ -65,10 +65,10 @@ CREATE TABLE LinkEditLog
 ALTER TABLE Session ADD COLUMN UserID  INT UNSIGNED  NOT NULL  AFTER SessionID;
 
 
-INSERT INTO ExtendAStoryVariable VALUES( "NextUserID",           2,  NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeEditLogID", 1,  NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextLinkEditLogID",    1,  NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "MaxEditDays",          30, NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "NextUserID",           2,  NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "NextEpisodeEditLogID", 1,  NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "NextLinkEditLogID",    1,  NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "MaxEditDays",          30, NULL );
 
 
-INSERT INTO User VALUES( 1, 4, "admin", PASSWORD( "change-me" ), "Administrator" );
+INSERT INTO User VALUES ( 1, 4, "admin", PASSWORD( "change-me" ), "Administrator" );

@@ -165,31 +165,31 @@ CREATE TABLE Image
 );
 
 
-INSERT INTO ExtendAStoryVariable VALUES( "CountDate",            NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
-INSERT INTO ExtendAStoryVariable VALUES( "CountValue",           0,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeID",        2,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextLinkID",           1,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeEditLogID", 1,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextLinkEditLogID",    1,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextSchemeID",         3,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextImageID",          1,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "CountDate",            NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
+INSERT INTO ExtendAStoryVariable VALUES ( "CountValue",           0,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "NextEpisodeID",        2,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "NextLinkID",           1,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "NextEpisodeEditLogID", 1,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "NextLinkEditLogID",    1,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "NextSchemeID",         3,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "NextImageID",          1,    NULL );
 
-INSERT INTO ExtendAStoryVariable VALUES( "StoryName",            NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES( "SiteName",             NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES( "StoryHome",            NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES( "SiteHome",             NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES( "ReadEpisodeURL",       NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES( "AdminEmail",           NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES( "IsWriteable",          NULL, "N"  );
-INSERT INTO ExtendAStoryVariable VALUES( "MaxLinks",             10,   NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "MaxEditDays",          30,   NULL );
-
-
-INSERT INTO User ( PermissionLevel, LoginName, Password, UserName ) VALUES( 4, "admin", PASSWORD( "change-me" ), "Administrator" );
+INSERT INTO ExtendAStoryVariable VALUES ( "StoryName",            NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "SiteName",             NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "StoryHome",            NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "SiteHome",             NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "ReadEpisodeURL",       NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "AdminEmail",           NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "IsWriteable",          NULL, "N"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "MaxLinks",             10,   NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "MaxEditDays",          30,   NULL );
 
 
-INSERT INTO Episode VALUES( 1, 1, 0, 0, 1, 0, 0, "N", "N", "N", "N", "-", "-", "-", "-", "-", "-", 0, NULL );
+INSERT INTO User ( PermissionLevel, LoginName, Password, UserName ) VALUES ( 4, "admin", PASSWORD( "change-me" ), "Administrator" );
 
 
-INSERT INTO Scheme VALUES( 1, "Black Text on White Background", "#FFFFFF", "#000000", "#0000FF", "#FF0000", "#00FF00", "", "images/red.gif", "images/green.gif", "images/blue.gif" );
-INSERT INTO Scheme VALUES( 2, "White Text on Black Background", "#000000", "#FFFFFF", "#00FF00", "#FF0000", "#0000FF", "", "images/red.gif", "images/green.gif", "images/blue.gif" );
+INSERT INTO Episode VALUES ( 1, 1, 0, 0, 1, 0, 0, "N", "N", "N", "N", "-", "-", "-", "-", "-", "-", 0, NULL );
+
+
+INSERT INTO Scheme VALUES ( 1, "Black Text on White Background", "#FFFFFF", "#000000", "#0000FF", "#FF0000", "#00FF00", "", "images/red.gif", "images/green.gif", "images/blue.gif" );
+INSERT INTO Scheme VALUES ( 2, "White Text on Black Background", "#000000", "#FFFFFF", "#00FF00", "#FF0000", "#0000FF", "", "images/red.gif", "images/green.gif", "images/blue.gif" );
