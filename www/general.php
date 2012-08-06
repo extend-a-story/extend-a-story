@@ -559,8 +559,11 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
     }
 
     // read the options to log from the database
-    $result = mysql_query( "SELECT TargetEpisodeID, IsBackLink, Description " .
-                             "FROM Link where SourceEpisodeID = " . $episode . " " .
+    $result = mysql_query( "SELECT TargetEpisodeID, " .
+                                  "IsBackLink, " .
+                                  "Description " .
+                             "FROM Link " .
+                            "WHERE SourceEpisodeID = " . $episode . " " .
                             "ORDER BY LinkID" );
 
     if ( ! $result )
