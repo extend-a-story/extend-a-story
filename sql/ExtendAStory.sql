@@ -51,7 +51,7 @@ CREATE TABLE Session
 
 CREATE TABLE User
 (
-    UserID           INT     UNSIGNED  NOT NULL  PRIMARY KEY,
+    UserID           INT     UNSIGNED  NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
     PermissionLevel  TINYINT UNSIGNED  NOT NULL,
     LoginName        VARCHAR( 255 )    NOT NULL,
     Password         VARCHAR( 255 )    NOT NULL,
@@ -167,7 +167,6 @@ CREATE TABLE Image
 
 INSERT INTO ExtendAStoryVariable VALUES( "CountDate",            NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
 INSERT INTO ExtendAStoryVariable VALUES( "CountValue",           0,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES( "NextUserID",           2,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeID",        2,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES( "NextLinkID",           1,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES( "NextEpisodeEditLogID", 1,    NULL );
@@ -186,7 +185,7 @@ INSERT INTO ExtendAStoryVariable VALUES( "MaxLinks",             10,   NULL );
 INSERT INTO ExtendAStoryVariable VALUES( "MaxEditDays",          30,   NULL );
 
 
-INSERT INTO User VALUES( 1, 4, "admin", PASSWORD( "change-me" ), "Administrator" );
+INSERT INTO User ( PermissionLevel, LoginName, Password, UserName ) VALUES( 4, "admin", PASSWORD( "change-me" ), "Administrator" );
 
 
 INSERT INTO Episode VALUES( 1, 1, 0, 0, 1, 0, 0, "N", "N", "N", "N", "-", "-", "-", "-", "-", "-", 0, NULL );

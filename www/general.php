@@ -659,49 +659,22 @@ function createLinkEditLog( &$error, &$fatal, $episodeEditLogID, $targetEpisodeI
 
 function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, $userName )
 {
-    // get the NextUserID from the database
-    $result = mysql_query( "SELECT IntValue " .
-                             "FROM ExtendAStoryVariable " .
-                            "WHERE VariableName = 'NextUserID'" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to query the NextUserID.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    $row = mysql_fetch_row( $result );
-
-    if ( ! $row )
-    {
-        $error .= "Unable to fetch the NextUserID row.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    $nextUserID = $row[ 0 ];
-
-    // update the NextUserID in the database
-    $result = mysql_query( "UPDATE ExtendAStoryVariable " .
-                              "SET IntValue = IntValue + 1 " .
-                            "WHERE VariableName = 'NextUserID'" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to update the NextUserID.<BR>";
-        $fatal = true;
-        return;
-    }
-
     // insert the user into the database
     $result = mysql_query( "INSERT " .
                              "INTO User " .
-                           "VALUES ( " . $nextUserID                       .    ", " .
-                                         $permissionLevel                  .    ", " .
-                                   "'" . mysql_escape_string( $loginName ) .   "', " .
-                         "PASSWORD( '" . mysql_escape_string( $password  ) . "' ), " .
-                                   "'" . mysql_escape_string( $userName  ) .   "' )" );
+                                  "( " .
+                                      "PermissionLevel, " .
+                                      "LoginName, " .
+                                      "Password, " .
+                                      "UserName " .
+                                  ") " .
+                           "VALUES " .
+                                  "( " .
+                                                      $permissionLevel                  .    ", " .
+                                                "'" . mysql_escape_string( $loginName ) .   "', " .
+                                      "PASSWORD( '" . mysql_escape_string( $password  ) . "' ), " .
+                                                "'" . mysql_escape_string( $userName  ) .    "' " .
+                                  ")" );
 
     if ( ! $result )
     {
@@ -710,7 +683,26 @@ function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, 
         return;
     }
 
-    return $nextUserID;
+    // get the new UserID from the database
+    $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+
+    if ( ! $result )
+    {
+        $error .= "Unable to query the new UserID.<BR>";
+        $fatal = true;
+        return;
+    }
+
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        $error .= "Unable to fetch the new UserID row.<BR>";
+        $fatal = true;
+        return;
+    }
+
+    return $row[ 0 ];
 }
 
 function extensionNotification( &$error, &$fatal, $email, $parent, $episode, $authorName )
