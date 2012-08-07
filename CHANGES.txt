@@ -10,6 +10,10 @@
 
 - Fixed bug # 3415911: Glitch with hyphenated words.
 
+- Fixed many PHP warnings.
+
+- Updated all database tables to use AUTO_INCREMENT.
+
 
 
 
