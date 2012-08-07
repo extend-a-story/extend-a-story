@@ -61,10 +61,10 @@ if ( empty( $error ))
 {
     $result = mysql_query( "SELECT Link.SourceEpisodeID, " .
                                   "Episode.Title " .
-                             "FROM Link " .
-                             "JOIN Episode " .
-                               "ON Link.SourceEpisodeID = Episode.EpisodeID " .
-                            "WHERE Link.TargetEpisodeID = " . $episode . " " .
+                             "FROM Link, " .
+                                  "Episode " .
+                            "WHERE Link.SourceEpisodeID = Episode.EpisodeID " .
+                              "AND Link.TargetEpisodeID = " . $episode . " " .
                             "ORDER BY Episode.EpisodeID" );
 
     if ( ! $result )
