@@ -43,3 +43,6 @@ DELETE FROM ExtendAStoryVariable WHERE VariableName = 'NextLinkEditLogID';
 
 ALTER TABLE Scheme MODIFY COLUMN SchemeID  INT UNSIGNED  NOT NULL  AUTO_INCREMENT;
 DELETE FROM ExtendAStoryVariable WHERE VariableName = 'NextSchemeID';
+
+ALTER TABLE Image MODIFY COLUMN ImageID  INT UNSIGNED  NOT NULL  AUTO_INCREMENT;
+DELETE FROM ExtendAStoryVariable WHERE VariableName = 'NextImageID';

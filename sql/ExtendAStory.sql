@@ -159,7 +159,7 @@ CREATE TABLE Scheme
 
 CREATE TABLE Image
 (
-    ImageID    INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    ImageID    INT UNSIGNED    NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
     ImageName  VARCHAR( 255 )  NOT NULL,
     ImageURL   VARCHAR( 255 )  NOT NULL
 );
@@ -167,7 +167,6 @@ CREATE TABLE Image
 
 INSERT INTO ExtendAStoryVariable VALUES ( "CountDate",            NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
 INSERT INTO ExtendAStoryVariable VALUES ( "CountValue",           0,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES ( "NextImageID",          1,    NULL );
 
 INSERT INTO ExtendAStoryVariable VALUES ( "StoryName",            NULL, "-"  );
 INSERT INTO ExtendAStoryVariable VALUES ( "SiteName",             NULL, "-"  );
