@@ -143,7 +143,7 @@ CREATE TABLE LinkEditLog
 
 CREATE TABLE Scheme
 (
-    SchemeID        INT UNSIGNED    NOT NULL  PRIMARY KEY,
+    SchemeID        INT UNSIGNED    NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
     SchemeName      VARCHAR( 255 )  NOT NULL,
     bgcolor         VARCHAR( 255 )  NOT NULL,
     text            VARCHAR( 255 )  NOT NULL,
@@ -167,7 +167,6 @@ CREATE TABLE Image
 
 INSERT INTO ExtendAStoryVariable VALUES ( "CountDate",            NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
 INSERT INTO ExtendAStoryVariable VALUES ( "CountValue",           0,    NULL );
-INSERT INTO ExtendAStoryVariable VALUES ( "NextSchemeID",         3,    NULL );
 INSERT INTO ExtendAStoryVariable VALUES ( "NextImageID",          1,    NULL );
 
 INSERT INTO ExtendAStoryVariable VALUES ( "StoryName",            NULL, "-"  );
@@ -241,5 +240,56 @@ INSERT INTO Episode
             );
 
 
-INSERT INTO Scheme VALUES ( 1, "Black Text on White Background", "#FFFFFF", "#000000", "#0000FF", "#FF0000", "#00FF00", "", "images/red.gif", "images/green.gif", "images/blue.gif" );
-INSERT INTO Scheme VALUES ( 2, "White Text on Black Background", "#000000", "#FFFFFF", "#00FF00", "#FF0000", "#0000FF", "", "images/red.gif", "images/green.gif", "images/blue.gif" );
+INSERT INTO Scheme
+            (
+                SchemeName,
+                bgcolor,
+                text,
+                link,
+                vlink,
+                alink,
+                background,
+                UncreatedLink,
+                CreatedLink,
+                BackLinkedLink
+            )
+     VALUES
+            (
+                "Black Text on White Background",
+                "#FFFFFF",
+                "#000000",
+                "#0000FF",
+                "#FF0000",
+                "#00FF00",
+                "",
+                "images/red.gif",
+                "images/green.gif",
+                "images/blue.gif"
+            );
+
+INSERT INTO Scheme
+            (
+                SchemeName,
+                bgcolor,
+                text,
+                link,
+                vlink,
+                alink,
+                background,
+                UncreatedLink,
+                CreatedLink,
+                BackLinkedLink
+            )
+     VALUES
+            (
+                "White Text on Black Background",
+                "#000000",
+                "#FFFFFF",
+                "#00FF00",
+                "#FF0000",
+                "#0000FF",
+                "",
+                "images/red.gif",
+                "images/green.gif",
+                "images/blue.gif"
+            );
