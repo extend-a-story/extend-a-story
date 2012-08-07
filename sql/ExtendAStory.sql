@@ -165,18 +165,18 @@ CREATE TABLE Image
 );
 
 
-INSERT INTO ExtendAStoryVariable VALUES ( "CountDate",            NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
-INSERT INTO ExtendAStoryVariable VALUES ( "CountValue",           0,    NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "CountDate",      NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
+INSERT INTO ExtendAStoryVariable VALUES ( "CountValue",     0,    NULL );
 
-INSERT INTO ExtendAStoryVariable VALUES ( "StoryName",            NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES ( "SiteName",             NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES ( "StoryHome",            NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES ( "SiteHome",             NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES ( "ReadEpisodeURL",       NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES ( "AdminEmail",           NULL, "-"  );
-INSERT INTO ExtendAStoryVariable VALUES ( "IsWriteable",          NULL, "N"  );
-INSERT INTO ExtendAStoryVariable VALUES ( "MaxLinks",             10,   NULL );
-INSERT INTO ExtendAStoryVariable VALUES ( "MaxEditDays",          30,   NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "StoryName",      NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "SiteName",       NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "StoryHome",      NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "SiteHome",       NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "ReadEpisodeURL", NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "AdminEmail",     NULL, "-"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "IsWriteable",    NULL, "N"  );
+INSERT INTO ExtendAStoryVariable VALUES ( "MaxLinks",       10,   NULL );
+INSERT INTO ExtendAStoryVariable VALUES ( "MaxEditDays",    30,   NULL );
 
 
 INSERT INTO User
