@@ -29,7 +29,7 @@ the following SQL statement in your Extend-A-Story database for each of
 your users:
 
   UPDATE User
-     SET Password = password( '<new password>' )
+     SET Password = PASSWORD( '<new password>' )
    WHERE LoginName = '<username>';
 
 For example, to change the password of the admin account to the
@@ -37,7 +37,7 @@ For example, to change the password of the admin account to the
 Extend-A-Story database:
 
   UPDATE User
-    SET Password = password( 'change-me' )
+    SET Password = PASSWORD( 'change-me' )
   WHERE LoginName = 'admin';
 
 You only have to perform this step if you are currently experiencing
