@@ -12,11 +12,11 @@ creation prior to upgrading the database, be sure to enable episode
 creation after upgrading the database.
 
 The code has changed for this release. Simply replace the story code on
-your web server with the contents of the www directory.
+your web server with the contents of the 'www' directory.
 
 The documentation has changed for this release. Simply replace the
 Extend-A-Story documentation directory on your web server with the
-contents of the docs directory.
+contents of the 'docs' directory.
 
 This version of Extend-A-Story fixes an issue encountered with recent
 versions of MySQL. This issue prevents all users from logging in to the
@@ -58,11 +58,11 @@ http://www.sir-toby.com/phpbb/viewtopic.php?t=1091
 There are no database changes for this release.
 
 The code has changed for this release. Simply replace the story code on
-your web server with the contents of the www directory.
+your web server with the contents of the 'www' directory.
 
 The documentation has changed for this release. Simply replace the
 Extend-A-Story documentation directory on your web server with the
-contents of the docs directory.
+contents of the 'docs' directory.
 
 
 
@@ -83,7 +83,7 @@ in case you have any problems. To upgrade the database, run the database
 upgrade script '2.0.1_to_2.1.0.sql' in the existing database.
 
 The code has changed for this release. Simply replace the story code on
-your web server with the contents of the www directory. There are two
+your web server with the contents of the 'www' directory. There are two
 new PHP scripts in this release that you may want to link to from your
 story's home page:
 
@@ -93,7 +93,7 @@ story's home page:
   - list-locked.php : Displays all episodes that are currently locked
                       for creation.
 
-Point your browser to <story root>/admin.php and login as the
+Point your browser to '<story root>/admin.php' and login as the
 administrator:
   - Login Name : admin
   - Password   : change-me
@@ -119,6 +119,6 @@ There are no documentation changes for this release.
 There are no database changes for this release.
 
 The code has changed for this release. Simply replace the story code on
-your web server with the contents of the www directory.
+your web server with the contents of the 'www' directory.
 
 There are no documentation changes for this release.

@@ -11,13 +11,13 @@ site with just one story:
 - In the new database, run the database creation script
   'ExtendAStory.sql'.
 
-- Take the contents of the www directory and place them in a directory
+- Take the contents of the 'www' directory and place them in a directory
   accessible to your web server.
 
 - Modify db.php to contain the relevant login information for the
   database you created.
 
-- Point your browser to <story root>/admin.php and login as the
+- Point your browser to '<story root>/admin.php' and login as the
   administrator:
   - Login Name : admin
   - Password   : change-me
@@ -92,10 +92,10 @@ site with just one story:
   setting, you should receive email notifying you of the newly created
   episode.
 
-- Take the contents of the docs directory and place them in a directory
-  accessible to your web server. These HTML pages are the documentation
-  for the users of Extend-A-Story. Be sure to link to them from your
-  site.
+- Take the contents of the 'docs' directory and place them in a
+  directory accessible to your web server. These HTML pages are the
+  documentation for the users of Extend-A-Story. Be sure to link to them
+  from your site.
 
 
 If you want to set up multiple stories, you follow the same directions
@@ -120,5 +120,5 @@ of problems you may find are:
   it's not, or the target is not a child of the source episode, but the
   link says it is.
 
-I've included several select statements that will identify these problem
-records in 'DBMaintenance.sql'.
+I've included select statements that will identify these problems in
+'DBMaintenance.sql'.
