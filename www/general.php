@@ -108,6 +108,7 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
     $result = mysql_query( "UPDATE Session " .
                               "SET UserID = 0 " .
                             "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 1 HOUR )" );
+
     if ( ! $result )
     {
         $error .= "Unable to logout inactive users.<BR>";
