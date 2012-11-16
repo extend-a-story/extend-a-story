@@ -6,9 +6,9 @@
 - Added functionality for including a common footer at the bottom of
   every page.
 
-- Fixed bug # 3419172: Cannot log in using admin interface.
+- Fixed bug # 9: Cannot Log In Using Admin Interface
 
-- Fixed bug # 3415911: Glitch with hyphenated words.
+- Fixed bug # 8: Glitch with Hyphenated Words
 
 - Fixed many PHP warnings.
 
@@ -21,21 +21,21 @@
 
 - Made the documentation HTML files XTHML 1.1 compliant.
 
-- Fixed bug # 847354: Old reference to db.inc in the readme file.
+- Fixed bug # 1: Old Reference to "db.inc" in the Readme File
 
-- Fixed bug # 847362: Fatal error with single quote in password in admin
-  interface.
+- Fixed bug # 2: Fatal Error with Single Quote in Password in Admin
+  Interface
 
-- Fixed bug # 847375: Problems with single quotes configuring story
-  settings.
+- Fixed bug # 3: Problems with Single Quotes when Configuring Story
+  Settings
 
-- Fixed bug # 855409: Problem creating user with a password with a
-  single quote.
+- Fixed bug # 4: Problem when Creating a User with a Password with a
+  Single Quote
 
-- Fixed bug # 855415: Fatal error when changing password with single
-  quote.
+- Fixed bug # 5: Fatal Error when Changing a Password with a Single
+  Quote
 
-- Fixed bug # 855418: Quotes not handled when editing a user.
+- Fixed bug # 6: Quotes Not Handled Properly when Editing a User 
 
 
 
