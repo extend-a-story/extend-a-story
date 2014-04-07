@@ -1,4 +1,4 @@
-===== Changes between V 2.2.0 and V 2.3.0 =====
+===== Changes between V 2.2.0 and V 3.0.0 =====
 
 - Nothing yet.
 
