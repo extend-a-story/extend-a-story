@@ -42,7 +42,7 @@
 - Fixed bug # 5: Fatal Error when Changing a Password with a Single
   Quote
 
-- Fixed bug # 6: Quotes Not Handled Properly when Editing a User 
+- Fixed bug # 6: Quotes Not Handled Properly when Editing a User
 
 
 
