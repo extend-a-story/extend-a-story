@@ -26,6 +26,8 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+require(  __DIR__ . "/include/Extend-A-Story.php" );
+
 require( "ExtendAStory.php" );
 
 $command         = "";
@@ -115,9 +117,6 @@ if ( isset( $_POST[ "extendable" ] ))
 
 $linkCount = 0;
 
-$error = "";
-$fatal = false;
-
 $warning = "";
 
 $createdEpisode = 0;
@@ -186,11 +185,10 @@ $editing = ( $command == "Edit"        ) ||
            ( $command == "EditPreview" ) ||
            ( $command == "EditSave"    );
 
-// connect to the database
-if ( empty( $error ))
-{
-    connectToDatabase( $error, $fatal );
-}
+Util::connectToDatabase();
+
+$error = "";
+$fatal = false;
 
 if ( empty( $error ))
 {

@@ -60,14 +60,10 @@ if (( $method != "title"      ) &&
     throw new HardStoryException( "The specified search method is not supported." );
 }
 
+Util::connectToDatabase();
+
 $error = "";
 $fatal = false;
-
-// connect to the database
-if ( empty( $error ))
-{
-    connectToDatabase( $error, $fatal );
-}
 
 if ( empty( $error ))
 {

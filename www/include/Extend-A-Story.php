@@ -28,5 +28,6 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/ClassLoader.php" );
 require(  __DIR__ . "/ExceptionHandler.php" );
+require(  __DIR__ . "/config/Configuration.php" );
 
 ?>

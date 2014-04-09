@@ -26,6 +26,8 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+require(  __DIR__ . "/include/Extend-A-Story.php" );
+
 require( "ExtendAStory.php" );
 
 $episode = 1;
@@ -37,14 +39,10 @@ if ( isset( $_POST[ "episode" ] ))
 
 $lockKey = $_POST[ "lockKey" ];
 
+Util::connectToDatabase();
+
 $error = "";
 $fatal = false;
-
-// connect to the database
-if ( empty( $error ))
-{
-    connectToDatabase( $error, $fatal );
-}
 
 if ( empty( $error ))
 {

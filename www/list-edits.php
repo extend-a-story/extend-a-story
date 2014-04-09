@@ -26,10 +26,9 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-require( "ExtendAStory.php" );
+require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-$error = "";
-$fatal = false;
+require( "ExtendAStory.php" );
 
 $episode = 1;
 
@@ -38,11 +37,10 @@ if ( isset( $_GET[ "episode" ] ))
     $episode = (int) $_GET[ "episode" ];
 }
 
-// connect to the database
-if ( empty( $error ))
-{
-    connectToDatabase( $error, $fatal );
-}
+Util::connectToDatabase();
+
+$error = "";
+$fatal = false;
 
 if ( empty( $error ))
 {

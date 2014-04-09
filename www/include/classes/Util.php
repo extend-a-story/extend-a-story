@@ -26,6 +26,25 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-require( "general.php" );
+class Util
+{
+    public static function connectToDatabase()
+    {
+        global $dbHost;
+        global $dbUser;
+        global $dbPassword;
+        global $dbDatabase;
+
+        if ( ! mysql_connect( $dbHost, $dbUser, $dbPassword ))
+        {
+            throw new HardStoryException( "Unable to connect to database." );
+        }
+
+        if ( ! mysql_select_db( $dbDatabase ))
+        {
+            throw new HardStoryException( "Unable to select database." );
+        }
+    }
+}
 
 ?>

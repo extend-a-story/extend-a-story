@@ -26,6 +26,8 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+require(  __DIR__ . "/include/Extend-A-Story.php" );
+
 require( "ExtendAStory.php" );
 
 $command = "";
@@ -35,14 +37,10 @@ if ( isset( $_REQUEST[ "command" ] ))
     $command = $_REQUEST[ "command" ];
 }
 
+Util::connectToDatabase();
+
 $error = "";
 $fatal = false;
-
-// connect to the database
-if ( empty( $error ))
-{
-    connectToDatabase( $error, $fatal );
-}
 
 if ( empty( $error ))
 {

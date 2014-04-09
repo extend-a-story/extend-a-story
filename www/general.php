@@ -81,27 +81,6 @@ function displayError( $error, $fatal )
     exit;
 }
 
-function connectToDatabase( &$error, &$fatal )
-{
-    global $host;
-    global $user;
-    global $password;
-    global $database;
-
-    if ( ! mysql_connect( $host, $user, $password ))
-    {
-        $error .= "Unable to connect to database.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    if ( ! mysql_select_db( $database ))
-    {
-        $error .= "Unable to select ExtendAStory database.<BR>";
-        $fatal = true;
-    }
-}
-
 function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
 {
     // log out all users after one hour of inactivity
