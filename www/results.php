@@ -26,6 +26,8 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+require(  __DIR__ . "/include/Extend-A-Story.php" );
+
 require( "ExtendAStory.php" );
 
 $method = "";
@@ -47,9 +49,6 @@ if ( isset( $_POST[ "days" ] ))
     $days = (int) $_POST[ "days" ];
 }
 
-$error = "";
-$fatal = false;
-
 if (( $method != "title"      ) &&
     ( $method != "text"       ) &&
     ( $method != "author"     ) &&
@@ -58,9 +57,11 @@ if (( $method != "title"      ) &&
     ( $method != "linkable"   ) &&
     ( $method != "days"       ))
 {
-    $error .= "The specified search method is not supported.<BR>";
-    $fatal = true;
+    throw new HardStoryException( "The specified search method is not supported." );
 }
+
+$error = "";
+$fatal = false;
 
 // connect to the database
 if ( empty( $error ))
