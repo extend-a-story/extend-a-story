@@ -31,14 +31,10 @@ require(  __DIR__ . "/include/Extend-A-Story.php" );
 require( "ExtendAStory.php" );
 
 Util::connectToDatabase();
+Util::getSessionAndUserIDs( $sessionID, $userID );
 
 $error = "";
 $fatal = false;
-
-if ( empty( $error ))
-{
-    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-}
 
 if ( empty( $error ))
 {

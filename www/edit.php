@@ -50,14 +50,10 @@ if ( isset( $_REQUEST[ "lockKey" ] ))
 }
 
 Util::connectToDatabase();
+Util::getSessionAndUserIDs( $sessionID, $userID );
 
 $error = "";
 $fatal = false;
-
-if ( empty( $error ))
-{
-    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-}
 
 if ( empty( $error ))
 {

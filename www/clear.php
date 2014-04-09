@@ -40,14 +40,10 @@ if ( isset( $_POST[ "episode" ] ))
 $lockKey = $_POST[ "lockKey" ];
 
 Util::connectToDatabase();
+Util::getSessionAndUserIDs( $sessionID, $userID );
 
 $error = "";
 $fatal = false;
-
-if ( empty( $error ))
-{
-    getSessionAndUserIDs( $error, $fatal, $sessionID, $userID );
-}
 
 if ( empty( $error ))
 {
