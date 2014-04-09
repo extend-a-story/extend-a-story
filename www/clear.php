@@ -31,13 +31,17 @@ require(  __DIR__ . "/include/Extend-A-Story.php" );
 require( "ExtendAStory.php" );
 
 $episode = 1;
+$lockKey = 0;
 
 if ( isset( $_POST[ "episode" ] ))
 {
     $episode = (int) $_POST[ "episode" ];
 }
 
-$lockKey = $_POST[ "lockKey" ];
+if ( isset( $_POST[ "lockKey" ] ))
+{
+    $lockKey = $_POST[ "lockKey" ];
+}
 
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
