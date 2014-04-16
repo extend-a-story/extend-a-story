@@ -73,10 +73,7 @@ if (( $command != ""                   ) &&
     $command = "";
 }
 
-$error = "";
-$fatal = false;
-
-if (( $command == "login" ) && ( empty( $error )))
+if ( $command == "login" )
 {
     $loginName = $_POST[ "loginName" ];
     $password  = $_POST[ "password"  ];
@@ -92,8 +89,7 @@ if (( $command == "login" ) && ( empty( $error )))
 
     if ( ! $result )
     {
-        $error .= "Unable to query user table in database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to query user table in database." );
     }
     else
     {
@@ -114,21 +110,19 @@ if (( $command == "login" ) && ( empty( $error )))
 
             if ( ! $result )
             {
-                $error .= "Unable to update session record.<BR>";
-                $fatal = true;
+                throw new HardStoryException( "Unable to update session record." );
             }
         }
     }
 }
 
-if (( $command == "logout" ) && ( empty( $error )))
+if ( $command == "logout" )
 {
     $result = mysql_query( "UPDATE Session SET UserID = 0 WHERE SessionID = " . $sessionID );
 
     if ( ! $result )
     {
-        $error .= "Unable to update session record.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to update session record." );
     }
     else
     {
@@ -137,7 +131,7 @@ if (( $command == "logout" ) && ( empty( $error )))
     }
 }
 
-if (( $userID == 0 ) && empty( $error ))
+if ( $userID == 0 )
 {
     if (( $command != ""                   ) &&
         ( $command != "login"              ) &&
@@ -206,32 +200,27 @@ if (( $userID == 0 ) && empty( $error ))
     exit;
 }
 
-if ( empty( $error ))
-{
-    $result = mysql_query( "SELECT PermissionLevel, " .
-                                  "UserName " .
-                             "FROM User " .
-                            "WHERE UserID = " . $userID );
+$result = mysql_query( "SELECT PermissionLevel, " .
+                              "UserName " .
+                         "FROM User " .
+                        "WHERE UserID = " . $userID );
 
-    if ( ! $result )
+if ( ! $result )
+{
+    throw new HardStoryException( "Unable to query user information from database." );
+}
+else
+{
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
     {
-        $error .= "Unable to query user information from database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to fetch user information row from database." );
     }
     else
     {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Unable to fetch user information row from database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $permissionLevel = $row[ 0 ];
-            $userName        = $row[ 1 ];
-        }
+        $permissionLevel = $row[ 0 ];
+        $userName        = $row[ 1 ];
     }
 }
 
@@ -253,7 +242,7 @@ if ((( $permissionLevel < 2           ) &&
     $command = "";
 }
 
-if (( $command == "changePasswordSave" ) && ( empty( $error )))
+if ( $command == "changePasswordSave" )
 {
     $curPassword  = $_POST[ "curPassword"  ];
     $newPassword1 = $_POST[ "newPassword1" ];
@@ -271,8 +260,7 @@ if (( $command == "changePasswordSave" ) && ( empty( $error )))
 
     if ( ! $result )
     {
-        $error .= "Unable to query user record from database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to query user record from database." );
     }
     else
     {
@@ -280,8 +268,7 @@ if (( $command == "changePasswordSave" ) && ( empty( $error )))
 
         if ( ! $row )
         {
-            $error .= "Unable to fetch user count row from database.<BR>";
-            $fatal = true;
+            throw new HardStoryException( "Unable to fetch user count row from database." );
         }
         else
         {
@@ -309,8 +296,7 @@ if (( $command == "changePasswordSave" ) && ( empty( $error )))
 
                     if ( ! $result )
                     {
-                        $error .= "Unable to update user record.<BR>";
-                        $fatal = true;
+                        throw new HardStoryException( "Unable to update user record." );
                     }
                     else
                     {
@@ -321,6 +307,9 @@ if (( $command == "changePasswordSave" ) && ( empty( $error )))
         }
     }
 }
+
+$error = "";
+$fatal = false;
 
 if (( $command == "configureSave" ) && ( empty( $error )))
 {
