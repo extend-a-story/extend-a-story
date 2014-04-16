@@ -46,13 +46,7 @@ if ( isset( $_POST[ "lockKey" ] ))
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
-$error = "";
-$fatal = false;
-
-if ( empty( $error ))
-{
-    $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
-}
+$isWriteable = Util::getStringValue( "IsWriteable" );
 
 if ( $isWriteable == "N" )
 {
@@ -87,6 +81,9 @@ You are unable to clear locks while episode creation is disabled.
 
     exit;
 }
+
+$error = "";
+$fatal = false;
 
 if ( empty( $error ))
 {

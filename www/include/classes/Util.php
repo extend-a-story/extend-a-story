@@ -168,6 +168,79 @@ class Util
         $sessionID = $actualSessionID;
         $userID    = $actualUserID;
     }
+
+    public static function getStringValue( $variableName )
+    {
+        $result = mysql_query(
+                "SELECT StringValue " .
+                  "FROM ExtendAStoryVariable " .
+                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException(
+                    "Problem retrieving the " . $variableName . " value from the database." );
+        }
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException(
+                    "Problem fetching " . $variableName . " row from the database." );
+        }
+
+        return $row[ 0 ];
+    }
+
+    public static function getIntValue( $variableName )
+    {
+        return Util::getIntValueInternal( $variableName, false );
+    }
+
+    public static function getAndIncrementIntValue( $variableName )
+    {
+        return Util::getIntValueInternal( $variableName, true );
+    }
+
+    function getIntValueInternal( $variableName, $increment )
+    {
+        if ( $increment )
+        {
+            // increment the value
+            $result = mysql_query(
+                    "UPDATE ExtendAStoryVariable " .
+                       "SET IntValue = IntValue + 1 " .
+                     "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+
+            if ( ! $result )
+            {
+            throw new HardStoryException(
+                    "Unable to increment the " . $variableName . " value in the database." );
+            }
+        }
+
+        $result = mysql_query(
+                "SELECT IntValue " .
+                  "FROM ExtendAStoryVariable " .
+                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException(
+                    "Problem retrieving the " . $variableName . " value from the database." );
+        }
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException(
+                    "Problem fetching " . $variableName . " row from the database." );
+        }
+
+        return $row[ 0 ];
+    }
 }
 
 ?>

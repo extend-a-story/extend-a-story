@@ -52,13 +52,7 @@ if ( isset( $_REQUEST[ "lockKey" ] ))
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
-$error = "";
-$fatal = false;
-
-if ( empty( $error ))
-{
-    $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
-}
+$isWriteable = Util::getStringValue( "IsWriteable" );
 
 if ( $isWriteable == "N" )
 {
@@ -95,6 +89,9 @@ You are unable to perform advanced edit functions while episode creation is disa
 }
 
 $permissionLevel = 0;
+
+$error = "";
+$fatal = false;
 
 if (( $userID != 0 ) && ( empty( $error )))
 {

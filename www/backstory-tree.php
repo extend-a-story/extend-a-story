@@ -40,21 +40,10 @@ if ( isset( $_GET[ "episode" ] ))
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
-$error = "";
-$fatal = false;
-
-if ( empty( $error ))
-{
-    $storyName = getStringValue( $error, $fatal, "StoryName" );
-    $siteName  = getStringValue( $error, $fatal, "SiteName"  );
-    $storyHome = getStringValue( $error, $fatal, "StoryHome" );
-    $siteHome  = getStringValue( $error, $fatal, "SiteHome"  );
-}
-
-if ( ! empty( $error ))
-{
-    displayError( $error, $fatal );
-}
+$storyName = Util::getStringValue( "StoryName" );
+$siteName  = Util::getStringValue( "SiteName"  );
+$storyHome = Util::getStringValue( "StoryHome" );
+$siteHome  = Util::getStringValue( "SiteHome"  );
 
 ?>
 

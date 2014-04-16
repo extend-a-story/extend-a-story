@@ -109,97 +109,6 @@ function setIntValue( &$error, &$fatal, $variableName, $variableValue )
     }
 }
 
-function getStringValue( &$error, &$fatal, $variableName )
-{
-    $returnValue = "";
-
-    $result = mysql_query(
-            "SELECT StringValue " .
-              "FROM ExtendAStoryVariable " .
-             "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the " . $variableName . " value from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Problem fetching " . $variableName . " row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $returnValue = $row[ 0 ];
-        }
-    }
-
-    return $returnValue;
-}
-
-function getIntValue( &$error, &$fatal, $variableName )
-{
-    return getIntValueInternal( $error, $fatal, $variableName, false );
-}
-
-function getAndIncrementIntValue( &$error, &$fatal, $variableName )
-{
-    return getIntValueInternal( $error, $fatal, $variableName, true );
-}
-
-function getIntValueInternal( &$error, &$fatal, $variableName, $increment )
-{
-    if ( $increment )
-    {
-        // increment the value
-        $result = mysql_query(
-                "UPDATE ExtendAStoryVariable " .
-                   "SET IntValue = IntValue + 1 " .
-                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
-
-        if ( ! $result )
-        {
-            $error .= "Unable to increment the " . $variableName .
-                      " value in the database.<BR>";
-            $fatal = true;
-            return 0;
-        }
-    }
-
-    $returnValue = 0;
-
-    $result = mysql_query(
-            "SELECT IntValue " .
-              "FROM ExtendAStoryVariable " .
-             "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the " . $variableName . " value from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Problem fetching " . $variableName . " row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $returnValue = $row[ 0 ];
-        }
-    }
-
-    return $returnValue;
-}
-
 function createEpisode( &$error, &$fatal, $parent, $scheme )
 {
     // insert the episode into the database
@@ -530,10 +439,10 @@ function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, 
 
 function extensionNotification( &$error, &$fatal, $email, $parent, $episode, $authorName )
 {
-    $storyName      = getStringValue( $error, $fatal, "StoryName"      );
-    $storyHome      = getStringValue( $error, $fatal, "StoryHome"      );
-    $readEpisodeURL = getStringValue( $error, $fatal, "ReadEpisodeURL" );
-    $adminEmail     = getStringValue( $error, $fatal, "AdminEmail"     );
+    $storyName      = Util::getStringValue( "StoryName"      );
+    $storyHome      = Util::getStringValue( "StoryHome"      );
+    $readEpisodeURL = Util::getStringValue( "ReadEpisodeURL" );
+    $adminEmail     = Util::getStringValue( "AdminEmail"     );
 
     $message = "This is an automated message.\n" .
                "\n" .
@@ -624,15 +533,7 @@ function canEditEpisode( $sessionID, $userID, $episodeID )
 
     if ( $sessionID == $authorSessionID )
     {
-        $error = "";
-        $fatal = false;
-
-        $maxEditDays = getIntValue( $error, $fatal, "MaxEditDays" );
-
-        if ( ! empty( $error ))
-        {
-            return false;
-        }
+        $maxEditDays = Util::getIntValue( "MaxEditDays" );
 
         $creationTime = strtotime( $creationDate );
         $curTime      = time();

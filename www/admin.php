@@ -40,21 +40,15 @@ if ( isset( $_REQUEST[ "command" ] ))
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
-$error = "";
-$fatal = false;
-
-if ( empty( $error ))
-{
-    $storyName      = getStringValue( $error, $fatal, "StoryName"      );
-    $siteName       = getStringValue( $error, $fatal, "SiteName"       );
-    $storyHome      = getStringValue( $error, $fatal, "StoryHome"      );
-    $siteHome       = getStringValue( $error, $fatal, "SiteHome"       );
-    $readEpisodeURL = getStringValue( $error, $fatal, "ReadEpisodeURL" );
-    $adminEmail     = getStringValue( $error, $fatal, "AdminEmail"     );
-    $isWriteable    = getStringValue( $error, $fatal, "IsWriteable"    );
-    $maxLinks       = getIntValue(    $error, $fatal, "MaxLinks"       );
-    $maxEditDays    = getIntValue(    $error, $fatal, "MaxEditDays"    );
-}
+$storyName      = Util::getStringValue( "StoryName"      );
+$siteName       = Util::getStringValue( "SiteName"       );
+$storyHome      = Util::getStringValue( "StoryHome"      );
+$siteHome       = Util::getStringValue( "SiteHome"       );
+$readEpisodeURL = Util::getStringValue( "ReadEpisodeURL" );
+$adminEmail     = Util::getStringValue( "AdminEmail"     );
+$isWriteable    = Util::getStringValue( "IsWriteable"    );
+$maxLinks       = Util::getIntValue(    "MaxLinks"       );
+$maxEditDays    = Util::getIntValue(    "MaxEditDays"    );
 
 $message = "";
 
@@ -78,6 +72,9 @@ if (( $command != ""                   ) &&
     $message = "Invalid Command";
     $command = "";
 }
+
+$error = "";
+$fatal = false;
 
 if (( $command == "login" ) && ( empty( $error )))
 {

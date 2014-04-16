@@ -40,19 +40,16 @@ if ( isset( $_GET[ "episode" ] ))
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
-$error = "";
-$fatal = false;
-
-if ( empty( $error ))
-{
-    $storyName   = getStringValue( $error, $fatal, "StoryName"   );
-    $siteName    = getStringValue( $error, $fatal, "SiteName"    );
-    $storyHome   = getStringValue( $error, $fatal, "StoryHome"   );
-    $siteHome    = getStringValue( $error, $fatal, "SiteHome"    );
-    $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
-}
+$storyName   = Util::getStringValue( "StoryName"   );
+$siteName    = Util::getStringValue( "SiteName"    );
+$storyHome   = Util::getStringValue( "StoryHome"   );
+$siteHome    = Util::getStringValue( "SiteHome"    );
+$isWriteable = Util::getStringValue( "IsWriteable" );
 
 $permissionLevel = 0;
+
+$error = "";
+$fatal = false;
 
 if (( $userID != 0 ) && ( empty( $error )))
 {
@@ -495,8 +492,8 @@ manually unlock it, if you wish.
 }
 else
 {
-    $countDate = getStringValue( $error, $fatal, "CountDate" );
-    $countValue = getAndIncrementIntValue( $error, $fatal, "CountValue" );
+    $countDate = Util::getStringValue( "CountDate" );
+    $countValue = Util::getAndIncrementIntValue( "CountValue" );
 
 ?>
 

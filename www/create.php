@@ -188,21 +188,15 @@ $editing = ( $command == "Edit"        ) ||
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
-$error = "";
-$fatal = false;
-
-if ( empty( $error ))
-{
-    $storyName   = getStringValue( $error, $fatal, "StoryName"   );
-    $siteName    = getStringValue( $error, $fatal, "SiteName"    );
-    $storyHome   = getStringValue( $error, $fatal, "StoryHome"   );
-    $siteHome    = getStringValue( $error, $fatal, "SiteHome"    );
-    $adminEmail  = getStringValue( $error, $fatal, "AdminEmail"  );
-    $maxLinks    = getIntValue(    $error, $fatal, "MaxLinks"    );
-    $countDate   = getStringValue( $error, $fatal, "CountDate"   );
-    $countValue  = getIntValue(    $error, $fatal, "CountValue"  );
-    $isWriteable = getStringValue( $error, $fatal, "IsWriteable" );
-}
+$storyName   = Util::getStringValue( "StoryName"   );
+$siteName    = Util::getStringValue( "SiteName"    );
+$storyHome   = Util::getStringValue( "StoryHome"   );
+$siteHome    = Util::getStringValue( "SiteHome"    );
+$adminEmail  = Util::getStringValue( "AdminEmail"  );
+$maxLinks    = Util::getIntValue(    "MaxLinks"    );
+$countDate   = Util::getStringValue( "CountDate"   );
+$countValue  = Util::getIntValue(    "CountValue"  );
+$isWriteable = Util::getStringValue( "IsWriteable" );
 
 if ( $isWriteable == "N" )
 {
@@ -237,6 +231,9 @@ You are unable to create episodes while episode creation is disabled.
 
     exit;
 }
+
+$error = "";
+$fatal = false;
 
 if (( empty( $error )) && ( $command == "Lock" ) && ( $episode != 1 ))
 {
