@@ -308,10 +308,7 @@ if ( $command == "changePasswordSave" )
     }
 }
 
-$error = "";
-$fatal = false;
-
-if (( $command == "configureSave" ) && ( empty( $error )))
+if ( $command == "configureSave" )
 {
     $newStoryName      = $_POST[ "newStoryName"      ];
     $newSiteName       = $_POST[ "newSiteName"       ];
@@ -411,15 +408,15 @@ if (( $command == "configureSave" ) && ( empty( $error )))
 
     if ( empty( $message ))
     {
-        setStringValue( $error, $fatal, "StoryName",      $newStoryName                       );
-        setStringValue( $error, $fatal, "SiteName",       $newSiteName                        );
-        setStringValue( $error, $fatal, "StoryHome",      $newStoryHome                       );
-        setStringValue( $error, $fatal, "SiteHome",       $newSiteHome                        );
-        setStringValue( $error, $fatal, "ReadEpisodeURL", $newReadEpisodeURL                  );
-        setStringValue( $error, $fatal, "AdminEmail",     $newAdminEmail                      );
-        setStringValue( $error, $fatal, "IsWriteable",    ( $newIsWriteable == 1 ? "Y" : "N" ));
-        setIntValue(    $error, $fatal, "MaxLinks",       $newMaxLinks                        );
-        setIntValue(    $error, $fatal, "MaxEditDays",    $newMaxEditDays                     );
+        Util::setStringValue( "StoryName",      $newStoryName                       );
+        Util::setStringValue( "SiteName",       $newSiteName                        );
+        Util::setStringValue( "StoryHome",      $newStoryHome                       );
+        Util::setStringValue( "SiteHome",       $newSiteHome                        );
+        Util::setStringValue( "ReadEpisodeURL", $newReadEpisodeURL                  );
+        Util::setStringValue( "AdminEmail",     $newAdminEmail                      );
+        Util::setStringValue( "IsWriteable",    ( $newIsWriteable == 1 ? "Y" : "N" ));
+        Util::setIntValue(    "MaxLinks",       $newMaxLinks                        );
+        Util::setIntValue(    "MaxEditDays",    $newMaxEditDays                     );
 
         $storyName      = $newStoryName;
         $siteName       = $newSiteName;
@@ -438,6 +435,9 @@ if (( $command == "configureSave" ) && ( empty( $error )))
         $message = "Problems saving configuration:<P>" . $message;
     }
 }
+
+$error = "";
+$fatal = false;
 
 if (( $command == "addUserSave" ) && ( empty( $error )))
 {

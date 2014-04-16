@@ -81,34 +81,6 @@ function displayError( $error, $fatal )
     exit;
 }
 
-function setStringValue( &$error, &$fatal, $variableName, $variableValue )
-{
-    $result = mysql_query(
-            "UPDATE ExtendAStoryVariable " .
-               "SET StringValue = '" . mysql_escape_string( $variableValue ) . "' " .
-             "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
-
-    if ( ! $result )
-    {
-        $error .= "Problem setting the " . $variableName . " value in the database.<BR>";
-        $fatal = true;
-    }
-}
-
-function setIntValue( &$error, &$fatal, $variableName, $variableValue )
-{
-    $result = mysql_query(
-            "UPDATE ExtendAStoryVariable " .
-               "SET IntValue = " . $variableValue . " " .
-             "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
-
-    if ( ! $result )
-    {
-        $error .= "Problem setting the " . $variableName . " value in the database.<BR>";
-        $fatal = true;
-    }
-}
-
 function createEpisode( &$error, &$fatal, $parent, $scheme )
 {
     // insert the episode into the database

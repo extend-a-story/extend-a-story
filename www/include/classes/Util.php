@@ -241,6 +241,34 @@ class Util
 
         return $row[ 0 ];
     }
+
+    public static function setStringValue( $variableName, $variableValue )
+    {
+        $result = mysql_query(
+                "UPDATE ExtendAStoryVariable " .
+                   "SET StringValue = '" . mysql_escape_string( $variableValue ) . "' " .
+                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException(
+                    "Problem setting the " . $variableName . " value in the database." );
+        }
+    }
+
+    public static function setIntValue( $variableName, $variableValue )
+    {
+        $result = mysql_query(
+                "UPDATE ExtendAStoryVariable " .
+                   "SET IntValue = " . $variableValue . " " .
+                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException(
+                    "Problem setting the " . $variableName . " value in the database." );
+        }
+    }
 }
 
 ?>
