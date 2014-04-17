@@ -215,8 +215,8 @@ class Util
 
             if ( ! $result )
             {
-            throw new HardStoryException(
-                    "Unable to increment the " . $variableName . " value in the database." );
+                throw new HardStoryException(
+                        "Unable to increment the " . $variableName . " value in the database." );
             }
         }
 
