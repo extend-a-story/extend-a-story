@@ -81,31 +81,6 @@ function displayError( $error, $fatal )
     exit;
 }
 
-function extensionNotification( &$error, &$fatal, $email, $parent, $episode, $authorName )
-{
-    $storyName      = Util::getStringValue( "StoryName"      );
-    $storyHome      = Util::getStringValue( "StoryHome"      );
-    $readEpisodeURL = Util::getStringValue( "ReadEpisodeURL" );
-    $adminEmail     = Util::getStringValue( "AdminEmail"     );
-
-    $message = "This is an automated message.\n" .
-               "\n" .
-               "Episode " . $episode . ", a child of episode " . $parent .
-               ", has been created.\n" .
-               $readEpisodeURL . "?episode=" . $episode . "\n" .
-               "\n" .
-               "Author of the new episode: " . $authorName . "\n" .
-               "\n" .
-               "This email was automatically generated and sent because at some\n" .
-               "point you created one or more episodes in the expandable story\n" .
-               "          " . $storyName . "\n" .
-               "     " . $storyHome . "\n" .
-               "and asked to be notified when someone expanded your story line.";
-
-    mail( $email, $storyName . " - Extension", $message,
-          "From: " . $adminEmail, "-f" . $adminEmail );
-}
-
 function getEpisodeBodyTranslationTable()
 {
     return array( "&lt;P&gt;"  => "<P>",

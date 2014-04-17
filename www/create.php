@@ -1203,8 +1203,7 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
     if ( $adminEmail != "-" )
     {
         // send a notification email to the administrator
-        extensionNotification(
-                $error, $fatal, $adminEmail, $parentToUpdate, $episodeToUpdate, $authorName );
+        Util::extensionNotification( $adminEmail, $parentToUpdate, $episodeToUpdate, $authorName );
 
         // send a notification email (if applicable) to the author of the parent episode
         $result = mysql_query( "SELECT AuthorNotify, " .
@@ -1233,8 +1232,8 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
 
                 if ( $tempAuthorNotify == "Y" )
                 {
-                    extensionNotification( $error, $fatal, $tempAuthorEmail, $parentToUpdate,
-                                           $episodeToUpdate, $authorName );
+                    Util::extensionNotification( $tempAuthorEmail, $parentToUpdate,
+                                                 $episodeToUpdate, $authorName );
                 }
             }
         }
