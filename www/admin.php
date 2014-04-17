@@ -532,9 +532,6 @@ if ( $command == "addUserSave" )
     }
 }
 
-$error = "";
-$fatal = false;
-
 if (( $command == "editUser"     ) ||
     ( $command == "editUserSave" ) ||
     ( $command == "deleteUser"   ))
@@ -574,8 +571,7 @@ if (( $command == "editUser"     ) ||
 
         if ( ! $result )
         {
-            $error .= "Unable to query user for editing from database.<BR>";
-            $fatal = true;
+            throw new HardStoryException( "Unable to query user for editing from database." );
         }
         else
         {
@@ -596,7 +592,7 @@ if (( $command == "editUser"     ) ||
     }
 }
 
-if (( $command == "editUserSave" ) && ( empty( $error )))
+if ( $command == "editUserSave" )
 {
     $newLoginName       = $_POST[ "newLoginName"       ];
     $newUserName        = $_POST[ "newUserName"        ];
@@ -684,8 +680,7 @@ if (( $command == "editUserSave" ) && ( empty( $error )))
 
         if ( ! $result )
         {
-            $error .= "Unable to query database for existing login name.<BR>";
-            $fatal = true;
+            throw new HardStoryException( "Unable to query database for existing login name." );
         }
         else
         {
@@ -693,8 +688,8 @@ if (( $command == "editUserSave" ) && ( empty( $error )))
 
             if ( ! $row )
             {
-                $error .= "Unable to fetch existing login name count row from database.<BR>";
-                $fatal = true;
+                throw new HardStoryException(
+                        "Unable to fetch existing login name count row from database." );
             }
             else
             {
@@ -733,8 +728,7 @@ if (( $command == "editUserSave" ) && ( empty( $error )))
 
         if ( ! $result )
         {
-            $error .= "Unable to update user record.<BR>";
-            $fatal = true;
+            throw new HardStoryException( "Unable to update user record." );
         }
         else
         {
@@ -752,7 +746,7 @@ if (( $command == "editUserSave" ) && ( empty( $error )))
     }
 }
 
-if (( $command == "deleteUserSave" ) && ( empty( $error )))
+if ( $command == "deleteUserSave" )
 {
     $deletedUserID = 0;
 
@@ -775,8 +769,7 @@ if (( $command == "deleteUserSave" ) && ( empty( $error )))
 
         if ( ! $result )
         {
-            $error .= "Problem deleting user from the database.<BR>";
-            $fatal = true;
+            throw new HardStoryException( "Problem deleting user from the database." );
         }
         else if ( mysql_affected_rows() == 0 )
         {
@@ -789,7 +782,7 @@ if (( $command == "deleteUserSave" ) && ( empty( $error )))
     }
 }
 
-if (( $command == "listOrphans" ) && ( empty( $error )))
+if ( $command == "listOrphans" )
 {
     $orphans = mysql_query( "SELECT Episode.EpisodeID, " .
                                    "Episode.Parent, " .
@@ -808,12 +801,11 @@ if (( $command == "listOrphans" ) && ( empty( $error )))
 
     if ( ! $orphans )
     {
-        $error .= "Unable to query list of orphans from the database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to query list of orphans from the database." );
     }
 }
 
-if (( $command == "listDeadEnds" ) && ( empty( $error )))
+if ( $command == "listDeadEnds" )
 {
     $deadEnds = mysql_query( "SELECT Episode.EpisodeID " .
                              "FROM Link " .
@@ -825,36 +817,30 @@ if (( $command == "listDeadEnds" ) && ( empty( $error )))
 
     if ( ! $deadEnds )
     {
-        $error .= "Unable to query list of dead ends from the database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to query list of dead ends from the database." );
     }
 }
 
 if ( $command == "listRecentEdits" )
 {
-    if ( empty( $error ))
-    {
-        $result = mysql_query( "SELECT MAX( EpisodeEditLogID ) FROM EpisodeEditLog" );
+    $result = mysql_query( "SELECT MAX( EpisodeEditLogID ) FROM EpisodeEditLog" );
 
-        if ( ! $result )
+    if ( ! $result )
+    {
+        throw new HardStoryException( "Unable to query the max EpisodeEditLogID from database." );
+    }
+    else
+    {
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
         {
-            $error .= "Unable to query the max EpisodeEditLogID from database.<BR>";
-            $fatal = true;
+            throw new HardStoryException(
+                    "Unable to retrieve the max EpisodeEditLogID record from database." );
         }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Unable to retrieve the max EpisodeEditLogID record from " .
-                          "database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $maxEpisodeEditLogID = (int) $row[ 0 ];
-            }
+            $maxEpisodeEditLogID = (int) $row[ 0 ];
         }
     }
 
@@ -881,25 +867,15 @@ if ( $command == "listRecentEdits" )
 
     if ( ! $edits )
     {
-        $error .= "Unable to query list of recent edits from the database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to query list of recent edits from the database." );
     }
 }
 
-if ( empty( $error ))
-{
-    $users = mysql_query( "SELECT UserID, LoginName FROM User ORDER BY UserID" );
+$users = mysql_query( "SELECT UserID, LoginName FROM User ORDER BY UserID" );
 
-    if ( ! $users )
-    {
-        $error .= "Unable to query user list from database.<BR>";
-        $fatal = true;
-    }
-}
-
-if ( ! empty( $error ))
+if ( ! $users )
 {
-    displayError( $error, $fatal );
+    throw new HardStoryException( "Unable to query user list from database." );
 }
 
 if ( $command == "listOrphans" )
