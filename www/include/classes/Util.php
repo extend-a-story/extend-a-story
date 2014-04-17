@@ -409,6 +409,160 @@ class Util
             throw new HardStoryException( "Unable to insert the link into the database." );
         }
     }
+
+    public static function createEpisodeEditLog( $episode, $editLogEntry )
+    {
+        // read the episode to log from the database
+        $result = mysql_query( "SELECT SchemeID, ImageID, IsLinkable, IsExtendable, " .
+                                      "AuthorMailto, AuthorNotify, Title, Text, AuthorName, " .
+                                      "AuthorEmail " .
+                                 "FROM Episode WHERE EpisodeID = " . $episode );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to query original episode from database." );
+        }
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException( "Unable to fetch original episode row from database." );
+        }
+
+        $schemeID     = $row[ 0 ];
+        $imageID      = $row[ 1 ];
+        $isLinkable   = $row[ 2 ];
+        $isExtendable = $row[ 3 ];
+        $authorMailto = $row[ 4 ];
+        $authorNotify = $row[ 5 ];
+        $title        = $row[ 6 ];
+        $text         = $row[ 7 ];
+        $authorName   = $row[ 8 ];
+        $authorEmail  = $row[ 9 ];
+
+        // insert the episode edit log into the database
+        $result = mysql_query( "INSERT " .
+                                 "INTO EpisodeEditLog " .
+                                      "( " .
+                                          "EpisodeID, " .
+                                          "SchemeID, " .
+                                          "ImageID, " .
+                                          "IsLinkable, " .
+                                          "IsExtendable, " .
+                                          "AuthorMailto, " .
+                                          "AuthorNotify, " .
+                                          "Title, " .
+                                          "Text, " .
+                                          "AuthorName, " .
+                                          "AuthorEmail, " .
+                                          "EditDate, " .
+                                          "EditLogEntry " .
+                                      ") " .
+                               "VALUES " .
+                                      "( " .
+                                                $episode                             .  ", " .
+                                                $schemeID                            .  ", " .
+                                                $imageID                             .  ", " .
+                                          "'" . $isLinkable                          . "', " .
+                                          "'" . $isExtendable                        . "', " .
+                                          "'" . $authorMailto                        . "', " .
+                                          "'" . $authorNotify                        . "', " .
+                                          "'" . mysql_escape_string( $title        ) . "', " .
+                                          "'" . mysql_escape_string( $text         ) . "', " .
+                                          "'" . mysql_escape_string( $authorName   ) . "', " .
+                                          "'" . mysql_escape_string( $authorEmail  ) . "', " .
+                                          "'" . date( "n/j/Y g:i:s A" )              . "', " .
+                                          "'" . mysql_escape_string( $editLogEntry ) . "' "  .
+                                      ")" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException(
+                    "Unable to insert the episode edit log into the database." );
+        }
+
+        // get the new EpisodeEditLogID from the database
+        $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to query the new EpisodeEditLogID." );
+        }
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException( "Unable to fetch the new EpisodeEditLogID row." );
+        }
+
+        $nextEpisodeEditLogID = $row[ 0 ];
+
+        // read the options to log from the database
+        $result = mysql_query( "SELECT TargetEpisodeID, " .
+                                      "IsBackLink, " .
+                                      "Description " .
+                                 "FROM Link " .
+                                "WHERE SourceEpisodeID = " . $episode . " " .
+                                "ORDER BY LinkID" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to query episode links from the database." );
+        }
+
+        for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+        {
+            $row = mysql_fetch_row( $result );
+            Util::createLinkEditLog( $nextEpisodeEditLogID, $row[ 0 ], $row[ 1 ], $row[ 2 ] );
+        }
+
+        return $nextEpisodeEditLogID;
+    }
+
+    public static function createLinkEditLog( $episodeEditLogID, $targetEpisodeID, $isBackLink,
+                                              $description )
+    {
+        // insert the link edit log into the database
+        $result = mysql_query( "INSERT " .
+                                 "INTO LinkEditLog " .
+                                      "( " .
+                                          "EpisodeEditLogID, " .
+                                          "TargetEpisodeID, " .
+                                          "IsBackLink, " .
+                                          "Description " .
+                                      ") " .
+                               "VALUES " .
+                                      "( " .
+                                                $episodeEditLogID                   .  ", " .
+                                                $targetEpisodeID                    .  ", " .
+                                          "'" . $isBackLink                         . "', " .
+                                          "'" . mysql_escape_string( $description ) . "' " .
+                                      ")" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to insert the link edit log into the database." );
+        }
+
+        // get the new LinkEditLogID from the database
+        $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to query the new LinkEditLogID." );
+        }
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException( "Unable to fetch the new LinkEditLogID row." );
+        }
+
+        return $row[ 0 ];
+    }
 }
 
 ?>

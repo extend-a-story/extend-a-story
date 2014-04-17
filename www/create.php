@@ -1274,7 +1274,7 @@ if (( $command == "EditSave" ) && ( empty( $error )))
     }
 
     // save the previous episode into the edit log
-    createEpisodeEditLog( $error, $fatal, $episode, "Edited by " . $userName . "." );
+    Util::createEpisodeEditLog( $episode, "Edited by " . $userName . "." );
 
     $result = mysql_query(
             "UPDATE Episode " .

@@ -431,8 +431,7 @@ if ( $command == "AddLinkSave" )
     {
         if ( empty( $error ))
         {
-            createEpisodeEditLog( $error, $fatal, $episode,
-                                  "New link added by " . $userName . "." );
+            Util::createEpisodeEditLog( $episode, "New link added by " . $userName . "." );
         }
 
         if ( $linkEpisode == 0 )
@@ -539,7 +538,7 @@ if ( $command == "DeleteSelectedLinkSave" )
 {
     if ( empty( $error ))
     {
-        createEpisodeEditLog( $error, $fatal, $episode, "Link deleted by " . $userName . "." );
+        Util::createEpisodeEditLog( $episode, "Link deleted by " . $userName . "." );
     }
 
     if ( empty( $error ))
@@ -654,8 +653,7 @@ if ( $command == "DeleteEpisodeSave" )
     {
         if ( empty( $error ))
         {
-            createEpisodeEditLog( $error, $fatal, $episode,
-                                  "Episode deleted by " . $userName . "." );
+            Util::createEpisodeEditLog( $episode, "Episode deleted by " . $userName . "." );
         }
 
         if ( empty( $error ))
@@ -712,8 +710,8 @@ if ( $command == "RevokeAuthorSave" )
 {
     if ( empty( $error ))
     {
-        createEpisodeEditLog( $error, $fatal, $episode,
-                              "Author's edit permission revoked by " . $userName . "." );
+        Util::createEpisodeEditLog( $episode,
+                                    "Author's edit permission revoked by " . $userName . "." );
     }
 
     if ( empty( $error ))
