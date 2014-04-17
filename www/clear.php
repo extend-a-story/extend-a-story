@@ -82,39 +82,27 @@ You are unable to clear locks while episode creation is disabled.
     exit;
 }
 
-$error = "";
-$fatal = false;
+$result = mysql_query( "SELECT Parent, " .
+                              "Status, " .
+                              "LockKey " .
+                         "FROM Episode " .
+                        "WHERE EpisodeID = " . $episode );
 
-if ( empty( $error ))
+if ( ! $result )
 {
-    $result = mysql_query( "SELECT Parent, " .
-                                  "Status, " .
-                                  "LockKey " .
-                             "FROM Episode " .
-                            "WHERE EpisodeID = " . $episode );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the episode from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Problem fetching episode row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $parent         = $row[ 0 ];
-            $status         = $row[ 1 ];
-            $episodeLockKey = $row[ 2 ];
-        }
-    }
+    throw new HardStoryException( "Problem retrieving the episode from the database." );
 }
+
+$row = mysql_fetch_row( $result );
+
+if ( ! $row )
+{
+    throw new HardStoryException( "Problem fetching episode row from the database." );
+}
+
+$parent         = $row[ 0 ];
+$status         = $row[ 1 ];
+$episodeLockKey = $row[ 2 ];
 
 if (( $status != 1 ) && ( $status != 3 ))
 {
@@ -186,28 +174,19 @@ correct key to unlock it at that time.
     exit;
 }
 
-if ( empty( $error ))
+$sessionColumn = ( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID";
+$statusValue = ( $status == 1 ) ? 0 : 2;
+
+$result = mysql_query( "UPDATE Episode " .
+                          "SET " . $sessionColumn . " = 0, " .
+                              "Status = " . $statusValue . ", " .
+                              "LockDate = '-', " .
+                              "LockKey = 0 " .
+                        "WHERE EpisodeID = " . $episode );
+
+if ( ! $result )
 {
-    $sessionColumn = ( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID";
-    $statusValue = ( $status == 1 ) ? 0 : 2;
-
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET " . $sessionColumn . " = 0, " .
-                                  "Status = " . $statusValue . ", " .
-                                  "LockDate = '-', " .
-                                  "LockKey = 0 " .
-                            "WHERE EpisodeID = " . $episode );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to unlock the episode record.<BR>";
-        $fatal = true;
-    }
-}
-
-if ( ! empty( $error ))
-{
-    displayError( $error, $fatal );
+    throw new HardStoryException( "Unable to unlock the episode record." );
 }
 
 ?>
