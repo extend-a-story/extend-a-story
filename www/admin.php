@@ -91,27 +91,25 @@ if ( $command == "login" )
     {
         throw new HardStoryException( "Unable to query user table in database." );
     }
+
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        $message = "Invalid login name and/or password.";
+    }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $message = "Successfully logged in.";
+        $userID = $row[ 0 ];
 
-        if ( ! $row )
+        $result = mysql_query( "UPDATE Session " .
+                                  "SET UserID = " . $userID . " " .
+                                "WHERE SessionID = " . $sessionID );
+
+        if ( ! $result )
         {
-            $message = "Invalid login name and/or password.";
-        }
-        else
-        {
-            $message = "Successfully logged in.";
-            $userID = $row[ 0 ];
-
-            $result = mysql_query( "UPDATE Session " .
-                                      "SET UserID = " . $userID . " " .
-                                    "WHERE SessionID = " . $sessionID );
-
-            if ( ! $result )
-            {
-                throw new HardStoryException( "Unable to update session record." );
-            }
+            throw new HardStoryException( "Unable to update session record." );
         }
     }
 }
@@ -124,11 +122,9 @@ if ( $command == "logout" )
     {
         throw new HardStoryException( "Unable to update session record." );
     }
-    else
-    {
-        $message = "Successfully logged out.";
-        $userID = 0;
-    }
+
+    $message = "Successfully logged out.";
+    $userID = 0;
 }
 
 if ( $userID == 0 )
@@ -209,20 +205,16 @@ if ( ! $result )
 {
     throw new HardStoryException( "Unable to query user information from database." );
 }
-else
-{
-    $row = mysql_fetch_row( $result );
 
-    if ( ! $row )
-    {
-        throw new HardStoryException( "Unable to fetch user information row from database." );
-    }
-    else
-    {
-        $permissionLevel = $row[ 0 ];
-        $userName        = $row[ 1 ];
-    }
+$row = mysql_fetch_row( $result );
+
+if ( ! $row )
+{
+    throw new HardStoryException( "Unable to fetch user information row from database." );
 }
+
+$permissionLevel = $row[ 0 ];
+$userName        = $row[ 1 ];
 
 if ((( $permissionLevel < 2           ) &&
      (( $command == "listOrphans"    ) ||
@@ -262,48 +254,42 @@ if ( $command == "changePasswordSave" )
     {
         throw new HardStoryException( "Unable to query user record from database." );
     }
+
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        throw new HardStoryException( "Unable to fetch user count row from database." );
+    }
+
+    if ( $row[ 0 ] != 1 )
+    {
+        $message = "Error: Old password is incorrect.";
+    }
     else
     {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
+        if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
         {
-            throw new HardStoryException( "Unable to fetch user count row from database." );
+            $message = "Error: You must enter a new password.";
+        }
+        else if ( $newPassword1 != $newPassword2 )
+        {
+            $message = "Error: New passwords do not match.";
         }
         else
         {
-            if ( $row[ 0 ] != 1 )
-            {
-                $message = "Error: Old password is incorrect.";
-            }
-            else
-            {
-                if (( empty( $newPassword1 )) && ( empty( $newPassword2 )))
-                {
-                    $message = "Error: You must enter a new password.";
-                }
-                else if ( $newPassword1 != $newPassword2 )
-                {
-                    $message = "Error: New passwords do not match.";
-                }
-                else
-                {
-                    $result = mysql_query(
-                            "UPDATE User " .
-                               "SET Password = PASSWORD( '" .
-                                               mysql_escape_string( $newPassword1 ) . "' ) " .
-                             "WHERE UserID = " . $userID );
+            $result = mysql_query(
+                    "UPDATE User " .
+                       "SET Password = PASSWORD( '" .
+                                       mysql_escape_string( $newPassword1 ) . "' ) " .
+                     "WHERE UserID = " . $userID );
 
-                    if ( ! $result )
-                    {
-                        throw new HardStoryException( "Unable to update user record." );
-                    }
-                    else
-                    {
-                        $message = "Password successfully changed.";
-                    }
-                }
+            if ( ! $result )
+            {
+                throw new HardStoryException( "Unable to update user record." );
             }
+
+            $message = "Password successfully changed.";
         }
     }
 }
@@ -500,20 +486,16 @@ if ( $command == "addUserSave" )
     {
         throw new HardStoryException( "Unable to query database for existing login name." );
     }
-    else
-    {
-        $row = mysql_fetch_row( $result );
 
-        if ( ! $row )
-        {
-            throw new HardStoryException(
-                    "Unable to fetch existing login name count row from database." );
-        }
-        else
-        {
-            $count = $row[ 0 ];
-        }
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        throw new HardStoryException(
+                "Unable to fetch existing login name count row from database." );
     }
+
+    $count = $row[ 0 ];
 
     if ( $count != 0 )
     {
@@ -573,21 +555,19 @@ if (( $command == "editUser"     ) ||
         {
             throw new HardStoryException( "Unable to query user for editing from database." );
         }
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            $message = "The specified user does not exist.";
+            $command = "";
+        }
         else
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $message = "The specified user does not exist.";
-                $command = "";
-            }
-            else
-            {
-                $oldPermissionLevel = $row[ 0 ];
-                $oldLoginName       = $row[ 1 ];
-                $oldUserName        = $row[ 2 ];
-            }
+            $oldPermissionLevel = $row[ 0 ];
+            $oldLoginName       = $row[ 1 ];
+            $oldUserName        = $row[ 2 ];
         }
     }
 }
@@ -682,20 +662,16 @@ if ( $command == "editUserSave" )
         {
             throw new HardStoryException( "Unable to query database for existing login name." );
         }
-        else
-        {
-            $row = mysql_fetch_row( $result );
 
-            if ( ! $row )
-            {
-                throw new HardStoryException(
-                        "Unable to fetch existing login name count row from database." );
-            }
-            else
-            {
-                $count = $row[ 0 ];
-            }
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException(
+                    "Unable to fetch existing login name count row from database." );
         }
+
+        $count = $row[ 0 ];
 
         if ( $count != 0 )
         {
@@ -730,15 +706,13 @@ if ( $command == "editUserSave" )
         {
             throw new HardStoryException( "Unable to update user record." );
         }
-        else
-        {
-            if ( $userID == $editedUserID )
-            {
-                $userName = $newUserName;
-            }
 
-            $message = "User Edited";
+        if ( $userID == $editedUserID )
+        {
+            $userName = $newUserName;
         }
+
+        $message = "User Edited";
     }
     else
     {
@@ -771,7 +745,8 @@ if ( $command == "deleteUserSave" )
         {
             throw new HardStoryException( "Problem deleting user from the database." );
         }
-        else if ( mysql_affected_rows() == 0 )
+
+        if ( mysql_affected_rows() == 0 )
         {
             $message = "The specified user does not exist.";
         }
@@ -829,20 +804,16 @@ if ( $command == "listRecentEdits" )
     {
         throw new HardStoryException( "Unable to query the max EpisodeEditLogID from database." );
     }
-    else
-    {
-        $row = mysql_fetch_row( $result );
 
-        if ( ! $row )
-        {
-            throw new HardStoryException(
-                    "Unable to retrieve the max EpisodeEditLogID record from database." );
-        }
-        else
-        {
-            $maxEpisodeEditLogID = (int) $row[ 0 ];
-        }
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        throw new HardStoryException(
+                "Unable to retrieve the max EpisodeEditLogID record from database." );
     }
+
+    $maxEpisodeEditLogID = (int) $row[ 0 ];
 
     $start = 0;
 

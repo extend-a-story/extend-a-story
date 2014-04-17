@@ -83,27 +83,25 @@ class Util
         {
             throw new HardStoryException( "Problem retrieving your session from the database." );
         }
-        else
+
+        $row = mysql_fetch_row( $result );
+
+        if ( $row )
         {
-            $row = mysql_fetch_row( $result );
-
-            if ( $row )
+            if ( $row[ 1 ] == $originalSessionKey )
             {
-                if ( $row[ 1 ] == $originalSessionKey )
+                $actualSessionID  = $originalSessionID;
+                $actualUserID     = $row[ 0 ];
+                $actualSessionKey = $originalSessionKey;
+
+                $result = mysql_query( "UPDATE Session " .
+                                          "SET AccessDate = NOW() " .
+                                        "WHERE SessionID = " . $originalSessionID );
+
+                if ( ! $result )
                 {
-                    $actualSessionID  = $originalSessionID;
-                    $actualUserID     = $row[ 0 ];
-                    $actualSessionKey = $originalSessionKey;
-
-                    $result = mysql_query( "UPDATE Session " .
-                                              "SET AccessDate = NOW() " .
-                                            "WHERE SessionID = " . $originalSessionID );
-
-                    if ( ! $result )
-                    {
-                        throw new HardStoryException(
-                                "Problem updating your session in the database." );
-                    }
+                    throw new HardStoryException(
+                            "Problem updating your session in the database." );
                 }
             }
         }
