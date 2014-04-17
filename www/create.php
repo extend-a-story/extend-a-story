@@ -1134,7 +1134,7 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
 {
     if ( $extending )
     {
-        $episodeToUpdate = createEpisode( $error, $fatal, $episode, $scheme );
+        $episodeToUpdate = Util::createEpisode( $episode, $scheme );
         createLink( $error, $fatal, $episode, $episodeToUpdate, $extendedLink, false );
         $parentToUpdate = $episode;
         $createdEpisode = $episodeToUpdate;
@@ -1194,7 +1194,7 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
             }
             else
             {
-                $newEpisode = createEpisode( $error, $fatal, $episodeToUpdate, $scheme );
+                $newEpisode = Util::createEpisode( $episodeToUpdate, $scheme );
                 createLink( $error, $fatal, $episodeToUpdate, $newEpisode, $$var1, false );
             }
         }

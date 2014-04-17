@@ -310,6 +310,76 @@ class Util
 
         return $row[ 0 ];
     }
+
+    public static function createEpisode( $parent, $scheme )
+    {
+        // insert the episode into the database
+        $result = mysql_query( "INSERT " .
+                                 "INTO Episode " .
+                                      "( " .
+                                          "Parent, " .
+                                          "AuthorSessionID, " .
+                                          "EditorSessionID, " .
+                                          "SchemeID, " .
+                                          "ImageID, " .
+                                          "Status, " .
+                                          "IsLinkable, " .
+                                          "IsExtendable, " .
+                                          "AuthorMailto, " .
+                                          "AuthorNotify, " .
+                                          "Title, " .
+                                          "Text, " .
+                                          "AuthorName, " .
+                                          "AuthorEmail, " .
+                                          "CreationDate, " .
+                                          "LockDate, " .
+                                          "LockKey, " .
+                                          "CreationTimestamp " .
+                                      ") " .
+                               "VALUES " .
+                                      "( " .
+                                          $parent        . ", " .
+                                          "0"            . ", " .
+                                          "0"            . ", " .
+                                          $scheme        . ", " .
+                                          "0"            . ", " .
+                                          "0"            . ", " .
+                                          "'N'"          . ", " .
+                                          "'N'"          . ", " .
+                                          "'N'"          . ", " .
+                                          "'N'"          . ", " .
+                                          "'-'"          . ", " .
+                                          "'-'"          . ", " .
+                                          "'-'"          . ", " .
+                                          "'-'"          . ", " .
+                                          "'-'"          . ", " .
+                                          "'-'"          . ", " .
+                                          "0"            . ", " .
+                                          "null"         .  " " .
+                                      ")" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to insert the episode into the database." );
+        }
+
+        // get the new EpisodeID from the database
+        $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to query the new EpisodeID." );
+        }
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException( "Unable to fetch the new EpisodeID row." );
+        }
+
+        return $row[ 0 ];
+    }
 }
 
 ?>

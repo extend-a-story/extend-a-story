@@ -439,7 +439,7 @@ if ( $command == "AddLinkSave" )
         {
             if ( empty( $error ))
             {
-                $newEpisode = createEpisode( $error, $fatal, $episode, $scheme );
+                $newEpisode = Util::createEpisode( $episode, $scheme );
             }
 
             if ( empty( $error ))
