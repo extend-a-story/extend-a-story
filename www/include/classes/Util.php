@@ -269,6 +269,49 @@ class Util
                     "Problem setting the " . $variableName . " value in the database." );
         }
     }
+
+    public static function createUser( $permissionLevel, $loginName, $password, $userName )
+    {
+        // insert the user into the database
+        $result = mysql_query(
+                "INSERT " .
+                  "INTO User " .
+                       "( " .
+                           "PermissionLevel, " .
+                           "LoginName, " .
+                           "Password, " .
+                           "UserName " .
+                       ") " .
+                "VALUES " .
+                       "( " .
+                                           $permissionLevel                  .    ", " .
+                                     "'" . mysql_escape_string( $loginName ) .   "', " .
+                           "PASSWORD( '" . mysql_escape_string( $password  ) . "' ), " .
+                                     "'" . mysql_escape_string( $userName  ) .    "' " .
+                       ")" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to insert the user into the database." );
+        }
+
+        // get the new UserID from the database
+        $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to query the new UserID." );
+        }
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException( "Unable to fetch the new UserID row." );
+        }
+
+        return $row[ 0 ];
+    }
 }
 
 ?>

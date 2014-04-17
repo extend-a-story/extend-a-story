@@ -436,10 +436,7 @@ if ( $command == "configureSave" )
     }
 }
 
-$error = "";
-$fatal = false;
-
-if (( $command == "addUserSave" ) && ( empty( $error )))
+if ( $command == "addUserSave" )
 {
     $newLoginName       = $_POST[ "newLoginName"       ];
     $newUserName        = $_POST[ "newUserName"        ];
@@ -501,8 +498,7 @@ if (( $command == "addUserSave" ) && ( empty( $error )))
 
     if ( ! $result )
     {
-        $error .= "Unable to query database for existing login name.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to query database for existing login name." );
     }
     else
     {
@@ -510,8 +506,8 @@ if (( $command == "addUserSave" ) && ( empty( $error )))
 
         if ( ! $row )
         {
-            $error .= "Unable to fetch existing login name count row from database.<BR>";
-            $fatal = true;
+            throw new HardStoryException(
+                    "Unable to fetch existing login name count row from database." );
         }
         else
         {
@@ -526,8 +522,7 @@ if (( $command == "addUserSave" ) && ( empty( $error )))
 
     if ( empty( $message ))
     {
-        createUser( $error, $fatal, $newPermissionLevel, $newLoginName, $newPassword1,
-                    $newUserName );
+        Util::createUser( $newPermissionLevel, $newLoginName, $newPassword1, $newUserName );
 
         $message = "User Added";
     }
@@ -536,6 +531,9 @@ if (( $command == "addUserSave" ) && ( empty( $error )))
         $message = "Problems adding user:<P>" . $message;
     }
 }
+
+$error = "";
+$fatal = false;
 
 if (( $command == "editUser"     ) ||
     ( $command == "editUserSave" ) ||

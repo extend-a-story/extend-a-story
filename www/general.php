@@ -361,54 +361,6 @@ function createLinkEditLog( &$error, &$fatal, $episodeEditLogID, $targetEpisodeI
     return $row[ 0 ];
 }
 
-function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, $userName )
-{
-    // insert the user into the database
-    $result = mysql_query( "INSERT " .
-                             "INTO User " .
-                                  "( " .
-                                      "PermissionLevel, " .
-                                      "LoginName, " .
-                                      "Password, " .
-                                      "UserName " .
-                                  ") " .
-                           "VALUES " .
-                                  "( " .
-                                                      $permissionLevel                  .    ", " .
-                                                "'" . mysql_escape_string( $loginName ) .   "', " .
-                                      "PASSWORD( '" . mysql_escape_string( $password  ) . "' ), " .
-                                                "'" . mysql_escape_string( $userName  ) .    "' " .
-                                  ")" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to insert the user into the database.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    // get the new UserID from the database
-    $result = mysql_query( "SELECT LAST_INSERT_ID()" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to query the new UserID.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    $row = mysql_fetch_row( $result );
-
-    if ( ! $row )
-    {
-        $error .= "Unable to fetch the new UserID row.<BR>";
-        $fatal = true;
-        return;
-    }
-
-    return $row[ 0 ];
-}
-
 function extensionNotification( &$error, &$fatal, $email, $parent, $episode, $authorName )
 {
     $storyName      = Util::getStringValue( "StoryName"      );
