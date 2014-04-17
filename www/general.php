@@ -81,38 +81,6 @@ function displayError( $error, $fatal )
     exit;
 }
 
-function createLink( &$error, &$fatal, $sourceEpisode, $targetEpisode, $description,
-                     $isBackLink )
-{
-    $description = mysql_escape_string( $description );
-
-    // insert the link into the database
-    $result = mysql_query( "INSERT " .
-                             "INTO Link " .
-                                  "( " .
-                                      "SourceEpisodeID, " .
-                                      "TargetEpisodeID, " .
-                                      "IsCreated, " .
-                                      "IsBackLink, " .
-                                      "Description " .
-                                  ") " .
-                           "VALUES " .
-                                  "( " .
-                                              $sourceEpisode            .  ", " .
-                                              $targetEpisode            .  ", " .
-                                      "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
-                                      "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
-                                      "'" .   $description              . "' "  .
-                                  ")" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to insert the link into the database.<BR>";
-        $fatal = true;
-        return;
-    }
-}
-
 function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
 {
     // read the episode to log from the database

@@ -444,14 +444,14 @@ if ( $command == "AddLinkSave" )
 
             if ( empty( $error ))
             {
-                createLink( $error, $fatal, $episode, $newEpisode, $linkDescription, false );
+                Util::createLink( $episode, $newEpisode, $linkDescription, false );
             }
         }
         else
         {
             if ( empty( $error ))
             {
-                createLink( $error, $fatal, $episode, $linkEpisode, $linkDescription, true );
+                Util::createLink( $episode, $linkEpisode, $linkDescription, true );
             }
         }
 

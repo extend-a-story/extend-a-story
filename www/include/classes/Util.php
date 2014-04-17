@@ -380,6 +380,35 @@ class Util
 
         return $row[ 0 ];
     }
+
+    public static function createLink( $sourceEpisode, $targetEpisode, $description, $isBackLink )
+    {
+        $description = mysql_escape_string( $description );
+
+        // insert the link into the database
+        $result = mysql_query( "INSERT " .
+                                 "INTO Link " .
+                                      "( " .
+                                          "SourceEpisodeID, " .
+                                          "TargetEpisodeID, " .
+                                          "IsCreated, " .
+                                          "IsBackLink, " .
+                                          "Description " .
+                                      ") " .
+                               "VALUES " .
+                                      "( " .
+                                                  $sourceEpisode            .  ", " .
+                                                  $targetEpisode            .  ", " .
+                                          "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
+                                          "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
+                                          "'" .   $description              . "' "  .
+                                      ")" );
+
+        if ( ! $result )
+        {
+            throw new HardStoryException( "Unable to insert the link into the database." );
+        }
+    }
 }
 
 ?>
