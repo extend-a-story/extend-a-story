@@ -89,7 +89,7 @@ $body = "<BODY BGCOLOR=\"" . $bgcolor . "\" " .
               ( empty( $background ) ? ">" :
                                        " BACKGROUND=\"" . $background . "\">" );
 
-$result = mysql_query( "select SchemeID, SchemeName from Scheme" );
+$result = mysql_query( "SELECT SchemeID, SchemeName FROM Scheme" );
 
 if ( ! $result )
 {
