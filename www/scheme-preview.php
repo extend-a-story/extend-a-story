@@ -45,76 +45,55 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$error = "";
-$fatal = false;
+$result = mysql_query( "SELECT SchemeName, " .
+                              "bgcolor, " .
+                              "text, " .
+                              "link, " .
+                              "vlink, " .
+                              "alink, " .
+                              "background, " .
+                              "UncreatedLink, " .
+                              "CreatedLink, " .
+                              "BackLinkedLink " .
+                         "FROM Scheme " .
+                        "WHERE SchemeID = " . $scheme );
 
-if ( empty( $error ))
+if ( ! $result )
 {
-    $result = mysql_query( "SELECT SchemeName, " .
-                                  "bgcolor, " .
-                                  "text, " .
-                                  "link, " .
-                                  "vlink, " .
-                                  "alink, " .
-                                  "background, " .
-                                  "UncreatedLink, " .
-                                  "CreatedLink, " .
-                                  "BackLinkedLink " .
-                             "FROM Scheme " .
-                            "WHERE SchemeID = " . $scheme );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the scheme from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Problem fetching scheme row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $schemeName     = $row[ 0 ];
-            $bgcolor        = $row[ 1 ];
-            $text           = $row[ 2 ];
-            $link           = $row[ 3 ];
-            $vlink          = $row[ 4 ];
-            $alink          = $row[ 5 ];
-            $background     = $row[ 6 ];
-            $uncreatedLink  = $row[ 7 ];
-            $createdLink    = $row[ 8 ];
-            $backLinkedLink = $row[ 9 ];
-
-            $body = "<BODY BGCOLOR=\"" . $bgcolor . "\" " .
-                          "TEXT=\""    . $text    . "\" " .
-                          "LINK=\""    . $link    . "\" " .
-                          "VLINK=\""   . $vlink   . "\" " .
-                          "ALINK=\""   . $alink   . "\""  .
-                          ( empty( $background ) ? ">" :
-                                                   " BACKGROUND=\"" . $background . "\">" );
-        }
-    }
+    throw new HardStoryException( "Problem retrieving the scheme from the database." );
 }
 
-if ( empty( $error ))
-{
-    $result = mysql_query( "select SchemeID, SchemeName from Scheme" );
+$row = mysql_fetch_row( $result );
 
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the list of schemes from the database.<BR>";
-        $fatal = true;
-    }
+if ( ! $row )
+{
+    throw new HardStoryException( "Problem fetching scheme row from the database." );
 }
 
-if ( ! empty( $error ))
+$schemeName     = $row[ 0 ];
+$bgcolor        = $row[ 1 ];
+$text           = $row[ 2 ];
+$link           = $row[ 3 ];
+$vlink          = $row[ 4 ];
+$alink          = $row[ 5 ];
+$background     = $row[ 6 ];
+$uncreatedLink  = $row[ 7 ];
+$createdLink    = $row[ 8 ];
+$backLinkedLink = $row[ 9 ];
+
+$body = "<BODY BGCOLOR=\"" . $bgcolor . "\" " .
+              "TEXT=\""    . $text    . "\" " .
+              "LINK=\""    . $link    . "\" " .
+              "VLINK=\""   . $vlink   . "\" " .
+              "ALINK=\""   . $alink   . "\""  .
+              ( empty( $background ) ? ">" :
+                                       " BACKGROUND=\"" . $background . "\">" );
+
+$result = mysql_query( "select SchemeID, SchemeName from Scheme" );
+
+if ( ! $result )
 {
-    displayError( $error, $fatal );
+    throw new HardStoryException( "Problem retrieving the list of schemes from the database." );
 }
 
 ?>
