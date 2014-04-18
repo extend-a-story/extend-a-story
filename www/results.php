@@ -68,68 +68,56 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$error = "";
-$fatal = false;
-
-if ( empty( $error ))
+if ( $method == "title" )
 {
-    if ( $method == "title" )
-    {
-        $whereClause = "Title LIKE '%" . mysql_escape_string( $text ) . "%' " .
-                   "AND ( Status = 2 OR Status = 3 )";
-    }
-
-    if ( $method == "text" )
-    {
-        $whereClause = "Text LIKE '%" . mysql_escape_string( $text ) . "%' " .
-                   "AND ( Status = 2 OR Status = 3 )";
-    }
-
-    if ( $method == "author" )
-    {
-        $whereClause = "AuthorName LIKE '%" . mysql_escape_string( $text ) . "%' " .
-                   "AND ( Status = 2 OR Status = 3 )";
-    }
-
-    if ( $method == "time" )
-    {
-        $whereClause = "CreationDate LIKE '%" . mysql_escape_string( $text ) . "%' " .
-                   "AND ( Status = 2 OR Status = 3 )";
-    }
-
-    if ( $method == "extendable" )
-    {
-        $whereClause = "IsExtendable = 'Y' AND ( Status = 2 OR Status = 3 )";
-    }
-
-    if ( $method == "linkable" )
-    {
-        $whereClause = "IsLinkable = 'Y' AND ( Status = 2 OR Status = 3 )";
-    }
-
-    if ( $method == "days" )
-    {
-        $whereClause = "CreationTimestamp > SUBDATE( NOW(), INTERVAL " . $days . " DAY ) " .
-                   "AND ( Status = 2 OR Status = 3 )";
-    }
-
-    $result = mysql_query( "SELECT EpisodeID, " .
-                                  "Title, " .
-                                  "AuthorName " .
-                             "FROM Episode " .
-                            "WHERE " . $whereClause . " " .
-                            "ORDER BY EpisodeID" );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the search results from the database.<BR>";
-        $fatal = true;
-    }
+    $whereClause = "Title LIKE '%" . mysql_escape_string( $text ) . "%' " .
+               "AND ( Status = 2 OR Status = 3 )";
 }
 
-if ( ! empty( $error ))
+if ( $method == "text" )
 {
-    displayError( $error, $fatal );
+    $whereClause = "Text LIKE '%" . mysql_escape_string( $text ) . "%' " .
+               "AND ( Status = 2 OR Status = 3 )";
+}
+
+if ( $method == "author" )
+{
+    $whereClause = "AuthorName LIKE '%" . mysql_escape_string( $text ) . "%' " .
+               "AND ( Status = 2 OR Status = 3 )";
+}
+
+if ( $method == "time" )
+{
+    $whereClause = "CreationDate LIKE '%" . mysql_escape_string( $text ) . "%' " .
+               "AND ( Status = 2 OR Status = 3 )";
+}
+
+if ( $method == "extendable" )
+{
+    $whereClause = "IsExtendable = 'Y' AND ( Status = 2 OR Status = 3 )";
+}
+
+if ( $method == "linkable" )
+{
+    $whereClause = "IsLinkable = 'Y' AND ( Status = 2 OR Status = 3 )";
+}
+
+if ( $method == "days" )
+{
+    $whereClause = "CreationTimestamp > SUBDATE( NOW(), INTERVAL " . $days . " DAY ) " .
+               "AND ( Status = 2 OR Status = 3 )";
+}
+
+$result = mysql_query( "SELECT EpisodeID, " .
+                              "Title, " .
+                              "AuthorName " .
+                         "FROM Episode " .
+                        "WHERE " . $whereClause . " " .
+                        "ORDER BY EpisodeID" );
+
+if ( ! $result )
+{
+    throw new HardStoryException( "Problem retrieving the search results from the database." );
 }
 
 ?>
