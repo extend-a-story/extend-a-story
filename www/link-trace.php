@@ -45,29 +45,17 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$error = "";
-$fatal = false;
+$result = mysql_query( "SELECT Link.SourceEpisodeID, " .
+                              "Episode.Title " .
+                         "FROM Link, " .
+                              "Episode " .
+                        "WHERE Link.SourceEpisodeID = Episode.EpisodeID " .
+                          "AND Link.TargetEpisodeID = " . $episode . " " .
+                        "ORDER BY Episode.EpisodeID" );
 
-if ( empty( $error ))
+if ( ! $result )
 {
-    $result = mysql_query( "SELECT Link.SourceEpisodeID, " .
-                                  "Episode.Title " .
-                             "FROM Link, " .
-                                  "Episode " .
-                            "WHERE Link.SourceEpisodeID = Episode.EpisodeID " .
-                              "AND Link.TargetEpisodeID = " . $episode . " " .
-                            "ORDER BY Episode.EpisodeID" );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the back link trace from the database.<BR>";
-        $fatal = true;
-    }
-}
-
-if ( ! empty( $error ))
-{
-    displayError( $error, $fatal );
+    throw new HardStoryException( "Problem retrieving the back link trace from the database." );
 }
 
 ?>
