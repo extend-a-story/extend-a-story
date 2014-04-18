@@ -48,84 +48,69 @@ $isWriteable = Util::getStringValue( "IsWriteable" );
 
 $permissionLevel = 0;
 
-$error = "";
-$fatal = false;
-
-if (( $userID != 0 ) && ( empty( $error )))
+if ( $userID != 0 )
 {
     $result = mysql_query( "SELECT PermissionLevel FROM User WHERE UserID = " . $userID );
 
     if ( ! $result )
     {
-        $error .= "Unable to query user information from database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Unable to fetch user information row from database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $permissionLevel = $row[ 0 ];
-        }
-    }
-}
-
-if ( empty( $error ))
-{
-    $result = mysql_query( "SELECT COUNT( * ) FROM Link where TargetEpisodeID = " . $episode );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving link count from the database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to query user information from database." );
     }
 
     $row = mysql_fetch_row( $result );
 
     if ( ! $row )
     {
-        $error .= "Problem fetching link count row from the database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to fetch user information row from database." );
     }
 
-    $linkCount = (int) $row[ 0 ];
+    $permissionLevel = $row[ 0 ];
+}
 
-    $result = mysql_query( "SELECT Parent, " .
-                                  "AuthorSessionID, " .
-                                  "EditorSessionID, " .
-                                  "SchemeID, " .
-                                  "ImageID, " .
-                                  "Status, " .
-                                  "IsLinkable, " .
-                                  "IsExtendable, " .
-                                  "AuthorMailto, " .
-                                  "Title, " .
-                                  "Text, " .
-                                  "AuthorName, " .
-                                  "AuthorEmail, " .
-                                  "CreationDate, " .
-                                  "LockDate, " .
-                                  "LockKey " .
-                             "FROM Episode " .
-                            "WHERE EpisodeID = " . $episode );
+$result = mysql_query( "SELECT COUNT( * ) FROM Link where TargetEpisodeID = " . $episode );
 
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the episode from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
+if ( ! $result )
+{
+    throw new HardStoryException( "Problem retrieving link count from the database." );
+}
 
-        if ( ! $row )
-        {
+$row = mysql_fetch_row( $result );
+
+if ( ! $row )
+{
+    throw new HardStoryException( "Problem fetching link count row from the database." );
+}
+
+$linkCount = (int) $row[ 0 ];
+
+$result = mysql_query( "SELECT Parent, " .
+                              "AuthorSessionID, " .
+                              "EditorSessionID, " .
+                              "SchemeID, " .
+                              "ImageID, " .
+                              "Status, " .
+                              "IsLinkable, " .
+                              "IsExtendable, " .
+                              "AuthorMailto, " .
+                              "Title, " .
+                              "Text, " .
+                              "AuthorName, " .
+                              "AuthorEmail, " .
+                              "CreationDate, " .
+                              "LockDate, " .
+                              "LockKey " .
+                         "FROM Episode " .
+                        "WHERE EpisodeID = " . $episode );
+
+if ( ! $result )
+{
+    throw new HardStoryException( "Problem retrieving the episode from the database." );
+}
+
+$row = mysql_fetch_row( $result );
+
+if ( ! $row )
+{
 
 ?>
 
@@ -147,140 +132,122 @@ if ( empty( $error ))
 
 <?php
 
-            exit;
-        }
-
-        $parent          = $row[ 0  ];
-        $authorSessionID = $row[ 1  ];
-        $editorSessionID = $row[ 2  ];
-        $scheme          = $row[ 3  ];
-        $image           = $row[ 4  ];
-        $status          = $row[ 5  ];
-        $isLinkable      = $row[ 6  ];
-        $isExtendable    = $row[ 7  ];
-        $authorMailto    = $row[ 8  ];
-        $title           = $row[ 9  ];
-        $text            = $row[ 10 ];
-        $authorName      = $row[ 11 ];
-        $authorEmail     = $row[ 12 ];
-        $creationDate    = $row[ 13 ];
-        $lockDate        = $row[ 14 ];
-        $lockKey         = $row[ 15 ];
-
-        $title      = htmlentities( $title      );
-        $text       = htmlentities( $text       );
-        $authorName = htmlentities( $authorName );
-
-        $text        = strtr( $text,        getEpisodeBodyTranslationTable()  );
-        $authorEmail = strtr( $authorEmail, getEmailAddressTranslationTable() );
-
-        $lockTime = strtotime( $lockDate );
-        $curTime  = time();
-        $diff     = $curTime - $lockTime;
-        $minutes  = $diff / 60;
-        $minutes  = (int) $minutes;
-        $timeout  = 60 - $minutes;
-
-        if (( $status == 1 ) && ( $minutes > 300 ))
-        {
-            $authorSessionID = 0;
-            $status = 0;
-
-            $result = mysql_query( "UPDATE Episode " .
-                                      "SET AuthorSessionID = 0, " .
-                                          "Status = 0, " .
-                                          "LockDate = '-', " .
-                                          "LockKey = 0 " .
-                                    "WHERE EpisodeID = " . $episode );
-
-            if ( ! $result )
-            {
-                $error .= "Automatic unlock attempt failed.<BR>";
-                $fatal = true;
-            }
-        }
-    }
+    exit;
 }
 
-if ( empty( $error ))
+$parent          = $row[ 0  ];
+$authorSessionID = $row[ 1  ];
+$editorSessionID = $row[ 2  ];
+$scheme          = $row[ 3  ];
+$image           = $row[ 4  ];
+$status          = $row[ 5  ];
+$isLinkable      = $row[ 6  ];
+$isExtendable    = $row[ 7  ];
+$authorMailto    = $row[ 8  ];
+$title           = $row[ 9  ];
+$text            = $row[ 10 ];
+$authorName      = $row[ 11 ];
+$authorEmail     = $row[ 12 ];
+$creationDate    = $row[ 13 ];
+$lockDate        = $row[ 14 ];
+$lockKey         = $row[ 15 ];
+
+$title      = htmlentities( $title      );
+$text       = htmlentities( $text       );
+$authorName = htmlentities( $authorName );
+
+$text        = strtr( $text,        getEpisodeBodyTranslationTable()  );
+$authorEmail = strtr( $authorEmail, getEmailAddressTranslationTable() );
+
+$lockTime = strtotime( $lockDate );
+$curTime  = time();
+$diff     = $curTime - $lockTime;
+$minutes  = $diff / 60;
+$minutes  = (int) $minutes;
+$timeout  = 60 - $minutes;
+
+if (( $status == 1 ) && ( $minutes > 300 ))
 {
-    $result = mysql_query( "SELECT bgcolor, " .
-                                  "text, " .
-                                  "link, " .
-                                  "vlink, " .
-                                  "alink, " .
-                                  "background, " .
-                                  "UncreatedLink, " .
-                                  "CreatedLink, " .
-                                  "BackLinkedLink " .
-                             "FROM Scheme " .
-                            "WHERE SchemeID = " . $scheme );
+    $authorSessionID = 0;
+    $status = 0;
+
+    $result = mysql_query( "UPDATE Episode " .
+                              "SET AuthorSessionID = 0, " .
+                                  "Status = 0, " .
+                                  "LockDate = '-', " .
+                                  "LockKey = 0 " .
+                            "WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
-        $error .= "Problem retrieving the scheme from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Problem fetching scheme row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $bgcolorColor   = $row[ 0 ];
-            $textColor      = $row[ 1 ];
-            $linkColor      = $row[ 2 ];
-            $vlinkColor     = $row[ 3 ];
-            $alinkColor     = $row[ 4 ];
-            $background     = $row[ 5 ];
-            $uncreatedLink  = $row[ 6 ];
-            $createdLink    = $row[ 7 ];
-            $backLinkedLink = $row[ 8 ];
-
-            $body = "<BODY BGCOLOR=\"" . $bgcolorColor . "\" " .
-                          "TEXT=\""    . $textColor    . "\" " .
-                          "LINK=\""    . $linkColor    . "\" " .
-                          "VLINK=\""   . $vlinkColor   . "\" " .
-                          "ALINK=\""   . $alinkColor   . "\""  .
-                          ( empty( $background ) ? ">" :
-                            " BACKGROUND=\"" . $background . "\">" );
-        }
+        throw new HardStoryException( "Automatic unlock attempt failed." );
     }
 }
 
-if (( empty( $error )) && ( $image != 0 ))
+$result = mysql_query( "SELECT bgcolor, " .
+                              "text, " .
+                              "link, " .
+                              "vlink, " .
+                              "alink, " .
+                              "background, " .
+                              "UncreatedLink, " .
+                              "CreatedLink, " .
+                              "BackLinkedLink " .
+                         "FROM Scheme " .
+                        "WHERE SchemeID = " . $scheme );
+
+if ( ! $result )
+{
+    throw new HardStoryException( "Problem retrieving the scheme from the database." );
+}
+
+$row = mysql_fetch_row( $result );
+
+if ( ! $row )
+{
+    throw new HardStoryException( "Problem fetching scheme row from the database." );
+}
+
+$bgcolorColor   = $row[ 0 ];
+$textColor      = $row[ 1 ];
+$linkColor      = $row[ 2 ];
+$vlinkColor     = $row[ 3 ];
+$alinkColor     = $row[ 4 ];
+$background     = $row[ 5 ];
+$uncreatedLink  = $row[ 6 ];
+$createdLink    = $row[ 7 ];
+$backLinkedLink = $row[ 8 ];
+
+$body = "<BODY BGCOLOR=\"" . $bgcolorColor . "\" " .
+              "TEXT=\""    . $textColor    . "\" " .
+              "LINK=\""    . $linkColor    . "\" " .
+              "VLINK=\""   . $vlinkColor   . "\" " .
+              "ALINK=\""   . $alinkColor   . "\""  .
+              ( empty( $background ) ? ">" :
+                " BACKGROUND=\"" . $background . "\">" );
+
+if ( $image != 0 )
 {
     $result = mysql_query( "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
 
     if ( ! $result )
     {
-        $error .= "Problem retrieving the image from the database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Problem retrieving the image from the database." );
     }
-    else
-    {
-        $row = mysql_fetch_row( $result );
 
-        if ( ! $row )
-        {
-            $error .= "Problem fetching image row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $image = $row[ 0 ];
-        }
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        throw new HardStoryException( "Problem fetching image row from the database." );
     }
+
+    $image = $row[ 0 ];
 }
 
 $canEdit = canEditEpisode( $sessionID, $userID, $episode );
 
-if (( $canEdit ) && ( empty( $error )))
+if ( $canEdit )
 {
     $result = mysql_query( "SELECT COUNT( * ) " .
                              "FROM EpisodeEditLog " .
@@ -288,45 +255,30 @@ if (( $canEdit ) && ( empty( $error )))
 
     if ( ! $result )
     {
-        $error = "Problem retrieving edit count from database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Problem retrieving edit count from database." );
     }
-    else
-    {
-        $row = mysql_fetch_row( $result );
 
-        if ( ! $row )
-        {
-            $error = "Problem fetching edit count row from database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $editCount = $row[ 0 ];
-        }
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        throw new HardStoryException( "Problem fetching edit count row from database." );
     }
+
+    $editCount = $row[ 0 ];
 }
 
-if ( empty( $error ))
-{
-    $result = mysql_query( "SELECT TargetEpisodeID, " .
-                                  "IsCreated, " .
-                                  "IsBackLink, " .
-                                  "Description " .
-                             "FROM Link " .
-                            "WHERE SourceEpisodeID = " . $episode . " " .
-                            "ORDER BY LinkID" );
+$result = mysql_query( "SELECT TargetEpisodeID, " .
+                              "IsCreated, " .
+                              "IsBackLink, " .
+                              "Description " .
+                         "FROM Link " .
+                        "WHERE SourceEpisodeID = " . $episode . " " .
+                        "ORDER BY LinkID" );
 
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving links from database.<BR>";
-        $fatal = true;
-    }
-}
-
-if ( ! empty( $error ))
+if ( ! $result )
 {
-    displayError( $error, $fatal );
+    throw new HardStoryException( "Problem retrieving links from database." );
 }
 
 if (( $isWriteable == "N" ) && (( $status == 0 ) || ( $status == 1 )))
