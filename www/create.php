@@ -232,10 +232,7 @@ You are unable to create episodes while episode creation is disabled.
     exit;
 }
 
-$error = "";
-$fatal = false;
-
-if (( empty( $error )) && ( $command == "Lock" ) && ( $episode != 1 ))
+if (( $command == "Lock" ) && ( $episode != 1 ))
 {
     $result = mysql_query( "SELECT COUNT( * ) " .
                              "FROM Link " .
@@ -243,22 +240,18 @@ if (( empty( $error )) && ( $command == "Lock" ) && ( $episode != 1 ))
 
     if ( ! $result )
     {
-        $error .= "Unable to query orphan status from the database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to query orphan status from the database." );
     }
-    else
-    {
-        $row = mysql_fetch_row( $result );
 
-        if ( ! $row )
-        {
-            $error .= "Unable to fetch link count row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            if ( $row[ 0 ] == 0 )
-            {
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        throw new HardStoryException( "Unable to fetch link count row from the database." );
+    }
+
+    if ( $row[ 0 ] == 0 )
+    {
 
 ?>
 
@@ -288,146 +281,123 @@ The episode you are trying to create is an orphan (has no links to it) and canno
 
 <?php
 
-                exit;
-            }
-        }
+        exit;
     }
 }
 
-if ( empty( $error ))
+$schemeList = mysql_query( "SELECT SchemeID, " .
+                                  "SchemeName " .
+                             "FROM Scheme" );
+
+if ( ! $schemeList )
 {
-    $schemeList = mysql_query( "SELECT SchemeID, " .
-                                      "SchemeName " .
-                                 "FROM Scheme" );
+    throw new HardStoryException( "Problem retrieving the list of schemes from the database." );
+}
 
-    if ( ! $schemeList )
+if ( $command == "Edit" )
+{
+    $result = mysql_query( "SELECT Parent, "       .
+                                  "SchemeID, "     .
+                                  "Status, "       .
+                                  "IsLinkable, "   .
+                                  "IsExtendable, " .
+                                  "AuthorMailto, " .
+                                  "AuthorNotify, " .
+                                  "Title, "        .
+                                  "Text, "         .
+                                  "AuthorName, "   .
+                                  "AuthorEmail, "  .
+                                  "CreationDate, " .
+                                  "LockKey "       .
+                             "FROM Episode "       .
+                            "WHERE EpisodeID = " . $episode );
+
+    if ( ! $result )
     {
-        $error .= "Problem retrieving the list of schemes from the database.<BR>";
-        $fatal = true;
+        throw new HardStoryException(
+                "Problem retrieving the episode for editing from the database." );
     }
 
-    if ( $command == "Edit" )
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
     {
-        $result = mysql_query( "SELECT Parent, "       .
-                                      "SchemeID, "     .
-                                      "Status, "       .
-                                      "IsLinkable, "   .
-                                      "IsExtendable, " .
-                                      "AuthorMailto, " .
-                                      "AuthorNotify, " .
-                                      "Title, "        .
-                                      "Text, "         .
-                                      "AuthorName, "   .
-                                      "AuthorEmail, "  .
-                                      "CreationDate, " .
-                                      "LockKey "       .
-                                 "FROM Episode "       .
-                                "WHERE EpisodeID = " . $episode );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving the episode for editing from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                $error .= "Problem fetching episode row for editing from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $parent          = $row[ 0  ];
-                $scheme          = $row[ 1  ];
-                $status          = $row[ 2  ];
-                $linkable        = $row[ 3  ];
-                $extendable      = $row[ 4  ];
-                $mailto          = $row[ 5  ];
-                $notify          = $row[ 6  ];
-                $title           = $row[ 7  ];
-                $text            = $row[ 8  ];
-                $authorName      = $row[ 9  ];
-                $authorEmail     = $row[ 10 ];
-                $creationDate    = $row[ 11 ];
-                $episodeLockKey  = $row[ 12 ];
-
-                $linkable   = ( $linkable   == "Y" ? 1 : 0 );
-                $extendable = ( $extendable == "Y" ? 1 : 0 );
-                $mailto     = ( $mailto     == "Y" ? 1 : 0 );
-                $notify     = ( $notify     == "Y" ? 1 : 0 );
-            }
-        }
+        throw new HardStoryException(
+                "Problem fetching episode row for editing from the database." );
     }
-    else
+
+    $parent          = $row[ 0  ];
+    $scheme          = $row[ 1  ];
+    $status          = $row[ 2  ];
+    $linkable        = $row[ 3  ];
+    $extendable      = $row[ 4  ];
+    $mailto          = $row[ 5  ];
+    $notify          = $row[ 6  ];
+    $title           = $row[ 7  ];
+    $text            = $row[ 8  ];
+    $authorName      = $row[ 9  ];
+    $authorEmail     = $row[ 10 ];
+    $creationDate    = $row[ 11 ];
+    $episodeLockKey  = $row[ 12 ];
+
+    $linkable   = ( $linkable   == "Y" ? 1 : 0 );
+    $extendable = ( $extendable == "Y" ? 1 : 0 );
+    $mailto     = ( $mailto     == "Y" ? 1 : 0 );
+    $notify     = ( $notify     == "Y" ? 1 : 0 );
+}
+else
+{
+    $result = mysql_query( "SELECT Parent, "       .
+                                  "SchemeID, "     .
+                                  "Status, "       .
+                                  "IsExtendable, " .
+                                  "CreationDate, " .
+                                  "LockKey "       .
+                             "FROM Episode "       .
+                            "WHERE EpisodeID = " . $episode );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT Parent, "       .
-                                      "SchemeID, "     .
-                                      "Status, "       .
-                                      "IsExtendable, " .
-                                      "CreationDate, " .
-                                      "LockKey "       .
-                                 "FROM Episode "       .
-                                "WHERE EpisodeID = " . $episode );
+        throw new HardStoryException( "Problem retrieving the episode from the database." );
+    }
 
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving the episode from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $row = mysql_fetch_row( $result );
+    $row = mysql_fetch_row( $result );
 
-            if ( ! $row )
-            {
-                $error .= "Problem fetching episode row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $parent         = $row[ 0 ];
-                $schemeID       = $row[ 1 ];
-                $status         = $row[ 2 ];
-                $isExtendable   = $row[ 3 ];
-                $creationDate   = $row[ 4 ];
-                $episodeLockKey = $row[ 5 ];
+    if ( ! $row )
+    {
+        throw new HardStoryException( "Problem fetching episode row from the database." );
+    }
 
-                if (( $command == "Lock" ) || ( $command == "Extend" ))
-                {
-                    $scheme = $schemeID;
-                }
-            }
-        }
+    $parent         = $row[ 0 ];
+    $schemeID       = $row[ 1 ];
+    $status         = $row[ 2 ];
+    $isExtendable   = $row[ 3 ];
+    $creationDate   = $row[ 4 ];
+    $episodeLockKey = $row[ 5 ];
+
+    if (( $command == "Lock" ) || ( $command == "Extend" ))
+    {
+        $scheme = $schemeID;
     }
 }
 
 $canEdit = canEditEpisode( $sessionID, $userID, $episode );
 
 // verify that the selected scheme is in the database
-if ( empty( $error ))
+$result = mysql_query( "SELECT SchemeName " .
+                         "FROM Scheme " .
+                        "WHERE SchemeID = " . $scheme );
+
+if ( ! $result )
 {
-    $result = mysql_query( "SELECT SchemeName " .
-                             "FROM Scheme " .
-                            "WHERE SchemeID = " . $scheme );
+    throw new HardStoryException( "Problem retrieving scheme from the database." );
+}
 
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving scheme from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
+$row = mysql_fetch_row( $result );
 
-        if ( ! $row )
-        {
-            $error .= "Problem fetching scheme row from the database.<BR>";
-            $fatal = true;
-        }
-    }
+if ( ! $row )
+{
+    throw new HardStoryException( "Problem fetching scheme row from the database." );
 }
 
 if ( $mailto == 1 )
@@ -466,11 +436,9 @@ else
     $extendableChecked = "";
 }
 
-if ( empty( $error ))
+if (( $command == "Lock" ) &&
+    ( $status != 0       ))
 {
-    if (( $command == "Lock" ) &&
-        ( $status != 0       ))
-    {
 
 ?>
 
@@ -501,13 +469,13 @@ currently working on. Wait a few moments and try again.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if (( $command == "Edit" ) &&
-        (( $status != 2     ) ||
-         ( ! $canEdit       )))
-    {
+if (( $command == "Edit" ) &&
+    (( $status != 2     ) ||
+     ( ! $canEdit       )))
+{
 
 ?>
 
@@ -538,13 +506,13 @@ or you don't have permission to edit this episode.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ((( $command == "Preview" ) ||
-         ( $command == "Save"    )) &&
-        ( $status != 1            ))
-    {
+if ((( $command == "Preview" ) ||
+     ( $command == "Save"    )) &&
+    ( $status != 1            ))
+{
 
 ?>
 
@@ -575,13 +543,13 @@ obtain a lock on this episode and then you may proceed with creating it.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ((( $command == "EditPreview" ) ||
-         ( $command == "EditSave"    )) &&
-        ( $status != 3                ))
-    {
+if ((( $command == "EditPreview" ) ||
+     ( $command == "EditSave"    )) &&
+    ( $status != 3                ))
+{
 
 ?>
 
@@ -612,13 +580,13 @@ obtain a lock on this episode and then you may proceed with editing it.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ((( $command == "Preview"      ) ||
-         ( $command == "Save"         )) &&
-        ( $lockKey != $episodeLockKey  ))
-    {
+if ((( $command == "Preview"      ) ||
+     ( $command == "Save"         )) &&
+    ( $lockKey != $episodeLockKey  ))
+{
 
 ?>
 
@@ -650,13 +618,13 @@ on this episode, and then you may proceed with creating it.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ((( $command == "EditPreview"  ) ||
-         ( $command == "EditSave"     )) &&
-        ( $lockKey != $episodeLockKey  ))
-    {
+if ((( $command == "EditPreview"  ) ||
+     ( $command == "EditSave"     )) &&
+    ( $lockKey != $episodeLockKey  ))
+{
 
 ?>
 
@@ -688,14 +656,14 @@ on this episode, and then you may proceed with editing it.
 
 <?php
 
-        exit;
-    }
+    exit;
+}
 
-    if ((( $command == "Extend"        ) ||
-         ( $command == "ExtendPreview" ) ||
-         ( $command == "ExtendSave"    )) &&
-        ( $isExtendable != "Y"          ))
-    {
+if ((( $command == "Extend"        ) ||
+     ( $command == "ExtendPreview" ) ||
+     ( $command == "ExtendSave"    )) &&
+    ( $isExtendable != "Y"          ))
+{
 
 ?>
 
@@ -725,8 +693,7 @@ You are trying to extend an episode that is not extendable.
 
 <?php
 
-        exit;
-    }
+    exit;
 }
 
 prepareParam( $extendedLink );
@@ -828,87 +795,81 @@ if ( $notify == 1 )
 
 $linkFound = false;
 
-if ( empty( $error ))
+if ( $editing )
 {
-    if ( $editing )
+    $result = mysql_query( "SELECT LinkID, " .
+                                  "TargetEpisodeID, " .
+                                  "IsBacklink, " .
+                                  "Description " .
+                             "FROM Link " .
+                            "WHERE SourceEpisodeID = " . $episode . " " .
+                            "ORDER BY LinkID" );
+
+    if ( ! $result )
     {
-        $result = mysql_query( "SELECT LinkID, " .
-                                      "TargetEpisodeID, " .
-                                      "IsBacklink, " .
-                                      "Description " .
-                                 "FROM Link " .
-                                "WHERE SourceEpisodeID = " . $episode . " " .
-                                "ORDER BY LinkID" );
-
-        if ( ! $result )
-        {
-            $error .= "Problem retrieving the links from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $linkCount = mysql_num_rows( $result );
-
-            for ( $i = 0; $i < $linkCount; $i++ )
-            {
-                $row = mysql_fetch_row( $result );
-
-                $var1 = "linkID"          . $i;
-                $var2 = "targetEpisodeID" . $i;
-                $var3 = "isBackLink"      . $i;
-                $var4 = "option"          . $i;
-                $var5 = "backlink"        . $i;
-
-                $$var1 = $row[ 0 ];
-                $$var2 = $row[ 1 ];
-                $$var3 = $row[ 2 ];
-
-                // if we are previewing or saving, read the option description from the form,
-                // otherwise read it from the database
-                $$var4 = ((( $command == "EditPreview" ) || ( $command == "EditSave" )) ?
-                         $_POST[ $var4 ] : $row[ 3 ] );
-
-                // if we are previewing or saving, read the backlinked episode from the form,
-                // otherwise read it from the database
-                $$var5 = ((( $command == "EditPreview" ) || ( $command == "EditSave" )) ?
-                         $_POST[ $var5 ] : $$var2 );
-
-                prepareParam( $$var4 );
-
-                $$var5 = (int) $$var5;
-            }
-        }
+        throw new HardStoryException( "Problem retrieving the links from the database." );
     }
-    else
+
+    $linkCount = mysql_num_rows( $result );
+
+    for ( $i = 0; $i < $linkCount; $i++ )
     {
-        $linkCount = $maxLinks;
+        $row = mysql_fetch_row( $result );
 
-        for ( $i = 0; $i < $linkCount; $i++ )
+        $var1 = "linkID"          . $i;
+        $var2 = "targetEpisodeID" . $i;
+        $var3 = "isBackLink"      . $i;
+        $var4 = "option"          . $i;
+        $var5 = "backlink"        . $i;
+
+        $$var1 = $row[ 0 ];
+        $$var2 = $row[ 1 ];
+        $$var3 = $row[ 2 ];
+
+        // if we are previewing or saving, read the option description from the form,
+        // otherwise read it from the database
+        $$var4 = ((( $command == "EditPreview" ) || ( $command == "EditSave" )) ?
+                 $_POST[ $var4 ] : $row[ 3 ] );
+
+        // if we are previewing or saving, read the backlinked episode from the form,
+        // otherwise read it from the database
+        $$var5 = ((( $command == "EditPreview" ) || ( $command == "EditSave" )) ?
+                 $_POST[ $var5 ] : $$var2 );
+
+        prepareParam( $$var4 );
+
+        $$var5 = (int) $$var5;
+    }
+}
+else
+{
+    $linkCount = $maxLinks;
+
+    for ( $i = 0; $i < $linkCount; $i++ )
+    {
+        $var1 = "linkID"          . $i;
+        $var2 = "targetEpisodeID" . $i;
+        $var3 = "isBackLink"      . $i;
+        $var4 = "option"          . $i;
+        $var5 = "backlink"        . $i;
+
+        $$var1 = 0;
+        $$var2 = 0;
+        $$var3 = "N";
+        $$var4 = "";
+        $$var5 = 0;
+
+        if ( isset( $_POST[ $var4 ] ))
         {
-            $var1 = "linkID"          . $i;
-            $var2 = "targetEpisodeID" . $i;
-            $var3 = "isBackLink"      . $i;
-            $var4 = "option"          . $i;
-            $var5 = "backlink"        . $i;
-
-            $$var1 = 0;
-            $$var2 = 0;
-            $$var3 = "N";
-            $$var4 = "";
-            $$var5 = 0;
-
-            if ( isset( $_POST[ $var4 ] ))
-            {
-                $$var4 = $_POST[ $var4 ];
-            }
-
-            if ( isset( $_POST[ $var5 ] ))
-            {
-                $$var5 = (int) $_POST[ $var5 ];
-            }
-
-            prepareParam( $$var4 );
+            $$var4 = $_POST[ $var4 ];
         }
+
+        if ( isset( $_POST[ $var5 ] ))
+        {
+            $$var5 = (int) $_POST[ $var5 ];
+        }
+
+        prepareParam( $$var4 );
     }
 }
 
@@ -953,35 +914,29 @@ for ( $i = 0; $i < $linkCount; $i++ )
             $warning .= "Option " . ( $i + 1 ) . " is back linked, but has no description.<BR>";
         }
 
-        if ( empty( $error ))
+        $result = mysql_query( "SELECT IsLinkable " .
+                                 "FROM Episode " .
+                                "WHERE EpisodeID = " . $$var2 );
+
+        if ( ! $result )
         {
-            $result = mysql_query( "SELECT IsLinkable " .
-                                     "FROM Episode " .
-                                    "WHERE EpisodeID = " . $$var2 );
+            throw new HardStoryException( "Problem retrieving an episode from the database to " .
+                                          "determine if it is linkable." );
+        }
 
-            if ( ! $result )
-            {
-                $error .= "Problem retrieving an episode from the database to determine if " .
-                          "it is linkable.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $row = mysql_fetch_row( $result );
+        $row = mysql_fetch_row( $result );
 
-                if ( ! $row )
-                {
-                    $warning .= "The back linked episode for option " . ( $i + 1 ) .
-                                " doesn't exist.<BR>";
-                }
-                else
-                {
-                    if ( $row[ 0 ] != "Y" )
-                    {
-                        $warning .= "The back linked episode for option " . ( $i + 1 ) .
-                                    " is not linkable.<BR>";
-                    }
-                }
+        if ( ! $row )
+        {
+            $warning .= "The back linked episode for option " . ( $i + 1 ) .
+                        " doesn't exist.<BR>";
+        }
+        else
+        {
+            if ( $row[ 0 ] != "Y" )
+            {
+                $warning .= "The back linked episode for option " . ( $i + 1 ) .
+                            " is not linkable.<BR>";
             }
         }
     }
@@ -1066,7 +1021,7 @@ else if ( $command == "EditPreview" )
     $bodyString = "You are now previewing your changes to episode " . $episode . ".";
 }
 
-if (( $command == "Lock" ) && ( empty( $error )))
+if ( $command == "Lock" )
 {
     $lockKey = mt_rand();
 
@@ -1079,12 +1034,11 @@ if (( $command == "Lock" ) && ( empty( $error )))
 
     if ( ! $result )
     {
-        $error .= "Unable to lock the episode.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to lock the episode." );
     }
 }
 
-if (( $command == "Preview" ) && ( empty( $error )))
+if ( $command == "Preview" )
 {
     $result = mysql_query( "UPDATE Episode " .
                               "SET AuthorSessionID = "  . $sessionID              . ", " .
@@ -1093,12 +1047,11 @@ if (( $command == "Preview" ) && ( empty( $error )))
 
     if ( ! $result )
     {
-        $error .= "Unable to update the lock on the episode.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to update the lock on the episode." );
     }
 }
 
-if (( $command == "Edit" ) && ( empty( $error )))
+if ( $command == "Edit" )
 {
     $lockKey = mt_rand();
 
@@ -1111,12 +1064,11 @@ if (( $command == "Edit" ) && ( empty( $error )))
 
     if ( ! $result )
     {
-        $error .= "Unable to lock the episode for editing.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to lock the episode for editing." );
     }
 }
 
-if (( $command == "EditPreview" ) && ( empty( $error )))
+if ( $command == "EditPreview" )
 {
     $result = mysql_query( "UPDATE Episode " .
                               "SET EditorSessionID = "  . $sessionID              . ", " .
@@ -1125,12 +1077,11 @@ if (( $command == "EditPreview" ) && ( empty( $error )))
 
     if ( ! $result )
     {
-        $error .= "Unable to update the edit lock on the episode.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to update the edit lock on the episode." );
     }
 }
 
-if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error )))
+if (( $command == "Save" ) || ( $command == "ExtendSave" ))
 {
     if ( $extending )
     {
@@ -1166,8 +1117,7 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
 
     if ( ! $result )
     {
-        $error .= "Unable to update the episode record.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to update the episode record." );
     }
 
     $result = mysql_query( "UPDATE Link " .
@@ -1177,8 +1127,7 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
 
     if ( ! $result )
     {
-        $error .= "Unable to update the link record.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to update the link record." );
     }
 
     for ( $i = 0; $i < $linkCount; $i++ )
@@ -1213,34 +1162,30 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
 
         if ( ! $result )
         {
-            $error .= "Problem retrieving the parent episode from the database.<BR>";
-            $fatal = true;
+            throw new HardStoryException(
+                    "Problem retrieving the parent episode from the database." );
         }
-        else
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
         {
-            $row = mysql_fetch_row( $result );
+            throw new HardStoryException(
+                    "Problem fetching parent episode row from the database." );
+        }
 
-            if ( ! $row )
-            {
-                $error .= "Problem fetching parent episode row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $tempAuthorNotify = $row[ 0 ];
-                $tempAuthorEmail  = $row[ 1 ];
+        $tempAuthorNotify = $row[ 0 ];
+        $tempAuthorEmail  = $row[ 1 ];
 
-                if ( $tempAuthorNotify == "Y" )
-                {
-                    Util::extensionNotification( $tempAuthorEmail, $parentToUpdate,
-                                                 $episodeToUpdate, $authorName );
-                }
-            }
+        if ( $tempAuthorNotify == "Y" )
+        {
+            Util::extensionNotification( $tempAuthorEmail, $parentToUpdate,
+                                         $episodeToUpdate, $authorName );
         }
     }
 }
 
-if (( $command == "EditSave" ) && ( empty( $error )))
+if ( $command == "EditSave" )
 {
     // if the editor is a user, look up their name for the edit log
     if ( $userID != 0 )
@@ -1249,23 +1194,17 @@ if (( $command == "EditSave" ) && ( empty( $error )))
 
         if ( ! $result )
         {
-            $error .= "Unable to query user from the database.<BR>";
-            $fatal = true;
+            throw new HardStoryException( "Unable to query user from the database." );
         }
-        else
-        {
-            $row = mysql_fetch_row( $result );
 
-            if ( ! $row )
-            {
-                $error .= "Unable to fetch user row from the database.<BR>";
-                $fatal = true;
-            }
-            else
-            {
-                $userName = $row[ 0 ];
-            }
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException( "Unable to fetch user row from the database." );
         }
+
+        $userName = $row[ 0 ];
     }
     else
     {
@@ -1295,8 +1234,7 @@ if (( $command == "EditSave" ) && ( empty( $error )))
 
     if ( ! $result )
     {
-        $error .= "Unable to update the episode record for editing.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Unable to update the episode record for editing." );
     }
 
     for ( $i = 0; $i < $linkCount; $i++ )
@@ -1324,15 +1262,9 @@ if (( $command == "EditSave" ) && ( empty( $error )))
 
         if ( ! $result )
         {
-            $error .= "Unable to update the link record for editing.<BR>";
-            $fatal = true;
+            throw new HardStoryException( "Unable to update the link record for editing." );
         }
     }
-}
-
-if ( ! empty( $error ))
-{
-    displayError( $error, $fatal );
 }
 
 if ( $command == "Save" )
