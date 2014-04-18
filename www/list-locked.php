@@ -38,26 +38,14 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$error = "";
-$fatal = false;
+$result = mysql_query( "SELECT EpisodeID " .
+                         "FROM Episode " .
+                        "WHERE Status = 1 " .
+                        "ORDER BY EpisodeID" );
 
-if ( empty( $error ))
+if ( ! $result )
 {
-    $result = mysql_query( "SELECT EpisodeID " .
-                             "FROM Episode " .
-                            "WHERE Status = 1 " .
-                            "ORDER BY EpisodeID" );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving locked episode list from the database.<BR>";
-        $fatal = true;
-    }
-}
-
-if ( ! empty( $error ))
-{
-    displayError( $error, $fatal );
+    throw new HardStoryException( "Problem retrieving locked episode list from the database." );
 }
 
 ?>
