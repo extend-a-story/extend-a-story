@@ -45,31 +45,19 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$error = "";
-$fatal = false;
+$result = mysql_query( "SELECT EpisodeEditLogID, " .
+                              "EditDate, " .
+                              "EditLogEntry " .
+                         "FROM EpisodeEditLog " .
+                        "WHERE EpisodeID = " . $episode . " " .
+                        "ORDER BY EpisodeEditLogID" );
 
-if ( empty( $error ))
+if ( ! $result )
 {
-    $result = mysql_query( "SELECT EpisodeEditLogID, " .
-                                  "EditDate, " .
-                                  "EditLogEntry " .
-                             "FROM EpisodeEditLog " .
-                            "WHERE EpisodeID = " . $episode . " " .
-                            "ORDER BY EpisodeEditLogID" );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving edit list from the database.<BR>";
-        $fatal = true;
-    }
+    throw new HardStoryException( "Problem retrieving edit list from the database." );
 }
 
 $canEdit = canEditEpisode( $sessionID, $userID, $episode );
-
-if ( ! empty( $error ))
-{
-    displayError( $error, $fatal );
-}
 
 if ( ! $canEdit )
 {
