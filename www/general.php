@@ -55,32 +55,6 @@ function maximumWordLength( $input )
     return $result;
 }
 
-function displayError( $error, $fatal )
-{
-    echo( "<HTML><HEAD>" );
-    echo( "<TITLE>Errors Detected</TITLE>" );
-    echo( "</HEAD><BODY>" );
-
-    echo( "<H1>Errors Detected</H1>" );
-
-    if ( $fatal )
-    {
-        echo( "The following fatal errors have occurred. " );
-        echo( "Please contact the site administrator." );
-    }
-    else
-    {
-        echo( "The following errors were detected with your submission. " );
-        echo( "Please use your browser's back button, correct the errors, " );
-        echo( "and try your submission again." );
-    }
-
-    echo( "<HR>" );
-    echo( $error );
-
-    exit;
-}
-
 function getEpisodeBodyTranslationTable()
 {
     return array( "&lt;P&gt;"  => "<P>",
