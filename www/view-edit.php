@@ -45,37 +45,30 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$error = "";
-$fatal = false;
+$result = mysql_query( "SELECT EpisodeID, " .
+                              "SchemeID, " .
+                              "ImageID, " .
+                              "IsLinkable, " .
+                              "IsExtendable, " .
+                              "AuthorMailto, " .
+                              "AuthorNotify, " .
+                              "Title, " .
+                              "Text, " .
+                              "AuthorName, " .
+                              "AuthorEmail, " .
+                              "EditDate " .
+                         "FROM EpisodeEditLog " .
+                        "WHERE EpisodeEditLogID = " . $episodeEditLogID );
 
-if ( empty( $error ))
+if ( ! $result )
 {
-    $result = mysql_query( "SELECT EpisodeID, " .
-                                  "SchemeID, " .
-                                  "ImageID, " .
-                                  "IsLinkable, " .
-                                  "IsExtendable, " .
-                                  "AuthorMailto, " .
-                                  "AuthorNotify, " .
-                                  "Title, " .
-                                  "Text, " .
-                                  "AuthorName, " .
-                                  "AuthorEmail, " .
-                                  "EditDate " .
-                             "FROM EpisodeEditLog " .
-                            "WHERE EpisodeEditLogID = " . $episodeEditLogID );
+    throw new HardStoryException( "Problem retrieving episode edit log record from the database." );
+}
 
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving episode edit log record from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
+$row = mysql_fetch_row( $result );
 
-        if ( ! $row )
-        {
+if ( ! $row )
+{
 
 ?>
 
@@ -97,23 +90,21 @@ if ( empty( $error ))
 
 <?php
 
-            exit;
-        }
-
-        $episode      = $row[ 0  ];
-        $scheme       = $row[ 1  ];
-        $image        = $row[ 2  ];
-        $isLinkable   = $row[ 3  ];
-        $isExtendable = $row[ 4  ];
-        $authorMailto = $row[ 5  ];
-        $authorNotify = $row[ 6  ];
-        $title        = $row[ 7  ];
-        $text         = $row[ 8  ];
-        $authorName   = $row[ 9  ];
-        $authorEmail  = $row[ 10 ];
-        $editDate     = $row[ 11 ];
-    }
+    exit;
 }
+
+$episode      = $row[ 0  ];
+$scheme       = $row[ 1  ];
+$image        = $row[ 2  ];
+$isLinkable   = $row[ 3  ];
+$isExtendable = $row[ 4  ];
+$authorMailto = $row[ 5  ];
+$authorNotify = $row[ 6  ];
+$title        = $row[ 7  ];
+$text         = $row[ 8  ];
+$authorName   = $row[ 9  ];
+$authorEmail  = $row[ 10 ];
+$editDate     = $row[ 11 ];
 
 $canEdit = canEditEpisode( $sessionID, $userID, $episode );
 
@@ -150,55 +141,37 @@ You do not have permission to view this edit log.
     exit;
 }
 
-if ( empty( $error ))
+$result = mysql_query( "SELECT Parent FROM Episode WHERE EpisodeID = " . $episode );
+
+if ( ! $result )
 {
-    $result = mysql_query( "SELECT Parent FROM Episode WHERE EpisodeID = " . $episode );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the episode from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Problem fetching episode row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $parent = $row[ 0 ];
-        }
-    }
+    throw new HardStoryException( "Problem retrieving the episode from the database." );
 }
 
-if ( empty( $error ))
+    $row = mysql_fetch_row( $result );
+
+if ( ! $row )
 {
-    $result = mysql_query( "SELECT COUNT( * ) FROM Link WHERE TargetEpisodeID = " . $episode );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving link count from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Problem fetching link count row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $linkCount = (int) $row[ 0 ];
-        }
-    }
+    throw new HardStoryException( "Problem fetching episode row from the database." );
 }
+
+$parent = $row[ 0 ];
+
+$result = mysql_query( "SELECT COUNT( * ) FROM Link WHERE TargetEpisodeID = " . $episode );
+
+if ( ! $result )
+{
+    throw new HardStoryException( "Problem retrieving link count from the database." );
+}
+
+    $row = mysql_fetch_row( $result );
+
+if ( ! $row )
+{
+    throw new HardStoryException( "Problem fetching link count row from the database." );
+}
+
+$linkCount = (int) $row[ 0 ];
 
 $title      = htmlentities( $title );
 $text       = htmlentities( $text  );
@@ -207,101 +180,77 @@ $authorName = htmlentities( $authorName );
 $text        = strtr( $text,        getEpisodeBodyTranslationTable()  );
 $authorEmail = strtr( $authorEmail, getEmailAddressTranslationTable() );
 
-if ( empty( $error ))
+$result = mysql_query( "SELECT bgcolor, " .
+                              "text, " .
+                              "link, " .
+                              "vlink, " .
+                              "alink, " .
+                              "background, " .
+                              "UncreatedLink, " .
+                              "CreatedLink, " .
+                              "BackLinkedLink " .
+                         "FROM Scheme " .
+                        "WHERE SchemeID = " . $scheme );
+
+if ( ! $result )
 {
-    $result = mysql_query( "SELECT bgcolor, " .
-                                  "text, " .
-                                  "link, " .
-                                  "vlink, " .
-                                  "alink, " .
-                                  "background, " .
-                                  "UncreatedLink, " .
-                                  "CreatedLink, " .
-                                  "BackLinkedLink " .
-                             "FROM Scheme " .
-                            "WHERE SchemeID = " . $scheme );
-
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving the scheme from the database.<BR>";
-        $fatal = true;
-    }
-    else
-    {
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            $error .= "Problem fetching scheme row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $bgcolorColor   = $row[ 0 ];
-            $textColor      = $row[ 1 ];
-            $linkColor      = $row[ 2 ];
-            $vlinkColor     = $row[ 3 ];
-            $alinkColor     = $row[ 4 ];
-            $background     = $row[ 5 ];
-            $uncreatedLink  = $row[ 6 ];
-            $createdLink    = $row[ 7 ];
-            $backLinkedLink = $row[ 8 ];
-
-            $body = "<BODY BGCOLOR=\"" . $bgcolorColor . "\" " .
-                          "TEXT=\""    . $textColor    . "\" " .
-                          "LINK=\""    . $linkColor    . "\" " .
-                          "VLINK=\""   . $vlinkColor   . "\" " .
-                          "ALINK=\""   . $alinkColor   . "\""  .
-                          ( empty( $background ) ? ">" :
-                                                   " BACKGROUND=\"" . $background . "\">" );
-        }
-    }
+    throw new HardStoryException( "Problem retrieving the scheme from the database." );
 }
 
-if (( empty( $error )) && ( $image != 0 ))
+$row = mysql_fetch_row( $result );
+
+if ( ! $row )
+{
+    throw new HardStoryException( "Problem fetching scheme row from the database." );
+}
+
+$bgcolorColor   = $row[ 0 ];
+$textColor      = $row[ 1 ];
+$linkColor      = $row[ 2 ];
+$vlinkColor     = $row[ 3 ];
+$alinkColor     = $row[ 4 ];
+$background     = $row[ 5 ];
+$uncreatedLink  = $row[ 6 ];
+$createdLink    = $row[ 7 ];
+$backLinkedLink = $row[ 8 ];
+
+$body = "<BODY BGCOLOR=\"" . $bgcolorColor . "\" " .
+              "TEXT=\""    . $textColor    . "\" " .
+              "LINK=\""    . $linkColor    . "\" " .
+              "VLINK=\""   . $vlinkColor   . "\" " .
+              "ALINK=\""   . $alinkColor   . "\""  .
+              ( empty( $background ) ? ">" :
+                                       " BACKGROUND=\"" . $background . "\">" );
+
+if ( $image != 0 )
 {
     $result = mysql_query( "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
 
     if ( ! $result )
     {
-        $error .= "Problem retrieving the image from the database.<BR>";
-        $fatal = true;
+        throw new HardStoryException( "Problem retrieving the image from the database." );
     }
-    else
-    {
-        $row = mysql_fetch_row( $result );
 
-        if ( ! $row )
-        {
-            $error .= "Problem fetching image row from the database.<BR>";
-            $fatal = true;
-        }
-        else
-        {
-            $image = $row[ 0 ];
-        }
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        throw new HardStoryException( "Problem fetching image row from the database." );
     }
+
+    $image = $row[ 0 ];
 }
 
-if ( empty( $error ))
-{
-    $result = mysql_query( "SELECT TargetEpisodeID, " .
-                                  "IsBackLink, " .
-                                  "Description " .
-                             "FROM LinkEditLog " .
-                            "WHERE EpisodeEditLogID = " . $episodeEditLogID . " " .
-                            "ORDER BY LinkEditLogID" );
+$result = mysql_query( "SELECT TargetEpisodeID, " .
+                              "IsBackLink, " .
+                              "Description " .
+                         "FROM LinkEditLog " .
+                        "WHERE EpisodeEditLogID = " . $episodeEditLogID . " " .
+                        "ORDER BY LinkEditLogID" );
 
-    if ( ! $result )
-    {
-        $error .= "Problem retrieving link edit log from database.<BR>";
-        $fatal = true;
-    }
-}
-
-if ( ! empty( $error ))
+if ( ! $result )
 {
-    displayError( $error, $fatal );
+    throw new HardStoryException( "Problem retrieving link edit log from database." );
 }
 
 ?>
