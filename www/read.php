@@ -156,8 +156,8 @@ $title      = htmlentities( $title      );
 $text       = htmlentities( $text       );
 $authorName = htmlentities( $authorName );
 
-$text        = strtr( $text,        getEpisodeBodyTranslationTable()  );
-$authorEmail = strtr( $authorEmail, getEmailAddressTranslationTable() );
+$text        = strtr( $text,        Util::getEpisodeBodyTranslation()  );
+$authorEmail = strtr( $authorEmail, Util::getEmailAddressTranslation() );
 
 $lockTime = strtotime( $lockDate );
 $curTime  = time();
@@ -493,7 +493,7 @@ else
 
         $description = $row[ 3 ];
         $description = htmlentities( $description );
-        $description = strtr( $description, getOptionTranslationTable() );
+        $description = strtr( $description, Util::getOptionTranslation() );
 
         if ( $row[ 2 ] == "Y" )
         {

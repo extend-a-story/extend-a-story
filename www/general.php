@@ -26,49 +26,6 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-function getEpisodeBodyTranslationTable()
-{
-    return array( "&lt;P&gt;"  => "<P>",
-                  "&lt;p&gt;"  => "<p>",
-                  "&lt;/P&gt;" => "</P>",
-                  "&lt;/p&gt;" => "</p>",
-                  "&lt;BR&gt;" => "<BR>",
-                  "&lt;bR&gt;" => "<bR>",
-                  "&lt;Br&gt;" => "<Br>",
-                  "&lt;br&gt;" => "<br>",
-                  "&lt;HR&gt;" => "<HR>",
-                  "&lt;hR&gt;" => "<hR>",
-                  "&lt;Hr&gt;" => "<Hr>",
-                  "&lt;hr&gt;" => "<hr>",
-                  "&lt;B&gt;"  => "<B>",
-                  "&lt;b&gt;"  => "<b>",
-                  "&lt;/B&gt;" => "</B>",
-                  "&lt;/b&gt;" => "</b>",
-                  "&lt;I&gt;"  => "<I>",
-                  "&lt;i&gt;"  => "<i>",
-                  "&lt;/I&gt;" => "</I>",
-                  "&lt;/i&gt;" => "</i>" );
-}
-
-function getOptionTranslationTable()
-{
-    return array( "&lt;B&gt;"  => "<B>",
-                  "&lt;b&gt;"  => "<b>",
-                  "&lt;/B&gt;" => "</B>",
-                  "&lt;/b&gt;" => "</b>",
-                  "&lt;I&gt;"  => "<I>",
-                  "&lt;i&gt;"  => "<i>",
-                  "&lt;/I&gt;" => "</I>",
-                  "&lt;/i&gt;" => "</i>" );
-}
-
-function getEmailAddressTranslationTable()
-{
-    return array( "\"" => "'",
-                  "@"  => " at ",
-                  "."  => " dot " );
-}
-
 function canEditEpisode( $sessionID, $userID, $episodeID )
 {
     if ( $userID != 0 )

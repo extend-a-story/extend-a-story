@@ -177,8 +177,8 @@ $title      = htmlentities( $title );
 $text       = htmlentities( $text  );
 $authorName = htmlentities( $authorName );
 
-$text        = strtr( $text,        getEpisodeBodyTranslationTable()  );
-$authorEmail = strtr( $authorEmail, getEmailAddressTranslationTable() );
+$text        = strtr( $text,        Util::getEpisodeBodyTranslation()  );
+$authorEmail = strtr( $authorEmail, Util::getEmailAddressTranslation() );
 
 $result = mysql_query( "SELECT bgcolor, " .
                               "text, " .
@@ -300,7 +300,7 @@ for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
 
     $description = $row[ 2 ];
     $description = htmlentities( $description );
-    $description = strtr( $description, getOptionTranslationTable() );
+    $description = strtr( $description, Util::getOptionTranslation() );
 
     if ( $row[ 1 ] == "Y" )
     {

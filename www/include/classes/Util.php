@@ -57,6 +57,49 @@ class Util
         return $result;
     }
 
+    public static function getEpisodeBodyTranslation()
+    {
+        return array( "&lt;P&gt;"  => "<P>",
+                      "&lt;p&gt;"  => "<p>",
+                      "&lt;/P&gt;" => "</P>",
+                      "&lt;/p&gt;" => "</p>",
+                      "&lt;BR&gt;" => "<BR>",
+                      "&lt;bR&gt;" => "<bR>",
+                      "&lt;Br&gt;" => "<Br>",
+                      "&lt;br&gt;" => "<br>",
+                      "&lt;HR&gt;" => "<HR>",
+                      "&lt;hR&gt;" => "<hR>",
+                      "&lt;Hr&gt;" => "<Hr>",
+                      "&lt;hr&gt;" => "<hr>",
+                      "&lt;B&gt;"  => "<B>",
+                      "&lt;b&gt;"  => "<b>",
+                      "&lt;/B&gt;" => "</B>",
+                      "&lt;/b&gt;" => "</b>",
+                      "&lt;I&gt;"  => "<I>",
+                      "&lt;i&gt;"  => "<i>",
+                      "&lt;/I&gt;" => "</I>",
+                      "&lt;/i&gt;" => "</i>" );
+    }
+
+    public static function getOptionTranslation()
+    {
+        return array( "&lt;B&gt;"  => "<B>",
+                      "&lt;b&gt;"  => "<b>",
+                      "&lt;/B&gt;" => "</B>",
+                      "&lt;/b&gt;" => "</b>",
+                      "&lt;I&gt;"  => "<I>",
+                      "&lt;i&gt;"  => "<i>",
+                      "&lt;/I&gt;" => "</I>",
+                      "&lt;/i&gt;" => "</i>" );
+    }
+
+    public static function getEmailAddressTranslation()
+    {
+        return array( "\"" => "'",
+                      "@"  => " at ",
+                      "."  => " dot " );
+    }
+
     public static function connectToDatabase()
     {
         global $dbHost;

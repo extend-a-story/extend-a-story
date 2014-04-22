@@ -470,7 +470,7 @@ if (( $command == "DeleteSelectedLink"     ) ||
     {
         $description = $row[ 3 ];
         $description = htmlentities( $description );
-        $description = strtr( $description, getOptionTranslationTable() );
+        $description = strtr( $description, Util::getOptionTranslation() );
     }
     else
     {
@@ -837,7 +837,7 @@ Select a link to delete:
 
             $description = $row[ 2 ];
             $description = htmlentities( $description );
-            $description = strtr( $description, getOptionTranslationTable() );
+            $description = strtr( $description, Util::getOptionTranslation() );
 
             if ( $row[ 1 ] == "Y" )
             {

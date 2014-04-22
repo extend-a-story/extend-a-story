@@ -1477,9 +1477,9 @@ if (( $command == "Preview"       ) ||
     $displayedText         = htmlentities( $text         );
     $displayedAuthorName   = htmlentities( $authorName   );
 
-    $displayedAuthorEmail  = strtr( $authorEmail,           getEmailAddressTranslationTable() );
-    $displayedExtendedLink = strtr( $displayedExtendedLink, getOptionTranslationTable()       );
-    $displayedText         = strtr( $displayedText,         getEpisodeBodyTranslationTable()  );
+    $displayedAuthorEmail  = strtr( $authorEmail,           Util::getEmailAddressTranslation() );
+    $displayedExtendedLink = strtr( $displayedExtendedLink, Util::getOptionTranslation()       );
+    $displayedText         = strtr( $displayedText,         Util::getEpisodeBodyTranslation()  );
 
 ?>
 
@@ -1528,7 +1528,7 @@ if (( $command == "Preview"       ) ||
         if ( ! empty( $$var1 ))
         {
             $displayedOption = htmlentities( $$var1 );
-            $displayedOption = strtr( $displayedOption, getOptionTranslationTable() );
+            $displayedOption = strtr( $displayedOption, Util::getOptionTranslation() );
 
             if ((( $$var2 != 0 ) && ( ! $editing )) || ( $$var3 == "Y" ))
             {
