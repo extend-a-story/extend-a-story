@@ -106,7 +106,7 @@ $authorName   = $row[ 9  ];
 $authorEmail  = $row[ 10 ];
 $editDate     = $row[ 11 ];
 
-$canEdit = canEditEpisode( $sessionID, $userID, $episode );
+$canEdit = Util::canEditEpisode( $sessionID, $userID, $episode );
 
 if ( ! $canEdit )
 {

@@ -57,7 +57,7 @@ if ( ! $result )
     throw new HardStoryException( "Problem retrieving edit list from the database." );
 }
 
-$canEdit = canEditEpisode( $sessionID, $userID, $episode );
+$canEdit = Util::canEditEpisode( $sessionID, $userID, $episode );
 
 if ( ! $canEdit )
 {

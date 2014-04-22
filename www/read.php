@@ -245,7 +245,7 @@ if ( $image != 0 )
     $image = $row[ 0 ];
 }
 
-$canEdit = canEditEpisode( $sessionID, $userID, $episode );
+$canEdit = Util::canEditEpisode( $sessionID, $userID, $episode );
 
 if ( $canEdit )
 {

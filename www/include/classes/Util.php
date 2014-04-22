@@ -660,6 +660,52 @@ class Util
         mail( $email, $storyName . " - Extension", $message,
               "From: " . $adminEmail, "-f" . $adminEmail );
     }
+
+    public static function canEditEpisode( $sessionID, $userID, $episodeID )
+    {
+        if ( $userID != 0 )
+        {
+            return true;
+        }
+
+        $result = mysql_query( "SELECT AuthorSessionID, CreationDate " .
+                                 "FROM Episode " .
+                                "WHERE EpisodeID = " . $episodeID );
+
+        if ( ! $result )
+        {
+            return false;
+        }
+
+        $row = mysql_fetch_row( $result );
+
+        if ( ! $row )
+        {
+            return false;
+        }
+
+        $authorSessionID = $row[ 0 ];
+        $creationDate    = $row[ 1 ];
+
+        if ( $sessionID == $authorSessionID )
+        {
+            $maxEditDays = Util::getIntValue( "MaxEditDays" );
+
+            $creationTime = strtotime( $creationDate );
+            $curTime      = time();
+            $seconds      = $curTime - $creationTime;
+            $minutes      = (int) ( $seconds / 60 );
+            $hours        = (int) ( $minutes / 60 );
+            $days         = (int) ( $hours   / 24 );
+
+            if ( $days < $maxEditDays )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 ?>

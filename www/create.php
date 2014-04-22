@@ -381,7 +381,7 @@ else
     }
 }
 
-$canEdit = canEditEpisode( $sessionID, $userID, $episode );
+$canEdit = Util::canEditEpisode( $sessionID, $userID, $episode );
 
 // verify that the selected scheme is in the database
 $result = mysql_query( "SELECT SchemeName " .
