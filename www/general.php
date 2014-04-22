@@ -26,16 +26,6 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-function prepareParam( &$param )
-{
-    if ( get_magic_quotes_gpc() == 1 )
-    {
-        $param = stripslashes( $param );
-    }
-
-    $param = trim( $param );
-}
-
 function maximumWordLength( $input )
 {
     $result = 0;

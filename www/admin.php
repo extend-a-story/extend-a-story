@@ -78,8 +78,8 @@ if ( $command == "login" )
     $loginName = $_POST[ "loginName" ];
     $password  = $_POST[ "password"  ];
 
-    prepareParam( $loginName );
-    prepareParam( $password  );
+    Util::prepareParam( $loginName );
+    Util::prepareParam( $password  );
 
     $result = mysql_query(
             "SELECT UserID " .
@@ -240,9 +240,9 @@ if ( $command == "changePasswordSave" )
     $newPassword1 = $_POST[ "newPassword1" ];
     $newPassword2 = $_POST[ "newPassword2" ];
 
-    prepareParam( $curPassword  );
-    prepareParam( $newPassword1 );
-    prepareParam( $newPassword2 );
+    Util::prepareParam( $curPassword  );
+    Util::prepareParam( $newPassword1 );
+    Util::prepareParam( $newPassword2 );
 
     $result = mysql_query(
             "SELECT COUNT( * ) " .
@@ -306,12 +306,12 @@ if ( $command == "configureSave" )
     $newMaxLinks       = $_POST[ "newMaxLinks"       ];
     $newMaxEditDays    = $_POST[ "newMaxEditDays"    ];
 
-    prepareParam( $newStoryName      );
-    prepareParam( $newSiteName       );
-    prepareParam( $newStoryHome      );
-    prepareParam( $newSiteHome       );
-    prepareParam( $newReadEpisodeURL );
-    prepareParam( $newAdminEmail     );
+    Util::prepareParam( $newStoryName      );
+    Util::prepareParam( $newSiteName       );
+    Util::prepareParam( $newStoryHome      );
+    Util::prepareParam( $newSiteHome       );
+    Util::prepareParam( $newReadEpisodeURL );
+    Util::prepareParam( $newAdminEmail     );
 
     $newIsWriteable = (int) $newIsWriteable;
     $newMaxLinks    = (int) $newMaxLinks;
@@ -430,10 +430,10 @@ if ( $command == "addUserSave" )
     $newPassword1       = $_POST[ "newPassword1"       ];
     $newPassword2       = $_POST[ "newPassword2"       ];
 
-    prepareParam( $newLoginName );
-    prepareParam( $newUserName  );
-    prepareParam( $newPassword1 );
-    prepareParam( $newPassword2 );
+    Util::prepareParam( $newLoginName );
+    Util::prepareParam( $newUserName  );
+    Util::prepareParam( $newPassword1 );
+    Util::prepareParam( $newPassword2 );
 
     $newPermissionLevel = (int) $newPermissionLevel;
 
@@ -580,10 +580,10 @@ if ( $command == "editUserSave" )
     $newPassword1       = $_POST[ "newPassword1"       ];
     $newPassword2       = $_POST[ "newPassword2"       ];
 
-    prepareParam( $newLoginName );
-    prepareParam( $newUserName  );
-    prepareParam( $newPassword1 );
-    prepareParam( $newPassword2 );
+    Util::prepareParam( $newLoginName );
+    Util::prepareParam( $newUserName  );
+    Util::prepareParam( $newPassword1 );
+    Util::prepareParam( $newPassword2 );
 
     $newPermissionLevel = (int) $newPermissionLevel;
 

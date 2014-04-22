@@ -28,6 +28,16 @@ http://www.sir-toby.com/extend-a-story/
 
 class Util
 {
+    public static function prepareParam( &$param )
+    {
+        if ( get_magic_quotes_gpc() == 1 )
+        {
+            $param = stripslashes( $param );
+        }
+
+        $param = trim( $param );
+    }
+
     public static function connectToDatabase()
     {
         global $dbHost;

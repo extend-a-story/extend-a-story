@@ -320,7 +320,7 @@ if ( $command == "AddLinkSave" )
     $linkDescription = $_POST[ "description"   ];
     $linkEpisode     = $_POST[ "linkedEpisode" ];
 
-    prepareParam( $linkDescription );
+    Util::prepareParam( $linkDescription );
 
     $linkEpisode = (int) $linkEpisode;
 

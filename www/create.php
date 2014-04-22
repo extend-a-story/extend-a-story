@@ -696,11 +696,11 @@ You are trying to extend an episode that is not extendable.
     exit;
 }
 
-prepareParam( $extendedLink );
-prepareParam( $title        );
-prepareParam( $text         );
-prepareParam( $authorName   );
-prepareParam( $authorEmail  );
+Util::prepareParam( $extendedLink );
+Util::prepareParam( $title        );
+Util::prepareParam( $text         );
+Util::prepareParam( $authorName   );
+Util::prepareParam( $authorEmail  );
 
 if ( $extending )
 {
@@ -836,7 +836,7 @@ if ( $editing )
         $$var5 = ((( $command == "EditPreview" ) || ( $command == "EditSave" )) ?
                  $_POST[ $var5 ] : $$var2 );
 
-        prepareParam( $$var4 );
+        Util::prepareParam( $$var4 );
 
         $$var5 = (int) $$var5;
     }
@@ -869,7 +869,7 @@ else
             $$var5 = (int) $_POST[ $var5 ];
         }
 
-        prepareParam( $$var4 );
+        Util::prepareParam( $$var4 );
     }
 }
 
