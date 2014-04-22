@@ -28,8 +28,6 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-require( "ExtendAStory.php" );
-
 $episodeEditLogID = 1;
 
 if ( isset( $_GET[ "episodeEditLogID" ] ))
