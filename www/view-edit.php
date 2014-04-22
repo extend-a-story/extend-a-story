@@ -82,7 +82,7 @@ if ( ! $row )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -130,7 +130,7 @@ You do not have permission to view this edit log.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -421,6 +421,6 @@ Edit Date: <?php echo( $editDate ); ?>
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>

@@ -185,7 +185,7 @@ if ( $userID == 0 )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -921,7 +921,7 @@ if ( $command == "listOrphans" )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -977,7 +977,7 @@ if ( $command == "listDeadEnds" )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1074,7 +1074,7 @@ if ( $command == "listRecentEdits" )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1125,7 +1125,7 @@ if ( $command == "changePassword" )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1233,7 +1233,7 @@ if ( $command == "configure" )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1299,7 +1299,7 @@ if ( $command == "addUser" )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1384,7 +1384,7 @@ if ( $command == "editUser" )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1427,7 +1427,7 @@ if ( $command == "deleteUser" )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1576,6 +1576,6 @@ Delete User -
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>

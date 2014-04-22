@@ -77,7 +77,7 @@ You are unable to perform advanced edit functions while episode creation is disa
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -136,7 +136,7 @@ You do not have permission to use the advanced editing features.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -199,7 +199,7 @@ You are trying to edit an episode that someone else is currently editing.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -254,7 +254,7 @@ You are trying to edit an episode that has not been locked.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -288,7 +288,7 @@ You are trying to edit an episode that has been locked, but not by you.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -670,7 +670,7 @@ The edit operation you requested has been completed.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -732,7 +732,7 @@ Linked Episode:<BR>
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -772,7 +772,7 @@ if ( $command == "DeleteSelectedLink" )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -894,7 +894,7 @@ There are no links from this episode that you can delete.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1014,7 +1014,7 @@ This episode can be deleted. Are you sure you want to delete it?
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1062,7 +1062,7 @@ author from being able to edit the episode afterwords. Are you sure?
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1093,6 +1093,6 @@ The command you selected is not supported.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>

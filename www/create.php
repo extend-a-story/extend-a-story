@@ -166,7 +166,7 @@ The command you selected is not supported.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -221,7 +221,7 @@ You are unable to create episodes while episode creation is disabled.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -273,7 +273,7 @@ The episode you are trying to create is an orphan (has no links to it) and canno
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -461,7 +461,7 @@ currently working on. Wait a few moments and try again.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -498,7 +498,7 @@ or you don't have permission to edit this episode.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -535,7 +535,7 @@ obtain a lock on this episode and then you may proceed with creating it.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -572,7 +572,7 @@ obtain a lock on this episode and then you may proceed with editing it.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -610,7 +610,7 @@ on this episode, and then you may proceed with creating it.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -648,7 +648,7 @@ on this episode, and then you may proceed with editing it.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -685,7 +685,7 @@ You are trying to extend an episode that is not extendable.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1290,7 +1290,7 @@ entry. Thank you for your addition to the story.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1324,7 +1324,7 @@ has been created and is ready for entry. Thank you for your addition to the stor
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1358,7 +1358,7 @@ entry. Thank you for your addition to the story.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -1843,6 +1843,6 @@ else
 
 ?>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>

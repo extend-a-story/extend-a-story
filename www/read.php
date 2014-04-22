@@ -124,7 +124,7 @@ if ( ! $row )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -304,7 +304,7 @@ yet, and episode creation is currently disabled.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -344,7 +344,7 @@ If you do not wish to create it now, you may go back to the previous episode.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -433,7 +433,7 @@ manually unlock it, if you wish.
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 
@@ -806,7 +806,7 @@ Extending Enabled
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
 

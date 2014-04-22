@@ -194,6 +194,6 @@ while ( count( $curEpisodes ) > 0 )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>

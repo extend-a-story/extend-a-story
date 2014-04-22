@@ -97,6 +97,6 @@ days.
 <P>
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>

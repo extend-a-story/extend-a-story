@@ -80,6 +80,6 @@ for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
 <P>
 <A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>

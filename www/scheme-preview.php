@@ -158,6 +158,6 @@ for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
 
 </CENTER>
 
-<?php require( "footer.php" ); ?>
+<?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
 </BODY></HTML>
