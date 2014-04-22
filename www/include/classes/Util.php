@@ -38,6 +38,25 @@ class Util
         $param = trim( $param );
     }
 
+    public static function maximumWordLength( $input )
+    {
+        $result = 0;
+
+        $word = strtok( $input, " \t\n\r\0\x0B" );
+
+        while( ! ( $word === false ))
+        {
+            if ( strlen( $word ) > $result )
+            {
+                $result = strlen( $word );
+            }
+
+            $word = strtok( " \t\n\r\0\x0B" );
+        }
+
+        return $result;
+    }
+
     public static function connectToDatabase()
     {
         global $dbHost;

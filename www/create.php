@@ -715,7 +715,7 @@ if ( $extending )
                     "<BR>";
     }
 
-    if ( maximumWordLength( $extendedLink ) > 30 )
+    if ( Util::maximumWordLength( $extendedLink ) > 30 )
     {
         $warning .= "The description for the new option cannot contain a word with more than " .
                     "30 characters.<BR>";
@@ -753,18 +753,18 @@ if ( strlen( $authorEmail ) > 255 )
     $warning .= "Your email address cannot be longer than 255 characters.<BR>";
 }
 
-if ( maximumWordLength( $title ) > 30 )
+if ( Util::maximumWordLength( $title ) > 30 )
 {
     $warning .= "The title cannot contain a word with more than 30 characters in it.<BR>";
 }
 
-if ( maximumWordLength( $text ) > 30 )
+if ( Util::maximumWordLength( $text ) > 30 )
 {
     $warning .= "The episode description cannot contain a word with more than 30 characters " .
                 "in it.<BR>";
 }
 
-if ( maximumWordLength( $authorName ) > 30 )
+if ( Util::maximumWordLength( $authorName ) > 30 )
 {
     $warning .= "The author name cannot contain a word with more than 30 characters in it.<BR>";
 }
@@ -895,7 +895,7 @@ for ( $i = 0; $i < $linkCount; $i++ )
                     " cannot be longer then 255 characters.<BR>";
     }
 
-    if ( maximumWordLength( $$var1 ) > 30 )
+    if ( Util::maximumWordLength( $$var1 ) > 30 )
     {
         $warning .= "The description for option " . ( $i + 1 ) .
                     " cannot contain a word with more than 30 characters in it.<BR>";
