@@ -28,19 +28,6 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-$episode = 1;
-$lockKey = 0;
-
-if ( isset( $_POST[ "episode" ] ))
-{
-    $episode = (int) $_POST[ "episode" ];
-}
-
-if ( isset( $_POST[ "lockKey" ] ))
-{
-    $lockKey = $_POST[ "lockKey" ];
-}
-
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
@@ -79,6 +66,9 @@ You are unable to clear locks while episode creation is disabled.
 
     exit;
 }
+
+$episode = Util::getIntParam( $_POST, "episode" );
+$lockKey = Util::getIntParam( $_POST, "lockKey" );
 
 $result = mysql_query( "SELECT Parent, " .
                               "Status, " .

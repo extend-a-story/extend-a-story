@@ -28,24 +28,17 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-$method = "";
-$text   = "";
-$days   = 0;
+Util::connectToDatabase();
+Util::getSessionAndUserIDs( $sessionID, $userID );
 
-if ( isset( $_POST[ "method" ] ))
-{
-    $method = $_POST[ "method" ];
-}
+$storyName = Util::getStringValue( "StoryName" );
+$siteName  = Util::getStringValue( "SiteName"  );
+$storyHome = Util::getStringValue( "StoryHome" );
+$siteHome  = Util::getStringValue( "SiteHome"  );
 
-if ( isset( $_POST[ "text" ] ))
-{
-    $text = $_POST[ "text" ];
-}
-
-if ( isset( $_POST[ "days" ] ))
-{
-    $days = (int) $_POST[ "days" ];
-}
+$method = Util::getStringParam(        $_POST, "method"     );
+$text   = Util::getStringParamDefault( $_POST, "text",   "" );
+$days   = Util::getIntParamDefault(    $_POST, "days",   0  );
 
 if (( $method != "title"      ) &&
     ( $method != "text"       ) &&
@@ -57,14 +50,6 @@ if (( $method != "title"      ) &&
 {
     throw new HardStoryException( "The specified search method is not supported." );
 }
-
-Util::connectToDatabase();
-Util::getSessionAndUserIDs( $sessionID, $userID );
-
-$storyName = Util::getStringValue( "StoryName" );
-$siteName  = Util::getStringValue( "SiteName"  );
-$storyHome = Util::getStringValue( "StoryHome" );
-$siteHome  = Util::getStringValue( "SiteHome"  );
 
 if ( $method == "title" )
 {

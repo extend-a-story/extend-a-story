@@ -28,13 +28,6 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-$scheme = 1;
-
-if ( isset( $_POST[ "scheme" ] ))
-{
-    $scheme = (int) $_POST[ "scheme" ];
-}
-
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
@@ -42,6 +35,27 @@ $storyName = Util::getStringValue( "StoryName" );
 $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
+
+$scheme = Util::getIntParamDefault( $_POST, "scheme", null );
+
+if ( ! isset( $scheme ))
+{
+    $result = mysql_query( "SELECT SchemeID FROM Scheme ORDER BY SchemeID ASC" );
+
+    if ( ! $result )
+    {
+        throw new HardStoryException( "Unable to query for the lowest scheme ID." );
+    }
+
+    $row = mysql_fetch_row( $result );
+
+    if ( ! $row )
+    {
+        throw new HardStoryException( "Unable to fetch the lowest scheme ID." );
+    }
+
+    $scheme = $row[ 0 ];
+}
 
 $result = mysql_query( "SELECT SchemeName, " .
                               "bgcolor, " .

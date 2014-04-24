@@ -28,14 +28,60 @@ http://www.sir-toby.com/extend-a-story/
 
 class Util
 {
-    public static function prepareParam( &$param )
+    public static function getStringParam( $array, $name )
     {
-        if ( get_magic_quotes_gpc() == 1 )
+        $value = Util::getStringParamDefault( $array, $name, null );
+
+        if ( ! isset( $value ))
         {
-            $param = stripslashes( $param );
+            throw new HardStoryException( "Parameter \"" . $name . "\" is not set." );
         }
 
-        $param = trim( $param );
+        return $value;
+    }
+
+    public static function getStringParamDefault( $array, $name, $defaultValue )
+    {
+        if ( ! isset( $array[ $name ] ))
+        {
+            return $defaultValue;
+        }
+
+        return trim( $array[ $name ] );
+    }
+
+    public static function getIntParam( $array, $name )
+    {
+        $value = Util::getIntParamDefault( $array, $name, null );
+
+        if ( ! isset( $value ))
+        {
+            throw new HardStoryException( "Parameter \"" . $name . "\" is not set." );
+        }
+
+        return $value;
+    }
+
+    public static function getIntParamDefault( $array, $name, $defaultValue )
+    {
+        if ( ! isset( $array[ $name ] ))
+        {
+            return $defaultValue;
+        }
+
+        $value = trim( $array[ $name ] );
+
+        if ( empty( $value ))
+        {
+            return $defaultValue;
+        }
+
+        if ( ! ctype_digit( $value ))
+        {
+            throw new HardStoryException( "Parameter \"" . $name . "\" is not an integer." );
+        }
+
+        return (int) $value;
     }
 
     public static function maximumWordLength( $input )
@@ -130,18 +176,8 @@ class Util
             throw new HardStoryException( "Unable to logout inactive users." );
         }
 
-        $originalSessionID  = 0;
-        $originalSessionKey = 0;
-
-        if ( isset( $_COOKIE[ "sessionID" ] ))
-        {
-            $originalSessionID = (int) $_COOKIE[ "sessionID" ];
-        }
-
-        if ( isset( $_COOKIE[ "sessionKey" ] ))
-        {
-            $originalSessionKey = (int) $_COOKIE[ "sessionKey" ];
-        }
+        $originalSessionID  = Util::getIntParamDefault( $_COOKIE, "sessionID",  0 );
+        $originalSessionKey = Util::getIntParamDefault( $_COOKIE, "sessionKey", 0 );
 
         $actualSessionID  = 0;
         $actualUserID     = 0;

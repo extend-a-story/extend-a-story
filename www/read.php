@@ -28,13 +28,6 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-$episode = 1;
-
-if ( isset( $_GET[ "episode" ] ))
-{
-    $episode = (int) $_GET[ "episode" ];
-}
-
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
@@ -43,6 +36,8 @@ $siteName    = Util::getStringValue( "SiteName"    );
 $storyHome   = Util::getStringValue( "StoryHome"   );
 $siteHome    = Util::getStringValue( "SiteHome"    );
 $isWriteable = Util::getStringValue( "IsWriteable" );
+
+$episode = Util::getIntParamDefault( $_GET, "episode", 1 );
 
 $permissionLevel = 0;
 

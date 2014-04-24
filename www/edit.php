@@ -28,25 +28,6 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-$command = "";
-$episode = 1;
-$lockKey = 0;
-
-if ( isset( $_REQUEST[ "command" ] ))
-{
-    $command = $_REQUEST[ "command" ];
-}
-
-if ( isset( $_REQUEST[ "episode" ] ))
-{
-    $episode = (int) $_REQUEST[ "episode" ];
-}
-
-if ( isset( $_REQUEST[ "lockKey" ] ))
-{
-    $lockKey = (int) $_REQUEST[ "lockKey" ];
-}
-
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
@@ -85,6 +66,10 @@ You are unable to perform advanced edit functions while episode creation is disa
 
     exit;
 }
+
+$command = Util::getStringParam(     $_REQUEST, "command"    );
+$episode = Util::getIntParam(        $_REQUEST, "episode"    );
+$lockKey = Util::getIntParamDefault( $_REQUEST, "lockKey", 0 );
 
 $permissionLevel = 0;
 
@@ -315,12 +300,8 @@ $linkEpisode     = 0;
 
 if ( $command == "AddLinkSave" )
 {
-    $linkDescription = $_POST[ "description"   ];
-    $linkEpisode     = $_POST[ "linkedEpisode" ];
-
-    Util::prepareParam( $linkDescription );
-
-    $linkEpisode = (int) $linkEpisode;
+    $linkDescription = Util::getStringParam(     $_POST, "description"      );
+    $linkEpisode     = Util::getIntParamDefault( $_POST, "linkedEpisode", 0 );
 
     if ( empty( $linkDescription ))
     {
@@ -430,10 +411,12 @@ if ( $command == "AddLinkSave" )
     }
 }
 
+$linkID = 0;
+
 if (( $command == "DeleteSelectedLink"     ) ||
     ( $command == "DeleteSelectedLinkSave" ))
 {
-    $linkID = $_REQUEST[ "linkID" ];
+    $linkID = Util::getIntParam( $_REQUEST, "linkID" );
 
     $result = mysql_query( "SELECT SourceEpisodeID, " .
                                   "IsCreated, " .

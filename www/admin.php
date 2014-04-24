@@ -28,13 +28,6 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-$command = "";
-
-if ( isset( $_REQUEST[ "command" ] ))
-{
-    $command = $_REQUEST[ "command" ];
-}
-
 Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
@@ -49,6 +42,8 @@ $maxLinks       = Util::getIntValue(    "MaxLinks"       );
 $maxEditDays    = Util::getIntValue(    "MaxEditDays"    );
 
 $message = "";
+
+$command = Util::getStringParamDefault( $_REQUEST, "command", "" );
 
 if (( $command != ""                   ) &&
     ( $command != "addUser"            ) &&
@@ -73,11 +68,8 @@ if (( $command != ""                   ) &&
 
 if ( $command == "login" )
 {
-    $loginName = $_POST[ "loginName" ];
-    $password  = $_POST[ "password"  ];
-
-    Util::prepareParam( $loginName );
-    Util::prepareParam( $password  );
+    $loginName = Util::getStringParam( $_POST, "loginName" );
+    $password  = Util::getStringParam( $_POST, "password"  );
 
     $result = mysql_query(
             "SELECT UserID " .
@@ -234,13 +226,9 @@ if ((( $permissionLevel < 2           ) &&
 
 if ( $command == "changePasswordSave" )
 {
-    $curPassword  = $_POST[ "curPassword"  ];
-    $newPassword1 = $_POST[ "newPassword1" ];
-    $newPassword2 = $_POST[ "newPassword2" ];
-
-    Util::prepareParam( $curPassword  );
-    Util::prepareParam( $newPassword1 );
-    Util::prepareParam( $newPassword2 );
+    $curPassword  = Util::getStringParam( $_POST, "curPassword"  );
+    $newPassword1 = Util::getStringParam( $_POST, "newPassword1" );
+    $newPassword2 = Util::getStringParam( $_POST, "newPassword2" );
 
     $result = mysql_query(
             "SELECT COUNT( * ) " .
@@ -294,26 +282,15 @@ if ( $command == "changePasswordSave" )
 
 if ( $command == "configureSave" )
 {
-    $newStoryName      = $_POST[ "newStoryName"      ];
-    $newSiteName       = $_POST[ "newSiteName"       ];
-    $newStoryHome      = $_POST[ "newStoryHome"      ];
-    $newSiteHome       = $_POST[ "newSiteHome"       ];
-    $newReadEpisodeURL = $_POST[ "newReadEpisodeURL" ];
-    $newAdminEmail     = $_POST[ "newAdminEmail"     ];
-    $newIsWriteable    = $_POST[ "newIsWriteable"    ];
-    $newMaxLinks       = $_POST[ "newMaxLinks"       ];
-    $newMaxEditDays    = $_POST[ "newMaxEditDays"    ];
-
-    Util::prepareParam( $newStoryName      );
-    Util::prepareParam( $newSiteName       );
-    Util::prepareParam( $newStoryHome      );
-    Util::prepareParam( $newSiteHome       );
-    Util::prepareParam( $newReadEpisodeURL );
-    Util::prepareParam( $newAdminEmail     );
-
-    $newIsWriteable = (int) $newIsWriteable;
-    $newMaxLinks    = (int) $newMaxLinks;
-    $newMaxEditDays = (int) $newMaxEditDays;
+    $newStoryName      = Util::getStringParam( $_POST, "newStoryName"      );
+    $newSiteName       = Util::getStringParam( $_POST, "newSiteName"       );
+    $newStoryHome      = Util::getStringParam( $_POST, "newStoryHome"      );
+    $newSiteHome       = Util::getStringParam( $_POST, "newSiteHome"       );
+    $newReadEpisodeURL = Util::getStringParam( $_POST, "newReadEpisodeURL" );
+    $newAdminEmail     = Util::getStringParam( $_POST, "newAdminEmail"     );
+    $newIsWriteable    = Util::getIntParam(    $_POST, "newIsWriteable"    );
+    $newMaxLinks       = Util::getIntParam(    $_POST, "newMaxLinks"       );
+    $newMaxEditDays    = Util::getIntParam(    $_POST, "newMaxEditDays"    );
 
     if ( empty( $newStoryName ))
     {
@@ -422,18 +399,11 @@ if ( $command == "configureSave" )
 
 if ( $command == "addUserSave" )
 {
-    $newLoginName       = $_POST[ "newLoginName"       ];
-    $newUserName        = $_POST[ "newUserName"        ];
-    $newPermissionLevel = $_POST[ "newPermissionLevel" ];
-    $newPassword1       = $_POST[ "newPassword1"       ];
-    $newPassword2       = $_POST[ "newPassword2"       ];
-
-    Util::prepareParam( $newLoginName );
-    Util::prepareParam( $newUserName  );
-    Util::prepareParam( $newPassword1 );
-    Util::prepareParam( $newPassword2 );
-
-    $newPermissionLevel = (int) $newPermissionLevel;
+    $newLoginName       = Util::getStringParam( $_POST, "newLoginName"       );
+    $newUserName        = Util::getStringParam( $_POST, "newUserName"        );
+    $newPermissionLevel = Util::getIntParam(    $_POST, "newPermissionLevel" );
+    $newPassword1       = Util::getStringParam( $_POST, "newPassword1"       );
+    $newPassword2       = Util::getStringParam( $_POST, "newPassword2"       );
 
     if ( empty( $newLoginName ))
     {
@@ -516,12 +486,7 @@ if (( $command == "editUser"     ) ||
     ( $command == "editUserSave" ) ||
     ( $command == "deleteUser"   ))
 {
-    $editedUserID = 0;
-
-    if ( isset( $_POST[ "userID" ] ))
-    {
-        $editedUserID = (int) $_POST[ "userID" ];
-    }
+    $editedUserID = Util::getIntParam( $_POST, "userID" );
 
     if ( $editedUserID == 0 )
     {
@@ -572,25 +537,12 @@ if (( $command == "editUser"     ) ||
 
 if ( $command == "editUserSave" )
 {
-    $newLoginName       = $_POST[ "newLoginName"       ];
-    $newUserName        = $_POST[ "newUserName"        ];
-    $newPermissionLevel = $_POST[ "newPermissionLevel" ];
-    $newPassword1       = $_POST[ "newPassword1"       ];
-    $newPassword2       = $_POST[ "newPassword2"       ];
-
-    Util::prepareParam( $newLoginName );
-    Util::prepareParam( $newUserName  );
-    Util::prepareParam( $newPassword1 );
-    Util::prepareParam( $newPassword2 );
-
-    $newPermissionLevel = (int) $newPermissionLevel;
-
-    $setNewPassword = 0;
-
-    if ( isset( $_POST[ "setNewPassword" ] ))
-    {
-        $setNewPassword = $_POST[ "setNewPassword" ];
-    }
+    $newLoginName       = Util::getStringParam(     $_POST, "newLoginName"          );
+    $newUserName        = Util::getStringParam(     $_POST, "newUserName"           );
+    $newPermissionLevel = Util::getIntParam(        $_POST, "newPermissionLevel"    );
+    $setNewPassword     = Util::getIntParamDefault( $_POST, "setNewPassword",     0 );
+    $newPassword1       = Util::getStringParam(     $_POST, "newPassword1"          );
+    $newPassword2       = Util::getStringParam(     $_POST, "newPassword2"          );
 
     if ( empty( $newLoginName ))
     {
@@ -720,12 +672,7 @@ if ( $command == "editUserSave" )
 
 if ( $command == "deleteUserSave" )
 {
-    $deletedUserID = 0;
-
-    if ( isset( $_POST[ "userID" ] ))
-    {
-        $deletedUserID = (int) $_POST[ "userID" ];
-    }
+    $deletedUserID = Util::getIntParam( $_POST, "userID" );
 
     if ( $deletedUserID == 0 )
     {
@@ -813,12 +760,7 @@ if ( $command == "listRecentEdits" )
 
     $maxEpisodeEditLogID = (int) $row[ 0 ];
 
-    $start = 0;
-
-    if ( isset( $_REQUEST[ "start" ] ))
-    {
-        $start = (int) $_REQUEST[ "start" ];
-    }
+    $start = Util::getIntParamDefault( $_GET, "start", 0 );
 
     if (( $start < 1 ) || ( $start > $maxEpisodeEditLogID ))
     {

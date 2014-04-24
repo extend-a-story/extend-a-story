@@ -28,90 +28,20 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-$command         = "";
-$episode         = 1;
-$lockKey         = 0;
-$commandModifier = "";
-$extendedLink    = "";
-$title           = "";
-$text            = "";
-$scheme          = 1;
-$authorName      = "";
-$authorEmail     = "";
-$mailto          = "";
-$notify          = "";
-$linkable        = 0;
-$extendable      = 0;
-
-if ( isset( $_REQUEST[ "command" ] ))
-{
-    $command = $_REQUEST[ "command" ];
-}
-
-if ( isset( $_REQUEST[ "episode" ] ))
-{
-    $episode = (int) $_REQUEST[ "episode" ];
-}
-
-if ( isset( $_POST[ "lockKey" ] ))
-{
-    $lockKey = (int) $_POST[ "lockKey" ];
-}
-
-if ( isset( $_POST[ "commandModifier" ] ))
-{
-    $commandModifier = $_POST[ "commandModifier" ];
-}
-
-if ( isset( $_POST[ "extendedLink" ] ))
-{
-    $extendedLink = $_POST[ "extendedLink" ];
-}
-
-if ( isset( $_POST[ "title" ] ))
-{
-    $title = $_POST[ "title" ];
-}
-
-if ( isset( $_POST[ "text" ] ))
-{
-    $text = $_POST[ "text" ];
-}
-
-if ( isset( $_POST[ "scheme" ] ))
-{
-    $scheme = (int) $_POST[ "scheme" ];
-}
-
-if ( isset( $_POST[ "authorName" ] ))
-{
-    $authorName = $_POST[ "authorName" ];
-}
-
-if ( isset( $_POST[ "authorEmail" ] ))
-{
-    $authorEmail = $_POST[ "authorEmail" ];
-}
-
-if ( isset( $_POST[ "mailto" ] ))
-{
-    $mailto = $_POST[ "mailto" ];
-}
-
-if ( isset( $_POST[ "notify" ] ))
-{
-    $notify = $_POST[ "notify" ];
-}
-
-if ( isset( $_POST[ "linkable" ] ))
-{
-    $linkable = (int) $_POST[ "linkable" ];
-}
-
-if ( isset( $_POST[ "extendable" ] ))
-{
-    $extendable = (int) $_POST[ "extendable" ];
-}
+$command         = Util::getStringParam(        $_REQUEST, "command"             );
+$episode         = Util::getIntParam(           $_REQUEST, "episode"             );
+$lockKey         = Util::getIntParamDefault(    $_POST,    "lockKey",         0  );
+$commandModifier = Util::getStringParamDefault( $_POST,    "commandModifier", "" );
+$extendedLink    = Util::getStringParamDefault( $_POST,    "extendedLink",    "" );
+$title           = Util::getStringParamDefault( $_POST,    "title",           "" );
+$text            = Util::getStringParamDefault( $_POST,    "text",            "" );
+$scheme          = Util::getIntParamDefault(    $_POST,    "scheme",          1  );
+$authorName      = Util::getStringParamDefault( $_POST,    "authorName",      "" );
+$authorEmail     = Util::getStringParamDefault( $_POST,    "authorEmail",     "" );
+$mailto          = Util::getIntParamDefault(    $_POST,    "mailto",          0  );
+$notify          = Util::getIntParamDefault(    $_POST,    "notify",          0  );
+$linkable        = Util::getIntParamDefault(    $_POST,    "linkable",        0  );
+$extendable      = Util::getIntParamDefault(    $_POST,    "extendable",      0  );
 
 $linkCount = 0;
 
@@ -694,12 +624,6 @@ You are trying to extend an episode that is not extendable.
     exit;
 }
 
-Util::prepareParam( $extendedLink );
-Util::prepareParam( $title        );
-Util::prepareParam( $text         );
-Util::prepareParam( $authorName   );
-Util::prepareParam( $authorEmail  );
-
 if ( $extending )
 {
     if ( empty( $extendedLink ))
@@ -827,16 +751,12 @@ if ( $editing )
         // if we are previewing or saving, read the option description from the form,
         // otherwise read it from the database
         $$var4 = ((( $command == "EditPreview" ) || ( $command == "EditSave" )) ?
-                 $_POST[ $var4 ] : $row[ 3 ] );
+                 Util::getStringParam( $_POST, $var4 ) : $row[ 3 ] );
 
         // if we are previewing or saving, read the backlinked episode from the form,
         // otherwise read it from the database
         $$var5 = ((( $command == "EditPreview" ) || ( $command == "EditSave" )) ?
-                 $_POST[ $var5 ] : $$var2 );
-
-        Util::prepareParam( $$var4 );
-
-        $$var5 = (int) $$var5;
+                 Util::getIntParamDefault( $_POST, $var5, 0 ) : $$var2 );
     }
 }
 else
@@ -857,17 +777,8 @@ else
         $$var4 = "";
         $$var5 = 0;
 
-        if ( isset( $_POST[ $var4 ] ))
-        {
-            $$var4 = $_POST[ $var4 ];
-        }
-
-        if ( isset( $_POST[ $var5 ] ))
-        {
-            $$var5 = (int) $_POST[ $var5 ];
-        }
-
-        Util::prepareParam( $$var4 );
+        $$var4 = Util::getStringParamDefault( $_POST, $var4, "" );
+        $$var5 = Util::getIntParamDefault(    $_POST, $var5, 0  );
     }
 }
 
