@@ -28,6 +28,40 @@ http://www.sir-toby.com/extend-a-story/
 
 class Util
 {
+    private static $dbConnection = null;
+
+    public static function getDbConnection()
+    {
+        if ( ! isset( Util::$dbConnection ))
+        {
+            global $dbHost, $dbUser, $dbPassword, $dbDatabase;
+
+            $dbOptions = array();
+            $dbOptions[ PDO::MYSQL_ATTR_FOUND_ROWS ] = true;
+
+            Util::$dbConnection = new PDO( "mysql:host=" . $dbHost . ";dbname=" . $dbDatabase,
+                                           $dbUser, $dbPassword, $dbOptions );
+
+            Util::$dbConnection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+        }
+
+        return Util::$dbConnection;
+    }
+
+    public static function getLastInsertId()
+    {
+        $dbStatement = Util::getDbConnection()->prepare( "SELECT LAST_INSERT_ID()" );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
+
+        if ( ! $row )
+        {
+            throw new HardStoryException( "Unable to fetch the last insert ID." );
+        }
+
+        return $row[ 0 ];
+    }
+
     public static function getStringParam( $array, $name )
     {
         $value = Util::getStringParamDefault( $array, $name, null );
@@ -167,14 +201,12 @@ class Util
     public static function getSessionAndUserIDs( &$sessionID, &$userID )
     {
         // log out all users after one hour of inactivity
-        $result = mysql_query( "UPDATE Session " .
-                                  "SET UserID = 0 " .
-                                "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 1 HOUR )" );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "UPDATE Session " .
+                   "SET UserID = 0 " .
+                 "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 1 HOUR )" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to logout inactive users." );
-        }
+        $dbStatement->execute();
 
         $originalSessionID  = Util::getIntParamDefault( $_COOKIE, "sessionID",  0 );
         $originalSessionKey = Util::getIntParamDefault( $_COOKIE, "sessionKey", 0 );
@@ -183,16 +215,14 @@ class Util
         $actualUserID     = 0;
         $actualSessionKey = 0;
 
-        $result = mysql_query( "SELECT UserID, SessionKey " .
-                                 "FROM Session " .
-                                "WHERE SessionID = " . $originalSessionID );
+        $dbStatement = Util::getDbConnection()->prepare( "SELECT UserID, " .
+                                                                "SessionKey " .
+                                                           "FROM Session " .
+                                                          "WHERE SessionID = :originalSessionID" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Problem retrieving your session from the database." );
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":originalSessionID", $originalSessionID, PDO::PARAM_INT );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( $row )
         {
@@ -202,14 +232,17 @@ class Util
                 $actualUserID     = $row[ 0 ];
                 $actualSessionKey = $originalSessionKey;
 
-                $result = mysql_query( "UPDATE Session " .
-                                          "SET AccessDate = NOW() " .
-                                        "WHERE SessionID = " . $originalSessionID );
+                $dbStatement = Util::getDbConnection()->prepare(
+                        "UPDATE Session " .
+                           "SET AccessDate = NOW() " .
+                         "WHERE SessionID = :originalSessionID" );
 
-                if ( ! $result )
+                $dbStatement->bindParam( ":originalSessionID", $originalSessionID, PDO::PARAM_INT );
+                $dbStatement->execute();
+
+                if ( $dbStatement->rowCount() != 1 )
                 {
-                    throw new HardStoryException(
-                            "Problem updating your session in the database." );
+                    throw new HardStoryException( "Unable to update your session." );
                 }
             }
         }
@@ -220,41 +253,25 @@ class Util
             $newSessionKey = mt_rand();
 
             // insert the session into the database
-            $result = mysql_query( "INSERT " .
-                                     "INTO Session " .
-                                          "( " .
-                                              "UserID, " .
-                                              "SessionKey, " .
-                                              "AccessDate " .
-                                          ") " .
-                                   "VALUES ".
-                                          "( " .
-                                              "0, " .
-                                              $newSessionKey . ", " .
-                                              "NOW() " .
-                                          ")" );
+            $dbStatement = Util::getDbConnection()->prepare( "INSERT " .
+                                                               "INTO Session " .
+                                                                    "( " .
+                                                                        "UserID, " .
+                                                                        "SessionKey, " .
+                                                                        "AccessDate " .
+                                                                    ") " .
+                                                             "VALUES ".
+                                                                    "( " .
+                                                                        "0, " .
+                                                                        ":newSessionKey, " .
+                                                                        "NOW() " .
+                                                                    ")" );
 
-            if ( ! $result )
-            {
-                throw new HardStoryException( "Unable to insert your session into the database." );
-            }
+            $dbStatement->bindParam( ":newSessionKey", $newSessionKey, PDO::PARAM_INT );
 
-            // get the new SessionID from the database
-            $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+            $dbStatement->execute();
 
-            if ( ! $result )
-            {
-                throw new HardStoryException( "Unable to query the new SessionID." );
-            }
-
-            $row = mysql_fetch_row( $result );
-
-            if ( ! $row )
-            {
-                throw new HardStoryException( "Unable to fetch the new SessionID row." );
-            }
-
-            $actualSessionID  = $row[ 0 ];
+            $actualSessionID  = Util::getLastInsertId();
             $actualSessionKey = $newSessionKey;
         }
 
@@ -262,14 +279,12 @@ class Util
         setcookie( "sessionKey", $actualSessionKey, time() + ( 60 * 60 * 24 * 370 ));
 
         // delete all sessions over 370 days old
-        $result = mysql_query( "DELETE " .
-                                 "FROM Session " .
-                                "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 370 DAY )" );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "DELETE " .
+                  "FROM Session " .
+                 "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 370 DAY )" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to delete old sessions from the database." );
-        }
+        $dbStatement->execute();
 
         $sessionID = $actualSessionID;
         $userID    = $actualUserID;
@@ -277,23 +292,18 @@ class Util
 
     public static function getStringValue( $variableName )
     {
-        $result = mysql_query(
-                "SELECT StringValue " .
-                  "FROM ExtendAStoryVariable " .
-                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+        $dbStatement = Util::getDbConnection()->prepare( "SELECT StringValue " .
+                                                           "FROM ExtendAStoryVariable " .
+                                                          "WHERE VariableName = :variableName" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException(
-                    "Problem retrieving the " . $variableName . " value from the database." );
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
             throw new HardStoryException(
-                    "Problem fetching " . $variableName . " row from the database." );
+                    "Unable to fetch \"" . $variableName . "\" string value." );
         }
 
         return $row[ 0 ];
@@ -313,73 +323,78 @@ class Util
     {
         if ( $increment )
         {
-            // increment the value
-            $result = mysql_query(
+            $dbStatement = Util::getDbConnection()->prepare(
                     "UPDATE ExtendAStoryVariable " .
                        "SET IntValue = IntValue + 1 " .
-                     "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+                     "WHERE VariableName = :variableName" );
 
-            if ( ! $result )
+            $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
+            $dbStatement->execute();
+
+            if ( $dbStatement->rowCount() != 1 )
             {
                 throw new HardStoryException(
-                        "Unable to increment the " . $variableName . " value in the database." );
+                        "Unable to increment \"" . $variableName . "\" int value." );
             }
         }
 
-        $result = mysql_query(
-                "SELECT IntValue " .
-                  "FROM ExtendAStoryVariable " .
-                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+        $dbStatement = Util::getDbConnection()->prepare( "SELECT IntValue " .
+                                                           "FROM ExtendAStoryVariable " .
+                                                          "WHERE VariableName = :variableName" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException(
-                    "Problem retrieving the " . $variableName . " value from the database." );
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
             throw new HardStoryException(
-                    "Problem fetching " . $variableName . " row from the database." );
+                    "Unable to fetch \"" . $variableName . "\" int value." );
         }
 
         return $row[ 0 ];
     }
 
-    public static function setStringValue( $variableName, $variableValue )
+    public static function setStringValue( $variableName, $stringValue )
     {
-        $result = mysql_query(
+        $dbStatement = Util::getDbConnection()->prepare(
                 "UPDATE ExtendAStoryVariable " .
-                   "SET StringValue = '" . mysql_escape_string( $variableValue ) . "' " .
-                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+                   "SET StringValue = :stringValue " .
+                 "WHERE VariableName = :variableName" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":stringValue",  $stringValue,  PDO::PARAM_STR );
+        $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException(
-                    "Problem setting the " . $variableName . " value in the database." );
+                    "Unable to set \"" . $variableName . "\" string value." );
         }
     }
 
-    public static function setIntValue( $variableName, $variableValue )
+    public static function setIntValue( $variableName, $intValue )
     {
-        $result = mysql_query(
+        $dbStatement = Util::getDbConnection()->prepare(
                 "UPDATE ExtendAStoryVariable " .
-                   "SET IntValue = " . $variableValue . " " .
-                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+                   "SET IntValue = :intValue " .
+                 "WHERE VariableName = :variableName" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":intValue",     $intValue,     PDO::PARAM_INT );
+        $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException(
-                    "Problem setting the " . $variableName . " value in the database." );
+                    "Unable to set \"" . $variableName . "\" int value." );
         }
     }
 
     public static function createUser( $permissionLevel, $loginName, $password, $userName )
     {
         // insert the user into the database
-        $result = mysql_query(
+        $dbStatement = Util::getDbConnection()->prepare(
                 "INSERT " .
                   "INTO User " .
                        "( " .
@@ -390,129 +405,120 @@ class Util
                        ") " .
                 "VALUES " .
                        "( " .
-                                           $permissionLevel                  .    ", " .
-                                     "'" . mysql_escape_string( $loginName ) .   "', " .
-                           "PASSWORD( '" . mysql_escape_string( $password  ) . "' ), " .
-                                     "'" . mysql_escape_string( $userName  ) .    "' " .
+                           ":permissionLevel, " .
+                           ":loginName, " .
+                           "PASSWORD( :password ), " .
+                           ":userName " .
                        ")" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":permissionLevel", $permissionLevel, PDO::PARAM_INT );
+        $dbStatement->bindParam( ":loginName",       $loginName,       PDO::PARAM_STR );
+        $dbStatement->bindParam( ":password",        $password,        PDO::PARAM_STR );
+        $dbStatement->bindParam( ":userName",        $userName,        PDO::PARAM_STR );
+
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException( "Unable to insert the user into the database." );
         }
 
-        // get the new UserID from the database
-        $result = mysql_query( "SELECT LAST_INSERT_ID()" );
-
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to query the new UserID." );
-        }
-
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            throw new HardStoryException( "Unable to fetch the new UserID row." );
-        }
-
-        return $row[ 0 ];
+        return Util::getLastInsertId();
     }
 
     public static function createEpisode( $parent, $scheme )
     {
         // insert the episode into the database
-        $result = mysql_query( "INSERT " .
-                                 "INTO Episode " .
-                                      "( " .
-                                          "Parent, " .
-                                          "AuthorSessionID, " .
-                                          "EditorSessionID, " .
-                                          "SchemeID, " .
-                                          "ImageID, " .
-                                          "Status, " .
-                                          "IsLinkable, " .
-                                          "IsExtendable, " .
-                                          "AuthorMailto, " .
-                                          "AuthorNotify, " .
-                                          "Title, " .
-                                          "Text, " .
-                                          "AuthorName, " .
-                                          "AuthorEmail, " .
-                                          "CreationDate, " .
-                                          "LockDate, " .
-                                          "LockKey, " .
-                                          "CreationTimestamp " .
-                                      ") " .
-                               "VALUES " .
-                                      "( " .
-                                          $parent        . ", " .
-                                          "0"            . ", " .
-                                          "0"            . ", " .
-                                          $scheme        . ", " .
-                                          "0"            . ", " .
-                                          "0"            . ", " .
-                                          "'N'"          . ", " .
-                                          "'N'"          . ", " .
-                                          "'N'"          . ", " .
-                                          "'N'"          . ", " .
-                                          "'-'"          . ", " .
-                                          "'-'"          . ", " .
-                                          "'-'"          . ", " .
-                                          "'-'"          . ", " .
-                                          "'-'"          . ", " .
-                                          "'-'"          . ", " .
-                                          "0"            . ", " .
-                                          "null"         .  " " .
-                                      ")" );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "INSERT " .
+                  "INTO Episode " .
+                       "( " .
+                           "Parent, " .
+                           "AuthorSessionID, " .
+                           "EditorSessionID, " .
+                           "SchemeID, " .
+                           "ImageID, " .
+                           "Status, " .
+                           "IsLinkable, " .
+                           "IsExtendable, " .
+                           "AuthorMailto, " .
+                           "AuthorNotify, " .
+                           "Title, " .
+                           "Text, " .
+                           "AuthorName, " .
+                           "AuthorEmail, " .
+                           "CreationDate, " .
+                           "LockDate, " .
+                           "LockKey, " .
+                           "CreationTimestamp " .
+                       ") " .
+                "VALUES " .
+                       "( " .
+                           ":parent, " .
+                           "0, " .
+                           "0, " .
+                           ":scheme, " .
+                           "0, " .
+                           "0, " .
+                           "'N', " .
+                           "'N', " .
+                           "'N', " .
+                           "'N', " .
+                           "'-', " .
+                           "'-', " .
+                           "'-', " .
+                           "'-', " .
+                           "'-', " .
+                           "'-', " .
+                           "0, " .
+                           "null " .
+                       ")" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":parent", $parent, PDO::PARAM_INT );
+        $dbStatement->bindParam( ":scheme", $scheme, PDO::PARAM_INT );
+
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException( "Unable to insert the episode into the database." );
         }
 
-        // get the new EpisodeID from the database
-        $result = mysql_query( "SELECT LAST_INSERT_ID()" );
-
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to query the new EpisodeID." );
-        }
-
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            throw new HardStoryException( "Unable to fetch the new EpisodeID row." );
-        }
-
-        return $row[ 0 ];
+        return Util::getLastInsertId();
     }
 
     public static function createLink( $sourceEpisode, $targetEpisode, $description, $isBackLink )
     {
-        $description = mysql_escape_string( $description );
+        $isBackLink = ( $isBackLink ? "Y" : "N" );
 
         // insert the link into the database
-        $result = mysql_query( "INSERT " .
-                                 "INTO Link " .
-                                      "( " .
-                                          "SourceEpisodeID, " .
-                                          "TargetEpisodeID, " .
-                                          "IsCreated, " .
-                                          "IsBackLink, " .
-                                          "Description " .
-                                      ") " .
-                               "VALUES " .
-                                      "( " .
-                                                  $sourceEpisode            .  ", " .
-                                                  $targetEpisode            .  ", " .
-                                          "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
-                                          "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
-                                          "'" .   $description              . "' "  .
-                                      ")" );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "INSERT " .
+                  "INTO Link " .
+                       "( " .
+                           "SourceEpisodeID, " .
+                           "TargetEpisodeID, " .
+                           "IsCreated, " .
+                           "IsBackLink, " .
+                           "Description " .
+                       ") " .
+                "VALUES " .
+                       "( " .
+                           ":sourceEpisode, " .
+                           ":targetEpisode, " .
+                           ":isBackLink, " .
+                           ":isBackLink, " .
+                           ":description " .
+                       ")" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":sourceEpisode", $sourceEpisode, PDO::PARAM_INT );
+        $dbStatement->bindParam( ":targetEpisode", $targetEpisode, PDO::PARAM_INT );
+        $dbStatement->bindParam( ":isBackLink",    $isBackLink,    PDO::PARAM_STR );
+        $dbStatement->bindParam( ":description",   $description,   PDO::PARAM_STR );
+
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException( "Unable to insert the link into the database." );
         }
@@ -520,156 +526,81 @@ class Util
 
     public static function createEpisodeEditLog( $episode, $editLogEntry )
     {
-        // read the episode to log from the database
-        $result = mysql_query( "SELECT SchemeID, ImageID, IsLinkable, IsExtendable, " .
-                                      "AuthorMailto, AuthorNotify, Title, Text, AuthorName, " .
-                                      "AuthorEmail " .
-                                 "FROM Episode WHERE EpisodeID = " . $episode );
-
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to query original episode from database." );
-        }
-
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            throw new HardStoryException( "Unable to fetch original episode row from database." );
-        }
-
-        $schemeID     = $row[ 0 ];
-        $imageID      = $row[ 1 ];
-        $isLinkable   = $row[ 2 ];
-        $isExtendable = $row[ 3 ];
-        $authorMailto = $row[ 4 ];
-        $authorNotify = $row[ 5 ];
-        $title        = $row[ 6 ];
-        $text         = $row[ 7 ];
-        $authorName   = $row[ 8 ];
-        $authorEmail  = $row[ 9 ];
+        $editDate = date( "n/j/Y g:i:s A" );
 
         // insert the episode edit log into the database
-        $result = mysql_query( "INSERT " .
-                                 "INTO EpisodeEditLog " .
-                                      "( " .
-                                          "EpisodeID, " .
-                                          "SchemeID, " .
-                                          "ImageID, " .
-                                          "IsLinkable, " .
-                                          "IsExtendable, " .
-                                          "AuthorMailto, " .
-                                          "AuthorNotify, " .
-                                          "Title, " .
-                                          "Text, " .
-                                          "AuthorName, " .
-                                          "AuthorEmail, " .
-                                          "EditDate, " .
-                                          "EditLogEntry " .
-                                      ") " .
-                               "VALUES " .
-                                      "( " .
-                                                $episode                             .  ", " .
-                                                $schemeID                            .  ", " .
-                                                $imageID                             .  ", " .
-                                          "'" . $isLinkable                          . "', " .
-                                          "'" . $isExtendable                        . "', " .
-                                          "'" . $authorMailto                        . "', " .
-                                          "'" . $authorNotify                        . "', " .
-                                          "'" . mysql_escape_string( $title        ) . "', " .
-                                          "'" . mysql_escape_string( $text         ) . "', " .
-                                          "'" . mysql_escape_string( $authorName   ) . "', " .
-                                          "'" . mysql_escape_string( $authorEmail  ) . "', " .
-                                          "'" . date( "n/j/Y g:i:s A" )              . "', " .
-                                          "'" . mysql_escape_string( $editLogEntry ) . "' "  .
-                                      ")" );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "INSERT " .
+                  "INTO EpisodeEditLog " .
+                       "( " .
+                           "EpisodeID, " .
+                           "SchemeID, " .
+                           "ImageID, " .
+                           "IsLinkable, " .
+                           "IsExtendable, " .
+                           "AuthorMailto, " .
+                           "AuthorNotify, " .
+                           "Title, " .
+                           "Text, " .
+                           "AuthorName, " .
+                           "AuthorEmail, " .
+                           "EditDate, " .
+                           "EditLogEntry " .
+                       ") " .
+                "SELECT EpisodeID, " .
+                       "SchemeID, " .
+                       "ImageID, " .
+                       "IsLinkable, " .
+                       "IsExtendable, " .
+                       "AuthorMailto, " .
+                       "AuthorNotify, " .
+                       "Title, " .
+                       "Text, " .
+                       "AuthorName, " .
+                       "AuthorEmail, " .
+                       ":editDate, " .
+                       ":editLogEntry " .
+                  "FROM Episode " .
+                 "WHERE EpisodeID = :episode" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":editDate",     $editDate,     PDO::PARAM_STR );
+        $dbStatement->bindParam( ":editLogEntry", $editLogEntry, PDO::PARAM_STR );
+        $dbStatement->bindParam( ":episode",      $episode,      PDO::PARAM_INT );
+
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException(
                     "Unable to insert the episode edit log into the database." );
         }
 
-        // get the new EpisodeEditLogID from the database
-        $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+        $episodeEditLogID = Util::getLastInsertId();
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to query the new EpisodeEditLogID." );
-        }
-
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            throw new HardStoryException( "Unable to fetch the new EpisodeEditLogID row." );
-        }
-
-        $nextEpisodeEditLogID = $row[ 0 ];
-
-        // read the options to log from the database
-        $result = mysql_query( "SELECT TargetEpisodeID, " .
-                                      "IsBackLink, " .
-                                      "Description " .
-                                 "FROM Link " .
-                                "WHERE SourceEpisodeID = " . $episode . " " .
-                                "ORDER BY LinkID" );
-
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to query episode links from the database." );
-        }
-
-        for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
-        {
-            $row = mysql_fetch_row( $result );
-            Util::createLinkEditLog( $nextEpisodeEditLogID, $row[ 0 ], $row[ 1 ], $row[ 2 ] );
-        }
-
-        return $nextEpisodeEditLogID;
-    }
-
-    public static function createLinkEditLog( $episodeEditLogID, $targetEpisodeID, $isBackLink,
-                                              $description )
-    {
         // insert the link edit log into the database
-        $result = mysql_query( "INSERT " .
-                                 "INTO LinkEditLog " .
-                                      "( " .
-                                          "EpisodeEditLogID, " .
-                                          "TargetEpisodeID, " .
-                                          "IsBackLink, " .
-                                          "Description " .
-                                      ") " .
-                               "VALUES " .
-                                      "( " .
-                                                $episodeEditLogID                   .  ", " .
-                                                $targetEpisodeID                    .  ", " .
-                                          "'" . $isBackLink                         . "', " .
-                                          "'" . mysql_escape_string( $description ) . "' " .
-                                      ")" );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "INSERT " .
+                  "INTO LinkEditLog " .
+                       "( " .
+                           "EpisodeEditLogID, " .
+                           "TargetEpisodeID, " .
+                           "IsBackLink, " .
+                           "Description " .
+                       ") " .
+                "SELECT :episodeEditLogID, " .
+                       "TargetEpisodeID, " .
+                       "IsBackLink, " .
+                       "Description " .
+                  "FROM Link " .
+                 "WHERE SourceEpisodeID = :episode " .
+                 "ORDER BY LinkID" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to insert the link edit log into the database." );
-        }
+        $dbStatement->bindParam( ":episodeEditLogID", $episodeEditLogID, PDO::PARAM_INT );
+        $dbStatement->bindParam( ":episode",          $episode,          PDO::PARAM_INT );
 
-        // get the new LinkEditLogID from the database
-        $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+        $dbStatement->execute();
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to query the new LinkEditLogID." );
-        }
-
-        $row = mysql_fetch_row( $result );
-
-        if ( ! $row )
-        {
-            throw new HardStoryException( "Unable to fetch the new LinkEditLogID row." );
-        }
-
-        return $row[ 0 ];
+        return $episodeEditLogID;
     }
 
     public static function extensionNotification( $email, $parent, $episode, $authorName )
@@ -704,20 +635,18 @@ class Util
             return true;
         }
 
-        $result = mysql_query( "SELECT AuthorSessionID, CreationDate " .
-                                 "FROM Episode " .
-                                "WHERE EpisodeID = " . $episodeID );
+        $dbStatement = Util::getDbConnection()->prepare( "SELECT AuthorSessionID, " .
+                                                                "CreationDate " .
+                                                           "FROM Episode " .
+                                                          "WHERE EpisodeID = :episodeID" );
 
-        if ( ! $result )
-        {
-            return false;
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":episodeID", $episodeID, PDO::PARAM_INT );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
-            return false;
+            throw new HardStoryException( "Episode " . $episodeID . " not found." );
         }
 
         $authorSessionID = $row[ 0 ];
