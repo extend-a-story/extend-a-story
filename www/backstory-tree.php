@@ -90,41 +90,38 @@ while ( count( $curEpisodes ) > 0 )
     {
         $episode = $curEpisodes[ $i ];
 
-        $result = mysql_query( "SELECT Title FROM Episode WHERE EpisodeID = " . $episode );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "SELECT Title " .
+                  "FROM Episode " .
+                 "WHERE EpisodeID = :episode" );
 
-        if ( ! $result )
-        {
-            echo( "Problem retrieving episode from database." );
-            exit;
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
-            echo( "Problem fetching episode row from database." );
-            exit;
+            throw new HardStoryException( "Problem fetching episode row from database." );
         }
 
         $title  = $row[ 0 ];
 
-        $result = mysql_query( "SELECT SourceEpisodeID, " .
-                                      "IsBackLink " .
-                                 "FROM Link " .
-                                "WHERE TargetEpisodeID = " . $episode . " " .
-                                "ORDER BY SourceEpisodeID" );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "SELECT SourceEpisodeID, " .
+                       "IsBackLink " .
+                  "FROM Link " .
+                 "WHERE TargetEpisodeID = :episode " .
+                 "ORDER BY SourceEpisodeID" );
 
-        if ( ! $result )
-        {
-            echo( "Problem retrieving parents from database." );
-            exit;
-        }
+        $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+        $dbStatement->execute();
+        $rows = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
         $children = "";
 
-        for ( $j = 0; $j < mysql_num_rows( $result ); $j++ )
+        for ( $j = 0; $j < count( $rows ); $j++ )
         {
-            $row = mysql_fetch_row( $result );
+            $row = $rows[ $j ];
             $target = $row[ 0 ];
             $visited = in_array( $target, $visitedEpisodes );
             $isBackLink = $row[ 1 ];
