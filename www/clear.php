@@ -70,18 +70,16 @@ You are unable to clear locks while episode creation is disabled.
 $episode = Util::getIntParam( $_POST, "episode" );
 $lockKey = Util::getIntParam( $_POST, "lockKey" );
 
-$result = mysql_query( "SELECT Parent, " .
-                              "Status, " .
-                              "LockKey " .
-                         "FROM Episode " .
-                        "WHERE EpisodeID = " . $episode );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT Parent, " .
+               "Status, " .
+               "LockKey " .
+          "FROM Episode " .
+         "WHERE EpisodeID = :episode" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving the episode from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -162,17 +160,22 @@ correct key to unlock it at that time.
     exit;
 }
 
-$sessionColumn = ( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID";
 $statusValue = ( $status == 1 ) ? 0 : 2;
 
-$result = mysql_query( "UPDATE Episode " .
-                          "SET " . $sessionColumn . " = 0, " .
-                              "Status = " . $statusValue . ", " .
-                              "LockDate = '-', " .
-                              "LockKey = 0 " .
-                        "WHERE EpisodeID = " . $episode );
+$dbStatement = Util::getDbConnection()->prepare(
+        "UPDATE Episode " .
+           "SET " . (( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID" ) . " = 0, " .
+               "Status = :statusValue, " .
+               "LockDate = '-', " .
+               "LockKey = 0 " .
+         "WHERE EpisodeID = :episode" );
 
-if ( ! $result )
+        $dbStatement->bindParam( ":statusValue", $statusValue, PDO::PARAM_INT );
+        $dbStatement->bindParam( ":episode",     $episode,     PDO::PARAM_INT );
+
+        $dbStatement->execute();
+
+if ( $dbStatement->rowCount() != 1 )
 {
     throw new HardStoryException( "Unable to unlock the episode record." );
 }
