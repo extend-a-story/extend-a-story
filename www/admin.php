@@ -71,18 +71,17 @@ if ( $command == "login" )
     $loginName = Util::getStringParam( $_POST, "loginName" );
     $password  = Util::getStringParam( $_POST, "password"  );
 
-    $result = mysql_query(
+    $dbStatement = Util::getDbConnection()->prepare(
             "SELECT UserID " .
               "FROM User " .
-             "WHERE LoginName = '" . mysql_escape_string( $loginName ) . "' " .
-               "AND Password = PASSWORD( '" . mysql_escape_string( $password ) . "' )" );
+             "WHERE LoginName = :loginName " .
+               "AND Password = PASSWORD( :password )" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Unable to query user table in database." );
-    }
+    $dbStatement->bindParam( ":loginName", $loginName, PDO::PARAM_STR );
+    $dbStatement->bindParam( ":password",  $password,  PDO::PARAM_STR );
 
-    $row = mysql_fetch_row( $result );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -93,11 +92,17 @@ if ( $command == "login" )
         $message = "Successfully logged in.";
         $userID = $row[ 0 ];
 
-        $result = mysql_query( "UPDATE Session " .
-                                  "SET UserID = " . $userID . " " .
-                                "WHERE SessionID = " . $sessionID );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "UPDATE Session " .
+                   "SET UserID = :userID " .
+                 "WHERE SessionID = :sessionID" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":userID",    $userID,    PDO::PARAM_INT );
+        $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException( "Unable to update session record." );
         }
@@ -106,9 +111,15 @@ if ( $command == "login" )
 
 if ( $command == "logout" )
 {
-    $result = mysql_query( "UPDATE Session SET UserID = 0 WHERE SessionID = " . $sessionID );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Session " .
+               "SET UserID = 0 " .
+             "WHERE SessionID = :sessionID" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to update session record." );
     }
@@ -186,17 +197,16 @@ if ( $userID == 0 )
     exit;
 }
 
-$result = mysql_query( "SELECT PermissionLevel, " .
-                              "UserName " .
-                         "FROM User " .
-                        "WHERE UserID = " . $userID );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT PermissionLevel, " .
+               "UserName " .
+          "FROM User " .
+         "WHERE UserID = :userID" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Unable to query user information from database." );
-}
+$dbStatement->bindParam( ":userID", $userID, PDO::PARAM_INT );
+$dbStatement->execute();
 
-$row = mysql_fetch_row( $result );
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -230,18 +240,17 @@ if ( $command == "changePasswordSave" )
     $newPassword1 = Util::getStringParam( $_POST, "newPassword1" );
     $newPassword2 = Util::getStringParam( $_POST, "newPassword2" );
 
-    $result = mysql_query(
+    $dbStatement = Util::getDbConnection()->prepare(
             "SELECT COUNT( * ) " .
               "FROM User " .
-             "WHERE UserID = " . $userID . " " .
-               "AND Password = PASSWORD( '" . mysql_escape_string( $curPassword ) . "' )" );
+             "WHERE UserID = :userID " .
+               "AND Password = PASSWORD( :curPassword )" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Unable to query user record from database." );
-    }
+    $dbStatement->bindParam( ":userID",      $userID,      PDO::PARAM_INT );
+    $dbStatement->bindParam( ":curPassword", $curPassword, PDO::PARAM_STR );
 
-    $row = mysql_fetch_row( $result );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -264,13 +273,17 @@ if ( $command == "changePasswordSave" )
         }
         else
         {
-            $result = mysql_query(
+            $dbStatement = Util::getDbConnection()->prepare(
                     "UPDATE User " .
-                       "SET Password = PASSWORD( '" .
-                                       mysql_escape_string( $newPassword1 ) . "' ) " .
-                     "WHERE UserID = " . $userID );
+                       "SET Password = PASSWORD( :newPassword1 ) " .
+                     "WHERE UserID = :userID" );
 
-            if ( ! $result )
+            $dbStatement->bindParam( ":newPassword1", $newPassword1, PDO::PARAM_STR );
+            $dbStatement->bindParam( ":userID",       $userID,       PDO::PARAM_INT );
+
+            $dbStatement->execute();
+
+            if ( $dbStatement->rowCount() != 1 )
             {
                 throw new HardStoryException( "Unable to update user record." );
             }
@@ -445,17 +458,14 @@ if ( $command == "addUserSave" )
 
     $count = -1;
 
-    $result = mysql_query(
+    $dbStatement = Util::getDbConnection()->prepare(
             "SELECT COUNT( * ) " .
               "FROM User " .
-             "WHERE LoginName = '" . mysql_escape_string( $newLoginName ) . "'" );
+             "WHERE LoginName = :newLoginName" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Unable to query database for existing login name." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":newLoginName", $newLoginName, PDO::PARAM_STR );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -508,18 +518,16 @@ if (( $command == "editUser"     ) ||
     }
     else
     {
-        $result = mysql_query( "SELECT PermissionLevel, " .
-                                      "LoginName, " .
-                                      "UserName " .
-                                 "FROM User " .
-                                "WHERE UserID = " . $editedUserID );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "SELECT PermissionLevel, " .
+                       "LoginName, " .
+                       "UserName " .
+                  "FROM User " .
+                 "WHERE UserID = :editedUserID" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to query user for editing from database." );
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":editedUserID", $editedUserID, PDO::PARAM_INT );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
@@ -603,17 +611,14 @@ if ( $command == "editUserSave" )
     {
         $count = -1;
 
-        $result = mysql_query(
+        $dbStatement = Util::getDbConnection()->prepare(
                 "SELECT COUNT( * ) " .
                   "FROM User " .
-                 "WHERE LoginName = '" . mysql_escape_string( $newLoginName ) . "'" );
+                 "WHERE LoginName = :newLoginName" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to query database for existing login name." );
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":newLoginName", $newLoginName, PDO::PARAM_STR );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
@@ -631,30 +636,40 @@ if ( $command == "editUserSave" )
 
     if ( empty( $message ))
     {
+        $dbStatement;
+
         if ( $setNewPassword == 1 )
         {
-            $sql = "UPDATE User " .
-                      "SET PermissionLevel = "  . $newPermissionLevel                  .  ", " .
-                          "LoginName       = '" . mysql_escape_string( $newLoginName ) . "', " .
-                          "Password        = PASSWORD( '" .
-                                             mysql_escape_string( $newPassword1 ) . "' ), "    .
-                          "UserName        = '" . mysql_escape_string( $newUserName  ) . "' "  .
-                    "WHERE UserID = " . $editedUserID;
+            $dbStatement = Util::getDbConnection()->prepare(
+                    "UPDATE User " .
+                       "SET PermissionLevel = :newPermissionLevel, " .
+                           "LoginName       = :newLoginName, " .
+                           "Password        = PASSWORD( :newPassword1 ), " .
+                           "UserName        = :newUserName " .
+                     "WHERE UserID = :editedUserID" );
+
+            $dbStatement->bindParam( ":newPassword1", $newPassword1, PDO::PARAM_STR );
         }
         else
         {
-            $sql = "UPDATE User " .
-                      "SET PermissionLevel = "  . $newPermissionLevel                  .  ", " .
-                          "LoginName       = '" . mysql_escape_string( $newLoginName ) . "', " .
-                          "UserName        = '" . mysql_escape_string( $newUserName  ) . "' "  .
-                    "WHERE UserID = " . $editedUserID;
+            $dbStatement = Util::getDbConnection()->prepare(
+                    "UPDATE User " .
+                       "SET PermissionLevel = :newPermissionLevel, " .
+                           "LoginName       = :newLoginName, " .
+                           "UserName        = :newUserName " .
+                     "WHERE UserID = :editedUserID" );
         }
 
-        $result = mysql_query( $sql );
+        $dbStatement->bindParam( ":newPermissionLevel", $newPermissionLevel, PDO::PARAM_INT );
+        $dbStatement->bindParam( ":newLoginName",       $newLoginName,       PDO::PARAM_STR );
+        $dbStatement->bindParam( ":newUserName",        $newUserName,        PDO::PARAM_STR );
+        $dbStatement->bindParam( ":editedUserID",       $editedUserID,       PDO::PARAM_INT );
 
-        if ( ! $result )
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Unable to update user record." );
+            throw new HardStoryException( "Unable to update user." );
         }
 
         if ( $userID == $editedUserID )
@@ -684,78 +699,72 @@ if ( $command == "deleteUserSave" )
     }
     else
     {
-        $result = mysql_query( "DELETE FROM User WHERE UserID = " . $deletedUserID );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "DELETE " .
+                  "FROM User " .
+                 "WHERE UserID = :deletedUserID" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":deletedUserID", $deletedUserID, PDO::PARAM_INT );
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Problem deleting user from the database." );
+            throw new HardStoryException( "Unable to delete user." );
         }
 
-        if ( mysql_affected_rows() == 0 )
-        {
-            $message = "The specified user does not exist.";
-        }
-        else
-        {
-            $message = "User Deleted";
-        }
+        $message = "User Deleted";
     }
 }
 
 if ( $command == "listOrphans" )
 {
-    $orphans = mysql_query( "SELECT Episode.EpisodeID, " .
-                                   "Episode.Parent, " .
-                                   "Episode.Status, " .
-                                   "COUNT( * )" .
-                              "FROM Link " .
-                  "RIGHT OUTER JOIN Episode " .
-                                "ON Link.IsBackLink = 'N' " .
-                               "AND Link.TargetEpisodeID = Episode.EpisodeID " .
-                   "LEFT OUTER JOIN EpisodeEditLog " .
-                                "ON Episode.EpisodeID = EpisodeEditLog.EpisodeID " .
-                             "WHERE Link.LinkID IS NULL " .
-                               "AND Episode.EpisodeID != 1 " .
-                             "GROUP BY Episode.EpisodeID " .
-                             "ORDER BY Episode.EpisodeID" );
+    $dbStatement = Util::getDbConnection()->prepare(
+                      "SELECT Episode.EpisodeID, " .
+                             "Episode.Parent, " .
+                             "Episode.Status, " .
+                             "COUNT( * )" .
+                        "FROM Link " .
+            "RIGHT OUTER JOIN Episode " .
+                          "ON Link.IsBackLink = 'N' " .
+                         "AND Link.TargetEpisodeID = Episode.EpisodeID " .
+             "LEFT OUTER JOIN EpisodeEditLog " .
+                          "ON Episode.EpisodeID = EpisodeEditLog.EpisodeID " .
+                       "WHERE Link.LinkID IS NULL " .
+                         "AND Episode.EpisodeID != 1 " .
+                       "GROUP BY Episode.EpisodeID " .
+                       "ORDER BY Episode.EpisodeID" );
 
-    if ( ! $orphans )
-    {
-        throw new HardStoryException( "Unable to query list of orphans from the database." );
-    }
+    $dbStatement->execute();
+    $orphans = $dbStatement->fetchAll( PDO::FETCH_NUM );
 }
 
 if ( $command == "listDeadEnds" )
 {
-    $deadEnds = mysql_query( "SELECT Episode.EpisodeID " .
-                             "FROM Link " .
-                 "RIGHT OUTER JOIN Episode " .
-                               "ON Link.SourceEpisodeID = Episode.EpisodeID " .
-                            "WHERE Link.LinkID IS NULL " .
-                              "AND ( Episode.Status = 2 OR Episode.Status = 3 ) " .
-                            "ORDER BY Episode.EpisodeID" );
+    $dbStatement = Util::getDbConnection()->prepare(
+                      "SELECT Episode.EpisodeID " .
+                        "FROM Link " .
+            "RIGHT OUTER JOIN Episode " .
+                          "ON Link.SourceEpisodeID = Episode.EpisodeID " .
+                       "WHERE Link.LinkID IS NULL " .
+                         "AND ( Episode.Status = 2 OR Episode.Status = 3 ) " .
+                       "ORDER BY Episode.EpisodeID" );
 
-    if ( ! $deadEnds )
-    {
-        throw new HardStoryException( "Unable to query list of dead ends from the database." );
-    }
+    $dbStatement->execute();
+    $deadEnds = $dbStatement->fetchAll( PDO::FETCH_NUM );
 }
 
 if ( $command == "listRecentEdits" )
 {
-    $result = mysql_query( "SELECT MAX( EpisodeEditLogID ) FROM EpisodeEditLog" );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT MAX( EpisodeEditLogID ) FROM EpisodeEditLog" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Unable to query the max EpisodeEditLogID from database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
         throw new HardStoryException(
-                "Unable to retrieve the max EpisodeEditLogID record from database." );
+                "Unable to fetch the max EpisodeEditLogID record from database." );
     }
 
     $maxEpisodeEditLogID = (int) $row[ 0 ];
@@ -767,27 +776,29 @@ if ( $command == "listRecentEdits" )
         $start = $maxEpisodeEditLogID;
     }
 
-    $edits = mysql_query( "SELECT EpisodeEditLogID, " .
-                                 "EpisodeID, " .
-                                 "EditDate, " .
-                                 "EditLogEntry " .
-                            "FROM EpisodeEditLog " .
-                           "WHERE EpisodeEditLogID <= " . $start . " " .
-                           "ORDER BY EpisodeEditLogID DESC " .
-                           "LIMIT 20" );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT EpisodeEditLogID, " .
+                   "EpisodeID, " .
+                   "EditDate, " .
+                   "EditLogEntry " .
+              "FROM EpisodeEditLog " .
+             "WHERE EpisodeEditLogID <= :start " .
+             "ORDER BY EpisodeEditLogID DESC " .
+             "LIMIT 20" );
 
-    if ( ! $edits )
-    {
-        throw new HardStoryException( "Unable to query list of recent edits from the database." );
-    }
+    $dbStatement->bindParam( ":start", $start, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $edits = $dbStatement->fetchAll( PDO::FETCH_NUM );
 }
 
-$users = mysql_query( "SELECT UserID, LoginName FROM User ORDER BY UserID" );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT UserID, " .
+               "LoginName " .
+          "FROM User " .
+         "ORDER BY LoginName" );
 
-if ( ! $users )
-{
-    throw new HardStoryException( "Unable to query user list from database." );
-}
+$dbStatement->execute();
+$users = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
 if ( $command == "listOrphans" )
 {
@@ -814,9 +825,9 @@ if ( $command == "listOrphans" )
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $orphans ); $i++ )
+    for ( $i = 0; $i < count( $orphans ); $i++ )
     {
-        $row = mysql_fetch_row( $orphans );
+        $row = $orphans[ $i ];
 
         $edits = (( $row[ 3 ] > 1 ) ?
                  "<A HREF=\"list-edits.php?episode=" .
@@ -893,9 +904,9 @@ if ( $command == "listDeadEnds" )
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $deadEnds ); $i++ )
+    for ( $i = 0; $i < count( $deadEnds ); $i++ )
     {
-        $row = mysql_fetch_row( $deadEnds );
+        $row = $deadEnds[ $i ];
 
 ?>
 
@@ -953,9 +964,9 @@ if ( $command == "listRecentEdits" )
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $edits ); $i++ )
+    for ( $i = 0; $i < count( $edits ); $i++ )
     {
-        $row = mysql_fetch_row( $edits );
+        $row = $edits[ $i ];
 
 ?>
 
@@ -1456,9 +1467,9 @@ Edit User -
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $users ); $i++ )
+    for ( $i = 0; $i < count( $users ); $i++ )
     {
-        $row = mysql_fetch_row( $users );
+        $row = $users[ $i ];
 
 ?>
 
@@ -1467,8 +1478,6 @@ Edit User -
 <?php
 
     }
-
-    mysql_data_seek( $users, 0 );
 
 ?>
 
@@ -1484,9 +1493,9 @@ Delete User -
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $users ); $i++ )
+    for ( $i = 0; $i < count( $users ); $i++ )
     {
-        $row = mysql_fetch_row( $users );
+        $row = $users[ $i ];
 
 ?>
 
