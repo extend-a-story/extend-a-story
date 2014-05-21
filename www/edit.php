@@ -75,17 +75,15 @@ $permissionLevel = 0;
 
 if ( $userID != 0 )
 {
-    $result = mysql_query( "SELECT PermissionLevel, " .
-                                  "UserName " .
-                             "FROM User " .
-                            "WHERE UserID = " . $userID );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT PermissionLevel, " .
+                   "UserName " .
+              "FROM User " .
+             "WHERE UserID = :userID" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Unable to query user information from database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":userID", $userID, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -132,18 +130,16 @@ You do not have permission to use the advanced editing features.
 
 $status = 0;
 
-$result = mysql_query( "SELECT SchemeID, " .
-                              "Status, " .
-                              "LockKey " .
-                         "FROM Episode " .
-                        "WHERE EpisodeID = " . $episode );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT SchemeID, " .
+               "Status, " .
+               "LockKey " .
+          "FROM Episode " .
+         "WHERE EpisodeID = :episode" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem querying episode from database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -193,18 +189,27 @@ You are trying to edit an episode that someone else is currently editing.
         exit;
     }
 
+    $lockDate = date( "n/j/Y g:i:s A" );
     $lockKey = mt_rand();
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET EditorSessionID = "  . $sessionID              .  ", " .
-                                  "Status          = 3"                           .  ", " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "', " .
-                                  "LockKey         = "  . $lockKey                .   " " .
-                            "WHERE EpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Episode " .
+               "SET EditorSessionID = :sessionID, " .
+                   "Status          = 3, " .
+                   "LockDate        = :lockDate, " .
+                   "LockKey         = :lockKey " .
+             "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+    $dbStatement->bindParam( ":lockDate",  $lockDate,  PDO::PARAM_STR );
+    $dbStatement->bindParam( ":lockKey",   $lockKey,   PDO::PARAM_INT );
+    $dbStatement->bindParam( ":episode",   $episode,   PDO::PARAM_INT );
+
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Problem updating episode record in database." );
+        throw new HardStoryException( "Unable to lock the episode." );
     }
 }
 
@@ -282,14 +287,23 @@ You are trying to edit an episode that has been locked, but not by you.
         exit;
     }
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET EditorSessionID = "  . $sessionID              . ", " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "' " .
-                            "WHERE EpisodeID = " . $episode );
+    $lockDate = date( "n/j/Y g:i:s A" );
 
-    if ( ! $result )
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Episode " .
+               "SET EditorSessionID = :sessionID, " .
+                   "LockDate        = :lockDate " .
+             "WHERE EpisodeID = :episode" );
+
+    $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+    $dbStatement->bindParam( ":lockDate",  $lockDate,  PDO::PARAM_STR );
+    $dbStatement->bindParam( ":episode",   $episode,   PDO::PARAM_INT );
+
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to update the edit lock on the episode." );
+        throw new HardStoryException( "Unable to update the lock on the episode." );
     }
 }
 
@@ -326,17 +340,17 @@ if ( $command == "AddLinkSave" )
             $message .= "The link cannot link back to the same episode you are editing.<BR>";
         }
 
-        $result = mysql_query( "SELECT COUNT( * ) " .
-                                 "FROM Link " .
-                                "WHERE SourceEpisodeID = " . $episode . " " .
-                                  "AND TargetEpisodeID = " . $linkEpisode );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "SELECT COUNT( * ) " .
+                  "FROM Link " .
+                 "WHERE SourceEpisodeID = :episode " .
+                   "AND TargetEpisodeID = :linkEpisode" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Problem retrieving link count from the database." );
-        }
+        $dbStatement->bindParam( ":episode",     $episode,     PDO::PARAM_INT );
+        $dbStatement->bindParam( ":linkEpisode", $linkEpisode, PDO::PARAM_INT );
 
-        $row = mysql_fetch_row( $result );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
@@ -349,17 +363,14 @@ if ( $command == "AddLinkSave" )
                         "specified episode.<BR>";
         }
 
-        $result = mysql_query( "SELECT IsLinkable " .
-                                 "FROM Episode " .
-                                "WHERE EpisodeID = " . $linkEpisode );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "SELECT IsLinkable " .
+                  "FROM Episode " .
+                 "WHERE EpisodeID = :linkEpisode" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Problem retrieving an episode from the database to " .
-                                          "determine if it is linkable." );
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":linkEpisode", $linkEpisode, PDO::PARAM_INT );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
@@ -388,15 +399,20 @@ if ( $command == "AddLinkSave" )
             Util::createLink( $episode, $linkEpisode, $linkDescription, true );
         }
 
-        $result = mysql_query( "UPDATE Episode " .
-                                  "SET EditorSessionID   = "  . $sessionID .  ", " .
-                                      "Status            = 2, "  .
-                                      "LockDate          = '', " .
-                                      "LockKey           = 0, "  .
-                                      "CreationTimestamp = now() " .
-                                "WHERE EpisodeID = " . $episode );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "UPDATE Episode " .
+                   "SET EditorSessionID   = :sessionID, " .
+                       "Status            = 2, " .
+                       "LockDate          = '', " .
+                       "LockKey           = 0, " .
+                       "CreationTimestamp = now() " .
+                 "WHERE EpisodeID = :episode" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+        $dbStatement->bindParam( ":episode",   $episode,   PDO::PARAM_INT );
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException( "Unable to unlock the episode record." );
         }
@@ -418,19 +434,17 @@ if (( $command == "DeleteSelectedLink"     ) ||
 {
     $linkID = Util::getIntParam( $_REQUEST, "linkID" );
 
-    $result = mysql_query( "SELECT SourceEpisodeID, " .
-                                  "IsCreated, " .
-                                  "IsBackLink, " .
-                                  "Description " .
-                             "FROM Link " .
-                            "WHERE LinkID = " . $linkID );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT SourceEpisodeID, " .
+                   "IsCreated, " .
+                   "IsBackLink, " .
+                   "Description " .
+              "FROM Link " .
+             "WHERE LinkID = :linkID" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Problem querying database for link information." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":linkID", $linkID, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -464,22 +478,29 @@ if ( $command == "DeleteSelectedLinkSave" )
 {
     Util::createEpisodeEditLog( $episode, "Link deleted by " . $userName . "." );
 
-    $result = mysql_query( "DELETE FROM Link WHERE LinkID = " . $linkID );
+    $dbStatement = Util::getDbConnection()->prepare( "DELETE FROM Link WHERE LinkID = :linkID" );
+    $dbStatement->bindParam( ":linkID", $linkID, PDO::PARAM_INT );
+    $dbStatement->execute();
 
-    if ( ! $result )
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to delete link from database." );
     }
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET EditorSessionID   = " . $sessionID . ", " .
-                                  "Status            = 2, "  .
-                                  "LockDate          = '', " .
-                                  "LockKey           = 0, "  .
-                                  "CreationTimestamp = now() " .
-                            "WHERE EpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Episode " .
+               "SET EditorSessionID   = :sessionID, " .
+                   "Status            = 2, " .
+                   "LockDate          = '', " .
+                   "LockKey           = 0, " .
+                   "CreationTimestamp = now() " .
+             "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+    $dbStatement->bindParam( ":episode",   $episode,   PDO::PARAM_INT );
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to unlock the episode record." );
     }
@@ -490,18 +511,18 @@ if ( $command == "DeleteSelectedLinkSave" )
 
 if ( $command == "DeleteLink" )
 {
-    $links = mysql_query( "SELECT LinkID, " .
-                                 "IsBackLink, " .
-                                 "Description " .
-                            "FROM Link " .
-                           "WHERE SourceEpisodeID = " . $episode . " " .
-                             "AND ( IsCreated = 'N' OR IsBackLink = 'Y' ) " .
-                           "ORDER BY LinkID" );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT LinkID, " .
+                   "IsBackLink, " .
+                   "Description " .
+              "FROM Link " .
+             "WHERE SourceEpisodeID = :episode " .
+               "AND ( IsCreated = 'N' OR IsBackLink = 'Y' ) " .
+             "ORDER BY LinkID" );
 
-    if ( ! $links )
-    {
-        throw new HardStoryException( "Problem retrieving links from database." );
-    }
+    $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $links = $dbStatement->fetchAll( PDO::FETCH_NUM );
 }
 
 if (( $command == "DeleteEpisode" ) || ( $command == "DeleteEpisodeSave" ))
@@ -509,16 +530,14 @@ if (( $command == "DeleteEpisode" ) || ( $command == "DeleteEpisodeSave" ))
     $linkCount = 0;
     $backlinkCount = 0;
 
-    $result = mysql_query( "SELECT COUNT( * ) " .
-                             "FROM Link " .
-                            "WHERE SourceEpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT COUNT( * ) " .
+              "FROM Link " .
+             "WHERE SourceEpisodeID = :episode" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Problem querying link count from the database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -527,19 +546,18 @@ if (( $command == "DeleteEpisode" ) || ( $command == "DeleteEpisodeSave" ))
 
     $linkCount = $row[ 0 ];
 
-    $backlinks = mysql_query( "SELECT SourceEpisodeID " .
-                                "FROM Link " .
-                               "WHERE TargetEpisodeID = " . $episode . " " .
-                                 "AND IsBackLink = 'Y' " .
-                            "ORDER BY SourceEpisodeID" );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT SourceEpisodeID " .
+              "FROM Link " .
+             "WHERE TargetEpisodeID = :episode " .
+               "AND IsBackLink = 'Y' " .
+          "ORDER BY SourceEpisodeID" );
 
-    if ( ! $backlinks )
-    {
-        throw new HardStoryException( "Problem querying database for back links to this episode." );
-    }
+    $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $backlinks = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
-    $backlinkCount = mysql_num_rows( $backlinks );
-
+    $backlinkCount = count( $backlinks );
     $canDeleteEpisode = ( $linkCount == 0 ) && ( $backlinkCount == 0 );
 }
 
@@ -549,35 +567,43 @@ if ( $command == "DeleteEpisodeSave" )
     {
         Util::createEpisodeEditLog( $episode, "Episode deleted by " . $userName . "." );
 
-        $result = mysql_query( "UPDATE Episode " .
-                                  "SET AuthorSessionID   = 0, "   .
-                                      "EditorSessionID   = 0, "   .
-                                      "ImageID           = 0, "   .
-                                      "Status            = 0, "   .
-                                      "IsLinkable        = 'N', " .
-                                      "IsExtendable      = 'N', " .
-                                      "AuthorMailto      = 'N', " .
-                                      "AuthorNotify      = 'N', " .
-                                      "Title             = '-', " .
-                                      "Text              = '-', " .
-                                      "AuthorName        = '-', " .
-                                      "AuthorEmail       = '-', " .
-                                      "CreationDate      = '-', " .
-                                      "LockDate          = '-', " .
-                                      "LockKey           = 0, "   .
-                                      "CreationTimestamp = NULL " .
-                                "WHERE EpisodeID = " . $episode );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "UPDATE Episode " .
+                   "SET AuthorSessionID   = 0, "   .
+                       "EditorSessionID   = 0, "   .
+                       "ImageID           = 0, "   .
+                       "Status            = 0, "   .
+                       "IsLinkable        = 'N', " .
+                       "IsExtendable      = 'N', " .
+                       "AuthorMailto      = 'N', " .
+                       "AuthorNotify      = 'N', " .
+                       "Title             = '-', " .
+                       "Text              = '-', " .
+                       "AuthorName        = '-', " .
+                       "AuthorEmail       = '-', " .
+                       "CreationDate      = '-', " .
+                       "LockDate          = '-', " .
+                       "LockKey           = 0, "   .
+                       "CreationTimestamp = NULL " .
+                 "WHERE EpisodeID = :episode" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException( "Problem deleting episode from database." );
         }
 
-        $result = mysql_query( "UPDATE Link " .
-                                  "SET IsCreated = 'N' " .
-                                "WHERE TargetEpisodeID = " . $episode );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "UPDATE Link " .
+                   "SET IsCreated = 'N' " .
+                 "WHERE TargetEpisodeID = :episode" );
 
-        if ( ! $result )
+        $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException( "Problem resetting link IsCreated status." );
         }
@@ -596,16 +622,21 @@ if ( $command == "RevokeAuthorSave" )
     Util::createEpisodeEditLog(
             $episode, "Author's edit permission revoked by " . $userName . "." );
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET AuthorSessionID   = 0, " .
-                                  "EditorSessionID   = " . $sessionID . ", " .
-                                  "Status            = 2, " .
-                                  "LockDate          = '', " .
-                                  "LockKey           = 0, " .
-                                  "CreationTimestamp = now() " .
-                            "WHERE EpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Episode " .
+               "SET AuthorSessionID   = 0, " .
+                   "EditorSessionID   = :sessionID, " .
+                   "Status            = 2, " .
+                   "LockDate          = '', " .
+                   "LockKey           = 0, " .
+                   "CreationTimestamp = now() " .
+             "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+    $dbStatement->bindParam( ":episode",   $episode,   PDO::PARAM_INT );
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to update the episode record." );
     }
@@ -801,7 +832,7 @@ yet.
 
 <?php
 
-    if ( mysql_num_rows( $links ) > 0 )
+    if ( count( $links ) > 0 )
     {
 
 ?>
@@ -812,9 +843,9 @@ Select a link to delete:
 
 <?php
 
-        for ( $i = 0; $i < mysql_num_rows( $links ); $i++ )
+        for ( $i = 0; $i < count( $links ); $i++ )
         {
-            $row = mysql_fetch_row( $links );
+            $row = $links[ $i ];
 
             $description = $row[ 2 ];
             $description = htmlentities( $description );
@@ -931,7 +962,7 @@ This episode has back links leading to it from the following episodes that must 
 
         for ( $i = 0; $i < $backlinkCount; $i++ )
         {
-            $row = mysql_fetch_row( $backlinks );
+            $row = $backlinks[ $i ];
 
 ?>
 
