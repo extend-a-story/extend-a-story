@@ -162,16 +162,14 @@ You are unable to create episodes while episode creation is disabled.
 
 if (( $command == "Lock" ) && ( $episode != 1 ))
 {
-    $result = mysql_query( "SELECT COUNT( * ) " .
-                             "FROM Link " .
-                            "WHERE TargetEpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT COUNT( * ) " .
+              "FROM Link " .
+             "WHERE TargetEpisodeID = :episode" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Unable to query orphan status from the database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -213,40 +211,37 @@ The episode you are trying to create is an orphan (has no links to it) and canno
     }
 }
 
-$schemeList = mysql_query( "SELECT SchemeID, " .
-                                  "SchemeName " .
-                             "FROM Scheme" );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT SchemeID, " .
+               "SchemeName " .
+          "FROM Scheme " .
+         "ORDER BY SchemeID" );
 
-if ( ! $schemeList )
-{
-    throw new HardStoryException( "Problem retrieving the list of schemes from the database." );
-}
+$dbStatement->execute();
+$schemeList = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
 if ( $command == "Edit" )
 {
-    $result = mysql_query( "SELECT Parent, "       .
-                                  "SchemeID, "     .
-                                  "Status, "       .
-                                  "IsLinkable, "   .
-                                  "IsExtendable, " .
-                                  "AuthorMailto, " .
-                                  "AuthorNotify, " .
-                                  "Title, "        .
-                                  "Text, "         .
-                                  "AuthorName, "   .
-                                  "AuthorEmail, "  .
-                                  "CreationDate, " .
-                                  "LockKey "       .
-                             "FROM Episode "       .
-                            "WHERE EpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+        "SELECT Parent, "       .
+               "SchemeID, "     .
+               "Status, "       .
+               "IsLinkable, "   .
+               "IsExtendable, " .
+               "AuthorMailto, " .
+               "AuthorNotify, " .
+               "Title, "        .
+               "Text, "         .
+               "AuthorName, "   .
+               "AuthorEmail, "  .
+               "CreationDate, " .
+               "LockKey "       .
+          "FROM Episode "       .
+         "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException(
-                "Problem retrieving the episode for editing from the database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -275,21 +270,19 @@ if ( $command == "Edit" )
 }
 else
 {
-    $result = mysql_query( "SELECT Parent, "       .
-                                  "SchemeID, "     .
-                                  "Status, "       .
-                                  "IsExtendable, " .
-                                  "CreationDate, " .
-                                  "LockKey "       .
-                             "FROM Episode "       .
-                            "WHERE EpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT Parent, "       .
+                   "SchemeID, "     .
+                   "Status, "       .
+                   "IsExtendable, " .
+                   "CreationDate, " .
+                   "LockKey "       .
+              "FROM Episode "       .
+             "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Problem retrieving the episode from the database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -312,20 +305,23 @@ else
 $canEdit = Util::canEditEpisode( $sessionID, $userID, $episode );
 
 // verify that the selected scheme is in the database
-$result = mysql_query( "SELECT SchemeName " .
-                         "FROM Scheme " .
-                        "WHERE SchemeID = " . $scheme );
+$dbStatement = Util::getDbConnection()->prepare(
+    "SELECT COUNT( * ) " .
+      "FROM Scheme " .
+     "WHERE SchemeID = :scheme" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving scheme from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":scheme", $scheme, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching scheme row from the database." );
+    throw new HardStoryException( "Unable to fetch scheme count row from the database." );
+}
+
+if ( $row[ 0 ] == 0 )
+{
+    throw new HardStoryException( "The specified scheme does not exist." );
 }
 
 if ( $mailto == 1 )
@@ -719,24 +715,24 @@ $linkFound = false;
 
 if ( $editing )
 {
-    $result = mysql_query( "SELECT LinkID, " .
-                                  "TargetEpisodeID, " .
-                                  "IsBacklink, " .
-                                  "Description " .
-                             "FROM Link " .
-                            "WHERE SourceEpisodeID = " . $episode . " " .
-                            "ORDER BY LinkID" );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT LinkID, " .
+                   "TargetEpisodeID, " .
+                   "IsBacklink, " .
+                   "Description " .
+              "FROM Link " .
+             "WHERE SourceEpisodeID = :episode " .
+             "ORDER BY LinkID" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Problem retrieving the links from the database." );
-    }
+    $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $rows = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
-    $linkCount = mysql_num_rows( $result );
+    $linkCount = count( $rows );
 
     for ( $i = 0; $i < $linkCount; $i++ )
     {
-        $row = mysql_fetch_row( $result );
+        $row = $rows[ $i ];
 
         $var1 = "linkID"          . $i;
         $var2 = "targetEpisodeID" . $i;
@@ -823,17 +819,14 @@ for ( $i = 0; $i < $linkCount; $i++ )
             $warning .= "Option " . ( $i + 1 ) . " is back linked, but has no description.<BR>";
         }
 
-        $result = mysql_query( "SELECT IsLinkable " .
-                                 "FROM Episode " .
-                                "WHERE EpisodeID = " . $$var2 );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "SELECT IsLinkable " .
+                  "FROM Episode " .
+                 "WHERE EpisodeID = :episodeID" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Problem retrieving an episode from the database to " .
-                                          "determine if it is linkable." );
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":episodeID", $$var2, PDO::PARAM_INT );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
@@ -932,16 +925,25 @@ else if ( $command == "EditPreview" )
 
 if ( $command == "Lock" )
 {
+    $lockDate = date( "n/j/Y g:i:s A" );
     $lockKey = mt_rand();
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET AuthorSessionID = "  . $sessionID              .  ", " .
-                                  "Status          = 1, " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "', " .
-                                  "LockKey         = "  . $lockKey                .   " " .
-                            "WHERE EpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Episode " .
+               "SET AuthorSessionID = :sessionID, " .
+                   "Status          = 1, " .
+                   "LockDate        = :lockDate, " .
+                   "LockKey         = :lockKey " .
+             "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+    $dbStatement->bindParam( ":lockDate",  $lockDate,  PDO::PARAM_STR );
+    $dbStatement->bindParam( ":lockKey",   $lockKey,   PDO::PARAM_INT );
+    $dbStatement->bindParam( ":episode",   $episode,   PDO::PARAM_INT );
+
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to lock the episode." );
     }
@@ -949,12 +951,21 @@ if ( $command == "Lock" )
 
 if ( $command == "Preview" )
 {
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET AuthorSessionID = "  . $sessionID              . ", " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "' " .
-                            "WHERE EpisodeID = " . $episode );
+    $lockDate = date( "n/j/Y g:i:s A" );
 
-    if ( ! $result )
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Episode " .
+               "SET AuthorSessionID = :sessionID, " .
+                   "LockDate        = :lockDate " .
+             "WHERE EpisodeID = :episode" );
+
+    $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+    $dbStatement->bindParam( ":lockDate",  $lockDate,  PDO::PARAM_STR );
+    $dbStatement->bindParam( ":episode",   $episode,   PDO::PARAM_INT );
+
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to update the lock on the episode." );
     }
@@ -962,16 +973,25 @@ if ( $command == "Preview" )
 
 if ( $command == "Edit" )
 {
+    $lockDate = date( "n/j/Y g:i:s A" );
     $lockKey = mt_rand();
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET EditorSessionID = "  . $sessionID              .  ", " .
-                                  "Status          = 3, " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "', " .
-                                  "LockKey         = "  . $lockKey                .   " " .
-                            "WHERE EpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Episode " .
+               "SET EditorSessionID = :sessionID, " .
+                   "Status          = 3, " .
+                   "LockDate        = :lockDate, " .
+                   "LockKey         = :lockKey " .
+             "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+    $dbStatement->bindParam( ":lockDate",  $lockDate,  PDO::PARAM_STR );
+    $dbStatement->bindParam( ":lockKey",   $lockKey,   PDO::PARAM_INT );
+    $dbStatement->bindParam( ":episode",   $episode,   PDO::PARAM_INT );
+
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to lock the episode for editing." );
     }
@@ -979,12 +999,21 @@ if ( $command == "Edit" )
 
 if ( $command == "EditPreview" )
 {
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET EditorSessionID = "  . $sessionID              . ", " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "' " .
-                            "WHERE EpisodeID = " . $episode );
+    $lockDate = date( "n/j/Y g:i:s A" );
 
-    if ( ! $result )
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Episode " .
+               "SET EditorSessionID = :sessionID, " .
+                   "LockDate        = :lockDate " .
+             "WHERE EpisodeID = :episode" );
+
+    $dbStatement->bindParam( ":sessionID", $sessionID, PDO::PARAM_INT );
+    $dbStatement->bindParam( ":lockDate",  $lockDate,  PDO::PARAM_STR );
+    $dbStatement->bindParam( ":episode",   $episode,   PDO::PARAM_INT );
+
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to update the edit lock on the episode." );
     }
@@ -1005,36 +1034,63 @@ if (( $command == "Save" ) || ( $command == "ExtendSave" ))
         $parentToUpdate = $parent;
     }
 
-    $result = mysql_query(
+    $linkableValue   = ( $linkable   == 1 ? "Y" : "N" );
+    $extendableValue = ( $extendable == 1 ? "Y" : "N" );
+    $mailtoValue     = ( $mailto     == 1 ? "Y" : "N" );
+    $notifyValue     = ( $notify     == 1 ? "Y" : "N" );
+    $creationDate    = date( "n/j/Y g:i:s A" );
+
+    $dbStatement = Util::getDbConnection()->prepare(
             "UPDATE Episode " .
-               "SET AuthorSessionID   = "  . $sessionID                          .  ", " .
-                   "SchemeID          = "  . $scheme                             .  ", " .
+               "SET AuthorSessionID   = :sessionID, " .
+                   "SchemeID          = :scheme, " .
                    "Status            = 2, " .
-                   "IsLinkable        = '" . ( $linkable   == 1 ? "Y" : "N" )    . "', " .
-                   "IsExtendable      = '" . ( $extendable == 1 ? "Y" : "N" )    . "', " .
-                   "AuthorMailto      = '" . ( $mailto     == 1 ? "Y" : "N" )    . "', " .
-                   "AuthorNotify      = '" . ( $notify     == 1 ? "Y" : "N" )    . "', " .
-                   "Title             = '" . mysql_escape_string( $title       ) . "', " .
-                   "Text              = '" . mysql_escape_string( $text        ) . "', " .
-                   "AuthorName        = '" . mysql_escape_string( $authorName  ) . "', " .
-                   "AuthorEmail       = '" . mysql_escape_string( $authorEmail ) . "', " .
-                   "CreationDate      = '" . date( "n/j/Y g:i:s A" )             . "', " .
+                   "IsLinkable        = :linkableValue, " .
+                   "IsExtendable      = :extendableValue, " .
+                   "AuthorMailto      = :mailtoValue, " .
+                   "AuthorNotify      = :notifyValue, " .
+                   "Title             = :title, " .
+                   "Text              = :text, " .
+                   "AuthorName        = :authorName, " .
+                   "AuthorEmail       = :authorEmail, " .
+                   "CreationDate      = :creationDate, " .
                    "LockDate          = '', " .
                    "LockKey           = 0, " .
                    "CreationTimestamp = now() " .
-             "WHERE EpisodeID = " . $episodeToUpdate );
+             "WHERE EpisodeID = :episodeToUpdate" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":sessionID",       $sessionID,       PDO::PARAM_INT );
+    $dbStatement->bindParam( ":scheme",          $scheme,          PDO::PARAM_INT );
+    $dbStatement->bindParam( ":linkableValue",   $linkableValue,   PDO::PARAM_STR );
+    $dbStatement->bindParam( ":extendableValue", $extendableValue, PDO::PARAM_STR );
+    $dbStatement->bindParam( ":mailtoValue",     $mailtoValue,     PDO::PARAM_STR );
+    $dbStatement->bindParam( ":notifyValue",     $notifyValue,     PDO::PARAM_STR );
+    $dbStatement->bindParam( ":title",           $title,           PDO::PARAM_STR );
+    $dbStatement->bindParam( ":text",            $text,            PDO::PARAM_STR );
+    $dbStatement->bindParam( ":authorName",      $authorName,      PDO::PARAM_STR );
+    $dbStatement->bindParam( ":authorEmail",     $authorEmail,     PDO::PARAM_STR );
+    $dbStatement->bindParam( ":creationDate",    $creationDate,    PDO::PARAM_STR );
+    $dbStatement->bindParam( ":episodeToUpdate", $episodeToUpdate, PDO::PARAM_INT );
+
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to update the episode record." );
     }
 
-    $result = mysql_query( "UPDATE Link " .
-                              "SET IsCreated = 'Y' " .
-                            "WHERE SourceEpisodeID = " . $parentToUpdate . " " .
-                              "AND TargetEpisodeID = " . $episodeToUpdate );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Link " .
+               "SET IsCreated = 'Y' " .
+             "WHERE SourceEpisodeID = :parentToUpdate " .
+               "AND TargetEpisodeID = :episodeToUpdate" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":parentToUpdate",  $parentToUpdate,  PDO::PARAM_INT );
+    $dbStatement->bindParam( ":episodeToUpdate", $episodeToUpdate, PDO::PARAM_INT );
+
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to update the link record." );
     }
@@ -1064,18 +1120,15 @@ if (( $command == "Save" ) || ( $command == "ExtendSave" ))
         Util::extensionNotification( $adminEmail, $parentToUpdate, $episodeToUpdate, $authorName );
 
         // send a notification email (if applicable) to the author of the parent episode
-        $result = mysql_query( "SELECT AuthorNotify, " .
-                                      "AuthorEmail " .
-                                 "FROM Episode " .
-                                "WHERE EpisodeID = " . $parentToUpdate );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "SELECT AuthorNotify, " .
+                       "AuthorEmail " .
+                  "FROM Episode " .
+                 "WHERE EpisodeID = :parentToUpdate" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException(
-                    "Problem retrieving the parent episode from the database." );
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":parentToUpdate", $parentToUpdate, PDO::PARAM_INT );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
@@ -1099,14 +1152,12 @@ if ( $command == "EditSave" )
     // if the editor is a user, look up their name for the edit log
     if ( $userID != 0 )
     {
-        $result = mysql_query( "SELECT UserName FROM User WHERE UserID = " . $userID );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "SELECT UserName FROM User WHERE UserID = :userID" );
 
-        if ( ! $result )
-        {
-            throw new HardStoryException( "Unable to query user from the database." );
-        }
-
-        $row = mysql_fetch_row( $result );
+        $dbStatement->bindParam( ":userID", $userID, PDO::PARAM_INT );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
         if ( ! $row )
         {
@@ -1123,25 +1174,44 @@ if ( $command == "EditSave" )
     // save the previous episode into the edit log
     Util::createEpisodeEditLog( $episode, "Edited by " . $userName . "." );
 
-    $result = mysql_query(
+    $linkableValue   = ( $linkable   == 1 ? "Y" : "N" );
+    $extendableValue = ( $extendable == 1 ? "Y" : "N" );
+    $mailtoValue     = ( $mailto     == 1 ? "Y" : "N" );
+    $notifyValue     = ( $notify     == 1 ? "Y" : "N" );
+
+    $dbStatement = Util::getDbConnection()->prepare(
             "UPDATE Episode " .
-               "SET EditorSessionID   = "  . $sessionID                          .  ", " .
-                   "SchemeID          = "  . $scheme                             .  ", " .
+               "SET EditorSessionID   = :sessionID, " .
+                   "SchemeID          = :scheme, " .
                    "Status            = 2, " .
-                   "IsLinkable        = '" . ( $linkable   == 1 ? "Y" : "N" )    . "', " .
-                   "IsExtendable      = '" . ( $extendable == 1 ? "Y" : "N" )    . "', " .
-                   "AuthorMailto      = '" . ( $mailto     == 1 ? "Y" : "N" )    . "', " .
-                   "AuthorNotify      = '" . ( $notify     == 1 ? "Y" : "N" )    . "', " .
-                   "Title             = '" . mysql_escape_string( $title       ) . "', " .
-                   "Text              = '" . mysql_escape_string( $text        ) . "', " .
-                   "AuthorName        = '" . mysql_escape_string( $authorName  ) . "', " .
-                   "AuthorEmail       = '" . mysql_escape_string( $authorEmail ) . "', " .
+                   "IsLinkable        = :linkableValue, " .
+                   "IsExtendable      = :extendableValue, " .
+                   "AuthorMailto      = :mailtoValue, " .
+                   "AuthorNotify      = :notifyValue, " .
+                   "Title             = :title, " .
+                   "Text              = :text, " .
+                   "AuthorName        = :authorName, " .
+                   "AuthorEmail       = :authorEmail, " .
                    "LockDate          = '', " .
                    "LockKey           = 0, " .
                    "CreationTimestamp = now() " .
-             "WHERE EpisodeID = " . $episode );
+             "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":sessionID",       $sessionID,       PDO::PARAM_INT );
+    $dbStatement->bindParam( ":scheme",          $scheme,          PDO::PARAM_INT );
+    $dbStatement->bindParam( ":linkableValue",   $linkableValue,   PDO::PARAM_STR );
+    $dbStatement->bindParam( ":extendableValue", $extendableValue, PDO::PARAM_STR );
+    $dbStatement->bindParam( ":mailtoValue",     $mailtoValue,     PDO::PARAM_STR );
+    $dbStatement->bindParam( ":notifyValue",     $notifyValue,     PDO::PARAM_STR );
+    $dbStatement->bindParam( ":title",           $title,           PDO::PARAM_STR );
+    $dbStatement->bindParam( ":text",            $text,            PDO::PARAM_STR );
+    $dbStatement->bindParam( ":authorName",      $authorName,      PDO::PARAM_STR );
+    $dbStatement->bindParam( ":authorEmail",     $authorEmail,     PDO::PARAM_STR );
+    $dbStatement->bindParam( ":episode",         $episode,         PDO::PARAM_INT );
+
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Unable to update the episode record for editing." );
     }
@@ -1153,23 +1223,32 @@ if ( $command == "EditSave" )
         $var3 = "option"     . $i;
         $var4 = "backlink"   . $i;
 
+        $dbStatement;
+
         if ( $$var2 == "Y" )
         {
-            $queryString = "UPDATE Link " .
-                              "SET TargetEpisodeID = "  . $$var4                        . ", " .
-                                  "Description     = '" . mysql_escape_string( $$var3 ) . "' " .
-                            "WHERE LinkID = " . $$var1;
+            $dbStatement = Util::getDbConnection()->prepare(
+                    "UPDATE Link " .
+                       "SET TargetEpisodeID = :backlink, " .
+                           "Description     = :option " .
+                     "WHERE LinkID = :linkID" );
+
+            $dbStatement->bindParam( ":backlink", $$var4, PDO::PARAM_INT );
         }
         else
         {
-            $queryString = "UPDATE Link " .
-                              "SET Description = '" . mysql_escape_string( $$var3 ) . "' " .
-                            "WHERE LinkID = " . $$var1;
+            $dbStatement = Util::getDbConnection()->prepare(
+                    "UPDATE Link " .
+                       "SET Description = :option " .
+                     "WHERE LinkID = :linkID" );
         }
 
-        $result = mysql_query( $queryString );
+        $dbStatement->bindParam( ":option", $$var3, PDO::PARAM_STR );
+        $dbStatement->bindParam( ":linkID", $$var1, PDO::PARAM_INT );
 
-        if ( ! $result )
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
         {
             throw new HardStoryException( "Unable to update the link record for editing." );
         }
@@ -1677,9 +1756,9 @@ Select a scheme for this episode:<BR>
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $schemeList ); $i++ )
+for ( $i = 0; $i < count( $schemeList ); $i++ )
 {
-    $row = mysql_fetch_row( $schemeList );
+    $row = $schemeList[ $i ];
 
     $selected = ( $scheme == $row[ 0 ] ) ? " SELECTED" : "";
 
