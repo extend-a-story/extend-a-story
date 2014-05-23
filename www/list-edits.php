@@ -38,21 +38,7 @@ $siteHome  = Util::getStringValue( "SiteHome"  );
 
 $episode = Util::getIntParam( $_GET, "episode" );
 
-$result = mysql_query( "SELECT EpisodeEditLogID, " .
-                              "EditDate, " .
-                              "EditLogEntry " .
-                         "FROM EpisodeEditLog " .
-                        "WHERE EpisodeID = " . $episode . " " .
-                        "ORDER BY EpisodeEditLogID" );
-
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving edit list from the database." );
-}
-
-$canEdit = Util::canEditEpisode( $sessionID, $userID, $episode );
-
-if ( ! $canEdit )
+if ( ! Util::canEditEpisode( $sessionID, $userID, $episode ))
 {
 
 ?>
@@ -85,6 +71,18 @@ You do not have permission to view the edits for this episode.
     exit;
 }
 
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT EpisodeEditLogID, " .
+               "EditDate, " .
+               "EditLogEntry " .
+          "FROM EpisodeEditLog " .
+         "WHERE EpisodeID = :episode " .
+         "ORDER BY EpisodeEditLogID" );
+
+$dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+$dbStatement->execute();
+$rows = $dbStatement->fetchAll( PDO::FETCH_NUM );
+
 ?>
 
 <HTML><HEAD>
@@ -105,9 +103,9 @@ Clicking on a <I>View Edit</I> link views the episode as it was <B>before</B> th
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < count( $rows ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = $rows[ $i ];
 
 ?>
 
