@@ -38,18 +38,18 @@ $siteHome  = Util::getStringValue( "SiteHome"  );
 
 $episode = Util::getIntParam( $_GET, "episode" );
 
-$result = mysql_query( "SELECT Link.SourceEpisodeID, " .
-                              "Episode.Title " .
-                         "FROM Link, " .
-                              "Episode " .
-                        "WHERE Link.SourceEpisodeID = Episode.EpisodeID " .
-                          "AND Link.TargetEpisodeID = " . $episode . " " .
-                        "ORDER BY Episode.EpisodeID" );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT Link.SourceEpisodeID, " .
+               "Episode.Title " .
+          "FROM Link, " .
+               "Episode " .
+         "WHERE Link.SourceEpisodeID = Episode.EpisodeID " .
+           "AND Link.TargetEpisodeID = :episode " .
+         "ORDER BY Episode.EpisodeID" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving the back link trace from the database." );
-}
+$dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+$dbStatement->execute();
+$rows = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
 ?>
 
@@ -67,9 +67,9 @@ if ( ! $result )
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < count( $rows ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = $rows[ $i ];
 
     $source = $row[ 0 ];
     $title  = $row[ 1 ];
