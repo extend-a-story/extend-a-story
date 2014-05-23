@@ -36,15 +36,14 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$result = mysql_query( "SELECT EpisodeID " .
-                         "FROM Episode " .
-                        "WHERE Status = 1 " .
-                        "ORDER BY EpisodeID" );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT EpisodeID " .
+          "FROM Episode " .
+         "WHERE Status = 1 " .
+         "ORDER BY EpisodeID" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving locked episode list from the database." );
-}
+$dbStatement->execute();
+$rows = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
 ?>
 
@@ -60,9 +59,9 @@ if ( ! $result )
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < count( $rows ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = $rows[ $i ];
 
 ?>
 
