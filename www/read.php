@@ -43,14 +43,12 @@ $permissionLevel = 0;
 
 if ( $userID != 0 )
 {
-    $result = mysql_query( "SELECT PermissionLevel FROM User WHERE UserID = " . $userID );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT PermissionLevel FROM User WHERE UserID = :userID" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Unable to query user information from database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":userID", $userID, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -60,14 +58,12 @@ if ( $userID != 0 )
     $permissionLevel = $row[ 0 ];
 }
 
-$result = mysql_query( "SELECT COUNT( * ) FROM Link where TargetEpisodeID = " . $episode );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT COUNT( * ) FROM Link where TargetEpisodeID = :episode" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving link count from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -76,31 +72,29 @@ if ( ! $row )
 
 $linkCount = (int) $row[ 0 ];
 
-$result = mysql_query( "SELECT Parent, " .
-                              "AuthorSessionID, " .
-                              "EditorSessionID, " .
-                              "SchemeID, " .
-                              "ImageID, " .
-                              "Status, " .
-                              "IsLinkable, " .
-                              "IsExtendable, " .
-                              "AuthorMailto, " .
-                              "Title, " .
-                              "Text, " .
-                              "AuthorName, " .
-                              "AuthorEmail, " .
-                              "CreationDate, " .
-                              "LockDate, " .
-                              "LockKey " .
-                         "FROM Episode " .
-                        "WHERE EpisodeID = " . $episode );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT Parent, " .
+               "AuthorSessionID, " .
+               "EditorSessionID, " .
+               "SchemeID, " .
+               "ImageID, " .
+               "Status, " .
+               "IsLinkable, " .
+               "IsExtendable, " .
+               "AuthorMailto, " .
+               "Title, " .
+               "Text, " .
+               "AuthorName, " .
+               "AuthorEmail, " .
+               "CreationDate, " .
+               "LockDate, " .
+               "LockKey " .
+          "FROM Episode " .
+         "WHERE EpisodeID = :episode" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving the episode from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -164,37 +158,39 @@ if (( $status == 1 ) && ( $minutes > 300 ))
     $authorSessionID = 0;
     $status = 0;
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET AuthorSessionID = 0, " .
-                                  "Status = 0, " .
-                                  "LockDate = '-', " .
-                                  "LockKey = 0 " .
-                            "WHERE EpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "UPDATE Episode " .
+               "SET AuthorSessionID = 0, " .
+                   "Status = 0, " .
+                   "LockDate = '-', " .
+                   "LockKey = 0 " .
+             "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
+    $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+    $dbStatement->execute();
+
+    if ( $dbStatement->rowCount() != 1 )
     {
         throw new HardStoryException( "Automatic unlock attempt failed." );
     }
 }
 
-$result = mysql_query( "SELECT bgcolor, " .
-                              "text, " .
-                              "link, " .
-                              "vlink, " .
-                              "alink, " .
-                              "background, " .
-                              "UncreatedLink, " .
-                              "CreatedLink, " .
-                              "BackLinkedLink " .
-                         "FROM Scheme " .
-                        "WHERE SchemeID = " . $scheme );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT bgcolor, " .
+               "text, " .
+               "link, " .
+               "vlink, " .
+               "alink, " .
+               "background, " .
+               "UncreatedLink, " .
+               "CreatedLink, " .
+               "BackLinkedLink " .
+          "FROM Scheme " .
+         "WHERE SchemeID = :scheme" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving the scheme from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":scheme", $scheme, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -221,14 +217,12 @@ $body = "<BODY BGCOLOR=\"" . $bgcolorColor . "\" " .
 
 if ( $image != 0 )
 {
-    $result = mysql_query( "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT ImageURL FROM Image WHERE ImageID = :image" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Problem retrieving the image from the database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":image", $image, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -242,16 +236,14 @@ $canEdit = Util::canEditEpisode( $sessionID, $userID, $episode );
 
 if ( $canEdit )
 {
-    $result = mysql_query( "SELECT COUNT( * ) " .
-                             "FROM EpisodeEditLog " .
-                            "WHERE EpisodeID = " . $episode );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT COUNT( * ) " .
+              "FROM EpisodeEditLog " .
+             "WHERE EpisodeID = :episode" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Problem retrieving edit count from database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -261,18 +253,18 @@ if ( $canEdit )
     $editCount = $row[ 0 ];
 }
 
-$result = mysql_query( "SELECT TargetEpisodeID, " .
-                              "IsCreated, " .
-                              "IsBackLink, " .
-                              "Description " .
-                         "FROM Link " .
-                        "WHERE SourceEpisodeID = " . $episode . " " .
-                        "ORDER BY LinkID" );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT TargetEpisodeID, " .
+               "IsCreated, " .
+               "IsBackLink, " .
+               "Description " .
+          "FROM Link " .
+         "WHERE SourceEpisodeID = :episode " .
+         "ORDER BY LinkID" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving links from database." );
-}
+$dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+$dbStatement->execute();
+$links = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
 if (( $isWriteable == "N" ) && (( $status == 0 ) || ( $status == 1 )))
 {
@@ -480,9 +472,9 @@ else
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+    for ( $i = 0; $i < count( $links ); $i++ )
     {
-        $row = mysql_fetch_row( $result );
+        $row = $links[ $i ];
 
         $description = $row[ 3 ];
         $description = htmlentities( $description );
