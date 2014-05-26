@@ -30,11 +30,29 @@ class Util
 {
     private static $dbConnection = null;
 
+    public static function verifyDbConfiguration()
+    {
+        global $dbHost, $dbUser, $dbPassword, $dbDatabase;
+
+        if (( ! isset( $dbHost     )) ||
+            ( ! isset( $dbUser     )) ||
+            ( ! isset( $dbPassword )) ||
+            ( ! isset( $dbDatabase )))
+        {
+            throw new HardStoryException(
+                    "The Extend-A-Story installation is not complete. If you are the " .
+                    "administrator, please refer to the documentation for completing the " .
+                    "installation." );
+        }
+    }
+
     public static function getDbConnection()
     {
         if ( ! isset( Util::$dbConnection ))
         {
             global $dbHost, $dbUser, $dbPassword, $dbDatabase;
+
+            Util::verifyDbConfiguration();
 
             $dbOptions = array();
             $dbOptions[ PDO::MYSQL_ATTR_FOUND_ROWS ] = true;

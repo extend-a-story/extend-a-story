@@ -26,9 +26,9 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-$dbHost     = "<host>";
-$dbUser     = "<user>";
-$dbPassword = "<password>";
-$dbDatabase = "<database>";
+$dbHost     = null;
+$dbUser     = null;
+$dbPassword = null;
+$dbDatabase = null;
 
 ?>
