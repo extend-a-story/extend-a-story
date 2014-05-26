@@ -48,8 +48,10 @@ class SimplePage
 
 ?>
 
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <?php
 
@@ -70,7 +72,7 @@ class SimplePage
 
     </head>
     <body>
-        <center>
+        <div style="text-align: center">
 
 <?php
 
@@ -79,7 +81,7 @@ class SimplePage
 
 ?>
 
-        <h1><?php echo( htmlentities( $this->mainHeader )); ?></h1>
+            <h1><?php echo( htmlentities( $this->mainHeader )); ?></h1>
 
 <?php
 
@@ -90,7 +92,7 @@ class SimplePage
 
 ?>
 
-        <h2><?php echo( htmlentities( $this->subHeader )); ?></h2>
+            <h2><?php echo( htmlentities( $this->subHeader )); ?></h2>
 
 <?php
 
@@ -101,13 +103,13 @@ class SimplePage
 
 ?>
 
-        <table width="500">
-            <tr>
-                <td>
-                    <?php echo( $this->content ); ?>
-                </td>
-            </tr>
-        </table>
+            <table width="500" style="text-align: left; margin-left: auto; margin-right: auto">
+                <tr>
+                    <td>
+                        <?php echo( $this->content ); ?>
+                    </td>
+                </tr>
+            </table>
 
 <?php
 
@@ -118,11 +120,11 @@ class SimplePage
 
 ?>
 
-        <p>
-            <a href="<?php echo( htmlentities( $this->linkUrl )); ?>">
-                <?php echo( htmlentities( $this->linkText )); ?>
-            </a>
-        </p>
+            <p>
+                <a href="<?php echo( htmlentities( $this->linkUrl )); ?>">
+                    <?php echo( htmlentities( $this->linkText )); ?>
+                </a>
+            </p>
 
 <?php
 
@@ -130,7 +132,7 @@ class SimplePage
 
 ?>
 
-        </center>
+        </div>
 
         <?php require( __DIR__ . "/../config/Footer.php" ); ?>
 
