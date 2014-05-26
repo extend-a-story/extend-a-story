@@ -38,27 +38,25 @@ $siteHome  = Util::getStringValue( "SiteHome"  );
 
 $episodeEditLogID = Util::getIntParam( $_GET, "episodeEditLogID" );
 
-$result = mysql_query( "SELECT EpisodeID, " .
-                              "SchemeID, " .
-                              "ImageID, " .
-                              "IsLinkable, " .
-                              "IsExtendable, " .
-                              "AuthorMailto, " .
-                              "AuthorNotify, " .
-                              "Title, " .
-                              "Text, " .
-                              "AuthorName, " .
-                              "AuthorEmail, " .
-                              "EditDate " .
-                         "FROM EpisodeEditLog " .
-                        "WHERE EpisodeEditLogID = " . $episodeEditLogID );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT EpisodeID, " .
+               "SchemeID, " .
+               "ImageID, " .
+               "IsLinkable, " .
+               "IsExtendable, " .
+               "AuthorMailto, " .
+               "AuthorNotify, " .
+               "Title, " .
+               "Text, " .
+               "AuthorName, " .
+               "AuthorEmail, " .
+               "EditDate " .
+          "FROM EpisodeEditLog " .
+         "WHERE EpisodeEditLogID = :episodeEditLogID" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving episode edit log record from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":episodeEditLogID", $episodeEditLogID, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -134,14 +132,12 @@ You do not have permission to view this edit log.
     exit;
 }
 
-$result = mysql_query( "SELECT Parent FROM Episode WHERE EpisodeID = " . $episode );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT Parent FROM Episode WHERE EpisodeID = :episode" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving the episode from the database." );
-}
-
-    $row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -150,14 +146,12 @@ if ( ! $row )
 
 $parent = $row[ 0 ];
 
-$result = mysql_query( "SELECT COUNT( * ) FROM Link WHERE TargetEpisodeID = " . $episode );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT COUNT( * ) FROM Link WHERE TargetEpisodeID = :episode" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving link count from the database." );
-}
-
-    $row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -173,24 +167,22 @@ $authorName = htmlentities( $authorName );
 $text        = strtr( $text,        Util::getEpisodeBodyTranslation()  );
 $authorEmail = strtr( $authorEmail, Util::getEmailAddressTranslation() );
 
-$result = mysql_query( "SELECT bgcolor, " .
-                              "text, " .
-                              "link, " .
-                              "vlink, " .
-                              "alink, " .
-                              "background, " .
-                              "UncreatedLink, " .
-                              "CreatedLink, " .
-                              "BackLinkedLink " .
-                         "FROM Scheme " .
-                        "WHERE SchemeID = " . $scheme );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT bgcolor, " .
+               "text, " .
+               "link, " .
+               "vlink, " .
+               "alink, " .
+               "background, " .
+               "UncreatedLink, " .
+               "CreatedLink, " .
+               "BackLinkedLink " .
+          "FROM Scheme " .
+         "WHERE SchemeID = :scheme" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving the scheme from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":scheme", $scheme, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -217,14 +209,12 @@ $body = "<BODY BGCOLOR=\"" . $bgcolorColor . "\" " .
 
 if ( $image != 0 )
 {
-    $result = mysql_query( "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT ImageURL FROM Image WHERE ImageID = :image" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Problem retrieving the image from the database." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->bindParam( ":image", $image, PDO::PARAM_INT );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -234,17 +224,17 @@ if ( $image != 0 )
     $image = $row[ 0 ];
 }
 
-$result = mysql_query( "SELECT TargetEpisodeID, " .
-                              "IsBackLink, " .
-                              "Description " .
-                         "FROM LinkEditLog " .
-                        "WHERE EpisodeEditLogID = " . $episodeEditLogID . " " .
-                        "ORDER BY LinkEditLogID" );
+$dbStatement = Util::getDbConnection()->prepare(
+    "SELECT TargetEpisodeID, " .
+           "IsBackLink, " .
+           "Description " .
+      "FROM LinkEditLog " .
+     "WHERE EpisodeEditLogID = :episodeEditLogID " .
+     "ORDER BY LinkEditLogID" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving link edit log from database." );
-}
+$dbStatement->bindParam( ":episodeEditLogID", $episodeEditLogID, PDO::PARAM_INT );
+$dbStatement->execute();
+$links = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
 ?>
 
@@ -287,9 +277,9 @@ if ( ! empty( $image ))
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < count( $links ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = $links[ $i ];
 
     $description = $row[ 2 ];
     $description = htmlentities( $description );
