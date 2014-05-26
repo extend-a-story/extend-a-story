@@ -40,68 +40,73 @@ $method = Util::getStringParam(        $_POST, "method"     );
 $text   = Util::getStringParamDefault( $_POST, "text",   "" );
 $days   = Util::getIntParamDefault(    $_POST, "days",   0  );
 
-if (( $method != "title"      ) &&
-    ( $method != "text"       ) &&
-    ( $method != "author"     ) &&
-    ( $method != "time"       ) &&
-    ( $method != "extendable" ) &&
-    ( $method != "linkable"   ) &&
-    ( $method != "days"       ))
+$text = "%" . $text . "%";
+
+$dbStatement;
+
+$queryPart1 = "SELECT EpisodeID, " .
+                     "Title, " .
+                     "AuthorName " .
+                "FROM Episode " .
+               "WHERE ";
+
+$queryPart2 =    "AND ( Status = 2 OR Status = 3 ) " .
+               "ORDER BY EpisodeID";
+
+if ( $method == "title" )
+{
+    $dbStatement = Util::getDbConnection()->prepare(
+            $queryPart1 . "Title LIKE :text " . $queryPart2 );
+
+    $dbStatement->bindParam( ":text", $text, PDO::PARAM_STR );
+}
+else if ( $method == "text" )
+{
+    $dbStatement = Util::getDbConnection()->prepare(
+            $queryPart1 . "Text LIKE :text " . $queryPart2 );
+
+    $dbStatement->bindParam( ":text", $text, PDO::PARAM_STR );
+}
+else if ( $method == "author" )
+{
+    $dbStatement = Util::getDbConnection()->prepare(
+            $queryPart1 . "AuthorName LIKE :text " . $queryPart2 );
+
+    $dbStatement->bindParam( ":text", $text, PDO::PARAM_STR );
+}
+else if ( $method == "time" )
+{
+    $dbStatement = Util::getDbConnection()->prepare(
+            $queryPart1 . "CreationDate LIKE :text " . $queryPart2 );
+
+    $dbStatement->bindParam( ":text", $text, PDO::PARAM_STR );
+}
+else if ( $method == "extendable" )
+{
+    $dbStatement = Util::getDbConnection()->prepare(
+            $queryPart1 . "IsExtendable = 'Y' " . $queryPart2 );
+}
+else if ( $method == "linkable" )
+{
+    $dbStatement = Util::getDbConnection()->prepare(
+            $queryPart1 . "IsLinkable = 'Y' " . $queryPart2 );
+}
+else if ( $method == "days" )
+{
+    $dbStatement = Util::getDbConnection()->prepare(
+            $queryPart1 .
+            "CreationTimestamp > SUBDATE( NOW(), INTERVAL :days DAY ) " .
+            $queryPart2 );
+
+    $dbStatement->bindParam( ":days", $days, PDO::PARAM_INT );
+}
+else
 {
     throw new HardStoryException( "The specified search method is not supported." );
 }
 
-if ( $method == "title" )
-{
-    $whereClause = "Title LIKE '%" . mysql_escape_string( $text ) . "%' " .
-               "AND ( Status = 2 OR Status = 3 )";
-}
-
-if ( $method == "text" )
-{
-    $whereClause = "Text LIKE '%" . mysql_escape_string( $text ) . "%' " .
-               "AND ( Status = 2 OR Status = 3 )";
-}
-
-if ( $method == "author" )
-{
-    $whereClause = "AuthorName LIKE '%" . mysql_escape_string( $text ) . "%' " .
-               "AND ( Status = 2 OR Status = 3 )";
-}
-
-if ( $method == "time" )
-{
-    $whereClause = "CreationDate LIKE '%" . mysql_escape_string( $text ) . "%' " .
-               "AND ( Status = 2 OR Status = 3 )";
-}
-
-if ( $method == "extendable" )
-{
-    $whereClause = "IsExtendable = 'Y' AND ( Status = 2 OR Status = 3 )";
-}
-
-if ( $method == "linkable" )
-{
-    $whereClause = "IsLinkable = 'Y' AND ( Status = 2 OR Status = 3 )";
-}
-
-if ( $method == "days" )
-{
-    $whereClause = "CreationTimestamp > SUBDATE( NOW(), INTERVAL " . $days . " DAY ) " .
-               "AND ( Status = 2 OR Status = 3 )";
-}
-
-$result = mysql_query( "SELECT EpisodeID, " .
-                              "Title, " .
-                              "AuthorName " .
-                         "FROM Episode " .
-                        "WHERE " . $whereClause . " " .
-                        "ORDER BY EpisodeID" );
-
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving the search results from the database." );
-}
+$dbStatement->execute();
+$rows = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
 ?>
 
@@ -122,9 +127,9 @@ if ( ! $result )
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < count( $rows ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = $rows[ $i ];
 
     $displayedTitle      = htmlentities( $row[ 1 ] );
     $displayedAuthorName = htmlentities( $row[ 2 ] );
