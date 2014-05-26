@@ -113,7 +113,6 @@ $editing = ( $command == "Edit"        ) ||
            ( $command == "EditPreview" ) ||
            ( $command == "EditSave"    );
 
-Util::connectToDatabase();
 Util::getSessionAndUserIDs( $sessionID, $userID );
 
 $storyName   = Util::getStringValue( "StoryName"   );

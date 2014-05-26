@@ -180,24 +180,6 @@ class Util
                       "."  => " dot " );
     }
 
-    public static function connectToDatabase()
-    {
-        global $dbHost;
-        global $dbUser;
-        global $dbPassword;
-        global $dbDatabase;
-
-        if ( ! mysql_connect( $dbHost, $dbUser, $dbPassword ))
-        {
-            throw new HardStoryException( "Unable to connect to database." );
-        }
-
-        if ( ! mysql_select_db( $dbDatabase ))
-        {
-            throw new HardStoryException( "Unable to select database." );
-        }
-    }
-
     public static function getSessionAndUserIDs( &$sessionID, &$userID )
     {
         // log out all users after one hour of inactivity
