@@ -40,14 +40,11 @@ $scheme = Util::getIntParamDefault( $_POST, "scheme", null );
 
 if ( ! isset( $scheme ))
 {
-    $result = mysql_query( "SELECT SchemeID FROM Scheme ORDER BY SchemeID ASC" );
+    $dbStatement = Util::getDbConnection()->prepare(
+            "SELECT SchemeID FROM Scheme ORDER BY SchemeID" );
 
-    if ( ! $result )
-    {
-        throw new HardStoryException( "Unable to query for the lowest scheme ID." );
-    }
-
-    $row = mysql_fetch_row( $result );
+    $dbStatement->execute();
+    $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
     if ( ! $row )
     {
@@ -57,25 +54,23 @@ if ( ! isset( $scheme ))
     $scheme = $row[ 0 ];
 }
 
-$result = mysql_query( "SELECT SchemeName, " .
-                              "bgcolor, " .
-                              "text, " .
-                              "link, " .
-                              "vlink, " .
-                              "alink, " .
-                              "background, " .
-                              "UncreatedLink, " .
-                              "CreatedLink, " .
-                              "BackLinkedLink " .
-                         "FROM Scheme " .
-                        "WHERE SchemeID = " . $scheme );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT SchemeName, " .
+               "bgcolor, " .
+               "text, " .
+               "link, " .
+               "vlink, " .
+               "alink, " .
+               "background, " .
+               "UncreatedLink, " .
+               "CreatedLink, " .
+               "BackLinkedLink " .
+          "FROM Scheme " .
+         "WHERE SchemeID = :scheme" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving the scheme from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement->bindParam( ":scheme", $scheme, PDO::PARAM_INT );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -101,12 +96,9 @@ $body = "<BODY BGCOLOR=\"" . $bgcolor . "\" " .
               ( empty( $background ) ? ">" :
                                        " BACKGROUND=\"" . $background . "\">" );
 
-$result = mysql_query( "SELECT SchemeID, SchemeName FROM Scheme" );
-
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving the list of schemes from the database." );
-}
+$dbStatement = Util::getDbConnection()->prepare( "SELECT SchemeID, SchemeName FROM Scheme" );
+$dbStatement->execute();
+$rows = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
 ?>
 
@@ -146,9 +138,9 @@ Select another scheme to preview:<BR>
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < count( $rows ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = $rows[ $i ];
     $selected = ( $scheme == $row[ 0 ] ) ? " SELECTED" : "";
 
 ?>
