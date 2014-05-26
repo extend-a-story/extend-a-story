@@ -36,14 +36,12 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$result = mysql_query( "SELECT COUNT( * ) FROM Episode WHERE Status = 2 OR Status = 3" );
+//$dbStatement = Util::getDbConnection()->prepare( "SELECT * FROM Episode WHERE 1=2" );
 
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving created episode count from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT COUNT( * ) FROM Episode WHERE Status = 2 OR Status = 3" );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -52,14 +50,10 @@ if ( ! $row )
 
 $created = $row[ 0 ];
 
-$result = mysql_query( "SELECT COUNT( * ) FROM Episode WHERE Status = 0 OR Status = 1" );
-
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving empty episode count from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement = Util::getDbConnection()->prepare(
+        "SELECT COUNT( * ) FROM Episode WHERE Status = 0 OR Status = 1" );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
@@ -68,14 +62,9 @@ if ( ! $row )
 
 $empty = $row[ 0 ];
 
-$result = mysql_query( "SELECT COUNT( * ) FROM Episode" );
-
-if ( ! $result )
-{
-    throw new HardStoryException( "Problem retrieving episode count from the database." );
-}
-
-$row = mysql_fetch_row( $result );
+$dbStatement = Util::getDbConnection()->prepare( "SELECT COUNT( * ) FROM Episode" );
+$dbStatement->execute();
+$row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
