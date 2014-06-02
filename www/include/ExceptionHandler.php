@@ -39,7 +39,7 @@ function handleException( $exception )
                        "Contact the site administrator if this problem persists." .
                    "</p>";
 
-        $simplePage = new SimplePage( "Error", null, $content, null, null );
+        $simplePage = new \pages\SimplePage( "Error", null, $content, null, null );
         $simplePage->render();
     }
 }

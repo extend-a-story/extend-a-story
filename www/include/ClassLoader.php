@@ -28,6 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 function loadClass( $className )
 {
+    $className = str_replace( "\\", "/", $className );
     require( __DIR__ . "/classes/" . $className . ".php" );
 }
 

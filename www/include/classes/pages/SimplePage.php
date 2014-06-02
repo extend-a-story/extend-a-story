@@ -26,6 +26,8 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+namespace pages;
+
 class SimplePage
 {
     private $mainHeader;
@@ -134,7 +136,7 @@ class SimplePage
 
         </div>
 
-        <?php require( __DIR__ . "/../config/Footer.php" ); ?>
+        <?php require( __DIR__ . "/../../config/Footer.php" ); ?>
 
     </body>
 </html>

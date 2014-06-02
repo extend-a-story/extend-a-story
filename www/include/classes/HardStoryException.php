@@ -42,7 +42,7 @@ class HardStoryException extends StoryException
                    "<hr />" .
                    "<p>" . htmlentities( $this->getMessage() ) . "</p>";
 
-        $simplePage = new SimplePage( "Error", null, $content, null, null );
+        $simplePage = new \pages\SimplePage( "Error", null, $content, null, null );
         $simplePage->render();
     }
 }
