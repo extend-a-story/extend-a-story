@@ -32,6 +32,8 @@ class StartPage
 {
     public function render()
     {
+        global $version;
+        $title = "Extend-A-Story " . $version . " Installation";
 
 ?>
 
@@ -40,12 +42,11 @@ class StartPage
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="style.css" />
-        <title>Extend-A-Story - Install</title>
     </head>
+        <title><?php echo( $title ); ?></title>
     <body>
         <div class="content">
-            <h1>Extend-A-Story</h1>
-            <h2>Install</h2>
+            <h1><?php echo( $title ); ?></h1>
 
             <div class="main">
                 <p>This page will guide you through the Extend-A-Story installation.</p>
