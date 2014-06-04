@@ -31,50 +31,50 @@ body
 
 div.navigation
 {
-    position: absolute;
-    top: 2em;
-    left: 2em;
-    width: 10em;
-    border-top:    1px solid #000000;
-    border-bottom: 1px solid #000000;
-    padding: 0.5em 0em 0.5em 0em;
+    position:         absolute;
+    top:              2em;
+    left:             2em;
+    width:            10em;
+    border-top:       1px solid #000000;
+    border-bottom:    1px solid #000000;
+    padding:          0.5em 0em 0.5em 0em;
 }
 
 div.navigation>ul
 {
-    padding: 0em;
-    margin: 0em;
-    list-style-type: none;
+    padding:          0em;
+    margin:           0em;
+    list-style-type:  none;
     list-style-image: none;
 }
 
 div.content
 {
-    border: 1px solid #AA00AA;
+    border:           1px solid #AA00AA;
     background-color: #FFFFFF;
-    padding: 1em;
-    margin: 2em 2em 2em 14em;
+    padding:          1em;
+    margin:           2em 2em 2em 14em;
 }
 
 div.main
 {
-    border: 1px solid #3333FF;
+    border:           1px solid #3333FF;
     background-color: #AAAAAA;
-    padding: 1em;
-    margin: 2em;
+    padding:          1em;
+    margin:           2em;
 }
 
 span.code
 {
-    font-family: monospace;
-    color: #880088;
+    font-family:      monospace;
+    color:            #880088;
 }
 
 div.code
 {
-    border: 1px solid #5599AA;
+    border:           1px solid #5599AA;
     background-color: #BBBBBB;
-    padding: 0.25em;
-    margin: 0.5em;
-    font-family: monospace;
+    padding:          0.25em;
+    margin:           0.5em;
+    font-family:      monospace;
 }
