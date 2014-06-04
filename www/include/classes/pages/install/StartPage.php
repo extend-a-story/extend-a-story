@@ -45,6 +45,15 @@ class StartPage
     </head>
         <title><?php echo( $title ); ?></title>
     <body>
+        <div class="navigation">
+            <ul>
+                <li>Navigation</li>
+                <li>Links</li>
+                <li>Go</li>
+                <li>Here</li>
+            </ul>
+        </div>
+
         <div class="content">
             <h1><?php echo( $title ); ?></h1>
 
