@@ -32,7 +32,7 @@ class StartPage
 {
     public function render()
     {
-        global $version;
+        global $version, $configFile;
         $title = "Extend-A-Story " . $version . " Installation";
 
 ?>
@@ -58,7 +58,23 @@ class StartPage
             <h1><?php echo( $title ); ?></h1>
 
             <div class="main">
-                <p>This page will guide you through the Extend-A-Story installation.</p>
+                <p>
+                    This page will guide you through the Extend-A-Story installation.
+                </p>
+                <p>
+                    Access to this page is restricted to the site administrator only. If
+                    <strong>you</strong> are the site administrator, you must configure the
+                    administrative IP address of your Extend-A-Story installation to match your
+                    computer's IP address before you can proceed. To do this, add the following
+                    configuration to <span class="code"><?php echo( $configFile ); ?></span> on your
+                    web server:
+                </p>
+                <div class="code">
+                    $adminIpAddress = <?php echo( $_SERVER[ REMOTE_ADDR ] ); ?>;
+                </div>
+                <p>
+                    Once this is done, <a href="install.php">refresh this page</a>.
+                </p>
             </div>
         </div>
 

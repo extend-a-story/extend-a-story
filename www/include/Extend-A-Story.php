@@ -30,6 +30,8 @@ require(  __DIR__ . "/ClassLoader.php" );
 require(  __DIR__ . "/ExceptionHandler.php" );
 require(  __DIR__ . "/config/Configuration.php" );
 
+$configFile = __DIR__ . "/config/Configuration.php";
+
 $version = "3.0.0 Pre-Release";
 
 ?>

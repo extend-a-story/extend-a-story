@@ -63,3 +63,18 @@ div.main
     padding: 1em;
     margin: 2em;
 }
+
+span.code
+{
+    font-family: monospace;
+    color: #880088;
+}
+
+div.code
+{
+    border: 1px solid #5599AA;
+    background-color: #BBBBBB;
+    padding: 0.25em;
+    margin: 0.5em;
+    font-family: monospace;
+}
