@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace pages\install;
 
-class StartPage
+class NonAdminPage
 {
     public function render()
     {
