@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-$page = new \pages\install\NonAdminPage();
+$page = new \pages\install\StartPage();
 $page->render();
 
 ?>
