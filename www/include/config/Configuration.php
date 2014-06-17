@@ -26,10 +26,9 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-$adminIpAddress = null;
-$dbHost         = null;
-$dbUser         = null;
-$dbPassword     = null;
-$dbDatabase     = null;
+$dbHost     = null;
+$dbUser     = null;
+$dbPassword = null;
+$dbDatabase = null;
 
 ?>
