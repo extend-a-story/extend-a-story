@@ -28,46 +28,25 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace pages\install;
 
-class StartPage
+class StartPage extends InstallPage
 {
-    public function render()
+    public function renderMain()
     {
-        global $version;
-        $title = "Extend-A-Story " . $version . " Installation";
 
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="style.css" />
-        <title><?php echo( $title ); ?></title>
-    </head>
-    <body>
-        <div class="navigation">
-            <ul>
-                <li>Navigation</li>
-                <li>Links</li>
-                <li>Go</li>
-                <li>Here</li>
-            </ul>
-        </div>
+<h2>Welcome to Extend-A-Story</h2>
 
-        <div class="content">
-            <h1><?php echo( $title ); ?></h1>
-
-            <div class="main">
-                <p>
-                    This page will guide you through the Extend-A-Story installation.
-                </p>
-            </div>
-        </div>
-
-        <?php require( __DIR__ . "/../../../config/Footer.php" ); ?>
-
-    </body>
-</html>
+<p>
+    This page will guide you through the Extend-A-Story installation. Click the Continue button to
+    proceed.
+</p>
+<div class="submit">
+    <form action="install.php" method="post">
+        <input type="hidden" name="step" value="Settings" />
+        <input type="submit" value="Continue" />
+    </form>
+</div>
 
 <?php
 

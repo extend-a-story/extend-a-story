@@ -1,5 +1,3 @@
-<?php
-
 /*
 
 Extend-A-Story - Interactive, Extendable, Choose Your Own Adventure Story
@@ -26,22 +24,16 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-require(  __DIR__ . "/include/Extend-A-Story.php" );
-
-$step = Util::getStringParamDefault( $_POST, "step", null );
-
-if ( isset( $step ))
+function toggleVisibility( id )
 {
-    if ( $step == "Settings" )
+    var element = document.getElementById( id );
+
+    if ( element.style.display == "none" )
     {
-        $page = new \pages\install\SettingsPage();
-        $page->render();
-        exit;
+        element.style.display = "";
+    }
+    else
+    {
+        element.style.display = "none";
     }
 }
-
-$page = new \pages\install\StartPage();
-$page->render();
-exit;
-
-?>

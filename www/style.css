@@ -63,3 +63,38 @@ div.main
     padding:          1em;
     margin:           2em;
 }
+
+fieldset
+{
+    border:           1px solid #000000;
+}
+
+div.inputField
+{
+    margin:           1em 0em 0em 0em;
+}
+
+span.inputFieldHelpButton
+{
+    margin:           0em 0em 0em 1em;
+    color:            #0000FF;
+    text-decoration:  underline;
+    cursor:           pointer;
+}
+
+div.inputFieldHelpContents
+{
+    background-color: #CCCCCC;
+    padding:          0.25em;
+    margin:           0.25em 0.25em 0.25em 1em;
+}
+
+legend
+{
+    font-weight:      bold;
+}
+
+div.submit
+{
+    text-align:       center;
+}
