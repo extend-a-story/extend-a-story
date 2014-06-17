@@ -32,7 +32,7 @@ class StartPage
 {
     public function render()
     {
-        global $version, $configFile;
+        global $version;
         $title = "Extend-A-Story " . $version . " Installation";
 
 ?>
