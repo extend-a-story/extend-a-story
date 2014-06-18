@@ -26,6 +26,9 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+use \Extend_A_Story\StoryException;
+use \pages\SimplePage;
+
 function handleException( $exception )
 {
     if ( $exception instanceof StoryException )
@@ -39,7 +42,7 @@ function handleException( $exception )
                        "Contact the site administrator if this problem persists." .
                    "</p>";
 
-        $simplePage = new \pages\SimplePage( "Error", null, $content, null, null );
+        $simplePage = new SimplePage( "Error", null, $content, null, null );
         $simplePage->render();
     }
 }

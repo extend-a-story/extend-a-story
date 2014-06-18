@@ -26,6 +26,10 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+namespace Extend_A_Story;
+
+use \Exception;
+
 abstract class StoryException extends Exception
 {
     public function __construct( $message )

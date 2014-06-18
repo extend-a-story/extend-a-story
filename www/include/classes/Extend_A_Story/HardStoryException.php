@@ -29,7 +29,6 @@ http://www.sir-toby.com/extend-a-story/
 namespace Extend_A_Story;
 
 use \pages\SimplePage;
-use \StoryException;
 
 class HardStoryException extends StoryException
 {
