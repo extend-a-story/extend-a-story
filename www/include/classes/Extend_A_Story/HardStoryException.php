@@ -26,6 +26,11 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+namespace Extend_A_Story;
+
+use \pages\SimplePage;
+use \StoryException;
+
 class HardStoryException extends StoryException
 {
     public function __construct( $message )
@@ -42,7 +47,7 @@ class HardStoryException extends StoryException
                    "<hr />" .
                    "<p>" . htmlentities( $this->getMessage() ) . "</p>";
 
-        $simplePage = new \pages\SimplePage( "Error", null, $content, null, null );
+        $simplePage = new SimplePage( "Error", null, $content, null, null );
         $simplePage->render();
     }
 }

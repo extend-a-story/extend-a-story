@@ -28,6 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
+use \Extend_A_Story\HardStoryException;
+
 $command         = Util::getStringParam(        $_REQUEST, "command"             );
 $episode         = Util::getIntParam(           $_REQUEST, "episode"             );
 $lockKey         = Util::getIntParamDefault(    $_POST,    "lockKey",         0  );

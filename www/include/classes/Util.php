@@ -26,6 +26,8 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+use \Extend_A_Story\HardStoryException;
+
 class Util
 {
     private static $dbConnection = null;
