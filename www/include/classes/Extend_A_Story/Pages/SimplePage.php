@@ -26,7 +26,7 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-namespace pages;
+namespace Extend_A_Story\Pages;
 
 class SimplePage
 {
@@ -136,7 +136,7 @@ class SimplePage
 
         </div>
 
-        <?php require( __DIR__ . "/../../config/Footer.php" ); ?>
+        <?php require( __DIR__ . "/../../../config/Footer.php" ); ?>
 
     </body>
 </html>

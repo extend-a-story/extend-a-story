@@ -26,8 +26,8 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
+use \Extend_A_Story\Pages\SimplePage;
 use \Extend_A_Story\StoryException;
-use \pages\SimplePage;
 
 function handleException( $exception )
 {
