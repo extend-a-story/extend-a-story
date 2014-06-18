@@ -26,9 +26,7 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-namespace pages\install;
-
-use \Extend_A_Story\Pages\Install\InstallPage;
+namespace Extend_A_Story\Pages\Install;
 
 class StartPage extends InstallPage
 {

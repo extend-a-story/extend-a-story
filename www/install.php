@@ -29,6 +29,7 @@ http://www.sir-toby.com/extend-a-story/
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
 use \Extend_A_Story\Pages\Install\SettingsPage;
+use \Extend_A_Story\Pages\Install\StartPage;
 use \Extend_A_Story\Util;
 
 $step = Util::getStringParamDefault( $_POST, "step", null );
@@ -43,7 +44,7 @@ if ( isset( $step ))
     }
 }
 
-$page = new \pages\install\StartPage();
+$page = new StartPage();
 $page->render();
 exit;
 
