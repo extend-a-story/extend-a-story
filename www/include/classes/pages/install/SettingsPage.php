@@ -28,6 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace pages\install;
 
+use \Extend_A_Story\Pages\Install\InstallPage;
+
 class SettingsPage extends InstallPage
 {
     public function renderMain()

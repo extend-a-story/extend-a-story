@@ -26,7 +26,7 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-namespace pages\install;
+namespace Extend_A_Story\Pages\Install;
 
 abstract class InstallPage
 {
@@ -69,7 +69,7 @@ abstract class InstallPage
             </div>
         </div>
 
-        <?php require( __DIR__ . "/../../../config/Footer.php" ); ?>
+        <?php require( __DIR__ . "/../../../../config/Footer.php" ); ?>
 
     </body>
 </html>
