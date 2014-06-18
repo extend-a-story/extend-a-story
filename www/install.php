@@ -28,6 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
+use \Extend_A_Story\Util;
+
 $step = Util::getStringParamDefault( $_POST, "step", null );
 
 if ( isset( $step ))

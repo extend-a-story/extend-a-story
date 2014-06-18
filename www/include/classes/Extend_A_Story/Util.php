@@ -26,7 +26,9 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-use \Extend_A_Story\HardStoryException;
+namespace Extend_A_Story;
+
+use \PDO;
 
 class Util
 {
