@@ -42,15 +42,18 @@ class StartPage extends InstallPage
     proceed.
 </p>
 
-<form action="install.php" method="post">
-    <div class="submit">
-        <input type="hidden" name="pageName" value="Start" />
-        <input type="submit" name="continueButton" value="Continue" />
-    </div>
-</form>
+<div class="submit">
+    <input type="hidden" name="pageName" value="Start" />
+    <input type="submit" name="continueButton" value="Continue" />
+</div>
 
 <?php
 
+    }
+
+    protected function getFields()
+    {
+        return array( "pageName", "backButton", "continueButton" );
     }
 }
 

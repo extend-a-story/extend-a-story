@@ -46,19 +46,48 @@ abstract class InstallPage
         <title><?php echo( $title ); ?></title>
     </head>
     <body>
-        <div class="navigation">
-            <ul>
-                <li>Navigation</li>
-                <li>Links</li>
-                <li>Go</li>
-                <li>Here</li>
-            </ul>
-        </div>
+        <form action="install.php" method="post">
 
-        <div class="content">
-            <h1><?php echo( $title ); ?></h1>
+            <div class="navigation">
+                <ul>
+                    <li>Navigation</li>
+                    <li>Links</li>
+                    <li>Go</li>
+                    <li>Here</li>
+                </ul>
+            </div>
 
-            <div class="main">
+            <div class="content">
+
+<?php
+
+$fields = $this->getFields();
+$keys = array_keys( $_POST );
+
+for ( $i = 0; $i < count( $keys ); $i++ )
+{
+    $key = $keys[ $i ];
+
+    if ( ! in_array( $key, $fields ))
+    {
+        $value = $_POST[ $key ];
+
+?>
+
+                <input type="hidden"
+                       name="<?php echo( htmlentities( $key )); ?>"
+                       value="<?php echo( htmlentities( $value )); ?>" />
+
+<?php
+
+    }
+}
+
+?>
+
+                <h1><?php echo( $title ); ?></h1>
+
+                <div class="main">
 
 <?php
 
@@ -66,8 +95,9 @@ abstract class InstallPage
 
 ?>
 
+                </div>
             </div>
-        </div>
+        </form>
 
         <?php require( __DIR__ . "/../../../../config/Footer.php" ); ?>
 
@@ -79,6 +109,8 @@ abstract class InstallPage
     }
 
     protected abstract function renderMain();
+
+    protected abstract function getFields();
 }
 
 ?>
