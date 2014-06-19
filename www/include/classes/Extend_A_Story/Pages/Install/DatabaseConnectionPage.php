@@ -78,7 +78,7 @@ class DatabaseConnectionPage extends InstallPage
             This is the password that will be used to connect to your database during the
             installation process.
         </div>
-        <input type="text" id="databasePassword" name="databasePassword" />
+        <input type="password" id="databasePassword" name="databasePassword" />
     </div>
 
 <form>
