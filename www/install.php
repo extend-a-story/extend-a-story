@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\Pages\Install\SettingsPage;
+use \Extend_A_Story\Pages\Install\DatabaseConnectionPage;
 use \Extend_A_Story\Pages\Install\StartPage;
 use \Extend_A_Story\Util;
 
@@ -38,7 +38,7 @@ if ( isset( $step ))
 {
     if ( $step == "Settings" )
     {
-        $page = new SettingsPage();
+        $page = new DatabaseConnectionPage();
         $page->render();
         exit;
     }
