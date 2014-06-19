@@ -37,7 +37,7 @@ class DatabaseConnectionPage extends InstallPage
 
 <h2>Database Connection</h2>
 
-<form>
+<form action="install.php" method="post">
 
     <div class="inputField">
         <div><label for="databaseHost">Host:</label></div>
@@ -81,7 +81,7 @@ class DatabaseConnectionPage extends InstallPage
         <input type="password" id="databasePassword" name="databasePassword" />
     </div>
 
-<form>
+</form>
 
 <?php
 

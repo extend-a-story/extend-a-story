@@ -41,12 +41,13 @@ class StartPage extends InstallPage
     This page will guide you through the Extend-A-Story installation. Click the Continue button to
     proceed.
 </p>
-<div class="submit">
-    <form action="install.php" method="post">
+
+<form action="install.php" method="post">
+    <div class="submit">
         <input type="hidden" name="step" value="Settings" />
         <input type="submit" value="Continue" />
-    </form>
-</div>
+    </div>
+</form>
 
 <?php
 
