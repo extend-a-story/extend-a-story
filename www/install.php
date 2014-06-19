@@ -37,7 +37,7 @@ $step = Util::getStringParamDefault( $_POST, "step", null );
 
 if ( isset( $step ))
 {
-    if ( $step == "Settings" )
+    if ( $step == "DatabaseConnection" )
     {
         $page = new DatabaseConnectionPage();
         $page->render();

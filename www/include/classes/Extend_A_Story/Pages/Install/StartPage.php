@@ -44,7 +44,7 @@ class StartPage extends InstallPage
 
 <form action="install.php" method="post">
     <div class="submit">
-        <input type="hidden" name="step" value="Settings" />
+        <input type="hidden" name="step" value="DatabaseConnection" />
         <input type="submit" value="Continue" />
     </div>
 </form>
