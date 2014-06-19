@@ -26,34 +26,50 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-require(  __DIR__ . "/include/Extend-A-Story.php" );
+namespace Extend_A_Story\Pages\Install;
 
-use \Extend_A_Story\Pages\Install\ConfirmationPage;
-use \Extend_A_Story\Pages\Install\DatabaseConnectionPage;
-use \Extend_A_Story\Pages\Install\StartPage;
-use \Extend_A_Story\Util;
-
-$step = Util::getStringParamDefault( $_POST, "step", null );
-
-if ( isset( $step ))
+class ConfirmationPage extends InstallPage
 {
-    if ( $step == "Settings" )
+    public function renderMain()
     {
-        $page = new DatabaseConnectionPage();
-        $page->render();
-        exit;
-    }
 
-    if ( $step == "Confirmation" )
-    {
-        $page = new ConfirmationPage();
-        $page->render();
-        exit;
-    }
+?>
+
+<h2>Confirmation</h2>
+
+<table>
+    <tr>
+        <th>Field Name</th>
+        <th>Value</th>
+    </tr>
+
+<?php
+
+$keys = array_keys( $_POST );
+
+for ( $i = 0; $i < count( $keys ); $i++ )
+{
+    $key = $keys[ $i ];
+    $value = $_POST[ $key ];
+
+?>
+
+    <tr>
+        <td><?php echo( $key ); ?></td>
+        <td><?php echo( $value ); ?></td>
+    </tr>
+
+<?php
+
 }
 
-$page = new StartPage();
-$page->render();
-exit;
+?>
+
+</table>
+
+<?php
+
+    }
+}
 
 ?>

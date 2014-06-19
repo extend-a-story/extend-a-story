@@ -81,6 +81,11 @@ class DatabaseConnectionPage extends InstallPage
         <input type="password" id="databasePassword" name="databasePassword" />
     </div>
 
+    <div class="submit">
+        <input type="hidden" name="step" value="Confirmation" />
+        <input type="submit" value="Continue" />
+    </div>
+
 </form>
 
 <?php
