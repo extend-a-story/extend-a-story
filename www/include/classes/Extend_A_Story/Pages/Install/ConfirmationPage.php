@@ -67,6 +67,13 @@ for ( $i = 0; $i < count( $keys ); $i++ )
 
 </table>
 
+<form action="install.php" method="post">
+    <div class="submit">
+        <input type="hidden" name="pageName" value="Confirmation" />
+        <input type="submit" name="backButton" value="Back" />
+    </div>
+</form>
+
 <?php
 
     }

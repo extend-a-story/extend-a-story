@@ -31,25 +31,60 @@ require(  __DIR__ . "/include/Extend-A-Story.php" );
 use \Extend_A_Story\Pages\Install\ConfirmationPage;
 use \Extend_A_Story\Pages\Install\DatabaseConnectionPage;
 use \Extend_A_Story\Pages\Install\StartPage;
+
+use \Extend_A_Story\HardStoryException;
 use \Extend_A_Story\Util;
 
-$step = Util::getStringParamDefault( $_POST, "step", null );
+$pageName       = Util::getStringParamDefault( $_POST, "pageName",       null );
+$backButton     = Util::getStringParamDefault( $_POST, "backButton",     null );
+$continueButton = Util::getStringParamDefault( $_POST, "continueButton", null );
 
-if ( isset( $step ))
+if ( isset( $pageName ))
 {
-    if ( $step == "DatabaseConnection" )
+    if ( $pageName == "Start" )
     {
-        $page = new DatabaseConnectionPage();
-        $page->render();
-        exit;
+        if ( isset( $continueButton ))
+        {
+            $page = new DatabaseConnectionPage();
+            $page->render();
+            exit;
+        }
+
+        throw new HardStoryException( "Invalid state." );
     }
 
-    if ( $step == "Confirmation" )
+    if ( $pageName == "DatabaseConnection" )
     {
-        $page = new ConfirmationPage();
-        $page->render();
-        exit;
+        if ( isset( $backButton ))
+        {
+            $page = new StartPage();
+            $page->render();
+            exit;
+        }
+
+        if ( isset( $continueButton ))
+        {
+            $page = new ConfirmationPage();
+            $page->render();
+            exit;
+        }
+
+        throw new HardStoryException( "Invalid state." );
     }
+
+    if ( $pageName == "Confirmation" )
+    {
+        if ( isset( $backButton ))
+        {
+            $page = new DatabaseConnectionPage();
+            $page->render();
+            exit;
+        }
+
+        throw new HardStoryException( "Invalid state." );
+    }
+
+    throw new HardStoryException( "Invalid state." );
 }
 
 $page = new StartPage();
