@@ -55,8 +55,8 @@ for ( $i = 0; $i < count( $keys ); $i++ )
 ?>
 
     <tr>
-        <td><?php echo( $key ); ?></td>
-        <td><?php echo( $value ); ?></td>
+        <td><?php echo( htmlentities( $key )); ?></td>
+        <td><?php echo( htmlentities( $value )); ?></td>
     </tr>
 
 <?php
