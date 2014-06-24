@@ -29,6 +29,34 @@ body
     background-color: #DDDDDD;
 }
 
+div.content
+{
+    border:           1px solid #AA00AA;
+    background-color: #FFFFFF;
+    padding:          1em;
+    margin:           2em 2em 2em 14em;
+}
+
+div.inputField
+{
+    margin:           1em 0em 0em 0em;
+}
+
+div.inputFieldHelpContents
+{
+    background-color: #CCCCCC;
+    padding:          0.25em;
+    margin:           0.25em 0.25em 0.25em 1em;
+}
+
+div.main
+{
+    border:           1px solid #3333FF;
+    background-color: #AAAAAA;
+    padding:          1em;
+    margin:           2em;
+}
+
 div.navigation
 {
     position:         absolute;
@@ -48,25 +76,14 @@ div.navigation>ul
     list-style-image: none;
 }
 
-div.content
+div.submit
 {
-    border:           1px solid #AA00AA;
-    background-color: #FFFFFF;
-    padding:          1em;
-    margin:           2em 2em 2em 14em;
+    text-align:       center;
 }
 
-div.main
+legend
 {
-    border:           1px solid #3333FF;
-    background-color: #AAAAAA;
-    padding:          1em;
-    margin:           2em;
-}
-
-div.inputField
-{
-    margin:           1em 0em 0em 0em;
+    font-weight:      bold;
 }
 
 span.inputFieldHelpButton
@@ -75,21 +92,4 @@ span.inputFieldHelpButton
     color:            #0000FF;
     text-decoration:  underline;
     cursor:           pointer;
-}
-
-div.inputFieldHelpContents
-{
-    background-color: #CCCCCC;
-    padding:          0.25em;
-    margin:           0.25em 0.25em 0.25em 1em;
-}
-
-legend
-{
-    font-weight:      bold;
-}
-
-div.submit
-{
-    text-align:       center;
 }
