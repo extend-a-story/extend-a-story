@@ -79,11 +79,23 @@ class DatabaseConnectionPage extends InstallPage
 
             try
             {
-                Util::getDbConnection();
+                $dbConnection = Util::getDbConnection();
             }
             catch ( Exception $e )
             {
                 $errors[] = new RawText( "Unable to connect to database: " . $e->getMessage() );
+            }
+        }
+
+        if ( count( $errors ) == 0 )
+        {
+            $dbStatement = $dbConnection->prepare( "SHOW TABLES" );
+            $dbStatement->execute();
+            $tables = $dbStatement->fetchAll( PDO::FETCH_NUM );
+
+            if ( count( $tables ) > 0 )
+            {
+                $errors[] = new RawText( "Database already contains tables." );
             }
         }
 
