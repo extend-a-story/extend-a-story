@@ -26,63 +26,20 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-namespace Extend_A_Story\Pages\Install;
+namespace Extend_A_Story\HtmlElements;
 
-class ConfirmationPage extends InstallPage
+class RawText extends HtmlElement
 {
-    protected function renderMain()
+    private $text;
+
+    public function __construct( $text )
     {
-        if ( !DatabaseConnectionPage::validate() )
-        {
-            return;
-        }
-
-?>
-
-<h2>Confirmation</h2>
-
-<table>
-    <tr>
-        <th>Field Name</th>
-        <th>Value</th>
-    </tr>
-
-<?php
-
-$keys = array_keys( $_POST );
-
-for ( $i = 0; $i < count( $keys ); $i++ )
-{
-    $key = $keys[ $i ];
-    $value = $_POST[ $key ];
-
-?>
-
-    <tr>
-        <td><?php echo( htmlentities( $key )); ?></td>
-        <td><?php echo( htmlentities( $value )); ?></td>
-    </tr>
-
-<?php
-
-}
-
-?>
-
-</table>
-
-<div class="submit">
-    <input type="hidden" name="pageName" value="Confirmation" />
-    <input type="submit" name="backButton" value="Back" />
-</div>
-
-<?php
-
+        $this->text = $text;
     }
 
-    protected function getFields()
+    public function render()
     {
-        return array( "pageName", "backButton", "continueButton" );
+        echo( htmlentities( $this->text ));
     }
 }
 

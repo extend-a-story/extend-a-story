@@ -37,6 +37,14 @@ div.content
     margin:           2em 2em 2em 14em;
 }
 
+div.error
+{
+    background-color: #FFDDDD;
+    color:            #FF0000;
+    font-weight:      bold;
+    padding:          0.25em;
+}
+
 div.inputField
 {
     margin:           1em 0em 0em 0em;

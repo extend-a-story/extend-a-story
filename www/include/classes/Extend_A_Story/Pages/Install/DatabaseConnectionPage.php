@@ -28,10 +28,52 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\HtmlElements\RawText;
+use \Extend_A_Story\HtmlElements\UnorderedList;
 use \Extend_A_Story\Util;
 
 class DatabaseConnectionPage extends InstallPage
 {
+    private $error;
+
+    public static function validate()
+    {
+        $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
+        $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", "" );
+        $databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", "" );
+
+        $errors = array();
+
+        if ( strlen( $databaseHost ) == 0 )
+        {
+            $errors[] = new RawText( "Host must be set." );
+        }
+
+        if ( strlen( $databaseUsername ) == 0 )
+        {
+            $errors[] = new RawText( "Username must be set." );
+        }
+
+        if ( strlen( $databasePassword ) == 0 )
+        {
+            $errors[] = new RawText( "Password must be set." );
+        }
+
+        if ( count( $errors ) > 0 )
+        {
+            $page = new DatabaseConnectionPage( new UnorderedList( $errors ));
+            $page->renderMain();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function __construct( $error = null )
+    {
+        $this->error = $error;
+    }
+
     protected function renderMain()
     {
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
@@ -41,6 +83,21 @@ class DatabaseConnectionPage extends InstallPage
 ?>
 
 <h2>Database Connection</h2>
+
+<?php
+
+        if ( isset( $this->error ))
+        {
+
+?>
+
+<div class="error"><?php echo( $this->error->render() ); ?></div>
+
+<?php
+
+        }
+
+?>
 
 <div class="inputField">
     <div><label for="databaseHost">Host:</label></div>
