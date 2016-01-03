@@ -41,6 +41,7 @@ class DatabaseConnectionPage extends InstallPage
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
         $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", "" );
         $databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", "" );
+        $databaseName     = Util::getStringParamDefault( $_POST, "databaseName",     "" );
 
         $errors = array();
 
@@ -57,6 +58,11 @@ class DatabaseConnectionPage extends InstallPage
         if ( strlen( $databasePassword ) == 0 )
         {
             $errors[] = new RawText( "Password must be set." );
+        }
+
+        if ( strlen( $databaseName ) == 0 )
+        {
+            $errors[] = new RawText( "Database must be set." );
         }
 
         if ( count( $errors ) > 0 )
@@ -79,6 +85,7 @@ class DatabaseConnectionPage extends InstallPage
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
         $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", "" );
         $databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", "" );
+        $databaseName     = Util::getStringParamDefault( $_POST, "databaseName",     "" );
 
 ?>
 
@@ -123,7 +130,7 @@ class DatabaseConnectionPage extends InstallPage
     </div>
     <div id="databaseUsername-help" class="inputFieldHelpContents" style="display: none;">
         This is the username that will be used to connect to your database during the
-        installation process. This user will need permissions to create your Extend-A-Story
+        installation process. This user will need all permissions to your Extend-A-Story
         database.
     </div>
     <input type="text" id="databaseUsername" name="databaseUsername"
@@ -144,6 +151,20 @@ class DatabaseConnectionPage extends InstallPage
            value="<?php echo( htmlentities( $databasePassword )); ?>" />
 </div>
 
+<div class="inputField">
+    <div><label for="databaseName">Database:</label></div>
+    <div>
+        <span class="inputFieldHelpButton"
+              onclick="toggleVisibility( 'databaseName-help' );">Help</span>
+    </div>
+    <div id="databaseName-help" class="inputFieldHelpContents" style="display: none;">
+        This is the name of your Extend-A-Story database. The tables needed by Extend-A-Story will
+        be created in this database.
+    </div>
+    <input type="text" id="databaseName" name="databaseName"
+           value="<?php echo( htmlentities( $databaseName )); ?>" />
+</div>
+
 <div class="submit">
     <input type="hidden" name="pageName" value="DatabaseConnection" />
     <input type="submit" name="backButton" value="Back" />
@@ -157,7 +178,7 @@ class DatabaseConnectionPage extends InstallPage
     protected function getFields()
     {
         return array( "pageName", "backButton", "continueButton",
-                      "databaseHost", "databaseUsername", "databasePassword" );
+                      "databaseHost", "databaseUsername", "databasePassword", "databaseName" );
     }
 }
 
