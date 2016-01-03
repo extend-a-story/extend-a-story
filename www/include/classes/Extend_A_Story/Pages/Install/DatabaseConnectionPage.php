@@ -32,7 +32,7 @@ use \Extend_A_Story\Util;
 
 class DatabaseConnectionPage extends InstallPage
 {
-    public function renderMain()
+    protected function renderMain()
     {
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
         $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", "" );

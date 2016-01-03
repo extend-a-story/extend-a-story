@@ -30,7 +30,7 @@ namespace Extend_A_Story\Pages\Install;
 
 class StartPage extends InstallPage
 {
-    public function renderMain()
+    protected function renderMain()
     {
 
 ?>

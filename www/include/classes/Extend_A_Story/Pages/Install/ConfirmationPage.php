@@ -30,7 +30,7 @@ namespace Extend_A_Story\Pages\Install;
 
 class ConfirmationPage extends InstallPage
 {
-    public function renderMain()
+    protected function renderMain()
     {
 
 ?>
