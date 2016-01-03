@@ -28,6 +28,9 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Exception;
+use \PDO;
+
 use \Extend_A_Story\HtmlElements\RawText;
 use \Extend_A_Story\HtmlElements\UnorderedList;
 use \Extend_A_Story\Util;
@@ -63,6 +66,25 @@ class DatabaseConnectionPage extends InstallPage
         if ( strlen( $databaseName ) == 0 )
         {
             $errors[] = new RawText( "Database must be set." );
+        }
+
+        if ( count( $errors ) == 0 )
+        {
+            global $dbHost, $dbUser, $dbPassword, $dbDatabase;
+
+            $dbHost     = $databaseHost;
+            $dbUser     = $databaseUsername;
+            $dbPassword = $databasePassword;
+            $dbDatabase = $databaseName;
+
+            try
+            {
+                Util::getDbConnection();
+            }
+            catch ( Exception $e )
+            {
+                $errors[] = new RawText( "Unable to connect to database: " . $e->getMessage() );
+            }
         }
 
         if ( count( $errors ) > 0 )
