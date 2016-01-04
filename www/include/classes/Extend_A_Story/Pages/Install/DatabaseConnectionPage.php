@@ -131,7 +131,7 @@ class DatabaseConnectionPage extends InstallPage
 
 ?>
 
-<div class="error"><?php echo( $this->error->render() ); ?></div>
+<div class="error"><?php $this->error->render(); ?></div>
 
 <?php
 
