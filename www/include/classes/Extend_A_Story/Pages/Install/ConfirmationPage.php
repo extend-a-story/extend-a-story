@@ -30,12 +30,20 @@ namespace Extend_A_Story\Pages\Install;
 
 class ConfirmationPage extends InstallPage
 {
+    public function validate()
+    {
+        $result = DatabaseConnectionPage::validatePage();
+
+        if ( isset( $result ))
+        {
+            return $result;
+        }
+
+        return $this;
+    }
+
     protected function renderMain()
     {
-        if ( !DatabaseConnectionPage::validate() )
-        {
-            return;
-        }
 
 ?>
 

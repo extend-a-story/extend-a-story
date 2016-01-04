@@ -30,6 +30,11 @@ namespace Extend_A_Story\Pages\Install;
 
 abstract class InstallPage
 {
+    public function validate()
+    {
+        return $this;
+    }
+
     public function render()
     {
         global $version;

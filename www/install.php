@@ -88,6 +88,7 @@ else
     $page = new StartPage();
 }
 
+$page = $page->validate();
 $page->render();
 
 ?>

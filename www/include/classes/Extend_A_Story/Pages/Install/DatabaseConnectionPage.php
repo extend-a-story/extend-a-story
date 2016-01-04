@@ -38,9 +38,7 @@ use \Extend_A_Story\Util;
 
 class DatabaseConnectionPage extends InstallPage
 {
-    private $error;
-
-    public static function validate()
+    public static function validatePage()
     {
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
         $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", "" );
@@ -102,13 +100,13 @@ class DatabaseConnectionPage extends InstallPage
 
         if ( count( $errors ) > 0 )
         {
-            $page = new DatabaseConnectionPage( new UnorderedList( $errors ));
-            $page->renderMain();
-            return false;
+            return new DatabaseConnectionPage( new UnorderedList( $errors ));
         }
 
-        return true;
+        return null;
     }
+
+    private $error;
 
     public function __construct( $error = null )
     {
