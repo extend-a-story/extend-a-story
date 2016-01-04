@@ -113,18 +113,17 @@ class DatabaseConnectionPage extends InstallPage
         $this->error = $error;
     }
 
+    protected function getSubtitle()
+    {
+        return "Database Connection";
+    }
+
     protected function renderMain()
     {
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
         $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", "" );
         $databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", "" );
         $databaseName     = Util::getStringParamDefault( $_POST, "databaseName",     "" );
-
-?>
-
-<h2>Database Connection</h2>
-
-<?php
 
         if ( isset( $this->error ))
         {

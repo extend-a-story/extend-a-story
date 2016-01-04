@@ -49,12 +49,15 @@ class ConfirmationPage extends InstallPage
         return $this;
     }
 
+    protected function getSubtitle()
+    {
+        return "Confirmation";
+    }
+
     protected function renderMain()
     {
 
 ?>
-
-<h2>Confirmation</h2>
 
 <table>
     <tr>

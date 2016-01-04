@@ -48,7 +48,7 @@ abstract class InstallPage
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="style.css" />
         <script type="text/javascript" src="script.js"></script>
-        <title><?php echo( $title ); ?></title>
+        <title><?php echo( $title ); ?> - <?php echo( $this->getSubtitle() ); ?></title>
     </head>
     <body>
         <form action="install.php" method="post">
@@ -94,6 +94,8 @@ for ( $i = 0; $i < count( $keys ); $i++ )
 
                 <div class="main">
 
+                    <h2><?php echo( $this->getSubtitle() ); ?></h2>
+
 <?php
 
         $this->renderMain();
@@ -112,6 +114,8 @@ for ( $i = 0; $i < count( $keys ); $i++ )
 <?php
 
     }
+
+    protected abstract function getSubtitle();
 
     protected abstract function renderMain();
 

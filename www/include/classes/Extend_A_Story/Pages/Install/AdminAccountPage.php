@@ -91,18 +91,17 @@ class AdminAccountPage extends InstallPage
         return $this;
     }
 
+    protected function getSubtitle()
+    {
+        return "Administrator Account";
+    }
+
     protected function renderMain()
     {
         $adminLoginName   = Util::getStringParamDefault( $_POST, "adminLoginName",   "" );
         $adminDisplayName = Util::getStringParamDefault( $_POST, "adminDisplayName", "" );
         $adminPassword1   = Util::getStringParamDefault( $_POST, "adminPassword1",   "" );
         $adminPassword2   = Util::getStringParamDefault( $_POST, "adminPassword2",   "" );
-
-?>
-
-<h2>Administrator Account</h2>
-
-<?php
 
         if ( isset( $this->error ))
         {

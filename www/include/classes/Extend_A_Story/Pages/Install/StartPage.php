@@ -30,12 +30,15 @@ namespace Extend_A_Story\Pages\Install;
 
 class StartPage extends InstallPage
 {
+    protected function getSubtitle()
+    {
+        return "Welcome to Extend-A-Story";
+    }
+
     protected function renderMain()
     {
 
 ?>
-
-<h2>Welcome to Extend-A-Story</h2>
 
 <p>
     This page will guide you through the Extend-A-Story installation. Click the Continue button to
