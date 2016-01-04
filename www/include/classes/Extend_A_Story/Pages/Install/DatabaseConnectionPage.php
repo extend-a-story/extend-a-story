@@ -106,11 +106,9 @@ class DatabaseConnectionPage extends InstallPage
         return null;
     }
 
-    private $error;
-
     public function __construct( $error = null )
     {
-        $this->error = $error;
+        parent::__construct( $error );
     }
 
     protected function getSubtitle()
@@ -124,17 +122,6 @@ class DatabaseConnectionPage extends InstallPage
         $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", "" );
         $databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", "" );
         $databaseName     = Util::getStringParamDefault( $_POST, "databaseName",     "" );
-
-        if ( isset( $this->error ))
-        {
-
-?>
-
-<div class="error"><?php $this->error->render(); ?></div>
-
-<?php
-
-        }
 
         $databaseHostField = new InputField(
                 "databaseHost", "Host", "text", $databaseHost,

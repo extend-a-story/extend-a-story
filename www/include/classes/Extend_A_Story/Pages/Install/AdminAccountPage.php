@@ -72,11 +72,9 @@ class AdminAccountPage extends InstallPage
         return null;
     }
 
-    private $error;
-
     public function __construct( $error = null )
     {
-        $this->error = $error;
+        parent::__construct( $error );
     }
 
     public function validate()
@@ -102,17 +100,6 @@ class AdminAccountPage extends InstallPage
         $adminDisplayName = Util::getStringParamDefault( $_POST, "adminDisplayName", "" );
         $adminPassword1   = Util::getStringParamDefault( $_POST, "adminPassword1",   "" );
         $adminPassword2   = Util::getStringParamDefault( $_POST, "adminPassword2",   "" );
-
-        if ( isset( $this->error ))
-        {
-
-?>
-
-<div class="error"><?php $this->error->render(); ?></div>
-
-<?php
-
-        }
 
         $adminLoginNameField = new InputField(
                 "adminLoginName", "Login Name", "text", $adminLoginName,

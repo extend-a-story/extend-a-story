@@ -30,6 +30,13 @@ namespace Extend_A_Story\Pages\Install;
 
 abstract class InstallPage
 {
+    private $error;
+
+    public function __construct( $error = null )
+    {
+        $this->error = $error;
+    }
+
     public function validate()
     {
         return $this;
@@ -97,6 +104,17 @@ for ( $i = 0; $i < count( $keys ); $i++ )
                     <h2><?php echo( $this->getSubtitle() ); ?></h2>
 
 <?php
+
+        if ( isset( $this->error ))
+        {
+
+?>
+
+                    <div class="error"><?php $this->error->render(); ?></div>
+
+<?php
+
+        }
 
         $this->renderMain();
 
