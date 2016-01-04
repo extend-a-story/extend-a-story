@@ -28,6 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
+use \Extend_A_Story\Pages\Install\AdminAccountPage;
 use \Extend_A_Story\Pages\Install\ConfirmationPage;
 use \Extend_A_Story\Pages\Install\DatabaseConnectionPage;
 use \Extend_A_Story\Pages\Install\StartPage;
@@ -60,18 +61,33 @@ if ( isset( $pageName ))
         }
         else if ( isset( $continueButton ))
         {
-            $page = new ConfirmationPage();
+            $page = new AdminAccountPage();
         }
         else
         {
             throw new HardStoryException( "Unrecognized navigation from database connection page." );
         }
     }
-    else if ( $pageName == "Confirmation" )
+    else if ( $pageName == "AdminAccount" )
     {
         if ( isset( $backButton ))
         {
             $page = new DatabaseConnectionPage();
+        }
+        else if ( isset( $continueButton ))
+        {
+            $page = new ConfirmationPage();
+        }
+        else
+        {
+            throw new HardStoryException( "Unrecognized navigation from admin account page." );
+        }
+    }
+    else if ( $pageName == "Confirmation" )
+    {
+        if ( isset( $backButton ))
+        {
+            $page = new AdminAccountPage();
         }
         else
         {

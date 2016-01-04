@@ -39,6 +39,13 @@ class ConfirmationPage extends InstallPage
             return $result;
         }
 
+        $result = AdminAccountPage::validatePage();
+
+        if ( isset( $result ))
+        {
+            return $result;
+        }
+
         return $this;
     }
 
