@@ -49,7 +49,7 @@ if ( isset( $pageName ))
         }
         else
         {
-            throw new HardStoryException( "Invalid state." );
+            throw new HardStoryException( "Unrecognized navigation from start page." );
         }
     }
     else if ( $pageName == "DatabaseConnection" )
@@ -64,7 +64,7 @@ if ( isset( $pageName ))
         }
         else
         {
-            throw new HardStoryException( "Invalid state." );
+            throw new HardStoryException( "Unrecognized navigation from database connection page." );
         }
     }
     else if ( $pageName == "Confirmation" )
@@ -75,12 +75,12 @@ if ( isset( $pageName ))
         }
         else
         {
-            throw new HardStoryException( "Invalid state." );
+            throw new HardStoryException( "Unrecognized navigation from confirmation page." );
         }
     }
     else
     {
-        throw new HardStoryException( "Invalid state." );
+        throw new HardStoryException( "Unrecognized page." );
     }
 }
 else
