@@ -46,49 +46,48 @@ if ( isset( $pageName ))
         if ( isset( $continueButton ))
         {
             $page = new DatabaseConnectionPage();
-            $page->render();
-            exit;
         }
-
-        throw new HardStoryException( "Invalid state." );
+        else
+        {
+            throw new HardStoryException( "Invalid state." );
+        }
     }
-
-    if ( $pageName == "DatabaseConnection" )
+    else if ( $pageName == "DatabaseConnection" )
     {
         if ( isset( $backButton ))
         {
             $page = new StartPage();
-            $page->render();
-            exit;
         }
-
-        if ( isset( $continueButton ))
+        else if ( isset( $continueButton ))
         {
             $page = new ConfirmationPage();
-            $page->render();
-            exit;
         }
-
-        throw new HardStoryException( "Invalid state." );
+        else
+        {
+            throw new HardStoryException( "Invalid state." );
+        }
     }
-
-    if ( $pageName == "Confirmation" )
+    else if ( $pageName == "Confirmation" )
     {
         if ( isset( $backButton ))
         {
             $page = new DatabaseConnectionPage();
-            $page->render();
-            exit;
         }
-
+        else
+        {
+            throw new HardStoryException( "Invalid state." );
+        }
+    }
+    else
+    {
         throw new HardStoryException( "Invalid state." );
     }
-
-    throw new HardStoryException( "Invalid state." );
+}
+else
+{
+    $page = new StartPage();
 }
 
-$page = new StartPage();
 $page->render();
-exit;
 
 ?>
