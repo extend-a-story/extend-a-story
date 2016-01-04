@@ -32,6 +32,7 @@ use \Extend_A_Story\Pages\Install\AdminAccountPage;
 use \Extend_A_Story\Pages\Install\ConfirmationPage;
 use \Extend_A_Story\Pages\Install\DatabaseConnectionPage;
 use \Extend_A_Story\Pages\Install\StartPage;
+use \Extend_A_Story\Pages\Install\StorySettingsPage;
 
 use \Extend_A_Story\HardStoryException;
 use \Extend_A_Story\Util;
@@ -76,18 +77,33 @@ if ( isset( $pageName ))
         }
         else if ( isset( $continueButton ))
         {
-            $page = new ConfirmationPage();
+            $page = new StorySettingsPage();
         }
         else
         {
             throw new HardStoryException( "Unrecognized navigation from admin account page." );
         }
     }
-    else if ( $pageName == "Confirmation" )
+    else if ( $pageName == "StorySettings" )
     {
         if ( isset( $backButton ))
         {
             $page = new AdminAccountPage();
+        }
+        else if ( isset( $continueButton ))
+        {
+            $page = new ConfirmationPage();
+        }
+        else
+        {
+            throw new HardStoryException( "Unrecognized navigation from story settings page." );
+        }
+    }
+    else if ( $pageName == "Confirmation" )
+    {
+        if ( isset( $backButton ))
+        {
+            $page = new StorySettingsPage();
         }
         else
         {

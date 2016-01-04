@@ -46,6 +46,13 @@ class ConfirmationPage extends InstallPage
             return $result;
         }
 
+        $result = StorySettingsPage::validatePage();
+
+        if ( isset( $result ))
+        {
+            return $result;
+        }
+
         return $this;
     }
 
