@@ -31,6 +31,7 @@ namespace Extend_A_Story\Pages\Install;
 use \Exception;
 use \PDO;
 
+use \Extend_A_Story\HtmlElements\InputField;
 use \Extend_A_Story\HtmlElements\RawText;
 use \Extend_A_Story\HtmlElements\UnorderedList;
 use \Extend_A_Story\Util;
@@ -138,66 +139,35 @@ class DatabaseConnectionPage extends InstallPage
 
         }
 
+        $databaseHostField = new InputField(
+                "databaseHost", "Host", "text", $databaseHost,
+                "This is the host name for your database. This is typically \"localhost\" unless " .
+                "your database is running on a different server than your web site. If you are " .
+                "running Extend-A-Story in a shared hosting environment, your hosting provider " .
+                "should provide you with your database host name." );
+
+        $databaseUsernameField = new InputField(
+                "databaseUsername", "Username", "text", $databaseUsername,
+                "This is the username that will be used to connect to your database during the " .
+                "installation process. This user will need all permissions to your " .
+                "Extend-A-Story database." );
+
+        $databasePasswordField = new InputField(
+                "databasePassword", "Password", "password", $databasePassword,
+                "This is the password that will be used to connect to your database during the " .
+                "installation process." );
+
+        $databaseNameField = new InputField(
+                "databaseName", "Database", "text", $databaseName,
+                "This is the name of your Extend-A-Story database. The tables needed by " .
+                "Extend-A-Story will be created in this database." );
+
+        $databaseHostField->render();
+        $databaseUsernameField->render();
+        $databasePasswordField->render();
+        $databaseNameField->render();
+
 ?>
-
-<div class="inputField">
-    <div><label for="databaseHost">Host:</label></div>
-    <div>
-        <span class="inputFieldHelpButton"
-              onclick="toggleVisibility( 'databaseHost-help' );">Help</span>
-    </div>
-    <div id="databaseHost-help" class="inputFieldHelpContents" style="display: none;">
-        This is the host name for your database. This is typically "localhost" unless your
-        database is running on a different server than your web site. If you are running
-        Extend-A-Story in a shared hosting environment, your hosting provider should provide
-        you with your database host name.
-    </div>
-    <input type="text" id="databaseHost" name="databaseHost"
-           value="<?php echo( htmlentities( $databaseHost )); ?>" />
-</div>
-
-<div class="inputField">
-    <div><label for="databaseUsername">Username:</label></div>
-    <div>
-        <span class="inputFieldHelpButton"
-              onclick="toggleVisibility( 'databaseUsername-help' );">Help</span>
-    </div>
-    <div id="databaseUsername-help" class="inputFieldHelpContents" style="display: none;">
-        This is the username that will be used to connect to your database during the
-        installation process. This user will need all permissions to your Extend-A-Story
-        database.
-    </div>
-    <input type="text" id="databaseUsername" name="databaseUsername"
-           value="<?php echo( htmlentities( $databaseUsername )); ?>" />
-</div>
-
-<div class="inputField">
-    <div><label for="databasePassword">Password:</label></div>
-    <div>
-        <span class="inputFieldHelpButton"
-              onclick="toggleVisibility( 'databasePassword-help' );">Help</span>
-    </div>
-    <div id="databasePassword-help" class="inputFieldHelpContents" style="display: none;">
-        This is the password that will be used to connect to your database during the
-        installation process.
-    </div>
-    <input type="password" id="databasePassword" name="databasePassword"
-           value="<?php echo( htmlentities( $databasePassword )); ?>" />
-</div>
-
-<div class="inputField">
-    <div><label for="databaseName">Database:</label></div>
-    <div>
-        <span class="inputFieldHelpButton"
-              onclick="toggleVisibility( 'databaseName-help' );">Help</span>
-    </div>
-    <div id="databaseName-help" class="inputFieldHelpContents" style="display: none;">
-        This is the name of your Extend-A-Story database. The tables needed by Extend-A-Story will
-        be created in this database.
-    </div>
-    <input type="text" id="databaseName" name="databaseName"
-           value="<?php echo( htmlentities( $databaseName )); ?>" />
-</div>
 
 <div class="submit">
     <input type="hidden" name="pageName" value="DatabaseConnection" />
