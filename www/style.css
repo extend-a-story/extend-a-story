@@ -84,6 +84,14 @@ div.navigation>ul
     list-style-image: none;
 }
 
+div.navigation>ul>li>ul
+{
+    padding:          0em 0em 0em 2em;
+    margin:           0em;
+    list-style-type:  none;
+    list-style-image: none;
+}
+
 div.submit
 {
     text-align:       center;

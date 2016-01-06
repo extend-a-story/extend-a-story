@@ -62,10 +62,26 @@ abstract class InstallPage
 
             <div class="navigation">
                 <ul>
-                    <li>Navigation</li>
-                    <li>Links</li>
-                    <li>Go</li>
-                    <li>Here</li>
+                    <li>Extend-A-Story:</li>
+                    <li>
+                        <ul>
+                            <li>
+                                <a href="http://www.sir-toby.com/phpbb/viewforum.php?f=3">
+                                    Forum
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/extend-a-story/extend-a-story">
+                                    GitHub Project
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.sir-toby.com/extend-a-story/">
+                                    Home Page
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
 
