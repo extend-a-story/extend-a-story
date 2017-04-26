@@ -45,6 +45,8 @@ function handleException( $exception )
         $simplePage = new SimplePage( "Error", null, $content, null, null );
         $simplePage->render();
     }
+
+    error_log( "An exception has occured: " . $exception );
 }
 
 set_exception_handler( "handleException" );
