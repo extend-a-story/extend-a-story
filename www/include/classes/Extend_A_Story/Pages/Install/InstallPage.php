@@ -28,14 +28,50 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\Util;
+
 abstract class InstallPage
 {
+    public static function getPage()
+    {
+        $pageName = Util::getStringParamDefault( $_POST, "pageName", null );
+
+        if ( isset( $pageName ))
+        {
+            switch ( $pageName )
+            {
+                case "Start"              : $page = new StartPage();              break;
+                case "DatabaseConnection" : $page = new DatabaseConnectionPage(); break;
+                case "AdminAccount"       : $page = new AdminAccountPage();       break;
+                case "StorySettings"      : $page = new StorySettingsPage();      break;
+                case "Confirmation"       : $page = new ConfirmationPage();       break;
+                default : throw new HardStoryException( "Unrecognized page." );
+            }
+
+            $page = $page->getNextPage();
+        }
+        else
+        {
+            $page = new StartPage();
+        }
+
+        return $page;
+    }
+
     private $error;
+
+    protected $backButton;
+    protected $continueButton;
 
     public function __construct( $error = null )
     {
         $this->error = $error;
+
+        $this->backButton     = Util::getStringParamDefault( $_POST, "backButton",     null );
+        $this->continueButton = Util::getStringParamDefault( $_POST, "continueButton", null );
     }
+
+    public abstract function getNextPage();
 
     public function validate()
     {

@@ -77,6 +77,21 @@ class AdminAccountPage extends InstallPage
         parent::__construct( $error );
     }
 
+    public function getNextPage()
+    {
+        if ( isset( $this->backButton ))
+        {
+            return new DatabaseConnectionPage();
+        }
+
+        if ( isset( $this->continueButton ))
+        {
+            return new StorySettingsPage();
+        }
+
+        throw new HardStoryException( "Unrecognized navigation from admin account page." );
+    }
+
     public function validate()
     {
         $result = DatabaseConnectionPage::validatePage();

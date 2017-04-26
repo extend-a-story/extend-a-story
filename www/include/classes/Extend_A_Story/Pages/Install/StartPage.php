@@ -30,6 +30,16 @@ namespace Extend_A_Story\Pages\Install;
 
 class StartPage extends InstallPage
 {
+    public function getNextPage()
+    {
+        if ( isset( $this->continueButton ))
+        {
+            return new DatabaseConnectionPage();
+        }
+
+        throw new HardStoryException( "Unrecognized navigation from start page." );
+    }
+
     protected function getSubtitle()
     {
         return "Welcome to Extend-A-Story";

@@ -30,6 +30,16 @@ namespace Extend_A_Story\Pages\Install;
 
 class ConfirmationPage extends InstallPage
 {
+    public function getNextPage()
+    {
+        if ( isset( $this->backButton ))
+        {
+            return new StorySettingsPage();
+        }
+
+        throw new HardStoryException( "Unrecognized navigation from confirmation page." );
+    }
+
     public function validate()
     {
         $result = DatabaseConnectionPage::validatePage();

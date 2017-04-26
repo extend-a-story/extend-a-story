@@ -111,6 +111,21 @@ class DatabaseConnectionPage extends InstallPage
         parent::__construct( $error );
     }
 
+    public function getNextPage()
+    {
+        if ( isset( $this->backButton ))
+        {
+            return new StartPage();
+        }
+
+        if ( isset( $this->continueButton ))
+        {
+            return new AdminAccountPage();
+        }
+
+        throw new HardStoryException( "Unrecognized navigation from database connection page." );
+    }
+
     protected function getSubtitle()
     {
         return "Database Connection";
