@@ -37,6 +37,13 @@ class AdminAccountPage extends InstallPage
 {
     public static function validatePage()
     {
+        $result = DatabaseConnectionPage::validatePage();
+
+        if ( isset( $result ))
+        {
+            return $result;
+        }
+
         $adminLoginName   = Util::getStringParamDefault( $_POST, "adminLoginName",   "" );
         $adminDisplayName = Util::getStringParamDefault( $_POST, "adminDisplayName", "" );
         $adminPassword1   = Util::getStringParamDefault( $_POST, "adminPassword1",   "" );

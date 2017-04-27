@@ -37,6 +37,13 @@ class StorySettingsPage extends InstallPage
 {
     public static function validatePage()
     {
+        $result = AdminAccountPage::validatePage();
+
+        if ( isset( $result ))
+        {
+            return $result;
+        }
+
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
         $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
         $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
@@ -134,13 +141,6 @@ class StorySettingsPage extends InstallPage
 
     public function validate()
     {
-        $result = DatabaseConnectionPage::validatePage();
-
-        if ( isset( $result ))
-        {
-            return $result;
-        }
-
         $result = AdminAccountPage::validatePage();
 
         if ( isset( $result ))
