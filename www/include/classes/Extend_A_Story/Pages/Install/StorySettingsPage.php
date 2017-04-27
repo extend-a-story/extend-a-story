@@ -38,11 +38,7 @@ class StorySettingsPage extends InstallPage
     public static function validatePage()
     {
         $result = AdminAccountPage::validatePage();
-
-        if ( isset( $result ))
-        {
-            return $result;
-        }
+        if ( isset( $result )) return $result;
 
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
         $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
@@ -126,28 +122,15 @@ class StorySettingsPage extends InstallPage
 
     public function getNextPage()
     {
-        if ( isset( $this->backButton ))
-        {
-            return new AdminAccountPage();
-        }
-
-        if ( isset( $this->continueButton ))
-        {
-            return new ConfirmationPage();
-        }
-
+        if ( isset( $this->backButton     )) return new AdminAccountPage();
+        if ( isset( $this->continueButton )) return new ConfirmationPage();
         throw new HardStoryException( "Unrecognized navigation from story settings page." );
     }
 
     public function validate()
     {
         $result = AdminAccountPage::validatePage();
-
-        if ( isset( $result ))
-        {
-            return $result;
-        }
-
+        if ( isset( $result )) return $result;
         return $this;
     }
 

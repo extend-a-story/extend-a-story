@@ -38,11 +38,7 @@ class AdminAccountPage extends InstallPage
     public static function validatePage()
     {
         $result = DatabaseConnectionPage::validatePage();
-
-        if ( isset( $result ))
-        {
-            return $result;
-        }
+        if ( isset( $result )) return $result;
 
         $adminLoginName   = Util::getStringParamDefault( $_POST, "adminLoginName",   "" );
         $adminDisplayName = Util::getStringParamDefault( $_POST, "adminDisplayName", "" );
@@ -86,28 +82,15 @@ class AdminAccountPage extends InstallPage
 
     public function getNextPage()
     {
-        if ( isset( $this->backButton ))
-        {
-            return new DatabaseConnectionPage();
-        }
-
-        if ( isset( $this->continueButton ))
-        {
-            return new StorySettingsPage();
-        }
-
+        if ( isset( $this->backButton     )) return new DatabaseConnectionPage();
+        if ( isset( $this->continueButton )) return new StorySettingsPage();
         throw new HardStoryException( "Unrecognized navigation from admin account page." );
     }
 
     public function validate()
     {
         $result = DatabaseConnectionPage::validatePage();
-
-        if ( isset( $result ))
-        {
-            return $result;
-        }
-
+        if ( isset( $result )) return $result;
         return $this;
     }
 

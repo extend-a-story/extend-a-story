@@ -32,11 +32,7 @@ class StartPage extends InstallPage
 {
     public function getNextPage()
     {
-        if ( isset( $this->continueButton ))
-        {
-            return new DatabaseConnectionPage();
-        }
-
+        if ( isset( $this->continueButton )) return new DatabaseConnectionPage();
         throw new HardStoryException( "Unrecognized navigation from start page." );
     }
 
