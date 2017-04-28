@@ -36,6 +36,13 @@ class StartPage extends InstallPage
         throw new HardStoryException( "Unrecognized navigation from start page." );
     }
 
+    public function validate()
+    {
+        $result = AuthorizationPage::validatePage();
+        if ( isset( $result )) return $result;
+        return $this;
+    }
+
     protected function getSubtitle()
     {
         return "Welcome to Extend-A-Story";

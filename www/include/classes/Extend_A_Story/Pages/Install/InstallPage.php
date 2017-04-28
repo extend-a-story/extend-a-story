@@ -40,6 +40,7 @@ abstract class InstallPage
         {
             switch ( $pageName )
             {
+                case "Authorization"      : $page = new AuthorizationPage();      break;
                 case "Start"              : $page = new StartPage();              break;
                 case "DatabaseConnection" : $page = new DatabaseConnectionPage(); break;
                 case "AdminAccount"       : $page = new AdminAccountPage();       break;
@@ -58,17 +59,22 @@ abstract class InstallPage
         return $page;
     }
 
-    private $error;
-
     protected $backButton;
     protected $continueButton;
+    protected $installToken;
+
+    private $error;
+    private $installTokenPost;
+    private $installTokenCookie;
 
     public function __construct( $error = null )
     {
         $this->error = $error;
 
-        $this->backButton     = Util::getStringParamDefault( $_POST, "backButton",     null );
-        $this->continueButton = Util::getStringParamDefault( $_POST, "continueButton", null );
+        $this->backButton         = Util::getStringParamDefault( $_POST,   "backButton",     null );
+        $this->continueButton     = Util::getStringParamDefault( $_POST,   "continueButton", null );
+        $this->installTokenPost   = Util::getStringParamDefault( $_POST,   "installToken",   null );
+        $this->installTokenCookie = Util::getStringParamDefault( $_COOKIE, "installToken",   null );
     }
 
     public abstract function getNextPage();
@@ -80,6 +86,7 @@ abstract class InstallPage
 
     public function render()
     {
+        $this->handleInstallToken();
         global $version;
         $title = "Extend-A-Story " . $version . " Installation";
 
@@ -125,26 +132,24 @@ abstract class InstallPage
 
 <?php
 
+// add hidden input fields for all fields that are not managed by this page
 $fields = $this->getFields();
 $keys = array_keys( $_POST );
-
 for ( $i = 0; $i < count( $keys ); $i++ )
 {
     $key = $keys[ $i ];
 
-    if ( ! in_array( $key, $fields ))
+    if ( !in_array( $key, $fields ))
     {
         $value = $_POST[ $key ];
-
-?>
-
-                <input type="hidden"
-                       name="<?php echo( htmlentities( $key )); ?>"
-                       value="<?php echo( htmlentities( $value )); ?>" />
-
-<?php
-
+        $this->renderHiddenInput( $key, $value );
     }
+}
+
+// add hidden input for the install token, if it doesn't exist
+if ( !in_array( "installToken", $keys ))
+{
+    $this->renderHiddenInput( "installToken", $this->installToken );
 }
 
 ?>
@@ -190,6 +195,42 @@ for ( $i = 0; $i < count( $keys ); $i++ )
     protected abstract function renderMain();
 
     protected abstract function getFields();
+
+    private function handleInstallToken()
+    {
+        if ( isset( $this->installTokenPost )) $this->installToken = $this->installTokenPost;
+        else if ( isset( $this->installTokenCookie )) $this->installToken = $this->installTokenCookie;
+        else $this->installToken = $this->generateInstallToken();
+
+        $oneWeek = 60 * 60 * 24 * 7; // number of seconds in one week
+        setcookie( "installToken", $this->installToken, time() + $oneWeek );
+    }
+
+    private function generateInstallToken()
+    {
+        $bytes = random_bytes( 16 );
+        $result = "";
+
+        for ( $i = 0; $i < strlen( $bytes ); $i++ )
+        {
+            $result .= sprintf( "%02x", ord( $bytes[ $i ] ));
+        }
+
+        return $result;
+    }
+
+    private function renderHiddenInput( $name, $value )
+    {
+
+?>
+
+                <input type="hidden"
+                       name="<?php echo( htmlentities( $name )); ?>"
+                       value="<?php echo( htmlentities( $value )); ?>" />
+
+<?php
+
+    }
 }
 
 ?>

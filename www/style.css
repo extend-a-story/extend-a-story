@@ -109,3 +109,8 @@ span.inputFieldHelpButton
     text-decoration:  underline;
     cursor:           pointer;
 }
+
+code
+{
+    background-color: #CCCCCC;
+}

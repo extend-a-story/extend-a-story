@@ -40,6 +40,9 @@ class DatabaseConnectionPage extends InstallPage
 {
     public static function validatePage()
     {
+        $result = AuthorizationPage::validatePage();
+        if ( isset( $result )) return $result;
+
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
         $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", "" );
         $databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", "" );
@@ -116,6 +119,13 @@ class DatabaseConnectionPage extends InstallPage
         if ( isset( $this->backButton     )) return new StartPage();
         if ( isset( $this->continueButton )) return new AdminAccountPage();
         throw new HardStoryException( "Unrecognized navigation from database connection page." );
+    }
+
+    public function validate()
+    {
+        $result = AuthorizationPage::validatePage();
+        if ( isset( $result )) return $result;
+        return $this;
     }
 
     protected function getSubtitle()
