@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 Util::getSessionAndUserIDs( $sessionID, $userID );
@@ -103,7 +103,7 @@ while ( count( $curEpisodes ) > 0 )
 
         if ( ! $row )
         {
-            throw new HardStoryException( "Problem fetching episode row from database." );
+            throw new StoryException( "Problem fetching episode row from database." );
         }
 
         $title  = $row[ 0 ];

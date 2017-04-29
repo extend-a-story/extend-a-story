@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 Util::getSessionAndUserIDs( $sessionID, $userID );
@@ -104,7 +104,7 @@ else if ( $method == "days" )
 }
 else
 {
-    throw new HardStoryException( "The specified search method is not supported." );
+    throw new StoryException( "The specified search method is not supported." );
 }
 
 $dbStatement->execute();

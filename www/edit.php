@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 Util::getSessionAndUserIDs( $sessionID, $userID );
@@ -89,7 +89,7 @@ if ( $userID != 0 )
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Unable to fetch user information row from database." );
+        throw new StoryException( "Unable to fetch user information row from database." );
     }
 
     $permissionLevel = $row[ 0 ];
@@ -145,7 +145,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching episode row from database." );
+    throw new StoryException( "Problem fetching episode row from database." );
 }
 
 $scheme         = $row[ 0 ];
@@ -211,7 +211,7 @@ You are trying to edit an episode that someone else is currently editing.
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to lock the episode." );
+        throw new StoryException( "Unable to lock the episode." );
     }
 }
 
@@ -305,7 +305,7 @@ You are trying to edit an episode that has been locked, but not by you.
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to update the lock on the episode." );
+        throw new StoryException( "Unable to update the lock on the episode." );
     }
 }
 
@@ -356,7 +356,7 @@ if ( $command == "AddLinkSave" )
 
         if ( ! $row )
         {
-            throw new HardStoryException( "Problem fetching link count row from the database." );
+            throw new StoryException( "Problem fetching link count row from the database." );
         }
 
         if ( $row[ 0 ] != 0 )
@@ -416,7 +416,7 @@ if ( $command == "AddLinkSave" )
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Unable to unlock the episode record." );
+            throw new StoryException( "Unable to unlock the episode record." );
         }
 
         $message = "Link Added";
@@ -450,7 +450,7 @@ if (( $command == "DeleteSelectedLink"     ) ||
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Unable to fetch link row from database." );
+        throw new StoryException( "Unable to fetch link row from database." );
     }
 
     if ( $row[ 0 ] != $episode )
@@ -486,7 +486,7 @@ if ( $command == "DeleteSelectedLinkSave" )
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to delete link from database." );
+        throw new StoryException( "Unable to delete link from database." );
     }
 
     $dbStatement = Util::getDbConnection()->prepare(
@@ -504,7 +504,7 @@ if ( $command == "DeleteSelectedLinkSave" )
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to unlock the episode record." );
+        throw new StoryException( "Unable to unlock the episode record." );
     }
 
     $message = "Link Deleted";
@@ -543,7 +543,7 @@ if (( $command == "DeleteEpisode" ) || ( $command == "DeleteEpisodeSave" ))
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Problem fetching link count row from the database." );
+        throw new StoryException( "Problem fetching link count row from the database." );
     }
 
     $linkCount = $row[ 0 ];
@@ -594,7 +594,7 @@ if ( $command == "DeleteEpisodeSave" )
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Problem deleting episode from database." );
+            throw new StoryException( "Problem deleting episode from database." );
         }
 
         $dbStatement = Util::getDbConnection()->prepare(
@@ -607,7 +607,7 @@ if ( $command == "DeleteEpisodeSave" )
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Problem resetting link IsCreated status." );
+            throw new StoryException( "Problem resetting link IsCreated status." );
         }
 
         $command = "Done";
@@ -640,7 +640,7 @@ if ( $command == "RevokeAuthorSave" )
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to update the episode record." );
+        throw new StoryException( "Unable to update the episode record." );
     }
 
     $message = "Author's Edit Permission Revoked";

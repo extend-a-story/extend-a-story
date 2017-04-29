@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 Util::getSessionAndUserIDs( $sessionID, $userID );
@@ -50,7 +50,7 @@ if ( ! isset( $scheme ))
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Unable to fetch the lowest scheme ID." );
+        throw new StoryException( "Unable to fetch the lowest scheme ID." );
     }
 
     $scheme = $row[ 0 ];
@@ -76,7 +76,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching scheme row from the database." );
+    throw new StoryException( "Problem fetching scheme row from the database." );
 }
 
 $schemeName     = $row[ 0 ];

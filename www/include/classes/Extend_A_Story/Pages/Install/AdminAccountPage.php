@@ -31,6 +31,7 @@ namespace Extend_A_Story\Pages\Install;
 use \Extend_A_Story\HtmlElements\InputField;
 use \Extend_A_Story\HtmlElements\RawText;
 use \Extend_A_Story\HtmlElements\UnorderedList;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 class AdminAccountPage extends InstallPage
@@ -84,7 +85,7 @@ class AdminAccountPage extends InstallPage
     {
         if ( isset( $this->backButton     )) return new DatabaseConnectionPage();
         if ( isset( $this->continueButton )) return new StorySettingsPage();
-        throw new HardStoryException( "Unrecognized navigation from admin account page." );
+        throw new StoryException( "Unrecognized navigation from admin account page." );
     }
 
     public function validate()

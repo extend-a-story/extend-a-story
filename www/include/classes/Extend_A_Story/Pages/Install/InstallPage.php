@@ -28,6 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 abstract class InstallPage
@@ -46,7 +47,7 @@ abstract class InstallPage
                 case "AdminAccount"       : $page = new AdminAccountPage();       break;
                 case "StorySettings"      : $page = new StorySettingsPage();      break;
                 case "Confirmation"       : $page = new ConfirmationPage();       break;
-                default : throw new HardStoryException( "Unrecognized page." );
+                default : throw new StoryException( "Unrecognized page." );
             }
 
             $page = $page->getNextPage();

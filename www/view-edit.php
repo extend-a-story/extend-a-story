@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 Util::getSessionAndUserIDs( $sessionID, $userID );
@@ -143,7 +143,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching episode row from the database." );
+    throw new StoryException( "Problem fetching episode row from the database." );
 }
 
 $parent = $row[ 0 ];
@@ -157,7 +157,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching link count row from the database." );
+    throw new StoryException( "Problem fetching link count row from the database." );
 }
 
 $linkCount = (int) $row[ 0 ];
@@ -188,7 +188,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching scheme row from the database." );
+    throw new StoryException( "Problem fetching scheme row from the database." );
 }
 
 $bgcolorColor   = $row[ 0 ];
@@ -220,7 +220,7 @@ if ( $image != 0 )
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Problem fetching image row from the database." );
+        throw new StoryException( "Problem fetching image row from the database." );
     }
 
     $image = $row[ 0 ];

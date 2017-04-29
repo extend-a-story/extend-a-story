@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 Util::getSessionAndUserIDs( $sessionID, $userID );
@@ -106,7 +106,7 @@ if ( $command == "login" )
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Unable to update session record." );
+            throw new StoryException( "Unable to update session record." );
         }
     }
 }
@@ -123,7 +123,7 @@ if ( $command == "logout" )
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to update session record." );
+        throw new StoryException( "Unable to update session record." );
     }
 
     $message = "Successfully logged out.";
@@ -212,7 +212,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Unable to fetch user information row from database." );
+    throw new StoryException( "Unable to fetch user information row from database." );
 }
 
 $permissionLevel = $row[ 0 ];
@@ -256,7 +256,7 @@ if ( $command == "changePasswordSave" )
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Unable to fetch user count row from database." );
+        throw new StoryException( "Unable to fetch user count row from database." );
     }
 
     if ( $row[ 0 ] != 1 )
@@ -287,7 +287,7 @@ if ( $command == "changePasswordSave" )
 
             if ( $dbStatement->rowCount() != 1 )
             {
-                throw new HardStoryException( "Unable to update user record." );
+                throw new StoryException( "Unable to update user record." );
             }
 
             $message = "Password successfully changed.";
@@ -471,7 +471,7 @@ if ( $command == "addUserSave" )
 
     if ( ! $row )
     {
-        throw new HardStoryException(
+        throw new StoryException(
                 "Unable to fetch existing login name count row from database." );
     }
 
@@ -624,7 +624,7 @@ if ( $command == "editUserSave" )
 
         if ( ! $row )
         {
-            throw new HardStoryException(
+            throw new StoryException(
                     "Unable to fetch existing login name count row from database." );
         }
 
@@ -671,7 +671,7 @@ if ( $command == "editUserSave" )
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Unable to update user." );
+            throw new StoryException( "Unable to update user." );
         }
 
         if ( $userID == $editedUserID )
@@ -711,7 +711,7 @@ if ( $command == "deleteUserSave" )
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Unable to delete user." );
+            throw new StoryException( "Unable to delete user." );
         }
 
         $message = "User Deleted";
@@ -765,7 +765,7 @@ if ( $command == "listRecentEdits" )
 
     if ( ! $row )
     {
-        throw new HardStoryException(
+        throw new StoryException(
                 "Unable to fetch the max EpisodeEditLogID record from database." );
     }
 

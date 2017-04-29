@@ -30,14 +30,27 @@ namespace Extend_A_Story;
 
 use \Exception;
 
-abstract class StoryException extends Exception
+use \Extend_A_Story\Pages\SimplePage;
+
+class StoryException extends Exception
 {
     public function __construct( $message )
     {
         parent::__construct( $message );
     }
 
-    public abstract function handle();
+    public function handle()
+    {
+        $content = "<p>" .
+                       "An error has occurred. Please try again later. " .
+                       "Contact the site administrator if this problem persists." .
+                   "</p>" .
+                   "<hr />" .
+                   "<p>" . htmlentities( $this->getMessage() ) . "</p>";
+
+        $simplePage = new SimplePage( "Error", null, $content, null, null );
+        $simplePage->render();
+    }
 }
 
 ?>

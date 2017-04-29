@@ -43,7 +43,7 @@ class Util
             ( ! isset( $dbPassword )) ||
             ( ! isset( $dbDatabase )))
         {
-            throw new HardStoryException(
+            throw new StoryException(
                     "The Extend-A-Story installation is not complete. If you are the " .
                     "administrator, please refer to the documentation for completing the " .
                     "installation." );
@@ -78,7 +78,7 @@ class Util
 
         if ( ! $row )
         {
-            throw new HardStoryException( "Unable to fetch the last insert ID." );
+            throw new StoryException( "Unable to fetch the last insert ID." );
         }
 
         return $row[ 0 ];
@@ -90,7 +90,7 @@ class Util
 
         if ( ! isset( $value ))
         {
-            throw new HardStoryException( "Parameter \"" . $name . "\" is not set." );
+            throw new StoryException( "Parameter \"" . $name . "\" is not set." );
         }
 
         return $value;
@@ -112,7 +112,7 @@ class Util
 
         if ( ! isset( $value ))
         {
-            throw new HardStoryException( "Parameter \"" . $name . "\" is not set." );
+            throw new StoryException( "Parameter \"" . $name . "\" is not set." );
         }
 
         return $value;
@@ -134,7 +134,7 @@ class Util
 
         if ( ! ctype_digit( $value ))
         {
-            throw new HardStoryException( "Parameter \"" . $name . "\" is not an integer." );
+            throw new StoryException( "Parameter \"" . $name . "\" is not an integer." );
         }
 
         return (int) $value;
@@ -246,7 +246,7 @@ class Util
 
                 if ( $dbStatement->rowCount() != 1 )
                 {
-                    throw new HardStoryException( "Unable to update your session." );
+                    throw new StoryException( "Unable to update your session." );
                 }
             }
         }
@@ -306,7 +306,7 @@ class Util
 
         if ( ! $row )
         {
-            throw new HardStoryException(
+            throw new StoryException(
                     "Unable to fetch \"" . $variableName . "\" string value." );
         }
 
@@ -337,7 +337,7 @@ class Util
 
             if ( $dbStatement->rowCount() != 1 )
             {
-                throw new HardStoryException(
+                throw new StoryException(
                         "Unable to increment \"" . $variableName . "\" int value." );
             }
         }
@@ -352,7 +352,7 @@ class Util
 
         if ( ! $row )
         {
-            throw new HardStoryException(
+            throw new StoryException(
                     "Unable to fetch \"" . $variableName . "\" int value." );
         }
 
@@ -372,7 +372,7 @@ class Util
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException(
+            throw new StoryException(
                     "Unable to set \"" . $variableName . "\" string value." );
         }
     }
@@ -390,7 +390,7 @@ class Util
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException(
+            throw new StoryException(
                     "Unable to set \"" . $variableName . "\" int value." );
         }
     }
@@ -424,7 +424,7 @@ class Util
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Unable to insert the user into the database." );
+            throw new StoryException( "Unable to insert the user into the database." );
         }
 
         return Util::getLastInsertId();
@@ -485,7 +485,7 @@ class Util
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Unable to insert the episode into the database." );
+            throw new StoryException( "Unable to insert the episode into the database." );
         }
 
         return Util::getLastInsertId();
@@ -524,7 +524,7 @@ class Util
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Unable to insert the link into the database." );
+            throw new StoryException( "Unable to insert the link into the database." );
         }
     }
 
@@ -575,7 +575,7 @@ class Util
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException(
+            throw new StoryException(
                     "Unable to insert the episode edit log into the database." );
         }
 
@@ -650,7 +650,7 @@ class Util
 
         if ( ! $row )
         {
-            throw new HardStoryException( "Episode " . $episodeID . " not found." );
+            throw new StoryException( "Episode " . $episodeID . " not found." );
         }
 
         $authorSessionID = $row[ 0 ];

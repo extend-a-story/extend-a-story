@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 Util::getSessionAndUserIDs( $sessionID, $userID );
@@ -47,7 +47,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching created episode count row from the database." );
+    throw new StoryException( "Problem fetching created episode count row from the database." );
 }
 
 $created = $row[ 0 ];
@@ -59,7 +59,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching empty episode count row from the database." );
+    throw new StoryException( "Problem fetching empty episode count row from the database." );
 }
 
 $empty = $row[ 0 ];
@@ -70,7 +70,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching episode count row from the database." );
+    throw new StoryException( "Problem fetching episode count row from the database." );
 }
 
 $count = $row[ 0 ];

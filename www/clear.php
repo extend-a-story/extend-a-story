@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 Util::getSessionAndUserIDs( $sessionID, $userID );
@@ -85,7 +85,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching episode row from the database." );
+    throw new StoryException( "Problem fetching episode row from the database." );
 }
 
 $parent         = $row[ 0 ];
@@ -179,7 +179,7 @@ $dbStatement = Util::getDbConnection()->prepare(
 
 if ( $dbStatement->rowCount() != 1 )
 {
-    throw new HardStoryException( "Unable to unlock the episode record." );
+    throw new StoryException( "Unable to unlock the episode record." );
 }
 
 ?>

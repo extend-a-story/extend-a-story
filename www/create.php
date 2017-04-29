@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 $command         = Util::getStringParam(        $_REQUEST, "command"             );
@@ -175,7 +175,7 @@ if (( $command == "Lock" ) && ( $episode != 1 ))
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Unable to fetch link count row from the database." );
+        throw new StoryException( "Unable to fetch link count row from the database." );
     }
 
     if ( $row[ 0 ] == 0 )
@@ -247,7 +247,7 @@ if ( $command == "Edit" )
 
     if ( ! $row )
     {
-        throw new HardStoryException(
+        throw new StoryException(
                 "Problem fetching episode row for editing from the database." );
     }
 
@@ -288,7 +288,7 @@ else
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Problem fetching episode row from the database." );
+        throw new StoryException( "Problem fetching episode row from the database." );
     }
 
     $parent         = $row[ 0 ];
@@ -318,12 +318,12 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Unable to fetch scheme count row from the database." );
+    throw new StoryException( "Unable to fetch scheme count row from the database." );
 }
 
 if ( $row[ 0 ] == 0 )
 {
-    throw new HardStoryException( "The specified scheme does not exist." );
+    throw new StoryException( "The specified scheme does not exist." );
 }
 
 if ( $mailto == 1 )
@@ -947,7 +947,7 @@ if ( $command == "Lock" )
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to lock the episode." );
+        throw new StoryException( "Unable to lock the episode." );
     }
 }
 
@@ -969,7 +969,7 @@ if ( $command == "Preview" )
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to update the lock on the episode." );
+        throw new StoryException( "Unable to update the lock on the episode." );
     }
 }
 
@@ -995,7 +995,7 @@ if ( $command == "Edit" )
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to lock the episode for editing." );
+        throw new StoryException( "Unable to lock the episode for editing." );
     }
 }
 
@@ -1017,7 +1017,7 @@ if ( $command == "EditPreview" )
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to update the edit lock on the episode." );
+        throw new StoryException( "Unable to update the edit lock on the episode." );
     }
 }
 
@@ -1078,7 +1078,7 @@ if (( $command == "Save" ) || ( $command == "ExtendSave" ))
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to update the episode record." );
+        throw new StoryException( "Unable to update the episode record." );
     }
 
     $dbStatement = Util::getDbConnection()->prepare(
@@ -1094,7 +1094,7 @@ if (( $command == "Save" ) || ( $command == "ExtendSave" ))
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to update the link record." );
+        throw new StoryException( "Unable to update the link record." );
     }
 
     for ( $i = 0; $i < $linkCount; $i++ )
@@ -1134,7 +1134,7 @@ if (( $command == "Save" ) || ( $command == "ExtendSave" ))
 
         if ( ! $row )
         {
-            throw new HardStoryException(
+            throw new StoryException(
                     "Problem fetching parent episode row from the database." );
         }
 
@@ -1163,7 +1163,7 @@ if ( $command == "EditSave" )
 
         if ( ! $row )
         {
-            throw new HardStoryException( "Unable to fetch user row from the database." );
+            throw new StoryException( "Unable to fetch user row from the database." );
         }
 
         $userName = $row[ 0 ];
@@ -1215,7 +1215,7 @@ if ( $command == "EditSave" )
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Unable to update the episode record for editing." );
+        throw new StoryException( "Unable to update the episode record for editing." );
     }
 
     for ( $i = 0; $i < $linkCount; $i++ )
@@ -1252,7 +1252,7 @@ if ( $command == "EditSave" )
 
         if ( $dbStatement->rowCount() != 1 )
         {
-            throw new HardStoryException( "Unable to update the link record for editing." );
+            throw new StoryException( "Unable to update the link record for editing." );
         }
     }
 }

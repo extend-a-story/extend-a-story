@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
-use \Extend_A_Story\HardStoryException;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 Util::getSessionAndUserIDs( $sessionID, $userID );
@@ -54,7 +54,7 @@ if ( $userID != 0 )
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Unable to fetch user information row from database." );
+        throw new StoryException( "Unable to fetch user information row from database." );
     }
 
     $permissionLevel = $row[ 0 ];
@@ -69,7 +69,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching link count row from the database." );
+    throw new StoryException( "Problem fetching link count row from the database." );
 }
 
 $linkCount = (int) $row[ 0 ];
@@ -173,7 +173,7 @@ if (( $status == 1 ) && ( $minutes > 300 ))
 
     if ( $dbStatement->rowCount() != 1 )
     {
-        throw new HardStoryException( "Automatic unlock attempt failed." );
+        throw new StoryException( "Automatic unlock attempt failed." );
     }
 }
 
@@ -196,7 +196,7 @@ $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
 if ( ! $row )
 {
-    throw new HardStoryException( "Problem fetching scheme row from the database." );
+    throw new StoryException( "Problem fetching scheme row from the database." );
 }
 
 $bgcolorColor   = $row[ 0 ];
@@ -228,7 +228,7 @@ if ( $image != 0 )
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Problem fetching image row from the database." );
+        throw new StoryException( "Problem fetching image row from the database." );
     }
 
     $image = $row[ 0 ];
@@ -249,7 +249,7 @@ if ( $canEdit )
 
     if ( ! $row )
     {
-        throw new HardStoryException( "Problem fetching edit count row from database." );
+        throw new StoryException( "Problem fetching edit count row from database." );
     }
 
     $editCount = $row[ 0 ];

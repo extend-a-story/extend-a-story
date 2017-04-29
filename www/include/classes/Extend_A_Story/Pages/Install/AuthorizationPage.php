@@ -28,6 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 class AuthorizationPage extends InstallPage
@@ -49,7 +50,7 @@ class AuthorizationPage extends InstallPage
     public function getNextPage()
     {
         if ( isset( $this->continueButton )) return new StartPage();
-        throw new HardStoryException( "Unrecognized navigation from authorization page." );
+        throw new StoryException( "Unrecognized navigation from authorization page." );
     }
 
     protected function getSubtitle()

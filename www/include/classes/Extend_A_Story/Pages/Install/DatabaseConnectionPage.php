@@ -34,6 +34,7 @@ use \PDO;
 use \Extend_A_Story\HtmlElements\InputField;
 use \Extend_A_Story\HtmlElements\RawText;
 use \Extend_A_Story\HtmlElements\UnorderedList;
+use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
 class DatabaseConnectionPage extends InstallPage
@@ -118,7 +119,7 @@ class DatabaseConnectionPage extends InstallPage
     {
         if ( isset( $this->backButton     )) return new StartPage();
         if ( isset( $this->continueButton )) return new AdminAccountPage();
-        throw new HardStoryException( "Unrecognized navigation from database connection page." );
+        throw new StoryException( "Unrecognized navigation from database connection page." );
     }
 
     public function validate()

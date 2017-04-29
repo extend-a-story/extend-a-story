@@ -28,12 +28,14 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\StoryException;
+
 class ConfirmationPage extends InstallPage
 {
     public function getNextPage()
     {
         if ( isset( $this->backButton )) return new StorySettingsPage();
-        throw new HardStoryException( "Unrecognized navigation from confirmation page." );
+        throw new StoryException( "Unrecognized navigation from confirmation page." );
     }
 
     public function validate()
