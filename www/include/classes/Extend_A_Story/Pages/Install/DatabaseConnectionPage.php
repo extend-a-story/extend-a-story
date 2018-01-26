@@ -82,23 +82,11 @@ class DatabaseConnectionPage extends InstallPage
 
             try
             {
-                $dbConnection = Util::getDbConnection();
+                Util::getDbConnection();
             }
             catch ( Exception $e )
             {
                 $errors[] = new RawText( "Unable to connect to database: " . $e->getMessage() );
-            }
-        }
-
-        if ( count( $errors ) == 0 )
-        {
-            $dbStatement = $dbConnection->prepare( "SHOW TABLES" );
-            $dbStatement->execute();
-            $tables = $dbStatement->fetchAll( PDO::FETCH_NUM );
-
-            if ( count( $tables ) > 0 )
-            {
-                $errors[] = new RawText( "Database already contains tables." );
             }
         }
 
@@ -117,8 +105,10 @@ class DatabaseConnectionPage extends InstallPage
 
     public function getNextPage()
     {
-        if ( isset( $this->backButton     )) return new StartPage();
-        if ( isset( $this->continueButton )) return new AdminAccountPage();
+        $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
+        if ( isset( $this->backButton )) return new StartPage();
+        if (( isset( $this->continueButton )) and ( isset( $allowDataLoss ))) return new DataLossWarningPage();
+        if (( isset( $this->continueButton )) and ( !isset( $allowDataLoss ))) return new AdminAccountPage();
         throw new StoryException( "Unrecognized navigation from database connection page." );
     }
 

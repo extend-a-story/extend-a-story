@@ -29,6 +29,7 @@ http://www.sir-toby.com/extend-a-story/
 namespace Extend_A_Story\Pages\Install;
 
 use \Extend_A_Story\StoryException;
+use \Extend_A_Story\Util;
 
 class ConfirmationPage extends InstallPage
 {
@@ -84,6 +85,22 @@ for ( $i = 0; $i < count( $keys ); $i++ )
 ?>
 
 </table>
+
+<?php
+
+$allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
+if ( isset( $allowDataLoss ))
+{
+
+?>
+
+<div class="dataLossWarning">!!! YOU WILL LOSE DATA IF YOU PROCEED !!!</div>
+
+<?php
+
+}
+
+?>
 
 <div class="submit">
     <input type="hidden" name="pageName" value="Confirmation" />

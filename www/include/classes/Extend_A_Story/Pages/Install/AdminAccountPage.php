@@ -38,7 +38,7 @@ class AdminAccountPage extends InstallPage
 {
     public static function validatePage()
     {
-        $result = DatabaseConnectionPage::validatePage();
+        $result = DataLossWarningPage::validatePage();
         if ( isset( $result )) return $result;
 
         $adminLoginName   = Util::getStringParamDefault( $_POST, "adminLoginName",   "" );
@@ -83,14 +83,16 @@ class AdminAccountPage extends InstallPage
 
     public function getNextPage()
     {
-        if ( isset( $this->backButton     )) return new DatabaseConnectionPage();
+        $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
+        if (( isset( $this->backButton )) and ( isset( $allowDataLoss ))) return new DataLossWarningPage();
+        if (( isset( $this->backButton )) and ( !isset( $allowDataLoss ))) return new DatabaseConnectionPage();
         if ( isset( $this->continueButton )) return new StorySettingsPage();
         throw new StoryException( "Unrecognized navigation from admin account page." );
     }
 
     public function validate()
     {
-        $result = DatabaseConnectionPage::validatePage();
+        $result = DataLossWarningPage::validatePage();
         if ( isset( $result )) return $result;
         return $this;
     }

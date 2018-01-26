@@ -37,6 +37,15 @@ div.content
     margin:           2em 2em 2em 14em;
 }
 
+div.dataLossWarning
+{
+    background-color: #FFDDDD;
+    color:            #FF0000;
+    font-weight:      bold;
+    padding:          0.25em;
+    margin:           1em 0em 1em 0em;
+}
+
 div.error
 {
     background-color: #FFDDDD;
