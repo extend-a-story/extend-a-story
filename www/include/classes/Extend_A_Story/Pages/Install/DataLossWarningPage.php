@@ -28,8 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
-use \PDO;
-
+use \Extend_A_Story\Data\Tables;
 use \Extend_A_Story\HtmlElements\Checkbox;
 use \Extend_A_Story\HtmlElements\RawText;
 use \Extend_A_Story\HtmlElements\UnorderedList;
@@ -43,12 +42,8 @@ class DataLossWarningPage extends InstallPage
         $result = DatabaseConnectionPage::validatePage();
         if ( isset( $result )) return $result;
 
-        $dbConnection = Util::getDbConnection();
-        $dbStatement = $dbConnection->prepare( "SHOW TABLES" );
-        $dbStatement->execute();
-        $tables = $dbStatement->fetchAll( PDO::FETCH_NUM );
-
-        if ( count( $tables ) > 0 )
+        $tableNames = Tables::getTableNames();
+        if ( count( $tableNames ) > 0 )
         {
             $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
             if ( !isset( $allowDataLoss ))
