@@ -29,7 +29,6 @@ http://www.sir-toby.com/extend-a-story/
 namespace Extend_A_Story\Pages\Install;
 
 use \Exception;
-use \PDO;
 
 use \Extend_A_Story\HtmlElements\InputField;
 use \Extend_A_Story\HtmlElements\RawText;
