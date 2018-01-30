@@ -28,6 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\HtmlElements\RawText;
+use \Extend_A_Story\HtmlElements\UnorderedList;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
@@ -43,8 +45,22 @@ class AuthorizationPage extends InstallPage
         // allow installation to proceed if the install token is configured and matches
         if (( isset( $installToken )) && ( $installToken === $installTokenLocal )) return null;
 
-        // otherwise, force the user to configure the install token
-        return new AuthorizationPage();
+        $error = null;
+
+        $pageName = Util::getStringParamDefault( $_POST, "pageName", null );
+        if ( $pageName === "Authorization" )
+        {
+            $message = "You must verify that you are the owner of this site.";
+            $error = new UnorderedList( [ new RawText( $message ) ] );
+        }
+
+        // force the user to configure the install token
+        return new AuthorizationPage( $error );
+    }
+
+    public function __construct( $error = null )
+    {
+        parent::__construct( $error );
     }
 
     public function getNextPage()
