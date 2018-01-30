@@ -29,6 +29,11 @@ body
     background-color: #DDDDDD;
 }
 
+code
+{
+    background-color: #CCCCCC;
+}
+
 div.content
 {
     border:           1px solid #AA00AA;
@@ -117,9 +122,4 @@ span.inputFieldHelpButton
     color:            #0000FF;
     text-decoration:  underline;
     cursor:           pointer;
-}
-
-code
-{
-    background-color: #CCCCCC;
 }
