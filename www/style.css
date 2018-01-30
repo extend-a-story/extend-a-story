@@ -123,3 +123,16 @@ span.inputFieldHelpButton
     text-decoration:  underline;
     cursor:           pointer;
 }
+
+td.header
+{
+    font-weight:      bold;
+}
+
+td.sectionHeader
+{
+    font-size:        large;
+    font-style:       italic;
+    font-weight:      bold;
+    text-align:       center;
+}

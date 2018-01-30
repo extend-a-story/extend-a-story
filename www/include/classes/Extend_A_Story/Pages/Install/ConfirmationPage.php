@@ -53,37 +53,98 @@ class ConfirmationPage extends InstallPage
 
     protected function renderMain()
     {
+        $databaseHost           = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
+        $databaseUsername       = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
+        $databaseName           = Util::getStringParamDefault( $_POST, "databaseName",           "" );
+        $adminLoginName         = Util::getStringParamDefault( $_POST, "adminLoginName",         "" );
+        $adminDisplayName       = Util::getStringParamDefault( $_POST, "adminDisplayName",       "" );
+        $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
+        $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
+        $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
+        $settingsSiteHome       = Util::getStringParamDefault( $_POST, "settingsSiteHome",       "" );
+        $settingsReadEpisodeUrl = Util::getStringParamDefault( $_POST, "settingsReadEpisodeUrl", "" );
+        $settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
+        $settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
+        $settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
 
 ?>
 
 <table>
     <tr>
-        <th>Field Name</th>
-        <th>Value</th>
+        <td colspan="2" class="sectionHeader">Database Connection</td>
     </tr>
-
-<?php
-
-$keys = array_keys( $_POST );
-
-for ( $i = 0; $i < count( $keys ); $i++ )
-{
-    $key = $keys[ $i ];
-    $value = $_POST[ $key ];
-
-?>
-
     <tr>
-        <td><?php echo( htmlentities( $key )); ?></td>
-        <td><?php echo( htmlentities( $value )); ?></td>
+        <td class="header">Host</td>
+        <td><?php echo( htmlentities( $databaseHost )); ?></td>
     </tr>
-
-<?php
-
-}
-
-?>
-
+    <tr>
+        <td class="header">Username</td>
+        <td><?php echo( htmlentities( $databaseUsername )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Password</td>
+        <td>**********</td>
+    </tr>
+    <tr>
+        <td class="header">Database</td>
+        <td><?php echo( htmlentities( $databaseName )); ?></td>
+    </tr>
+    <tr>
+        <td colspan="2"><hr/></td>
+    </tr>
+    <tr>
+        <td colspan="2" class="sectionHeader">Administrator Account</td>
+    </tr>
+    <tr>
+        <td class="header">Login Name</td>
+        <td><?php echo( htmlentities( $adminLoginName )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Display Name</td>
+        <td><?php echo( htmlentities( $adminDisplayName )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Password</td>
+        <td>**********</td>
+    </tr>
+    <tr>
+        <td colspan="2"><hr/></td>
+    </tr>
+    <tr>
+        <td colspan="2" class="sectionHeader">Story Settings</td>
+    </tr>
+    <tr>
+        <td class="header">Story Name</td>
+        <td><?php echo( htmlentities( $settingsStoryName )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Site Name</td>
+        <td><?php echo( htmlentities( $settingsSiteName )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Story Home</td>
+        <td><?php echo( htmlentities( $settingsStoryHome )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Site Home</td>
+        <td><?php echo( htmlentities( $settingsSiteHome )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Read Episode URL</td>
+        <td><?php echo( htmlentities( $settingsReadEpisodeUrl )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Admin Email</td>
+        <td><?php echo( htmlentities( $settingsAdminEmail )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Max Links</td>
+        <td><?php echo( htmlentities( $settingsMaxLinks )); ?></td>
+    </tr>
+    <tr>
+        <td class="header">Max Edit Days</td>
+        <td><?php echo( htmlentities( $settingsMaxEditDays )); ?></td>
+    </tr>
 </table>
 
 <?php
