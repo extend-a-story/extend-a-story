@@ -99,19 +99,33 @@ class DataLossWarningPage extends InstallPage
                               "the database you specified. Do not click this checkbox unless you are okay with " .
                               "losing data." );
 
+        $tableNames = Tables::getTableNames();
+
+        if ( count( $tableNames ) > 0 )
+        {
+            $tables = UnorderedList::buildFromStringArray( $tableNames );
+
 ?>
 
 <p>
-    The database you specified already contains one or more tables. These tables will be deleted if you proceed with the
-    installation. If you do not wish to lose data, please go back and specify a different database.
-</p>
-
-<p>
-    If you wish to proceed, click the checkbox below to confirm that you are okay with losing data. We strongly suggest
-    performing a backup before you proceed.
+    The database you specified already contains the following tables:
 </p>
 
 <?php
+
+        $tables->render();
+
+?>
+
+<p>
+    These tables will be deleted if you proceed with the installation. If you do not wish to lose data, please go back
+    and specify a different database. If you wish to proceed, click the checkbox below to confirm that you are okay with
+    losing data. We strongly suggest performing a backup before you proceed.
+</p>
+
+<?php
+
+        }
 
         $allowDataLossCheckbox->render();
 

@@ -30,6 +30,13 @@ namespace Extend_A_Story\HtmlElements;
 
 class UnorderedList extends HtmlElement
 {
+    public static function buildFromStringArray( $stringArray )
+    {
+        $children = array();
+        foreach ( $stringArray as $string ) $children[] = new RawText( $string );
+        return new UnorderedList( $children );
+    }
+
     private $children;
 
     public function __construct( $children )
