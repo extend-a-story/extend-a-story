@@ -149,9 +149,9 @@ class ConfirmationPage extends InstallPage
 
 <?php
 
-$allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
-if ( isset( $allowDataLoss ))
-{
+        $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
+        if ( isset( $allowDataLoss ))
+        {
 
 ?>
 
@@ -159,7 +159,7 @@ if ( isset( $allowDataLoss ))
 
 <?php
 
-}
+        }
 
 ?>
 
