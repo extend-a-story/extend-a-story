@@ -28,6 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\Data\Tables;
+use \Extend_A_Story\HtmlElements\UnorderedList;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
@@ -149,13 +151,26 @@ class ConfirmationPage extends InstallPage
 
 <?php
 
-        $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
-        if ( isset( $allowDataLoss ))
+        $tableNames = Tables::getTableNames();
+        if ( count( $tableNames ) > 0 )
         {
+            $tables = UnorderedList::buildFromStringArray( $tableNames );
 
 ?>
 
-<div class="dataLossWarning">!!! YOU WILL LOSE DATA IF YOU PROCEED !!!</div>
+<div class="dataLossWarning">
+
+    <p>!!! YOU WILL LOSE DATA IF YOU PROCEED !!!</p>
+
+    <p>The following tables will be deleted:</p>
+
+<?php
+
+            $tables->render();
+
+?>
+
+</div>
 
 <?php
 
