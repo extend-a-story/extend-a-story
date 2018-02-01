@@ -44,7 +44,8 @@ class ConfirmationPage extends InstallPage
 
     protected function getNextPage()
     {
-        if ( isset( $this->backButton )) return new StorySettingsPage();
+        if ( isset( $this->backButton     )) return new StorySettingsPage();
+        if ( isset( $this->continueButton )) return new CompletedPage();
         throw new StoryException( "Unrecognized navigation from confirmation page." );
     }
 
@@ -186,6 +187,7 @@ class ConfirmationPage extends InstallPage
 <div class="submit">
     <input type="hidden" name="pageName" value="Confirmation" />
     <input type="submit" name="backButton" value="Back" />
+    <input type="submit" name="continueButton" value="Install" />
 </div>
 
 <?php
