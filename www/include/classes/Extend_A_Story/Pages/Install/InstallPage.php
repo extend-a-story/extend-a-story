@@ -79,10 +79,7 @@ abstract class InstallPage
         $this->installTokenCookie = Util::getStringParamDefault( $_COOKIE, "installToken",   null );
     }
 
-    public function validate()
-    {
-        return $this;
-    }
+    public abstract function validate();
 
     public function render()
     {
