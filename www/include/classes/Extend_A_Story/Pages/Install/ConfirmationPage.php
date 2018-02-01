@@ -35,17 +35,17 @@ use \Extend_A_Story\Util;
 
 class ConfirmationPage extends InstallPage
 {
-    public function getNextPage()
-    {
-        if ( isset( $this->backButton )) return new StorySettingsPage();
-        throw new StoryException( "Unrecognized navigation from confirmation page." );
-    }
-
     public function validate()
     {
         $result = StorySettingsPage::validatePage();
         if ( isset( $result )) return $result;
         return $this;
+    }
+
+    protected function getNextPage()
+    {
+        if ( isset( $this->backButton )) return new StorySettingsPage();
+        throw new StoryException( "Unrecognized navigation from confirmation page." );
     }
 
     protected function getSubtitle()

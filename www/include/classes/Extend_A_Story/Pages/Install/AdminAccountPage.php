@@ -81,20 +81,20 @@ class AdminAccountPage extends InstallPage
         parent::__construct( $error );
     }
 
-    public function getNextPage()
+    public function validate()
+    {
+        $result = DataLossWarningPage::validatePage();
+        if ( isset( $result )) return $result;
+        return $this;
+    }
+
+    protected function getNextPage()
     {
         $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
         if (( isset( $this->backButton )) and ( isset( $allowDataLoss ))) return new DataLossWarningPage();
         if (( isset( $this->backButton )) and ( !isset( $allowDataLoss ))) return new DatabaseConnectionPage();
         if ( isset( $this->continueButton )) return new StorySettingsPage();
         throw new StoryException( "Unrecognized navigation from admin account page." );
-    }
-
-    public function validate()
-    {
-        $result = DataLossWarningPage::validatePage();
-        if ( isset( $result )) return $result;
-        return $this;
     }
 
     protected function getSubtitle()

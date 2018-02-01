@@ -102,20 +102,20 @@ class DatabaseConnectionPage extends InstallPage
         parent::__construct( $error );
     }
 
-    public function getNextPage()
+    public function validate()
+    {
+        $result = AuthorizationPage::validatePage();
+        if ( isset( $result )) return $result;
+        return $this;
+    }
+
+    protected function getNextPage()
     {
         $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
         if ( isset( $this->backButton )) return new StartPage();
         if (( isset( $this->continueButton )) and ( isset( $allowDataLoss ))) return new DataLossWarningPage();
         if (( isset( $this->continueButton )) and ( !isset( $allowDataLoss ))) return new AdminAccountPage();
         throw new StoryException( "Unrecognized navigation from database connection page." );
-    }
-
-    public function validate()
-    {
-        $result = AuthorizationPage::validatePage();
-        if ( isset( $result )) return $result;
-        return $this;
     }
 
     protected function getSubtitle()

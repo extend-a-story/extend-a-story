@@ -70,18 +70,18 @@ class DataLossWarningPage extends InstallPage
         parent::__construct( $error );
     }
 
-    public function getNextPage()
-    {
-        if ( isset( $this->backButton     )) return new DatabaseConnectionPage();
-        if ( isset( $this->continueButton )) return new AdminAccountPage();
-        throw new StoryException( "Unrecognized navigation from data loss warning page." );
-    }
-
     public function validate()
     {
         $result = DatabaseConnectionPage::validatePage();
         if ( isset( $result )) return $result;
         return $this;
+    }
+
+    protected function getNextPage()
+    {
+        if ( isset( $this->backButton     )) return new DatabaseConnectionPage();
+        if ( isset( $this->continueButton )) return new AdminAccountPage();
+        throw new StoryException( "Unrecognized navigation from data loss warning page." );
     }
 
     protected function getSubtitle()

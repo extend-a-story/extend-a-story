@@ -32,17 +32,17 @@ use \Extend_A_Story\StoryException;
 
 class StartPage extends InstallPage
 {
-    public function getNextPage()
-    {
-        if ( isset( $this->continueButton )) return new DatabaseConnectionPage();
-        throw new StoryException( "Unrecognized navigation from start page." );
-    }
-
     public function validate()
     {
         $result = AuthorizationPage::validatePage();
         if ( isset( $result )) return $result;
         return $this;
+    }
+
+    protected function getNextPage()
+    {
+        if ( isset( $this->continueButton )) return new DatabaseConnectionPage();
+        throw new StoryException( "Unrecognized navigation from start page." );
     }
 
     protected function getSubtitle()

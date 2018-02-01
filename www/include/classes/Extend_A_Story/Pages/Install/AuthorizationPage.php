@@ -63,7 +63,7 @@ class AuthorizationPage extends InstallPage
         parent::__construct( $error );
     }
 
-    public function getNextPage()
+    protected function getNextPage()
     {
         if ( isset( $this->continueButton )) return new StartPage();
         throw new StoryException( "Unrecognized navigation from authorization page." );

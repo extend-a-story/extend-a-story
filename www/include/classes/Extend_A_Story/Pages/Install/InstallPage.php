@@ -79,8 +79,6 @@ abstract class InstallPage
         $this->installTokenCookie = Util::getStringParamDefault( $_COOKIE, "installToken",   null );
     }
 
-    public abstract function getNextPage();
-
     public function validate()
     {
         return $this;
@@ -191,6 +189,8 @@ if ( !in_array( "installToken", $keys ))
 <?php
 
     }
+
+    protected abstract function getNextPage();
 
     protected abstract function getSubtitle();
 

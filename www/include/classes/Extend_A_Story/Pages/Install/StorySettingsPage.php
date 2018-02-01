@@ -121,18 +121,18 @@ class StorySettingsPage extends InstallPage
         parent::__construct( $error );
     }
 
-    public function getNextPage()
-    {
-        if ( isset( $this->backButton     )) return new AdminAccountPage();
-        if ( isset( $this->continueButton )) return new ConfirmationPage();
-        throw new StoryException( "Unrecognized navigation from story settings page." );
-    }
-
     public function validate()
     {
         $result = AdminAccountPage::validatePage();
         if ( isset( $result )) return $result;
         return $this;
+    }
+
+    protected function getNextPage()
+    {
+        if ( isset( $this->backButton     )) return new AdminAccountPage();
+        if ( isset( $this->continueButton )) return new ConfirmationPage();
+        throw new StoryException( "Unrecognized navigation from story settings page." );
     }
 
     protected function getSubtitle()
