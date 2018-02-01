@@ -100,7 +100,6 @@ class DataLossWarningPage extends InstallPage
                               "losing data." );
 
         $tableNames = Tables::getTableNames();
-
         if ( count( $tableNames ) > 0 )
         {
             $tables = UnorderedList::buildFromStringArray( $tableNames );
