@@ -89,6 +89,12 @@ class DataLossWarningPage extends InstallPage
         return "Data Loss Warning";
     }
 
+    protected function getFields()
+    {
+        return array( "pageName", "backButton", "continueButton",
+                      "allowDataLoss" );
+    }
+
     protected function renderMain()
     {
         $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
@@ -138,12 +144,6 @@ class DataLossWarningPage extends InstallPage
 
 <?php
 
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton",
-                      "allowDataLoss" );
     }
 }
 

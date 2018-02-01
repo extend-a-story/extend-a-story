@@ -194,9 +194,9 @@ if ( !in_array( "installToken", $keys ))
 
     protected abstract function getSubtitle();
 
-    protected abstract function renderMain();
-
     protected abstract function getFields();
+
+    protected abstract function renderMain();
 
     private function handleInstallToken()
     {

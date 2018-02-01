@@ -140,6 +140,15 @@ class StorySettingsPage extends InstallPage
         return "Story Settings";
     }
 
+    protected function getFields()
+    {
+        return array( "pageName", "backButton", "continueButton",
+                      "settingsStoryName", "settingsSiteName",
+                      "settingsStoryHome", "settingsSiteHome",
+                      "settingsReadEpisodeUrl", "settingsAdminEmail",
+                      "settingsMaxLinks", "settingsMaxEditDays" );
+    }
+
     protected function renderMain()
     {
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
@@ -212,15 +221,6 @@ class StorySettingsPage extends InstallPage
 
 <?php
 
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton",
-                      "settingsStoryName", "settingsSiteName",
-                      "settingsStoryHome", "settingsSiteHome",
-                      "settingsReadEpisodeUrl", "settingsAdminEmail",
-                      "settingsMaxLinks", "settingsMaxEditDays" );
     }
 }
 

@@ -123,6 +123,12 @@ class DatabaseConnectionPage extends InstallPage
         return "Database Connection";
     }
 
+    protected function getFields()
+    {
+        return array( "pageName", "backButton", "continueButton",
+                      "databaseHost", "databaseUsername", "databasePassword", "databaseName" );
+    }
+
     protected function renderMain()
     {
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
@@ -168,12 +174,6 @@ class DatabaseConnectionPage extends InstallPage
 
 <?php
 
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton",
-                      "databaseHost", "databaseUsername", "databasePassword", "databaseName" );
     }
 }
 

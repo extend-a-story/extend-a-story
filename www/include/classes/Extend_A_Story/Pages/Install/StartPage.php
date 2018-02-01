@@ -50,6 +50,11 @@ class StartPage extends InstallPage
         return "Welcome to Extend-A-Story";
     }
 
+    protected function getFields()
+    {
+        return array( "pageName", "backButton", "continueButton" );
+    }
+
     protected function renderMain()
     {
 
@@ -67,11 +72,6 @@ class StartPage extends InstallPage
 
 <?php
 
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton" );
     }
 }
 

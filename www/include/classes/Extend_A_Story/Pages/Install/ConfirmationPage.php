@@ -53,6 +53,11 @@ class ConfirmationPage extends InstallPage
         return "Confirmation";
     }
 
+    protected function getFields()
+    {
+        return array( "pageName", "backButton", "continueButton" );
+    }
+
     protected function renderMain()
     {
         $databaseHost           = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
@@ -185,11 +190,6 @@ class ConfirmationPage extends InstallPage
 
 <?php
 
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton" );
     }
 }
 

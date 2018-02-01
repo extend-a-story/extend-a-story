@@ -74,6 +74,11 @@ class AuthorizationPage extends InstallPage
         return "Authorization Required";
     }
 
+    protected function getFields()
+    {
+        return array( "pageName", "backButton", "continueButton" );
+    }
+
     protected function renderMain()
     {
 
@@ -102,11 +107,6 @@ class AuthorizationPage extends InstallPage
 
 <?php
 
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton" );
     }
 }
 

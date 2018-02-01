@@ -102,6 +102,12 @@ class AdminAccountPage extends InstallPage
         return "Administrator Account";
     }
 
+    protected function getFields()
+    {
+        return array( "pageName", "backButton", "continueButton",
+                      "adminLoginName", "adminDisplayName", "adminPassword1", "adminPassword2" );
+    }
+
     protected function renderMain()
     {
         $adminLoginName   = Util::getStringParamDefault( $_POST, "adminLoginName",   "" );
@@ -146,12 +152,6 @@ class AdminAccountPage extends InstallPage
 
 <?php
 
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton",
-                      "adminLoginName", "adminDisplayName", "adminPassword1", "adminPassword2" );
     }
 }
 
