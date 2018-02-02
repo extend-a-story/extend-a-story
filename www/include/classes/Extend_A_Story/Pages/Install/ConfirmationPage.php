@@ -109,7 +109,7 @@ class ConfirmationPage extends InstallPage
         <td><?php echo( htmlentities( $this->databaseName )); ?></td>
     </tr>
     <tr>
-        <td colspan="2"><hr/></td>
+        <td colspan="2"><hr /></td>
     </tr>
     <tr>
         <td colspan="2" class="sectionHeader">Administrator Account</td>
@@ -127,7 +127,7 @@ class ConfirmationPage extends InstallPage
         <td>**********</td>
     </tr>
     <tr>
-        <td colspan="2"><hr/></td>
+        <td colspan="2"><hr /></td>
     </tr>
     <tr>
         <td colspan="2" class="sectionHeader">Story Settings</td>

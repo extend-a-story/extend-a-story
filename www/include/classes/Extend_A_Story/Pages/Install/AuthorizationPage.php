@@ -94,11 +94,11 @@ class AuthorizationPage extends InstallPage
     you are the owner of this site by updating your configuration file.
 </p>
 <p>
-    This is the location of your configuration file:<br/>
+    This is the location of your configuration file:<br />
     <code><?php echo( realpath( __DIR__ . "/../../../../config/Configuration.php" )); ?></code>
 </p>
 <p>
-    Find the line that begins with <code>$installToken</code> and change it to read as follows:<br/>
+    Find the line that begins with <code>$installToken</code> and change it to read as follows:<br />
     <code>$installToken = "<?php echo( $this->installToken ); ?>";</code>
 </p>
 <p>
