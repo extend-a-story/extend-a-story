@@ -108,39 +108,42 @@ class AdminAccountPage extends InstallPage
                       "adminLoginName", "adminDisplayName", "adminPassword1", "adminPassword2" );
     }
 
-    protected function renderMain()
+    protected function preRender()
     {
         $adminLoginName   = Util::getStringParamDefault( $_POST, "adminLoginName",   "" );
         $adminDisplayName = Util::getStringParamDefault( $_POST, "adminDisplayName", "" );
         $adminPassword1   = Util::getStringParamDefault( $_POST, "adminPassword1",   "" );
         $adminPassword2   = Util::getStringParamDefault( $_POST, "adminPassword2",   "" );
 
-        $adminLoginNameField = new InputField(
+        $this->adminLoginNameField = new InputField(
                 "adminLoginName", "Login Name", "text", $adminLoginName,
                 "This is the login name for the administrative account for your story. This " .
                 "account will be created during installation. You will be able to log in to this " .
                 "account using this name." );
 
-        $adminDisplayNameField = new InputField(
+        $this->adminDisplayNameField = new InputField(
                 "adminDisplayName", "Display Name", "text", $adminDisplayName,
                 "This is the display name for the administrative account for your story. This " .
                 "name will be publicly displayed on any moderation activity you perform in your " .
                 "story." );
 
-        $adminPassword1Field = new InputField(
+        $this->adminPassword1Field = new InputField(
                 "adminPassword1", "Pasword", "password", $adminPassword1,
                 "This is the password for the administrative account for your story. This " .
                 "account will be created during installation. You will be able to log in to this " .
                 "account using this password." );
 
-        $adminPassword2Field = new InputField(
+        $this->adminPassword2Field = new InputField(
                 "adminPassword2", "Pasword (Again)", "password", $adminPassword2,
                 "Please enter the password a second time to guard against a mis-typed password." );
+    }
 
-        $adminLoginNameField->render();
-        $adminDisplayNameField->render();
-        $adminPassword1Field->render();
-        $adminPassword2Field->render();
+    protected function renderMain()
+    {
+        $this->adminLoginNameField->render();
+        $this->adminDisplayNameField->render();
+        $this->adminPassword1Field->render();
+        $this->adminPassword2Field->render();
 
 ?>
 
@@ -153,6 +156,11 @@ class AdminAccountPage extends InstallPage
 <?php
 
     }
+
+    private $adminLoginNameField;
+    private $adminDisplayNameField;
+    private $adminPassword1Field;
+    private $adminPassword2Field;
 }
 
 ?>

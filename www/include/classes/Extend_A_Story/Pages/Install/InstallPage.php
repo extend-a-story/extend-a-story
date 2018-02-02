@@ -83,6 +83,7 @@ abstract class InstallPage
 
     public function render()
     {
+        $this->preRender();
         $this->handleInstallToken();
         global $version;
         $title = "Extend-A-Story " . $version . " Installation";
@@ -192,6 +193,10 @@ abstract class InstallPage
     protected abstract function getSubtitle();
 
     protected abstract function getFields();
+
+    protected function preRender()
+    {
+    }
 
     protected abstract function renderMain();
 

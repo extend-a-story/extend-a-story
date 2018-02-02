@@ -149,7 +149,7 @@ class StorySettingsPage extends InstallPage
                       "settingsMaxLinks", "settingsMaxEditDays" );
     }
 
-    protected function renderMain()
+    protected function preRender()
     {
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
         $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
@@ -160,56 +160,59 @@ class StorySettingsPage extends InstallPage
         $settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
         $settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
 
-        $settingsStoryNameField = new InputField(
+        $this->settingsStoryNameField = new InputField(
                 "settingsStoryName", "Story Name", "text", $settingsStoryName,
                 "This is the name of your story. This name will be used in page titles and links " .
                 "to the home page of your story." );
 
-        $settingsSiteNameField = new InputField(
+        $this->settingsSiteNameField = new InputField(
                 "settingsSiteName", "Site Name", "text", $settingsSiteName,
                 "This is the name of your web site. This name will be used in links to the home " .
                 "page of your web site." );
 
-        $settingsStoryHomeField = new InputField(
+        $this->settingsStoryHomeField = new InputField(
                 "settingsStoryHome", "Story Home", "text", $settingsStoryHome,
                 "This is the URL for the home page of your story. All story pages will provide a " .
                 "link to this URL." );
 
-        $settingsSiteHomeField = new InputField(
+        $this->settingsSiteHomeField = new InputField(
                 "settingsSiteHome", "Site Home", "text", $settingsSiteHome,
                 "This is the URL for the home page of your web site. All story pages will " .
                 "provide a link to this URL." );
 
-        $settingsReadEpisodeUrlField = new InputField(
+        $this->settingsReadEpisodeUrlField = new InputField(
                 "settingsReadEpisodeUrl", "Read Episode URL", "text", $settingsReadEpisodeUrl,
                 "This is the URL to the \"read.php\" script for this story on your web site. " .
                 "Email notifications of newly created episodes will use this URL to provide a " .
                 "link to the newly created episode." );
 
-        $settingsAdminEmailField = new InputField(
+        $this->settingsAdminEmailField = new InputField(
                 "settingsAdminEmail", "Admin Email", "text", $settingsAdminEmail,
                 "This is the email address from which email notifications of newly created " .
                 "episodes will be sent. This email address will receive an email notification " .
                 "for every episode that is created." );
 
-        $settingsMaxLinksField = new InputField(
+        $this->settingsMaxLinksField = new InputField(
                 "settingsMaxLinks", "Max Links", "text", $settingsMaxLinks,
                 "This is the maximum number of links an author is allowed to specify when " .
                 "creating an episode." );
 
-        $settingsMaxEditDaysField = new InputField(
+        $this->settingsMaxEditDaysField = new InputField(
                 "settingsMaxEditDays", "Max Edit Days", "text", $settingsMaxEditDays,
                 "This is the number of days for which an author is allowed to edit an epiosde " .
                 "that they created." );
+    }
 
-        $settingsStoryNameField->render();
-        $settingsSiteNameField->render();
-        $settingsStoryHomeField->render();
-        $settingsSiteHomeField->render();
-        $settingsReadEpisodeUrlField->render();
-        $settingsAdminEmailField->render();
-        $settingsMaxLinksField->render();
-        $settingsMaxEditDaysField->render();
+    protected function renderMain()
+    {
+        $this->settingsStoryNameField->render();
+        $this->settingsSiteNameField->render();
+        $this->settingsStoryHomeField->render();
+        $this->settingsSiteHomeField->render();
+        $this->settingsReadEpisodeUrlField->render();
+        $this->settingsAdminEmailField->render();
+        $this->settingsMaxLinksField->render();
+        $this->settingsMaxEditDaysField->render();
 
 ?>
 
@@ -222,6 +225,15 @@ class StorySettingsPage extends InstallPage
 <?php
 
     }
+
+    private $settingsStoryNameField;
+    private $settingsSiteNameField;
+    private $settingsStoryHomeField;
+    private $settingsSiteHomeField;
+    private $settingsReadEpisodeUrlField;
+    private $settingsAdminEmailField;
+    private $settingsMaxLinksField;
+    private $settingsMaxEditDaysField;
 }
 
 ?>

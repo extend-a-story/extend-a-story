@@ -95,20 +95,28 @@ class DataLossWarningPage extends InstallPage
                       "allowDataLoss" );
     }
 
-    protected function renderMain()
+    protected function preRender()
     {
         $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
 
-        $allowDataLossCheckbox =
+        $this->allowDataLossCheckbox =
                 new Checkbox( "allowDataLoss", "Allow Data Loss", "true", isset( $allowDataLoss ),
                               "Clicking this checkbox will allow you to proceed at the expense of losing data in " .
                               "the database you specified. Do not click this checkbox unless you are okay with " .
                               "losing data." );
 
+        $this->tables = null;
         $tableNames = Tables::getTableNames();
         if ( count( $tableNames ) > 0 )
         {
-            $tables = UnorderedList::buildFromStringArray( $tableNames );
+            $this->tables = UnorderedList::buildFromStringArray( $tableNames );
+        }
+    }
+
+    protected function renderMain()
+    {
+        if ( isset( $this->tables ))
+        {
 
 ?>
 
@@ -118,7 +126,7 @@ class DataLossWarningPage extends InstallPage
 
 <?php
 
-            $tables->render();
+            $this->tables->render();
 
 ?>
 
@@ -132,7 +140,7 @@ class DataLossWarningPage extends InstallPage
 
         }
 
-        $allowDataLossCheckbox->render();
+        $this->allowDataLossCheckbox->render();
 
 ?>
 
@@ -145,6 +153,8 @@ class DataLossWarningPage extends InstallPage
 <?php
 
     }
+
+    private $allowDataLossCheckbox;
 }
 
 ?>

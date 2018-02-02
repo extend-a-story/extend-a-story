@@ -59,21 +59,32 @@ class ConfirmationPage extends InstallPage
         return array( "pageName", "backButton", "continueButton" );
     }
 
+    protected function preRender()
+    {
+        $this->databaseHost           = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
+        $this->databaseUsername       = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
+        $this->databaseName           = Util::getStringParamDefault( $_POST, "databaseName",           "" );
+        $this->adminLoginName         = Util::getStringParamDefault( $_POST, "adminLoginName",         "" );
+        $this->adminDisplayName       = Util::getStringParamDefault( $_POST, "adminDisplayName",       "" );
+        $this->settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
+        $this->settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
+        $this->settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
+        $this->settingsSiteHome       = Util::getStringParamDefault( $_POST, "settingsSiteHome",       "" );
+        $this->settingsReadEpisodeUrl = Util::getStringParamDefault( $_POST, "settingsReadEpisodeUrl", "" );
+        $this->settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
+        $this->settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
+        $this->settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
+        $this->tables                 = null;
+
+        $tableNames = Tables::getTableNames();
+        if ( count( $tableNames ) > 0 )
+        {
+            $this->tables = UnorderedList::buildFromStringArray( $tableNames );
+        }
+    }
+
     protected function renderMain()
     {
-        $databaseHost           = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
-        $databaseUsername       = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
-        $databaseName           = Util::getStringParamDefault( $_POST, "databaseName",           "" );
-        $adminLoginName         = Util::getStringParamDefault( $_POST, "adminLoginName",         "" );
-        $adminDisplayName       = Util::getStringParamDefault( $_POST, "adminDisplayName",       "" );
-        $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
-        $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
-        $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
-        $settingsSiteHome       = Util::getStringParamDefault( $_POST, "settingsSiteHome",       "" );
-        $settingsReadEpisodeUrl = Util::getStringParamDefault( $_POST, "settingsReadEpisodeUrl", "" );
-        $settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
-        $settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
-        $settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
 
 ?>
 
@@ -83,11 +94,11 @@ class ConfirmationPage extends InstallPage
     </tr>
     <tr>
         <td class="header">Host</td>
-        <td><?php echo( htmlentities( $databaseHost )); ?></td>
+        <td><?php echo( htmlentities( $this->databaseHost )); ?></td>
     </tr>
     <tr>
         <td class="header">Username</td>
-        <td><?php echo( htmlentities( $databaseUsername )); ?></td>
+        <td><?php echo( htmlentities( $this->databaseUsername )); ?></td>
     </tr>
     <tr>
         <td class="header">Password</td>
@@ -95,7 +106,7 @@ class ConfirmationPage extends InstallPage
     </tr>
     <tr>
         <td class="header">Database</td>
-        <td><?php echo( htmlentities( $databaseName )); ?></td>
+        <td><?php echo( htmlentities( $this->databaseName )); ?></td>
     </tr>
     <tr>
         <td colspan="2"><hr/></td>
@@ -105,11 +116,11 @@ class ConfirmationPage extends InstallPage
     </tr>
     <tr>
         <td class="header">Login Name</td>
-        <td><?php echo( htmlentities( $adminLoginName )); ?></td>
+        <td><?php echo( htmlentities( $this->adminLoginName )); ?></td>
     </tr>
     <tr>
         <td class="header">Display Name</td>
-        <td><?php echo( htmlentities( $adminDisplayName )); ?></td>
+        <td><?php echo( htmlentities( $this->adminDisplayName )); ?></td>
     </tr>
     <tr>
         <td class="header">Password</td>
@@ -123,44 +134,42 @@ class ConfirmationPage extends InstallPage
     </tr>
     <tr>
         <td class="header">Story Name</td>
-        <td><?php echo( htmlentities( $settingsStoryName )); ?></td>
+        <td><?php echo( htmlentities( $this->settingsStoryName )); ?></td>
     </tr>
     <tr>
         <td class="header">Site Name</td>
-        <td><?php echo( htmlentities( $settingsSiteName )); ?></td>
+        <td><?php echo( htmlentities( $this->settingsSiteName )); ?></td>
     </tr>
     <tr>
         <td class="header">Story Home</td>
-        <td><?php echo( htmlentities( $settingsStoryHome )); ?></td>
+        <td><?php echo( htmlentities( $this->settingsStoryHome )); ?></td>
     </tr>
     <tr>
         <td class="header">Site Home</td>
-        <td><?php echo( htmlentities( $settingsSiteHome )); ?></td>
+        <td><?php echo( htmlentities( $this->settingsSiteHome )); ?></td>
     </tr>
     <tr>
         <td class="header">Read Episode URL</td>
-        <td><?php echo( htmlentities( $settingsReadEpisodeUrl )); ?></td>
+        <td><?php echo( htmlentities( $this->settingsReadEpisodeUrl )); ?></td>
     </tr>
     <tr>
         <td class="header">Admin Email</td>
-        <td><?php echo( htmlentities( $settingsAdminEmail )); ?></td>
+        <td><?php echo( htmlentities( $this->settingsAdminEmail )); ?></td>
     </tr>
     <tr>
         <td class="header">Max Links</td>
-        <td><?php echo( htmlentities( $settingsMaxLinks )); ?></td>
+        <td><?php echo( htmlentities( $this->settingsMaxLinks )); ?></td>
     </tr>
     <tr>
         <td class="header">Max Edit Days</td>
-        <td><?php echo( htmlentities( $settingsMaxEditDays )); ?></td>
+        <td><?php echo( htmlentities( $this->settingsMaxEditDays )); ?></td>
     </tr>
 </table>
 
 <?php
 
-        $tableNames = Tables::getTableNames();
-        if ( count( $tableNames ) > 0 )
+        if ( isset( $this->tables ))
         {
-            $tables = UnorderedList::buildFromStringArray( $tableNames );
 
 ?>
 
@@ -172,7 +181,7 @@ class ConfirmationPage extends InstallPage
 
 <?php
 
-            $tables->render();
+            $this->tables->render();
 
 ?>
 
@@ -193,6 +202,21 @@ class ConfirmationPage extends InstallPage
 <?php
 
     }
+
+    private $databaseHost;
+    private $databaseUsername;
+    private $databaseName;
+    private $adminLoginName;
+    private $adminDisplayName;
+    private $settingsStoryName;
+    private $settingsSiteName;
+    private $settingsStoryHome;
+    private $settingsSiteHome;
+    private $settingsReadEpisodeUrl;
+    private $settingsAdminEmail;
+    private $settingsMaxLinks;
+    private $settingsMaxEditDays;
+    private $tables;
 }
 
 ?>
