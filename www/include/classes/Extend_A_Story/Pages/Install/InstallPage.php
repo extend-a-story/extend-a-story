@@ -129,25 +129,25 @@ abstract class InstallPage
 
 <?php
 
-// add hidden input fields for all fields that are not managed by this page
-$fields = $this->getFields();
-$keys = array_keys( $_POST );
-for ( $i = 0; $i < count( $keys ); $i++ )
-{
-    $key = $keys[ $i ];
+        // add hidden input fields for all fields that are not managed by this page
+        $fields = $this->getFields();
+        $keys = array_keys( $_POST );
+        for ( $i = 0; $i < count( $keys ); $i++ )
+        {
+            $key = $keys[ $i ];
 
-    if ( !in_array( $key, $fields ))
-    {
-        $value = $_POST[ $key ];
-        $this->renderHiddenInput( $key, $value );
-    }
-}
+            if ( !in_array( $key, $fields ))
+            {
+                $value = $_POST[ $key ];
+                $this->renderHiddenInput( $key, $value );
+            }
+        }
 
-// add hidden input for the install token, if it doesn't exist
-if ( !in_array( "installToken", $keys ))
-{
-    $this->renderHiddenInput( "installToken", $this->installToken );
-}
+        // add hidden input for the install token, if it doesn't exist
+        if ( !in_array( "installToken", $keys ))
+        {
+            $this->renderHiddenInput( "installToken", $this->installToken );
+        }
 
 ?>
 
