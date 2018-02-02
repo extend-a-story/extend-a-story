@@ -118,7 +118,7 @@ class DataLossWarningPage extends InstallPage
 
 <?php
 
-        $tables->render();
+            $tables->render();
 
 ?>
 
