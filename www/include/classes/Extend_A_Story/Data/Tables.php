@@ -34,7 +34,8 @@ use \Extend_A_Story\Util;
 
 class Tables
 {
-    private static $storyTableNames = array( "ExtendAStoryVariable" );
+    private static $storyTableNames = array( "ExtendAStoryVariable",
+                                             "Session" );
 
     public static function getConflictingTableNames()
     {
@@ -55,6 +56,7 @@ class Tables
     public static function createTables()
     {
         ExtendAStoryVariable::createTable();
+        Session::createTable();
     }
 
     private static function getDatabaseTableNames()
