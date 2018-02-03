@@ -37,7 +37,8 @@ class Tables
     private static $storyTableNames = array( "ExtendAStoryVariable",
                                              "Session",
                                              "User",
-                                             "Episode" );
+                                             "Episode",
+                                             "Link" );
 
     public static function getConflictingTableNames()
     {
@@ -61,6 +62,7 @@ class Tables
         Session::createTable();
         User::createTable();
         Episode::createTable();
+        Link::createTable();
     }
 
     private static function getDatabaseTableNames()
