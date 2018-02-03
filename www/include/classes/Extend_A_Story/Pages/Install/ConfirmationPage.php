@@ -76,7 +76,7 @@ class ConfirmationPage extends InstallPage
         $this->settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
         $this->tables                 = null;
 
-        $tableNames = Tables::getTableNames();
+        $tableNames = Tables::getConflictingTableNames();
         if ( count( $tableNames ) > 0 )
         {
             $this->tables = UnorderedList::buildFromStringArray( $tableNames );

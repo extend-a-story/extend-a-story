@@ -28,44 +28,29 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Data;
 
-use \PDO;
-
 use \Extend_A_Story\Util;
 
-class Tables
+class ExtendAStoryVariable
 {
-    private static $storyTableNames = array( "ExtendAStoryVariable" );
-
-    public static function getConflictingTableNames()
-    {
-        $conflictingTableNames = array();
-        $databaseTableNames = Tables::getDatabaseTableNames();
-
-        foreach ( $databaseTableNames as $databaseTableName )
-        {
-            if ( in_array( $databaseTableName, Tables::$storyTableNames, true ))
-            {
-                $conflictingTableNames[] = $databaseTableName;
-            }
-        }
-
-        return $conflictingTableNames;
-    }
-
-    public static function createTables()
-    {
-        ExtendAStoryVariable::createTable();
-    }
-
-    private static function getDatabaseTableNames()
+    public static function createTable()
     {
         $dbConnection = Util::getDbConnection();
-        $dbStatement = $dbConnection->prepare( "SHOW TABLES" );
+
+        $dbStatement = $dbConnection->prepare( "DROP TABLE IF EXISTS ExtendAStoryVariable" );
         $dbStatement->execute();
-        $tables = $dbStatement->fetchAll( PDO::FETCH_NUM );
-        $tableNames = array();
-        foreach ( $tables as $table ) $tableNames[] = $table[ 0 ];
-        return $tableNames;
+
+        $sql =
+<<<SQL
+            CREATE TABLE ExtendAStoryVariable
+            (
+                VariableName  VARCHAR( 255 )  NOT NULL  PRIMARY KEY,
+                IntValue      INT UNSIGNED    NULL,
+                StringValue   VARCHAR( 255 )  NULL
+            );
+SQL;
+
+        $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->execute();
     }
 }
 

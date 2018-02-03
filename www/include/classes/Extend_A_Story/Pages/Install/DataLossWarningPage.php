@@ -42,7 +42,7 @@ class DataLossWarningPage extends InstallPage
         $result = DatabaseConnectionPage::validatePage();
         if ( isset( $result )) return $result;
 
-        $tableNames = Tables::getTableNames();
+        $tableNames = Tables::getConflictingTableNames();
         if ( count( $tableNames ) > 0 )
         {
             $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
@@ -106,7 +106,7 @@ class DataLossWarningPage extends InstallPage
                               "losing data." );
 
         $this->tables = null;
-        $tableNames = Tables::getTableNames();
+        $tableNames = Tables::getConflictingTableNames();
         if ( count( $tableNames ) > 0 )
         {
             $this->tables = UnorderedList::buildFromStringArray( $tableNames );

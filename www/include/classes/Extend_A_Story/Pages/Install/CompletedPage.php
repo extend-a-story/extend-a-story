@@ -28,6 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\Data\Tables;
 use \Extend_A_Story\StoryException;
 
 class CompletedPage extends InstallPage
@@ -52,6 +53,11 @@ class CompletedPage extends InstallPage
     protected function getFields()
     {
         return array( "pageName", "backButton", "continueButton" );
+    }
+
+    protected function preRender()
+    {
+        Tables::createTables();
     }
 
     protected function renderMain()
