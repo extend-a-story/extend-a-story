@@ -51,7 +51,7 @@ class Link
                 Description     VARCHAR( 255 )  NOT NULL,
                 INDEX( SourceEpisodeID ),
                 INDEX( TargetEpisodeID )
-            );
+            )
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

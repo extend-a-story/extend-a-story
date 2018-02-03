@@ -46,7 +46,7 @@ class ExtendAStoryVariable
                 VariableName  VARCHAR( 255 )  NOT NULL  PRIMARY KEY,
                 IntValue      INT UNSIGNED    NULL,
                 StringValue   VARCHAR( 255 )  NULL
-            );
+            )
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

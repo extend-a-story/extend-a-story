@@ -62,7 +62,7 @@ class Episode
                 LockDate           VARCHAR( 255 )    NOT NULL,
                 LockKey            INT     UNSIGNED  NOT NULL,
                 CreationTimestamp  DATETIME          NULL
-            );
+            )
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

@@ -58,7 +58,7 @@ class EpisodeEditLog
                 EditDate          VARCHAR( 255 )  NOT NULL,
                 EditLogEntry      VARCHAR( 255 )  NOT NULL,
                 INDEX( EpisodeID )
-            );
+            )
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

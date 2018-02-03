@@ -47,7 +47,7 @@ class Session
                 UserID      INT UNSIGNED  NOT NULL,
                 SessionKey  INT UNSIGNED  NOT NULL,
                 AccessDate  DATETIME      NOT NULL
-            );
+            )
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

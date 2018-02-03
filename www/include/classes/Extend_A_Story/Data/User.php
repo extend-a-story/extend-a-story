@@ -48,7 +48,7 @@ class User
                 LoginName        VARCHAR( 255 )    NOT NULL,
                 Password         VARCHAR( 255 )    NOT NULL,
                 UserName         VARCHAR( 255 )    NOT NULL
-            );
+            )
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );
