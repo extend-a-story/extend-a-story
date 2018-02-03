@@ -41,7 +41,8 @@ class Tables
                                              "Link",
                                              "EpisodeEditLog",
                                              "LinkEditLog",
-                                             "Scheme" );
+                                             "Scheme",
+                                             "Image" );
 
     public static function getConflictingTableNames()
     {
@@ -69,6 +70,7 @@ class Tables
         EpisodeEditLog::createTable();
         LinkEditLog::createTable();
         Scheme::createTable();
+        Image::createTable();
     }
 
     private static function getDatabaseTableNames()
