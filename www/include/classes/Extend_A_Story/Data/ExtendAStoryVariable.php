@@ -28,6 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Data;
 
+use \PDO;
+
 use \Extend_A_Story\Util;
 
 class ExtendAStoryVariable
@@ -50,6 +52,73 @@ class ExtendAStoryVariable
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->execute();
+    }
+
+    public static function populateTable( $settingsStoryName, $settingsSiteName,
+                                          $settingsStoryHome, $settingsSiteHome,
+                                          $settingsReadEpisodeUrl, $settingsAdminEmail,
+                                          $settingsMaxLinks, $settingsMaxEditDays )
+    {
+        ExtendAStoryVariable::populateCountDate();
+        ExtendAStoryVariable::populateIntValue(    "CountValue",     0                       );
+        ExtendAStoryVariable::populateStringValue( "StoryName",      $settingsStoryName      );
+        ExtendAStoryVariable::populateStringValue( "SiteName",       $settingsSiteName       );
+        ExtendAStoryVariable::populateStringValue( "StoryHome",      $settingsStoryHome      );
+        ExtendAStoryVariable::populateStringValue( "SiteHome",       $settingsSiteHome       );
+        ExtendAStoryVariable::populateStringValue( "ReadEpisodeURL", $settingsReadEpisodeUrl );
+        ExtendAStoryVariable::populateStringValue( "AdminEmail",     $settingsAdminEmail     );
+        ExtendAStoryVariable::populateStringValue( "IsWriteable",    "N"                     );
+        ExtendAStoryVariable::populateIntValue(    "MaxLinks",       $settingsMaxLinks       );
+        ExtendAStoryVariable::populateIntValue(    "MaxEditDays",    $settingsMaxEditDays    );
+    }
+
+    private static function populateCountDate()
+    {
+        $dbConnection = Util::getDbConnection();
+
+        $sql =
+<<<SQL
+            INSERT INTO ExtendAStoryVariable
+                        ( VariableName, StringValue )
+                 VALUES ( "CountDate", date_format( now(), '%c/%e/%Y %l:%i:%s %p' ))
+SQL;
+
+        $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->execute();
+    }
+
+    private static function populateIntValue( $variableName, $intValue )
+    {
+        $dbConnection = Util::getDbConnection();
+
+        $sql =
+<<<SQL
+            INSERT INTO ExtendAStoryVariable
+                        ( VariableName, IntValue )
+                 VALUES ( :variableName, :intValue )
+SQL;
+
+        $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
+        $dbStatement->bindParam( ":intValue",     $intValue,     PDO::PARAM_INT );
+        $dbStatement->execute();
+    }
+
+    private static function populateStringValue( $variableName, $stringValue )
+    {
+        $dbConnection = Util::getDbConnection();
+
+        $sql =
+<<<SQL
+            INSERT INTO ExtendAStoryVariable
+                        ( VariableName, StringValue )
+                 VALUES ( :variableName, :stringValue )
+SQL;
+
+        $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
+        $dbStatement->bindParam( ":stringValue",  $stringValue,  PDO::PARAM_STR );
         $dbStatement->execute();
     }
 }

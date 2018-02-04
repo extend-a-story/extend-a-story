@@ -30,6 +30,7 @@ namespace Extend_A_Story\Pages\Install;
 
 use \Extend_A_Story\Data\Tables;
 use \Extend_A_Story\StoryException;
+use \Extend_A_Story\Util;
 
 class CompletedPage extends InstallPage
 {
@@ -57,7 +58,20 @@ class CompletedPage extends InstallPage
 
     protected function preRender()
     {
+        $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
+        $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
+        $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
+        $settingsSiteHome       = Util::getStringParamDefault( $_POST, "settingsSiteHome",       "" );
+        $settingsReadEpisodeUrl = Util::getStringParamDefault( $_POST, "settingsReadEpisodeUrl", "" );
+        $settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
+        $settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
+        $settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
+
         Tables::createTables();
+        Tables::populateTables( $settingsStoryName, $settingsSiteName,
+                                $settingsStoryHome, $settingsSiteHome,
+                                $settingsReadEpisodeUrl, $settingsAdminEmail,
+                                $settingsMaxLinks, $settingsMaxEditDays );
     }
 
     protected function renderMain()

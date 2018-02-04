@@ -73,6 +73,17 @@ class Tables
         Image::createTable();
     }
 
+    public static function populateTables( $settingsStoryName, $settingsSiteName,
+                                           $settingsStoryHome, $settingsSiteHome,
+                                           $settingsReadEpisodeUrl, $settingsAdminEmail,
+                                           $settingsMaxLinks, $settingsMaxEditDays )
+    {
+        ExtendAStoryVariable::populateTable( $settingsStoryName, $settingsSiteName,
+                                             $settingsStoryHome, $settingsSiteHome,
+                                             $settingsReadEpisodeUrl, $settingsAdminEmail,
+                                             $settingsMaxLinks, $settingsMaxEditDays );
+    }
+
     private static function getDatabaseTableNames()
     {
         $dbConnection = Util::getDbConnection();
