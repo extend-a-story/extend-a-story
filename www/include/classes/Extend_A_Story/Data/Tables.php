@@ -76,12 +76,14 @@ class Tables
     public static function populateTables( $settingsStoryName, $settingsSiteName,
                                            $settingsStoryHome, $settingsSiteHome,
                                            $settingsReadEpisodeUrl, $settingsAdminEmail,
-                                           $settingsMaxLinks, $settingsMaxEditDays )
+                                           $settingsMaxLinks, $settingsMaxEditDays,
+                                           $adminLoginName, $adminDisplayName, $adminPassword )
     {
         ExtendAStoryVariable::populateTable( $settingsStoryName, $settingsSiteName,
                                              $settingsStoryHome, $settingsSiteHome,
                                              $settingsReadEpisodeUrl, $settingsAdminEmail,
                                              $settingsMaxLinks, $settingsMaxEditDays );
+        User::populateTable( $adminLoginName, $adminDisplayName, $adminPassword );
     }
 
     private static function getDatabaseTableNames()

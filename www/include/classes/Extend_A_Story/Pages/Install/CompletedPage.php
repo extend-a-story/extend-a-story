@@ -66,12 +66,16 @@ class CompletedPage extends InstallPage
         $settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
         $settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
         $settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
+        $adminLoginName         = Util::getStringParamDefault( $_POST, "adminLoginName",         "" );
+        $adminDisplayName       = Util::getStringParamDefault( $_POST, "adminDisplayName",       "" );
+        $adminPassword          = Util::getStringParamDefault( $_POST, "adminPassword1",         "" );
 
         Tables::createTables();
         Tables::populateTables( $settingsStoryName, $settingsSiteName,
                                 $settingsStoryHome, $settingsSiteHome,
                                 $settingsReadEpisodeUrl, $settingsAdminEmail,
-                                $settingsMaxLinks, $settingsMaxEditDays );
+                                $settingsMaxLinks, $settingsMaxEditDays,
+                                $adminLoginName, $adminDisplayName, $adminPassword );
     }
 
     protected function renderMain()
