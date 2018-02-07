@@ -85,6 +85,7 @@ class Tables
                                              $settingsMaxLinks, $settingsMaxEditDays );
         User::populateTable( $adminLoginName, $adminDisplayName, $adminPassword );
         Episode::populateTable();
+        Scheme::populateTable();
     }
 
     private static function getDatabaseTableNames()

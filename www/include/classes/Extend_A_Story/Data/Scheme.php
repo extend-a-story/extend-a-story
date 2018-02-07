@@ -60,6 +60,27 @@ SQL;
         $dbStatement = $dbConnection->prepare( $sql );
         $dbStatement->execute();
     }
+
+    public static function populateTable()
+    {
+        $dbConnection = Util::getDbConnection();
+
+        $sql =
+<<<SQL
+            INSERT INTO Scheme
+                        ( SchemeName, bgcolor, text, link, vlink, alink, background,
+                          UncreatedLink, CreatedLink, BackLinkedLink )
+                 VALUES ( "Black Text on White Background",
+                          "#FFFFFF", "#000000", "#0000FF", "#FF0000", "#00FF00", "",
+                          "images/red.gif", "images/green.gif", "images/blue.gif" ),
+                        ( "White Text on Black Background",
+                          "#000000", "#FFFFFF", "#00FF00", "#FF0000", "#0000FF", "",
+                          "images/red.gif", "images/green.gif", "images/blue.gif" )
+SQL;
+
+        $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->execute();
+    }
 }
 
 ?>
