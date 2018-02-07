@@ -68,6 +68,24 @@ SQL;
         $dbStatement = $dbConnection->prepare( $sql );
         $dbStatement->execute();
     }
+
+    public static function populateTable()
+    {
+        $dbConnection = Util::getDbConnection();
+
+        $sql =
+<<<SQL
+            INSERT INTO Episode
+                        ( Parent, AuthorSessionID, EditorSessionID, SchemeID, ImageID,
+                          Status, IsLinkable, IsExtendable, AuthorMailto, AuthorNotify,
+                          Title, Text, AuthorName, AuthorEmail, CreationDate,
+                          LockDate, LockKey, CreationTimestamp )
+                 VALUES ( 1, 0, 0, 1, 0, 0, "N", "N", "N", "N", "-", "-", "-", "-", "-", "-", 0, NULL )
+SQL;
+
+        $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->execute();
+    }
 }
 
 ?>

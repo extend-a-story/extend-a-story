@@ -84,6 +84,7 @@ class Tables
                                              $settingsReadEpisodeUrl, $settingsAdminEmail,
                                              $settingsMaxLinks, $settingsMaxEditDays );
         User::populateTable( $adminLoginName, $adminDisplayName, $adminPassword );
+        Episode::populateTable();
     }
 
     private static function getDatabaseTableNames()
