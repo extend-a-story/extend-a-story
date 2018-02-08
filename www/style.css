@@ -116,6 +116,12 @@ legend
     font-weight:      bold;
 }
 
+pre
+{
+    background-color: #CCCCCC;
+    margin:           1em 0em 1em 2em;
+}
+
 span.inputFieldHelpButton
 {
     margin:           0em 0em 0em 1em;

@@ -58,6 +58,10 @@ class CompletedPage extends InstallPage
 
     protected function preRender()
     {
+        $this->databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
+        $this->databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
+        $this->databasePassword = Util::getStringParamDefault( $_POST, "databasePassword",       "" );
+        $this->databaseName     = Util::getStringParamDefault( $_POST, "databaseName",           "" );
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
         $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
         $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
@@ -83,9 +87,43 @@ class CompletedPage extends InstallPage
 
 ?>
 
-<p>This page is not complete.</p>
+<p>
+    Your Extend-A-Story database has been installed. To finish your installation, you must update your configuration
+    file. This is the location of your configuration file:
+</p>
+
+<pre>
+<?php echo( htmlentities( realpath( __DIR__ . "/../../../../config/Configuration.php" ))); ?>
+</pre>
+
+<p>
+    Near the end of the file you will find a section that begins with:
+</p>
+
+<pre>
+$installToken = "<?php echo( htmlentities( $this->installToken )); ?>";
+</pre>
+
+<p>
+    Change that section to read as follows:
+</p>
+
+<pre>
+$installToken = null;
+$dbHost       = "<?php echo( htmlentities( $this->databaseHost     )); ?>";
+$dbUser       = "<?php echo( htmlentities( $this->databaseUsername )); ?>";
+$dbPassword   = "<?php echo( htmlentities( $this->databasePassword )); ?>";
+$dbDatabase   = "<?php echo( htmlentities( $this->databaseName     )); ?>";
+</pre>
 
 <?php
 
     }
+
+    private $databaseHost;
+    private $databaseUsername;
+    private $databasePassword;
+    private $databaseName;
 }
+
+?>
