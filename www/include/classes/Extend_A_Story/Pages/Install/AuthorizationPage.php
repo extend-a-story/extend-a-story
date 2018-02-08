@@ -107,7 +107,7 @@ $installToken = "<?php echo( htmlentities( $this->installToken )); ?>";
 </pre>
 
 <p>
-    Once this is done, click the Continue button to proceed.
+    Once this is done, click the <em>Continue</em> button to proceed.
 </p>
 
 <div class="submit">
