@@ -90,17 +90,22 @@ class AuthorizationPage extends InstallPage
 ?>
 
 <p>
-    You are attempting to install Extend-A-Story. You cannot proceed until you have verified that
-    you are the owner of this site by updating your configuration file.
+    You are attempting to install Extend-A-Story. You cannot proceed until you have verified that you are the owner of
+    this site by updating your configuration file. This is the location of your configuration file:
 </p>
+
+<pre>
+<?php echo( htmlentities( realpath( __DIR__ . "/../../../../config/Configuration.php" ))); ?>
+</pre>
+
 <p>
-    This is the location of your configuration file:<br />
-    <code><?php echo( realpath( __DIR__ . "/../../../../config/Configuration.php" )); ?></code>
+    Find the line that begins with <code>$installToken</code> and change it to read as follows:
 </p>
-<p>
-    Find the line that begins with <code>$installToken</code> and change it to read as follows:<br />
-    <code>$installToken = "<?php echo( $this->installToken ); ?>";</code>
-</p>
+
+<pre>
+$installToken = "<?php echo( htmlentities( $this->installToken )); ?>";
+</pre>
+
 <p>
     Once this is done, click the Continue button to proceed.
 </p>
