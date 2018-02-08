@@ -65,6 +65,8 @@ class DataLossWarningPage extends InstallPage
         return null;
     }
 
+    private $allowDataLossCheckbox;
+
     public function __construct( $error = null )
     {
         parent::__construct( $error );
@@ -153,8 +155,6 @@ class DataLossWarningPage extends InstallPage
 <?php
 
     }
-
-    private $allowDataLossCheckbox;
 }
 
 ?>

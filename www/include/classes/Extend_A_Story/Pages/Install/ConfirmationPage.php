@@ -35,6 +35,21 @@ use \Extend_A_Story\Util;
 
 class ConfirmationPage extends InstallPage
 {
+    private $databaseHost;
+    private $databaseUsername;
+    private $databaseName;
+    private $adminLoginName;
+    private $adminDisplayName;
+    private $settingsStoryName;
+    private $settingsSiteName;
+    private $settingsStoryHome;
+    private $settingsSiteHome;
+    private $settingsReadEpisodeUrl;
+    private $settingsAdminEmail;
+    private $settingsMaxLinks;
+    private $settingsMaxEditDays;
+    private $tables;
+
     public function validate()
     {
         $result = StorySettingsPage::validatePage();
@@ -202,21 +217,6 @@ class ConfirmationPage extends InstallPage
 <?php
 
     }
-
-    private $databaseHost;
-    private $databaseUsername;
-    private $databaseName;
-    private $adminLoginName;
-    private $adminDisplayName;
-    private $settingsStoryName;
-    private $settingsSiteName;
-    private $settingsStoryHome;
-    private $settingsSiteHome;
-    private $settingsReadEpisodeUrl;
-    private $settingsAdminEmail;
-    private $settingsMaxLinks;
-    private $settingsMaxEditDays;
-    private $tables;
 }
 
 ?>

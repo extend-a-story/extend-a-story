@@ -97,6 +97,11 @@ class DatabaseConnectionPage extends InstallPage
         return null;
     }
 
+    private $databaseHostField;
+    private $databaseUsernameField;
+    private $databasePasswordField;
+    private $databaseNameField;
+
     public function __construct( $error = null )
     {
         parent::__construct( $error );
@@ -178,11 +183,6 @@ class DatabaseConnectionPage extends InstallPage
 <?php
 
     }
-
-    private $databaseHostField;
-    private $databaseUsernameField;
-    private $databasePasswordField;
-    private $databaseNameField;
 }
 
 ?>

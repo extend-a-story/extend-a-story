@@ -34,6 +34,11 @@ use \Extend_A_Story\Util;
 
 class CompletedPage extends InstallPage
 {
+    private $databaseHost;
+    private $databaseUsername;
+    private $databasePassword;
+    private $databaseName;
+
     public function validate()
     {
         $result = StorySettingsPage::validatePage();
@@ -119,11 +124,6 @@ $dbDatabase   = "<?php echo( htmlentities( $this->databaseName     )); ?>";
 <?php
 
     }
-
-    private $databaseHost;
-    private $databaseUsername;
-    private $databasePassword;
-    private $databaseName;
 }
 
 ?>

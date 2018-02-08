@@ -116,6 +116,15 @@ class StorySettingsPage extends InstallPage
         return null;
     }
 
+    private $settingsStoryNameField;
+    private $settingsSiteNameField;
+    private $settingsStoryHomeField;
+    private $settingsSiteHomeField;
+    private $settingsReadEpisodeUrlField;
+    private $settingsAdminEmailField;
+    private $settingsMaxLinksField;
+    private $settingsMaxEditDaysField;
+
     public function __construct( $error = null )
     {
         parent::__construct( $error );
@@ -225,15 +234,6 @@ class StorySettingsPage extends InstallPage
 <?php
 
     }
-
-    private $settingsStoryNameField;
-    private $settingsSiteNameField;
-    private $settingsStoryHomeField;
-    private $settingsSiteHomeField;
-    private $settingsReadEpisodeUrlField;
-    private $settingsAdminEmailField;
-    private $settingsMaxLinksField;
-    private $settingsMaxEditDaysField;
 }
 
 ?>

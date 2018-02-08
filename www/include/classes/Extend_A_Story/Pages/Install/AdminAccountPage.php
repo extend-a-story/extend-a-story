@@ -76,6 +76,11 @@ class AdminAccountPage extends InstallPage
         return null;
     }
 
+    private $adminLoginNameField;
+    private $adminDisplayNameField;
+    private $adminPassword1Field;
+    private $adminPassword2Field;
+
     public function __construct( $error = null )
     {
         parent::__construct( $error );
@@ -156,11 +161,6 @@ class AdminAccountPage extends InstallPage
 <?php
 
     }
-
-    private $adminLoginNameField;
-    private $adminDisplayNameField;
-    private $adminPassword1Field;
-    private $adminPassword2Field;
 }
 
 ?>
