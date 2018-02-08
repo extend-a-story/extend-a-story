@@ -1081,20 +1081,24 @@ if (( $command == "Save" ) || ( $command == "ExtendSave" ))
         throw new StoryException( "Unable to update the episode record." );
     }
 
-    $dbStatement = Util::getDbConnection()->prepare(
-            "UPDATE Link " .
-               "SET IsCreated = 'Y' " .
-             "WHERE SourceEpisodeID = :parentToUpdate " .
-               "AND TargetEpisodeID = :episodeToUpdate" );
-
-    $dbStatement->bindParam( ":parentToUpdate",  $parentToUpdate,  PDO::PARAM_INT );
-    $dbStatement->bindParam( ":episodeToUpdate", $episodeToUpdate, PDO::PARAM_INT );
-
-    $dbStatement->execute();
-
-    if ( $dbStatement->rowCount() != 1 )
+    // if the episode is not the first episode, mark the link leading to it as created
+    if ( $episodeToUpdate != 1 )
     {
-        throw new StoryException( "Unable to update the link record." );
+        $dbStatement = Util::getDbConnection()->prepare(
+                "UPDATE Link " .
+                   "SET IsCreated = 'Y' " .
+                 "WHERE SourceEpisodeID = :parentToUpdate " .
+                   "AND TargetEpisodeID = :episodeToUpdate" );
+
+        $dbStatement->bindParam( ":parentToUpdate",  $parentToUpdate,  PDO::PARAM_INT );
+        $dbStatement->bindParam( ":episodeToUpdate", $episodeToUpdate, PDO::PARAM_INT );
+
+        $dbStatement->execute();
+
+        if ( $dbStatement->rowCount() != 1 )
+        {
+            throw new StoryException( "Unable to update the link record." );
+        }
     }
 
     for ( $i = 0; $i < $linkCount; $i++ )
