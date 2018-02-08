@@ -96,7 +96,7 @@ abstract class InstallPage
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="style.css" />
         <script type="text/javascript" src="script.js"></script>
-        <title><?php echo( $title ); ?> - <?php echo( $this->getSubtitle() ); ?></title>
+        <title><?php echo( htmlentities( $title )); ?> - <?php echo( htmlentities( $this->getSubtitle() )); ?></title>
     </head>
     <body>
         <form action="install.php" method="post">
@@ -152,11 +152,11 @@ abstract class InstallPage
 
 ?>
 
-                <h1><?php echo( $title ); ?></h1>
+                <h1><?php echo( htmlentities( $title )); ?></h1>
 
                 <div class="main">
 
-                    <h2><?php echo( $this->getSubtitle() ); ?></h2>
+                    <h2><?php echo( htmlentities( $this->getSubtitle() )); ?></h2>
 
 <?php
 
