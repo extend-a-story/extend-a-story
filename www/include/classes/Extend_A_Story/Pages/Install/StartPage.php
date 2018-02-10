@@ -61,8 +61,7 @@ class StartPage extends InstallPage
 ?>
 
 <p>
-    This page will guide you through the Extend-A-Story installation. Click the Continue button to
-    proceed.
+    This page will guide you through the Extend-A-Story installation. Click the <em>Continue</em> button to proceed.
 </p>
 
 <div class="submit">
