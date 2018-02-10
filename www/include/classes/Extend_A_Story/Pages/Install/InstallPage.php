@@ -90,12 +90,12 @@ abstract class InstallPage
 
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="style.css" />
-        <script type="text/javascript" src="script.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="script.js"></script>
         <title><?php echo( htmlentities( $title )); ?> - <?php echo( htmlentities( $this->getSubtitle() )); ?></title>
     </head>
     <body>
@@ -230,7 +230,7 @@ abstract class InstallPage
 
                 <input type="hidden"
                        name="<?php echo( htmlentities( $name )); ?>"
-                       value="<?php echo( htmlentities( $value )); ?>" />
+                       value="<?php echo( htmlentities( $value )); ?>">
 
 <?php
 

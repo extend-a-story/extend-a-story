@@ -65,8 +65,8 @@ class StartPage extends InstallPage
 </p>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="Start" />
-    <input type="submit" name="continueButton" value="Continue" />
+    <input type="hidden" name="pageName" value="Start">
+    <input type="submit" name="continueButton" value="Continue">
 </div>
 
 <?php

@@ -67,7 +67,7 @@ class InputField extends HtmlElement
     <input type="<?php echo( htmlentities( $this->type )); ?>"
            id="<?php echo( htmlentities( $this->name )); ?>"
            name="<?php echo( htmlentities( $this->name )); ?>"
-           value="<?php echo( htmlentities( $this->value )); ?>" />
+           value="<?php echo( htmlentities( $this->value )); ?>">
 </div>
 
 <?php

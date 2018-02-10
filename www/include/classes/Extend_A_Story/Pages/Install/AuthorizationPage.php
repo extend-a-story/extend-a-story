@@ -111,8 +111,8 @@ $installToken = "<?php echo( htmlentities( $this->installToken )); ?>";
 </p>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="Authorization" />
-    <input type="submit" name="continueButton" value="Continue" />
+    <input type="hidden" name="pageName" value="Authorization">
+    <input type="submit" name="continueButton" value="Continue">
 </div>
 
 <?php

@@ -235,9 +235,9 @@ class StorySettingsPage extends InstallPage
 ?>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="StorySettings" />
-    <input type="submit" name="backButton" value="Back" />
-    <input type="submit" name="continueButton" value="Continue" />
+    <input type="hidden" name="pageName" value="StorySettings">
+    <input type="submit" name="backButton" value="Back">
+    <input type="submit" name="continueButton" value="Continue">
 </div>
 
 <?php

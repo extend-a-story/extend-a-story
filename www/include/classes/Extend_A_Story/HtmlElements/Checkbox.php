@@ -56,7 +56,7 @@ class Checkbox extends HtmlElement
                id="<?php echo( htmlentities( $this->name )); ?>"
                name="<?php echo( htmlentities( $this->name )); ?>"
                value="<?php echo( htmlentities( $this->value )); ?>"
-               <?php echo( $this->checked ? "checked=\"checked\"" : "" ); ?> />
+               <?php echo( $this->checked ? "checked" : "" ); ?>>
         <label for="<?php echo( htmlentities( $this->name )); ?>">
             <?php echo( htmlentities( $this->label )); ?>
         </label>
