@@ -103,6 +103,10 @@ class ConfirmationPage extends InstallPage
 
 ?>
 
+<p>
+    Verify that your settings are correct. Once you are ready to proceed, click the <em>Install</em> button.
+</p>
+
 <table>
     <tr>
         <td colspan="2" class="sectionHeader">Database Connection</td>

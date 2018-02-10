@@ -167,6 +167,15 @@ class DatabaseConnectionPage extends InstallPage
 
     protected function renderMain()
     {
+
+?>
+
+<p>
+    Tell us how to connect to your database.
+</p>
+
+<?php
+
         $this->databaseHostField->render();
         $this->databaseUsernameField->render();
         $this->databasePasswordField->render();

@@ -214,6 +214,15 @@ class StorySettingsPage extends InstallPage
 
     protected function renderMain()
     {
+
+?>
+
+<p>
+    Configure your story settings.
+</p>
+
+<?php
+
         $this->settingsStoryNameField->render();
         $this->settingsSiteNameField->render();
         $this->settingsStoryHomeField->render();

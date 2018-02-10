@@ -145,6 +145,15 @@ class AdminAccountPage extends InstallPage
 
     protected function renderMain()
     {
+
+?>
+
+<p>
+    Create your administrator account.
+</p>
+
+<?php
+
         $this->adminLoginNameField->render();
         $this->adminDisplayNameField->render();
         $this->adminPassword1Field->render();
