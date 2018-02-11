@@ -60,7 +60,7 @@ class InstallConfirmationPage extends InstallPage
     protected function getNextPage()
     {
         if ( isset( $this->backButton     )) return new StorySettingsPage();
-        if ( isset( $this->continueButton )) return new CompletedPage();
+        if ( isset( $this->continueButton )) return new InstallCompletedPage();
         throw new StoryException( "Unrecognized navigation from install confirmation page." );
     }
 

@@ -32,7 +32,7 @@ use \Extend_A_Story\Data\Tables;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
-class CompletedPage extends InstallPage
+class InstallCompletedPage extends InstallPage
 {
     private $databaseHost;
     private $databaseUsername;
@@ -48,7 +48,7 @@ class CompletedPage extends InstallPage
 
     protected function getNextPage()
     {
-        throw new StoryException( "Unrecognized navigation from completed page." );
+        throw new StoryException( "Unrecognized navigation from install completed page." );
     }
 
     protected function getSubtitle()
