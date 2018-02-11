@@ -41,13 +41,13 @@ abstract class InstallPage
         {
             switch ( $pageName )
             {
-                case "Authorization"      : $page = new AuthorizationPage();      break;
-                case "Start"              : $page = new StartPage();              break;
-                case "DatabaseConnection" : $page = new DatabaseConnectionPage(); break;
-                case "DataLossWarning"    : $page = new DataLossWarningPage();    break;
-                case "AdminAccount"       : $page = new AdminAccountPage();       break;
-                case "StorySettings"      : $page = new StorySettingsPage();      break;
-                case "Confirmation"       : $page = new ConfirmationPage();       break;
+                case "Authorization"       : $page = new AuthorizationPage();       break;
+                case "Start"               : $page = new StartPage();               break;
+                case "DatabaseConnection"  : $page = new DatabaseConnectionPage();  break;
+                case "DataLossWarning"     : $page = new DataLossWarningPage();     break;
+                case "AdminAccount"        : $page = new AdminAccountPage();        break;
+                case "StorySettings"       : $page = new StorySettingsPage();       break;
+                case "InstallConfirmation" : $page = new InstallConfirmationPage(); break;
                 default : throw new StoryException( "Unrecognized page." );
             }
 

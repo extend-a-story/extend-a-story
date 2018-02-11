@@ -33,7 +33,7 @@ use \Extend_A_Story\HtmlElements\UnorderedList;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
-class ConfirmationPage extends InstallPage
+class InstallConfirmationPage extends InstallPage
 {
     private $databaseHost;
     private $databaseUsername;
@@ -61,12 +61,12 @@ class ConfirmationPage extends InstallPage
     {
         if ( isset( $this->backButton     )) return new StorySettingsPage();
         if ( isset( $this->continueButton )) return new CompletedPage();
-        throw new StoryException( "Unrecognized navigation from confirmation page." );
+        throw new StoryException( "Unrecognized navigation from install confirmation page." );
     }
 
     protected function getSubtitle()
     {
-        return "Confirmation";
+        return "Install Confirmation";
     }
 
     protected function getFields()
@@ -213,7 +213,7 @@ class ConfirmationPage extends InstallPage
 ?>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="Confirmation">
+    <input type="hidden" name="pageName" value="InstallConfirmation">
     <input type="submit" name="backButton" value="Back">
     <input type="submit" name="continueButton" value="Install">
 </div>
