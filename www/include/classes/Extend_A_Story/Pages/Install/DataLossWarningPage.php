@@ -81,7 +81,7 @@ class DataLossWarningPage extends InstallPage
 
     protected function getNextPage()
     {
-        if ( isset( $this->backButton     )) return new DatabaseConnectionPage();
+        if ( isset( $this->backButton     )) return new SelectTaskPage();
         if ( isset( $this->continueButton )) return new AdminAccountPage();
         throw new StoryException( "Unrecognized navigation from data loss warning page." );
     }

@@ -44,6 +44,7 @@ abstract class InstallPage
                 case "Authorization"       : $page = new AuthorizationPage();       break;
                 case "Start"               : $page = new StartPage();               break;
                 case "DatabaseConnection"  : $page = new DatabaseConnectionPage();  break;
+                case "SelectTask"          : $page = new SelectTaskPage();          break;
                 case "DataLossWarning"     : $page = new DataLossWarningPage();     break;
                 case "AdminAccount"        : $page = new AdminAccountPage();        break;
                 case "StorySettings"       : $page = new StorySettingsPage();       break;

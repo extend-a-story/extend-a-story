@@ -111,6 +111,12 @@ div.submit
     text-align:       center;
 }
 
+input[ type="radio" ]
+{
+    margin-top:       -0.1em;
+    vertical-align:   middle;
+}
+
 legend
 {
     font-weight:      bold;

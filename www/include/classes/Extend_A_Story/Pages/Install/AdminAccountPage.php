@@ -97,7 +97,7 @@ class AdminAccountPage extends InstallPage
     {
         $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
         if (( isset( $this->backButton )) and ( isset( $allowDataLoss ))) return new DataLossWarningPage();
-        if (( isset( $this->backButton )) and ( !isset( $allowDataLoss ))) return new DatabaseConnectionPage();
+        if (( isset( $this->backButton )) and ( !isset( $allowDataLoss ))) return new SelectTaskPage();
         if ( isset( $this->continueButton )) return new StorySettingsPage();
         throw new StoryException( "Unrecognized navigation from admin account page." );
     }

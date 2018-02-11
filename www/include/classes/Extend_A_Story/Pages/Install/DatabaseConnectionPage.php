@@ -116,10 +116,8 @@ class DatabaseConnectionPage extends InstallPage
 
     protected function getNextPage()
     {
-        $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
         if ( isset( $this->backButton )) return new StartPage();
-        if (( isset( $this->continueButton )) and ( isset( $allowDataLoss ))) return new DataLossWarningPage();
-        if (( isset( $this->continueButton )) and ( !isset( $allowDataLoss ))) return new AdminAccountPage();
+        if ( isset( $this->continueButton )) return new SelectTaskPage();
         throw new StoryException( "Unrecognized navigation from database connection page." );
     }
 
