@@ -53,7 +53,7 @@ class InstallCompletedPage extends InstallPage
 
     protected function getSubtitle()
     {
-        return "Installation Completed";
+        return "Install Completed";
     }
 
     protected function getFields()
