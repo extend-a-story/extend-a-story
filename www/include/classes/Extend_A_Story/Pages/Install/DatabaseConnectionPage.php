@@ -136,10 +136,22 @@ class DatabaseConnectionPage extends InstallPage
 
     protected function preRender()
     {
-        $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
-        $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", "" );
-        $databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", "" );
-        $databaseName     = Util::getStringParamDefault( $_POST, "databaseName",     "" );
+        global $dbHost, $dbUser, $dbPassword, $dbDatabase;
+
+        $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     null );
+        $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", null );
+        $databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", null );
+        $databaseName     = Util::getStringParamDefault( $_POST, "databaseName",     null );
+
+        if ( !isset( $databaseHost     )) $databaseHost     = $dbHost;
+        if ( !isset( $databaseUsername )) $databaseUsername = $dbUser;
+        if ( !isset( $databasePassword )) $databasePassword = $dbPassword;
+        if ( !isset( $databaseName     )) $databaseName     = $dbDatabase;
+
+        if ( !isset( $databaseHost     )) $databaseHost     = "";
+        if ( !isset( $databaseUsername )) $databaseUsername = "";
+        if ( !isset( $databasePassword )) $databasePassword = "";
+        if ( !isset( $databaseName     )) $databaseName     = "";
 
         $this->databaseHostField = new InputField(
                 "databaseHost", "Host", "text", $databaseHost,
