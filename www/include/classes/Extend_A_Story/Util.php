@@ -36,17 +36,26 @@ class Util
 
     public static function verifyDbConfiguration()
     {
-        global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName;
+        global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName,
+               $configStoryEnabled;
 
         if (( !isset( $configDatabaseHost     )) ||
             ( !isset( $configDatabaseUsername )) ||
             ( !isset( $configDatabasePassword )) ||
-            ( !isset( $configDatabaseName     )))
+            ( !isset( $configDatabaseName     )) ||
+            ( !isset( $configStoryEnabled     )))
         {
             throw new StoryException(
                     "The Extend-A-Story installation is not complete. If you are the " .
                     "administrator, please refer to the documentation for completing the " .
                     "installation." );
+        }
+
+        if ( !$configStoryEnabled )
+        {
+            throw new StoryException(
+                    "This Extend-A-Story installation is currently disabled. If you are the administrator, please " .
+                    "refer to the documentation for enabling Extend-A-Story." );
         }
     }
 

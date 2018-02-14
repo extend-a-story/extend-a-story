@@ -34,7 +34,7 @@ class StartPage extends InstallPage
 {
     public function validate()
     {
-        $result = AuthorizationPage::validatePage();
+        $result = DisableStoryPage::validatePage();
         if ( isset( $result )) return $result;
         return $this;
     }

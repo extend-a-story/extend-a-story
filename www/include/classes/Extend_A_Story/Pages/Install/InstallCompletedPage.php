@@ -119,6 +119,7 @@ $configDatabaseHost     = "<?php echo( htmlentities( $this->databaseHost     ));
 $configDatabaseUsername = "<?php echo( htmlentities( $this->databaseUsername )); ?>";
 $configDatabasePassword = "<?php echo( htmlentities( $this->databasePassword )); ?>";
 $configDatabaseName     = "<?php echo( htmlentities( $this->databaseName     )); ?>";
+$configStoryEnabled     = true;
 </pre>
 
 <?php

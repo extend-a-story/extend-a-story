@@ -42,6 +42,7 @@ abstract class InstallPage
             switch ( $pageName )
             {
                 case "Authorization"       : $page = new AuthorizationPage();       break;
+                case "DisableStory"        : $page = new DisableStoryPage();        break;
                 case "Start"               : $page = new StartPage();               break;
                 case "DatabaseConnection"  : $page = new DatabaseConnectionPage();  break;
                 case "SelectTask"          : $page = new SelectTaskPage();          break;

@@ -31,5 +31,6 @@ $configDatabaseHost     = null;
 $configDatabaseUsername = null;
 $configDatabasePassword = null;
 $configDatabaseName     = null;
+$configStoryEnabled     = false;
 
 ?>
