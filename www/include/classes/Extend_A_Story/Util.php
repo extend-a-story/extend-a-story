@@ -46,16 +46,15 @@ class Util
             ( !isset( $configStoryEnabled     )))
         {
             throw new StoryException(
-                    "The Extend-A-Story installation is not complete. If you are the " .
-                    "administrator, please refer to the documentation for completing the " .
-                    "installation." );
+                    "Extend-A-Story is not correctly installed. If you are the site administrator, refer to the " .
+                    "documentation for installng Extend-A-Story." );
         }
 
         if ( !$configStoryEnabled )
         {
             throw new StoryException(
-                    "This Extend-A-Story installation is currently disabled. If you are the administrator, please " .
-                    "refer to the documentation for enabling Extend-A-Story." );
+                    "Extend-A-Story is currently disabled. If you are the site administrator, refer to the " .
+                    "documentation for enabling Extend-A-Story." );
         }
     }
 
