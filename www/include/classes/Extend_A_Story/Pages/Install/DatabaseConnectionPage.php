@@ -72,12 +72,12 @@ class DatabaseConnectionPage extends InstallPage
 
         if ( count( $errors ) == 0 )
         {
-            global $dbHost, $dbUser, $dbPassword, $dbDatabase;
+            global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName;
 
-            $dbHost     = $databaseHost;
-            $dbUser     = $databaseUsername;
-            $dbPassword = $databasePassword;
-            $dbDatabase = $databaseName;
+            $configDatabaseHost     = $databaseHost;
+            $configDatabaseUsername = $databaseUsername;
+            $configDatabasePassword = $databasePassword;
+            $configDatabaseName     = $databaseName;
 
             try
             {
@@ -134,17 +134,17 @@ class DatabaseConnectionPage extends InstallPage
 
     protected function preRender()
     {
-        global $dbHost, $dbUser, $dbPassword, $dbDatabase;
+        global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName;
 
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     null );
         $databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", null );
         $databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", null );
         $databaseName     = Util::getStringParamDefault( $_POST, "databaseName",     null );
 
-        if ( !isset( $databaseHost     )) $databaseHost     = $dbHost;
-        if ( !isset( $databaseUsername )) $databaseUsername = $dbUser;
-        if ( !isset( $databasePassword )) $databasePassword = $dbPassword;
-        if ( !isset( $databaseName     )) $databaseName     = $dbDatabase;
+        if ( !isset( $databaseHost     )) $databaseHost     = $configDatabaseHost;
+        if ( !isset( $databaseUsername )) $databaseUsername = $configDatabaseUsername;
+        if ( !isset( $databasePassword )) $databasePassword = $configDatabasePassword;
+        if ( !isset( $databaseName     )) $databaseName     = $configDatabaseName;
 
         if ( !isset( $databaseHost     )) $databaseHost     = "";
         if ( !isset( $databaseUsername )) $databaseUsername = "";

@@ -106,7 +106,7 @@ class InstallCompletedPage extends InstallPage
 </p>
 
 <pre>
-$installToken = "<?php echo( htmlentities( $this->installToken )); ?>";
+$configInstallToken = "<?php echo( htmlentities( $this->installToken )); ?>";
 </pre>
 
 <p>
@@ -114,11 +114,11 @@ $installToken = "<?php echo( htmlentities( $this->installToken )); ?>";
 </p>
 
 <pre>
-$installToken = null;
-$dbHost       = "<?php echo( htmlentities( $this->databaseHost     )); ?>";
-$dbUser       = "<?php echo( htmlentities( $this->databaseUsername )); ?>";
-$dbPassword   = "<?php echo( htmlentities( $this->databasePassword )); ?>";
-$dbDatabase   = "<?php echo( htmlentities( $this->databaseName     )); ?>";
+$installToken           = null;
+$configDatabaseHost     = "<?php echo( htmlentities( $this->databaseHost     )); ?>";
+$configDatabaseUsername = "<?php echo( htmlentities( $this->databaseUsername )); ?>";
+$configDatabasePassword = "<?php echo( htmlentities( $this->databasePassword )); ?>";
+$configDatabaseName     = "<?php echo( htmlentities( $this->databaseName     )); ?>";
 </pre>
 
 <?php

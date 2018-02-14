@@ -36,12 +36,12 @@ class Util
 
     public static function verifyDbConfiguration()
     {
-        global $dbHost, $dbUser, $dbPassword, $dbDatabase;
+        global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName;
 
-        if (( ! isset( $dbHost     )) ||
-            ( ! isset( $dbUser     )) ||
-            ( ! isset( $dbPassword )) ||
-            ( ! isset( $dbDatabase )))
+        if (( ! isset( $configDatabaseHost     )) ||
+            ( ! isset( $configDatabaseUsername )) ||
+            ( ! isset( $configDatabasePassword )) ||
+            ( ! isset( $configDatabaseName     )))
         {
             throw new StoryException(
                     "The Extend-A-Story installation is not complete. If you are the " .
@@ -54,15 +54,15 @@ class Util
     {
         if ( ! isset( Util::$dbConnection ))
         {
-            global $dbHost, $dbUser, $dbPassword, $dbDatabase;
+            global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName;
 
             Util::verifyDbConfiguration();
 
             $dbOptions = array();
             $dbOptions[ PDO::MYSQL_ATTR_FOUND_ROWS ] = true;
 
-            Util::$dbConnection = new PDO( "mysql:host=" . $dbHost . ";dbname=" . $dbDatabase,
-                                           $dbUser, $dbPassword, $dbOptions );
+            Util::$dbConnection = new PDO( "mysql:host=" . $configDatabaseHost . ";dbname=" . $configDatabaseName,
+                                           $configDatabaseUsername, $configDatabasePassword, $dbOptions );
 
             Util::$dbConnection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
         }

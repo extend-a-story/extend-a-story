@@ -37,13 +37,13 @@ class AuthorizationPage extends InstallPage
 {
     public static function validatePage()
     {
-        global $installToken;
+        global $configInstallToken;
         $installTokenPost   = Util::getStringParamDefault( $_POST,   "installToken", null );
         $installTokenCookie = Util::getStringParamDefault( $_COOKIE, "installToken", null );
         $installTokenLocal  = isset( $installTokenPost ) ? $installTokenPost : $installTokenCookie;
 
         // allow installation to proceed if the install token is configured and matches
-        if (( isset( $installToken )) && ( $installToken === $installTokenLocal )) return null;
+        if (( isset( $configInstallToken )) && ( $configInstallToken === $installTokenLocal )) return null;
 
         $error = null;
 
@@ -99,11 +99,11 @@ class AuthorizationPage extends InstallPage
 </pre>
 
 <p>
-    Find the line that begins with <code>$installToken</code> and change it to read as follows:
+    Find the line that begins with <code>$configInstallToken</code> and change it to read as follows:
 </p>
 
 <pre>
-$installToken = "<?php echo( htmlentities( $this->installToken )); ?>";
+$configInstallToken = "<?php echo( htmlentities( $this->installToken )); ?>";
 </pre>
 
 <p>

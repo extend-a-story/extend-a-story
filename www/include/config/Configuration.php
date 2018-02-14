@@ -26,10 +26,10 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-$installToken = null;
-$dbHost       = null;
-$dbUser       = null;
-$dbPassword   = null;
-$dbDatabase   = null;
+$configInstallToken     = null;
+$configDatabaseHost     = null;
+$configDatabaseUsername = null;
+$configDatabasePassword = null;
+$configDatabaseName     = null;
 
 ?>
