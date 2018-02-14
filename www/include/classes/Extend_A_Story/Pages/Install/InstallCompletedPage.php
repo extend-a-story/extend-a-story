@@ -114,7 +114,7 @@ $configInstallToken = "<?php echo( htmlentities( $this->installToken )); ?>";
 </p>
 
 <pre>
-$installToken           = null;
+$configInstallToken     = null;
 $configDatabaseHost     = "<?php echo( htmlentities( $this->databaseHost     )); ?>";
 $configDatabaseUsername = "<?php echo( htmlentities( $this->databaseUsername )); ?>";
 $configDatabasePassword = "<?php echo( htmlentities( $this->databasePassword )); ?>";
