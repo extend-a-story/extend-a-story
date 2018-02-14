@@ -40,7 +40,7 @@ $siteHome  = Util::getStringValue( "SiteHome"  );
 
 $scheme = Util::getIntParamDefault( $_POST, "scheme", null );
 
-if ( ! isset( $scheme ))
+if ( !isset( $scheme ))
 {
     $dbStatement = Util::getDbConnection()->prepare(
             "SELECT SchemeID FROM Scheme ORDER BY SchemeID" );
@@ -48,7 +48,7 @@ if ( ! isset( $scheme ))
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Unable to fetch the lowest scheme ID." );
     }
@@ -74,7 +74,7 @@ $dbStatement->bindParam( ":scheme", $scheme, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching scheme row from the database." );
 }

@@ -60,7 +60,7 @@ $dbStatement->bindParam( ":episodeEditLogID", $episodeEditLogID, PDO::PARAM_INT 
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
 
 ?>
@@ -101,7 +101,7 @@ $editDate     = $row[ 11 ];
 
 $canEdit = Util::canEditEpisode( $sessionID, $userID, $episode );
 
-if ( ! $canEdit )
+if ( !$canEdit )
 {
 
 ?>
@@ -141,7 +141,7 @@ $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching episode row from the database." );
 }
@@ -155,7 +155,7 @@ $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching link count row from the database." );
 }
@@ -186,7 +186,7 @@ $dbStatement->bindParam( ":scheme", $scheme, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching scheme row from the database." );
 }
@@ -218,7 +218,7 @@ if ( $image != 0 )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Problem fetching image row from the database." );
     }
@@ -258,7 +258,7 @@ $links = $dbStatement->fetchAll( PDO::FETCH_NUM );
 
 <?php
 
-if ( ! empty( $image ))
+if ( !empty( $image ))
 {
 
 ?>

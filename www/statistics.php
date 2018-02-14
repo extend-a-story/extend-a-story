@@ -45,7 +45,7 @@ $dbStatement = Util::getDbConnection()->prepare(
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching created episode count row from the database." );
 }
@@ -57,7 +57,7 @@ $dbStatement = Util::getDbConnection()->prepare(
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching empty episode count row from the database." );
 }
@@ -68,7 +68,7 @@ $dbStatement = Util::getDbConnection()->prepare( "SELECT COUNT( * ) FROM Episode
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching episode count row from the database." );
 }

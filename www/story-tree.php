@@ -98,7 +98,7 @@ while ( count( $curEpisodes ) > 0 )
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException( "Problem fetching episode row from database." );
         }

@@ -101,7 +101,7 @@ while ( count( $curEpisodes ) > 0 )
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException( "Problem fetching episode row from database." );
         }
@@ -136,7 +136,7 @@ while ( count( $curEpisodes ) > 0 )
             {
                 $color = "#008000";
 
-                if ( ! in_array( $target, $nextEpisodes ))
+                if ( !in_array( $target, $nextEpisodes ))
                 {
                     array_push( $nextEpisodes, $target );
                 }

@@ -52,7 +52,7 @@ if ( $userID != 0 )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Unable to fetch user information row from database." );
     }
@@ -67,7 +67,7 @@ $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching link count row from the database." );
 }
@@ -98,7 +98,7 @@ $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
 
 ?>
@@ -194,7 +194,7 @@ $dbStatement->bindParam( ":scheme", $scheme, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching scheme row from the database." );
 }
@@ -226,7 +226,7 @@ if ( $image != 0 )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Problem fetching image row from the database." );
     }
@@ -247,7 +247,7 @@ if ( $canEdit )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Problem fetching edit count row from database." );
     }
@@ -453,7 +453,7 @@ else
 
 <?php
 
-    if ( ! empty( $image ))
+    if ( !empty( $image ))
     {
 
 ?>
@@ -593,9 +593,9 @@ else
 
 <?php
 
-    if ( ! empty( $authorName ))
+    if ( !empty( $authorName ))
     {
-        if (( ! empty( $authorEmail )) && ( $authorMailto == "Y" ))
+        if (( !empty( $authorEmail )) && ( $authorMailto == "Y" ))
         {
             $author = "<A HREF=\"mailto:" . $authorEmail . "\">" . $authorName . "</A>";
         }
@@ -609,7 +609,7 @@ else
         $author = "";
     }
 
-    if ( ! empty( $author ))
+    if ( !empty( $author ))
     {
 
 ?>

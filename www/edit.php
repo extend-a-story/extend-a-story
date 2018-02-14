@@ -87,7 +87,7 @@ if ( $userID != 0 )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Unable to fetch user information row from database." );
     }
@@ -143,7 +143,7 @@ $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching episode row from database." );
 }
@@ -354,7 +354,7 @@ if ( $command == "AddLinkSave" )
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException( "Problem fetching link count row from the database." );
         }
@@ -374,7 +374,7 @@ if ( $command == "AddLinkSave" )
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             $message .= "The back linked episode doesn't exist.<BR>";
         }
@@ -448,7 +448,7 @@ if (( $command == "DeleteSelectedLink"     ) ||
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Unable to fetch link row from database." );
     }
@@ -541,7 +541,7 @@ if (( $command == "DeleteEpisode" ) || ( $command == "DeleteEpisodeSave" ))
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Problem fetching link count row from the database." );
     }
@@ -661,7 +661,7 @@ if ( $command == "Done" )
 
 <?php
 
-if ( ! empty( $message ))
+if ( !empty( $message ))
 {
 
 ?>
@@ -710,7 +710,7 @@ if ( $command == "AddLink" )
 
 <?php
 
-    if ( ! empty( $message ))
+    if ( !empty( $message ))
     {
 
 ?>
@@ -812,7 +812,7 @@ if ( $command == "DeleteLink" )
 
 <?php
 
-    if ( ! empty( $message ))
+    if ( !empty( $message ))
     {
 
 ?>

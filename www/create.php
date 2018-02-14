@@ -173,7 +173,7 @@ if (( $command == "Lock" ) && ( $episode != 1 ))
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Unable to fetch link count row from the database." );
     }
@@ -245,7 +245,7 @@ if ( $command == "Edit" )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException(
                 "Problem fetching episode row for editing from the database." );
@@ -286,7 +286,7 @@ else
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Problem fetching episode row from the database." );
     }
@@ -316,7 +316,7 @@ $dbStatement->bindParam( ":scheme", $scheme, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Unable to fetch scheme count row from the database." );
 }
@@ -400,7 +400,7 @@ currently working on. Wait a few moments and try again.
 
 if (( $command == "Edit" ) &&
     (( $status != 2     ) ||
-     ( ! $canEdit       )))
+     ( !$canEdit        )))
 {
 
 ?>
@@ -786,7 +786,7 @@ for ( $i = 0; $i < $linkCount; $i++ )
     $var2 = "backlink"   . $i;
     $var3 = "isBackLink" . $i;
 
-    if ( ! empty( $$var1 ))
+    if ( !empty( $$var1 ))
     {
         $linkFound = true;
     }
@@ -808,7 +808,7 @@ for ( $i = 0; $i < $linkCount; $i++ )
                     " cannot contain a word with more than 30 characters in it.<BR>";
     }
 
-    if ((( $$var2 != 0 ) && ( ! $editing )) || ( $$var3 == "Y" ))
+    if ((( $$var2 != 0 ) && ( !$editing )) || ( $$var3 == "Y" ))
     {
         if (( $editing ) && ( $$var2 == $episode ))
         {
@@ -816,7 +816,7 @@ for ( $i = 0; $i < $linkCount; $i++ )
                         " is back linked to the same episode you are editing.<BR>";
         }
 
-        if (( empty( $$var1 )) && ( ! $editing ))
+        if (( empty( $$var1 )) && ( !$editing ))
         {
             $warning .= "Option " . ( $i + 1 ) . " is back linked, but has no description.<BR>";
         }
@@ -830,7 +830,7 @@ for ( $i = 0; $i < $linkCount; $i++ )
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             $warning .= "The back linked episode for option " . ( $i + 1 ) .
                         " doesn't exist.<BR>";
@@ -846,7 +846,7 @@ for ( $i = 0; $i < $linkCount; $i++ )
     }
 }
 
-if (( ! $linkFound ) && ( ! $editing ))
+if (( !$linkFound ) && ( !$editing ))
 {
     $warning .= "You must enter in at least one option.<BR>";
 }
@@ -876,7 +876,7 @@ if ( $sameBackLink )
     $warning .= "More than one option back links to the same episode.<BR>";
 }
 
-if ( ! empty( $warning ))
+if ( !empty( $warning ))
 {
     if ( $command == "Save" )
     {
@@ -1106,7 +1106,7 @@ if (( $command == "Save" ) || ( $command == "ExtendSave" ))
         $var1 = "option"   . $i;
         $var2 = "backlink" . $i;
 
-        if ( ! empty( $$var1 ))
+        if ( !empty( $$var1 ))
         {
             if ( $$var2 != 0 )
             {
@@ -1136,7 +1136,7 @@ if (( $command == "Save" ) || ( $command == "ExtendSave" ))
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException(
                     "Problem fetching parent episode row from the database." );
@@ -1165,7 +1165,7 @@ if ( $command == "EditSave" )
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException( "Unable to fetch user row from the database." );
         }
@@ -1519,12 +1519,12 @@ if (( $command == "Preview"       ) ||
         $var2 = "backlink"   . $i;
         $var3 = "isBackLink" . $i;
 
-        if ( ! empty( $$var1 ))
+        if ( !empty( $$var1 ))
         {
             $displayedOption = htmlentities( $$var1 );
             $displayedOption = strtr( $displayedOption, Util::getOptionTranslation() );
 
-            if ((( $$var2 != 0 ) && ( ! $editing )) || ( $$var3 == "Y" ))
+            if ((( $$var2 != 0 ) && ( !$editing )) || ( $$var3 == "Y" ))
             {
                 $image = "blue.gif";
             }
@@ -1585,9 +1585,9 @@ if (( $command == "Preview"       ) ||
 
 <?php
 
-    if ( ! empty( $displayedAuthorName ))
+    if ( !empty( $displayedAuthorName ))
     {
-        if ((( ! empty( $displayedAuthorEmail ))) && ( $mailto == 1 ))
+        if ((( !empty( $displayedAuthorEmail ))) && ( $mailto == 1 ))
         {
             $author = "<A HREF=\"mailto:" . $displayedAuthorEmail . "\">" .
                       $displayedAuthorName . "</A>";
@@ -1602,7 +1602,7 @@ if (( $command == "Preview"       ) ||
         $author = "";
     }
 
-    if ( ! empty( $author ))
+    if ( !empty( $author ))
     {
 
 ?>
@@ -1665,7 +1665,7 @@ if (( $command == "Preview"       ) ||
     ( $command == "ExtendPreview" ) ||
     ( $command == "EditPreview"   ))
 {
-    if ( ! empty( $warning ))
+    if ( !empty( $warning ))
     {
 
 ?>

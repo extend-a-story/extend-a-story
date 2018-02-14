@@ -39,7 +39,7 @@ $siteHome  = Util::getStringValue( "SiteHome"  );
 
 $episode = Util::getIntParam( $_GET, "episode" );
 
-if ( ! Util::canEditEpisode( $sessionID, $userID, $episode ))
+if ( !Util::canEditEpisode( $sessionID, $userID, $episode ))
 {
 
 ?>

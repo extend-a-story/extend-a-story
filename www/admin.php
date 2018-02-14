@@ -85,7 +85,7 @@ if ( $command == "login" )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         $message = "Invalid login name and/or password.";
     }
@@ -154,7 +154,7 @@ if ( $userID == 0 )
 
 <?php
 
-    if ( ! empty( $message ))
+    if ( !empty( $message ))
     {
 
 ?>
@@ -210,7 +210,7 @@ $dbStatement->execute();
 
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Unable to fetch user information row from database." );
 }
@@ -254,7 +254,7 @@ if ( $command == "changePasswordSave" )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException( "Unable to fetch user count row from database." );
     }
@@ -469,7 +469,7 @@ if ( $command == "addUserSave" )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException(
                 "Unable to fetch existing login name count row from database." );
@@ -531,7 +531,7 @@ if (( $command == "editUser"     ) ||
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             $message = "The specified user does not exist.";
             $command = "";
@@ -622,7 +622,7 @@ if ( $command == "editUserSave" )
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException(
                     "Unable to fetch existing login name count row from database." );
@@ -763,7 +763,7 @@ if ( $command == "listRecentEdits" )
     $dbStatement->execute();
     $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-    if ( ! $row )
+    if ( !$row )
     {
         throw new StoryException(
                 "Unable to fetch the max EpisodeEditLogID record from database." );
@@ -1405,7 +1405,7 @@ if ( $command == "deleteUser" )
 
 <?php
 
-if ( ! empty( $message ))
+if ( !empty( $message ))
 {
 
 ?>

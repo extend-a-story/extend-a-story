@@ -83,7 +83,7 @@ $dbStatement->bindParam( ":episode", $episode, PDO::PARAM_INT );
 $dbStatement->execute();
 $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-if ( ! $row )
+if ( !$row )
 {
     throw new StoryException( "Problem fetching episode row from the database." );
 }

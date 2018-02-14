@@ -38,10 +38,10 @@ class Util
     {
         global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName;
 
-        if (( ! isset( $configDatabaseHost     )) ||
-            ( ! isset( $configDatabaseUsername )) ||
-            ( ! isset( $configDatabasePassword )) ||
-            ( ! isset( $configDatabaseName     )))
+        if (( !isset( $configDatabaseHost     )) ||
+            ( !isset( $configDatabaseUsername )) ||
+            ( !isset( $configDatabasePassword )) ||
+            ( !isset( $configDatabaseName     )))
         {
             throw new StoryException(
                     "The Extend-A-Story installation is not complete. If you are the " .
@@ -52,7 +52,7 @@ class Util
 
     public static function getDbConnection()
     {
-        if ( ! isset( Util::$dbConnection ))
+        if ( !isset( Util::$dbConnection ))
         {
             global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName;
 
@@ -76,7 +76,7 @@ class Util
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException( "Unable to fetch the last insert ID." );
         }
@@ -88,7 +88,7 @@ class Util
     {
         $value = Util::getStringParamDefault( $array, $name, null );
 
-        if ( ! isset( $value ))
+        if ( !isset( $value ))
         {
             throw new StoryException( "Parameter \"" . $name . "\" is not set." );
         }
@@ -98,7 +98,7 @@ class Util
 
     public static function getStringParamDefault( $array, $name, $defaultValue )
     {
-        if ( ! isset( $array[ $name ] ))
+        if ( !isset( $array[ $name ] ))
         {
             return $defaultValue;
         }
@@ -110,7 +110,7 @@ class Util
     {
         $value = Util::getIntParamDefault( $array, $name, null );
 
-        if ( ! isset( $value ))
+        if ( !isset( $value ))
         {
             throw new StoryException( "Parameter \"" . $name . "\" is not set." );
         }
@@ -120,7 +120,7 @@ class Util
 
     public static function getIntParamDefault( $array, $name, $defaultValue )
     {
-        if ( ! isset( $array[ $name ] ))
+        if ( !isset( $array[ $name ] ))
         {
             return $defaultValue;
         }
@@ -132,7 +132,7 @@ class Util
             return $defaultValue;
         }
 
-        if ( ! ctype_digit( $value ))
+        if ( !ctype_digit( $value ))
         {
             throw new StoryException( "Parameter \"" . $name . "\" is not an integer." );
         }
@@ -146,7 +146,7 @@ class Util
 
         $word = strtok( $input, " \t\n\r\0\x0B" );
 
-        while( ! ( $word === false ))
+        while( !( $word === false ))
         {
             if ( strlen( $word ) > $result )
             {
@@ -304,7 +304,7 @@ class Util
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException(
                     "Unable to fetch \"" . $variableName . "\" string value." );
@@ -350,7 +350,7 @@ class Util
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException(
                     "Unable to fetch \"" . $variableName . "\" int value." );
@@ -648,7 +648,7 @@ class Util
         $dbStatement->execute();
         $row = $dbStatement->fetch( PDO::FETCH_NUM );
 
-        if ( ! $row )
+        if ( !$row )
         {
             throw new StoryException( "Episode " . $episodeID . " not found." );
         }
