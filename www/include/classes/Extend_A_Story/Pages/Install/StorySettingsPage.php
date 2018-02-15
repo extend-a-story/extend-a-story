@@ -196,7 +196,7 @@ class StorySettingsPage extends InstallPage
         $this->settingsAdminEmailField = new InputField(
                 "settingsAdminEmail", "Admin Email", "text", $settingsAdminEmail,
                 "This is the email address from which email notifications of newly created episodes will be sent. " .
-                "This email address will receive an email notification for every episode that is created." );
+                "This email address will also receive an email notification for every episode that is created." );
 
         $this->settingsMaxLinksField = new InputField(
                 "settingsMaxLinks", "Max Links", "text", $settingsMaxLinks,
