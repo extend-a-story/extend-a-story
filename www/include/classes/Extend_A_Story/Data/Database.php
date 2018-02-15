@@ -32,7 +32,7 @@ use \PDO;
 
 use \Extend_A_Story\Util;
 
-class Tables
+class Database
 {
     private static $storyTableNames = array( "ExtendAStoryVariable",
                                              "Session",
@@ -47,11 +47,11 @@ class Tables
     public static function getConflictingTableNames()
     {
         $conflictingTableNames = array();
-        $databaseTableNames = Tables::getDatabaseTableNames();
+        $databaseTableNames = Database::getDatabaseTableNames();
 
         foreach ( $databaseTableNames as $databaseTableName )
         {
-            if ( in_array( $databaseTableName, Tables::$storyTableNames, true ))
+            if ( in_array( $databaseTableName, Database::$storyTableNames, true ))
             {
                 $conflictingTableNames[] = $databaseTableName;
             }
@@ -60,7 +60,7 @@ class Tables
         return $conflictingTableNames;
     }
 
-    public static function createTables()
+    public static function createDatabase()
     {
         ExtendAStoryVariable::createTable();
         Session::createTable();
@@ -73,11 +73,11 @@ class Tables
         Image::createTable();
     }
 
-    public static function populateTables( $settingsStoryName, $settingsSiteName,
-                                           $settingsStoryHome, $settingsSiteHome,
-                                           $settingsReadEpisodeUrl, $settingsAdminEmail,
-                                           $settingsMaxLinks, $settingsMaxEditDays,
-                                           $adminLoginName, $adminDisplayName, $adminPassword )
+    public static function populateDatabase( $settingsStoryName, $settingsSiteName,
+                                             $settingsStoryHome, $settingsSiteHome,
+                                             $settingsReadEpisodeUrl, $settingsAdminEmail,
+                                             $settingsMaxLinks, $settingsMaxEditDays,
+                                             $adminLoginName, $adminDisplayName, $adminPassword )
     {
         ExtendAStoryVariable::populateTable( $settingsStoryName, $settingsSiteName,
                                              $settingsStoryHome, $settingsSiteHome,

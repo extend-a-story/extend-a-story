@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
-use \Extend_A_Story\Data\Tables;
+use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\HtmlElements\UnorderedList;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
@@ -91,7 +91,7 @@ class InstallConfirmationPage extends InstallPage
         $this->settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
         $this->tables                 = null;
 
-        $tableNames = Tables::getConflictingTableNames();
+        $tableNames = Database::getConflictingTableNames();
         if ( count( $tableNames ) > 0 )
         {
             $this->tables = UnorderedList::buildFromStringArray( $tableNames );

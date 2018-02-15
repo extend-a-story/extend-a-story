@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
-use \Extend_A_Story\Data\Tables;
+use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\HtmlElements\Checkbox;
 use \Extend_A_Story\HtmlElements\RawText;
 use \Extend_A_Story\HtmlElements\UnorderedList;
@@ -42,7 +42,7 @@ class DataLossWarningPage extends InstallPage
         $result = DatabaseConnectionPage::validatePage();
         if ( isset( $result )) return $result;
 
-        $tableNames = Tables::getConflictingTableNames();
+        $tableNames = Database::getConflictingTableNames();
         if ( count( $tableNames ) > 0 )
         {
             $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
@@ -108,7 +108,7 @@ class DataLossWarningPage extends InstallPage
                               "losing data." );
 
         $this->tables = null;
-        $tableNames = Tables::getConflictingTableNames();
+        $tableNames = Database::getConflictingTableNames();
         if ( count( $tableNames ) > 0 )
         {
             $this->tables = UnorderedList::buildFromStringArray( $tableNames );

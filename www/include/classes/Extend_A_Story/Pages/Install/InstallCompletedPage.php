@@ -28,7 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
-use \Extend_A_Story\Data\Tables;
+use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
@@ -79,12 +79,12 @@ class InstallCompletedPage extends InstallPage
         $adminDisplayName       = Util::getStringParamDefault( $_POST, "adminDisplayName",       "" );
         $adminPassword          = Util::getStringParamDefault( $_POST, "adminPassword1",         "" );
 
-        Tables::createTables();
-        Tables::populateTables( $settingsStoryName, $settingsSiteName,
-                                $settingsStoryHome, $settingsSiteHome,
-                                $settingsReadEpisodeUrl, $settingsAdminEmail,
-                                $settingsMaxLinks, $settingsMaxEditDays,
-                                $adminLoginName, $adminDisplayName, $adminPassword );
+        Database::createDatabase();
+        Database::populateDatabase( $settingsStoryName, $settingsSiteName,
+                                    $settingsStoryHome, $settingsSiteHome,
+                                    $settingsReadEpisodeUrl, $settingsAdminEmail,
+                                    $settingsMaxLinks, $settingsMaxEditDays,
+                                    $adminLoginName, $adminDisplayName, $adminPassword );
     }
 
     protected function renderMain()
