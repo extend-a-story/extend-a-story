@@ -155,26 +155,25 @@ class DatabaseConnectionPage extends InstallPage
 
         $this->databaseHostField = new InputField(
                 "databaseHost", "Host", "text", $databaseHost,
-                "This is the host name for your database server. If your database server and " .
-                "your web server are running on the same machine, use \"localhost\". If you are " .
-                "running Extend-A-Story in a shared hosting environment, your hosting provider " .
-                "will provide you with the host name for your database server." );
+                "This is the host name for your database server. If your database server and your web server are " .
+                "running on the same machine, use \"localhost\". If you are running Extend-A-Story in a shared " .
+                "hosting environment, your hosting provider will provide you with the host name for your database " .
+                "server." );
 
         $this->databaseUsernameField = new InputField(
                 "databaseUsername", "Username", "text", $databaseUsername,
-                "This is the username that will be used to connect to your database server " .
-                "during the installation process. This user will need all permissions to your " .
-                "Extend-A-Story database." );
+                "This is the username that will be used to connect to your database server during the installation " .
+                "process. This user will need all permissions to your Extend-A-Story database." );
 
         $this->databasePasswordField = new InputField(
                 "databasePassword", "Password", "password", $databasePassword,
-                "This is the password that will be used to connect to your database server " .
-                "during the installation process." );
+                "This is the password that will be used to connect to your database server during the installation " .
+                "process." );
 
         $this->databaseNameField = new InputField(
                 "databaseName", "Database", "text", $databaseName,
-                "This is the name of your Extend-A-Story database. The tables needed by " .
-                "Extend-A-Story will be created in this database." );
+                "This is the name of your Extend-A-Story database. The tables needed by Extend-A-Story will be " .
+                "created in this database." );
     }
 
     protected function renderMain()

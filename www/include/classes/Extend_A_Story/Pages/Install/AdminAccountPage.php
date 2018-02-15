@@ -122,21 +122,18 @@ class AdminAccountPage extends InstallPage
 
         $this->adminLoginNameField = new InputField(
                 "adminLoginName", "Login Name", "text", $adminLoginName,
-                "This is the login name for the administrative account for your story. This " .
-                "account will be created during installation. You will be able to log in to this " .
-                "account using this name." );
+                "This is the login name for the administrative account for your story. This account will be created " .
+                "during installation. You will be able to log in to this account using this name." );
 
         $this->adminDisplayNameField = new InputField(
                 "adminDisplayName", "Display Name", "text", $adminDisplayName,
-                "This is the display name for the administrative account for your story. This " .
-                "name will be publicly displayed on any moderation activity you perform in your " .
-                "story." );
+                "This is the display name for the administrative account for your story. This name will be publicly " .
+                "displayed on any moderation activity you perform in your story." );
 
         $this->adminPassword1Field = new InputField(
                 "adminPassword1", "Pasword", "password", $adminPassword1,
-                "This is the password for the administrative account for your story. This " .
-                "account will be created during installation. You will be able to log in to this " .
-                "account using this password." );
+                "This is the password for the administrative account for your story. This account will be created " .
+                "during installation. You will be able to log in to this account using this password." );
 
         $this->adminPassword2Field = new InputField(
                 "adminPassword2", "Pasword (Again)", "password", $adminPassword2,

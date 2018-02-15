@@ -171,45 +171,40 @@ class StorySettingsPage extends InstallPage
 
         $this->settingsStoryNameField = new InputField(
                 "settingsStoryName", "Story Name", "text", $settingsStoryName,
-                "This is the name of your story. This name will be used in page titles and links " .
-                "to the home page of your story." );
+                "This is the name of your story. This name will be used in page titles and links to the home page of " .
+                "your story." );
 
         $this->settingsSiteNameField = new InputField(
                 "settingsSiteName", "Site Name", "text", $settingsSiteName,
-                "This is the name of your web site. This name will be used in links to the home " .
-                "page of your web site." );
+                "This is the name of your web site. This name will be used in links to the home page of your web " .
+                "site." );
 
         $this->settingsStoryHomeField = new InputField(
                 "settingsStoryHome", "Story Home", "text", $settingsStoryHome,
-                "This is the URL for the home page of your story. All story pages will provide a " .
-                "link to this URL." );
+                "This is the URL for the home page of your story. All story pages will provide a link to this URL." );
 
         $this->settingsSiteHomeField = new InputField(
                 "settingsSiteHome", "Site Home", "text", $settingsSiteHome,
-                "This is the URL for the home page of your web site. All story pages will " .
-                "provide a link to this URL." );
+                "This is the URL for the home page of your web site. All story pages will provide a link to this " .
+                "URL." );
 
         $this->settingsReadEpisodeUrlField = new InputField(
                 "settingsReadEpisodeUrl", "Read Episode URL", "text", $settingsReadEpisodeUrl,
-                "This is the URL to the \"read.php\" script for this story on your web site. " .
-                "Email notifications of newly created episodes will use this URL to provide a " .
-                "link to the newly created episode." );
+                "This is the URL to the \"read.php\" script for this story on your web site. Email notifications of " .
+                "newly created episodes will use this URL to provide a link to the newly created episode." );
 
         $this->settingsAdminEmailField = new InputField(
                 "settingsAdminEmail", "Admin Email", "text", $settingsAdminEmail,
-                "This is the email address from which email notifications of newly created " .
-                "episodes will be sent. This email address will receive an email notification " .
-                "for every episode that is created." );
+                "This is the email address from which email notifications of newly created episodes will be sent. " .
+                "This email address will receive an email notification for every episode that is created." );
 
         $this->settingsMaxLinksField = new InputField(
                 "settingsMaxLinks", "Max Links", "text", $settingsMaxLinks,
-                "This is the maximum number of links an author is allowed to specify when " .
-                "creating an episode." );
+                "This is the maximum number of links an author is allowed to specify when creating an episode." );
 
         $this->settingsMaxEditDaysField = new InputField(
                 "settingsMaxEditDays", "Max Edit Days", "text", $settingsMaxEditDays,
-                "This is the number of days for which an author is allowed to edit an epiosde " .
-                "that they created." );
+                "This is the number of days for which an author is allowed to edit an epiosde that they created." );
     }
 
     protected function renderMain()
