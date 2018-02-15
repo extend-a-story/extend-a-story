@@ -60,7 +60,7 @@ class SelectTaskPage extends InstallPage
             $task = Util::getStringParamDefault( $_POST, "task", null );
             if ( !isset( $task ))
             {
-                $message = "You must select an installation task.";
+                $message = "You must select a task.";
                 $error = new UnorderedList( [ new RawText( $message ) ] );
                 return new SelectTaskPage( $error );
             }
@@ -106,7 +106,7 @@ class SelectTaskPage extends InstallPage
 ?>
 
 <p>
-    Which installation task would you like to perform?
+    Which task would you like to perform?
 </p>
 
 <?php
