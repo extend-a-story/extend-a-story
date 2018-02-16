@@ -88,6 +88,26 @@ class Database
         Scheme::populateTable();
     }
 
+    public static function getDatabaseVersion()
+    {
+        // check for the User table; assume version 1 if the User table is not present
+        $databaseTableNames = Database::getDatabaseTableNames();
+        if ( !in_array( "User", $databaseTableNames, true )) return 1;
+
+        // check type of Password column in User table; assume version 2 if Password column type is not varchar
+        $dbStatement = Util::getDbConnection()->prepare( "DESC User Password" );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
+        $passwordColumn = $row[ 1 ];
+        if ( substr( $passwordColumn, 0, 7 ) !== "varchar" ) return 2;
+
+        // check length of Password column in User table; assume version 3 if Password column length is not 255
+        if ( $passwordColumn !== "varchar(255)" ) return 3;
+
+        // otherwise, assume version 4
+        return 4;
+    }
+
     private static function getDatabaseTableNames()
     {
         $dbConnection = Util::getDbConnection();

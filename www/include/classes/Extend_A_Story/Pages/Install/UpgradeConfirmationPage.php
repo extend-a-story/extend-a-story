@@ -28,10 +28,13 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\StoryException;
 
 class UpgradeConfirmationPage extends InstallPage
 {
+    private $databaseVersion;
+
     public function validate()
     {
         $result = DatabaseConnectionPage::validatePage();
@@ -55,13 +58,18 @@ class UpgradeConfirmationPage extends InstallPage
         return array( "pageName", "backButton", "continueButton" );
     }
 
+    protected function preRender()
+    {
+        $this->databaseVersion = Database::getDatabaseVersion();
+    }
+
     protected function renderMain()
     {
 
 ?>
 
 <p>
-    This page is not complete.
+    Database Version: <?php echo( htmlentities( $this->databaseVersion )); ?>
 </p>
 
 <div class="submit">
