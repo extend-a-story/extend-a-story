@@ -108,7 +108,7 @@ class Database
         return 4;
     }
 
-    private static function getDatabaseTableNames()
+    public static function getDatabaseTableNames()
     {
         $dbConnection = Util::getDbConnection();
         $dbStatement = $dbConnection->prepare( "SHOW TABLES" );
