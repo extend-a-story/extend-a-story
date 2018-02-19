@@ -31,7 +31,7 @@ namespace Extend_A_Story\Pages\Install;
 use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\StoryException;
 
-class UpgradeConfirmationPage extends InstallPage
+class VersionConfirmationPage extends InstallPage
 {
     private $databaseVersion;
 
@@ -45,12 +45,12 @@ class UpgradeConfirmationPage extends InstallPage
     protected function getNextPage()
     {
         if ( isset( $this->backButton )) return new SelectTaskPage();
-        throw new StoryException( "Unrecognized navigation from upgrade confirmation page." );
+        throw new StoryException( "Unrecognized navigation from version confirmation page." );
     }
 
     protected function getSubtitle()
     {
-        return "Upgrade Confirmation";
+        return "Version Confirmation";
     }
 
     protected function getFields()
@@ -73,7 +73,7 @@ class UpgradeConfirmationPage extends InstallPage
 </p>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="UpgradeConfirmation">
+    <input type="hidden" name="pageName" value="VersionConfirmation">
     <input type="submit" name="backButton" value="Back">
 </div>
 

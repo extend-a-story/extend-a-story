@@ -72,7 +72,7 @@ class SelectTaskPage extends InstallPage
                 if ( !isset( $allowDataLoss )) return new AdminAccountPage();
             }
 
-            if ( $task === "upgrade" ) return new UpgradeConfirmationPage();
+            if ( $task === "upgrade" ) return new VersionConfirmationPage();
         }
 
         throw new StoryException( "Unrecognized navigation from select task page." );

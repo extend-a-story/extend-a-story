@@ -50,7 +50,7 @@ abstract class InstallPage
                 case "AdminAccount"        : $page = new AdminAccountPage();        break;
                 case "StorySettings"       : $page = new StorySettingsPage();       break;
                 case "InstallConfirmation" : $page = new InstallConfirmationPage(); break;
-                case "UpgradeConfirmation" : $page = new UpgradeConfirmationPage(); break;
+                case "VersionConfirmation" : $page = new VersionConfirmationPage(); break;
                 default : throw new StoryException( "Unrecognized page." );
             }
 
