@@ -30,9 +30,12 @@ namespace Extend_A_Story\Upgrade;
 
 use \Extend_A_Story\Data\Database;
 
-class Version2
+class Version2 extends Version
 {
-    public static function checkDatabase()
+    public function getDatabaseVersion() { return 2; }
+    public function getStoryVersion() { return "2.1.x"; }
+
+    public function checkDatabase()
     {
         $versionTables = array( "ExtendAStoryVariable", "Session", "User", "Episode", "Link",
                                 "EpisodeEditLog", "LinkEditLog", "Scheme", "Image" );

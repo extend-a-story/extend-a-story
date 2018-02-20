@@ -28,12 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
-use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\StoryException;
-use \Extend_A_Story\Upgrade\Version1;
-use \Extend_A_Story\Upgrade\Version2;
-use \Extend_A_Story\Upgrade\Version3;
-use \Extend_A_Story\Upgrade\Version4;
+use \Extend_A_Story\Upgrade\Version;
 
 class VersionConfirmationPage extends InstallPage
 {
@@ -66,32 +62,10 @@ class VersionConfirmationPage extends InstallPage
 
     protected function preRender()
     {
-        $this->databaseVersion = Database::getDatabaseVersion();
-
-        switch ( $this->databaseVersion )
-        {
-            case 1 :
-                $this->databaseExists = Version1::checkDatabase();
-                $this->storyVersion = "2.0.x";
-                break;
-
-            case 2 :
-                $this->databaseExists = Version2::checkDatabase();
-                $this->storyVersion = "2.1.x";
-                break;
-
-            case 3 :
-                $this->databaseExists = Version3::checkDatabase();
-                $this->storyVersion = "2.2.x";
-                break;
-
-            case 4 :
-                $this->databaseExists = Version4::checkDatabase();
-                $this->storyVersion = "2.2.x";
-                break;
-
-            default : throw new StoryException( "Unrecognized database version." );
-        }
+        $version = Version::getVersion();
+        $this->databaseVersion = $version->getDatabaseVersion();
+        $this->databaseExists  = $version->checkDatabase();
+        $this->storyVersion    = $version->getStoryVersion();
     }
 
     protected function renderMain()

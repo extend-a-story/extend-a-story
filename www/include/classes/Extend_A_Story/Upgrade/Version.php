@@ -29,16 +29,24 @@ http://www.sir-toby.com/extend-a-story/
 namespace Extend_A_Story\Upgrade;
 
 use \Extend_A_Story\Data\Database;
+use \Extend_A_Story\StoryException;
 
-class Version1 extends Version
+abstract class Version
 {
-    public function getDatabaseVersion() { return 1; }
-    public function getStoryVersion() { return "2.0.x"; }
+    public abstract function getDatabaseVersion();
+    public abstract function getStoryVersion();
+    public abstract function checkDatabase();
 
-    public function checkDatabase()
+    public static function getVersion()
     {
-        $versionTables = array( "ExtendAStoryVariable", "Session", "Episode", "Link", "Scheme", "Image" );
-        $databaseTables = Database::getDatabaseTableNames();
-        return empty( array_diff( $versionTables, $databaseTables ));
+        $databaseVersion = Database::getDatabaseVersion();
+        switch ( $databaseVersion )
+        {
+            case 1 : return new Version1();
+            case 2 : return new Version2();
+            case 3 : return new Version3();
+            case 4 : return new Version4();
+            default : throw new StoryException( "Unrecognized database version." );
+        }
     }
 }
