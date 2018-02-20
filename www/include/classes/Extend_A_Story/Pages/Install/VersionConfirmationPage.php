@@ -119,6 +119,22 @@ You are upgrading from version <?php echo( htmlentities( $this->storyVersion ));
 <div class="submit">
     <input type="hidden" name="pageName" value="VersionConfirmation">
     <input type="submit" name="backButton" value="Back">
+
+<?php
+
+        if (( $this->databaseExists ) and ( $this->databaseVersion !== 4 ))
+        {
+
+?>
+
+    <input type="submit" name="continueButton" value="Continue">
+
+<?php
+
+        }
+
+?>
+
 </div>
 
 <?php
