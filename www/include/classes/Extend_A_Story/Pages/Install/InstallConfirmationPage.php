@@ -205,6 +205,8 @@ class InstallConfirmationPage extends InstallPage
 
 ?>
 
+    <p>We strongly suggest performing a backup before you proceed.</p>
+
 </div>
 
 <?php
