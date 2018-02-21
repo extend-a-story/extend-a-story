@@ -133,8 +133,8 @@ class DataLossWarningPage extends InstallPage
 ?>
 
 <p>
-    These tables will be deleted if you proceed with the installation. If you do not wish to lose data, please go back
-    and specify a different database. If you wish to proceed, click the checkbox below to confirm that you are okay with
+    These tables will be deleted if you proceed with the installation. If you do not wish to lose data, go back and
+    specify a different database. If you wish to proceed, click the checkbox below to confirm that you are okay with
     losing data. We strongly suggest performing a backup before you proceed.
 </p>
 
