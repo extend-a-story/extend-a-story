@@ -65,6 +65,7 @@ class VersionConfirmationPage extends InstallPage
         {
             $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
             if ( $databaseVersion === 1 ) return new AdminAccountPage();
+            if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 )) return new UpgradeConfirmationPage();
             else throw new StoryException( "Unrecognized database version." );
         }
 
