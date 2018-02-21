@@ -104,7 +104,8 @@ class InstallConfirmationPage extends InstallPage
 ?>
 
 <p>
-    Verify that your settings are correct. Once you are ready to proceed, click the <em>Install</em> button.
+    We have gathered all of the information we need to install your new Extend-A-Story database. Verify that your
+    information is correct. Once you are ready to proceed, click the <em>Install</em> button.
 </p>
 
 <table>
