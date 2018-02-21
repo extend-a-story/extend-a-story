@@ -30,9 +30,22 @@ namespace Extend_A_Story\Pages\Install;
 
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Upgrade\Version;
+use \Extend_A_Story\Util;
 
 class VersionConfirmationPage extends InstallPage
 {
+    public static function validatePage()
+    {
+        $result = DatabaseConnectionPage::validatePage();
+        if ( isset( $result )) return $result;
+
+        $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
+        $version = Version::getVersion();
+        if ( $databaseVersion !== $version->getDatabaseVersion() ) return new VersionConfirmationPage();
+
+        return null;
+    }
+
     private $databaseVersion;
     private $databaseExists;
     private $storyVersion;
@@ -47,6 +60,14 @@ class VersionConfirmationPage extends InstallPage
     protected function getNextPage()
     {
         if ( isset( $this->backButton )) return new SelectTaskPage();
+
+        if ( isset( $this->continueButton ))
+        {
+            $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
+            if ( $databaseVersion === 1 ) return new AdminAccountPage();
+            else throw new StoryException( "Unrecognized database version." );
+        }
+
         throw new StoryException( "Unrecognized navigation from version confirmation page." );
     }
 
@@ -57,7 +78,8 @@ class VersionConfirmationPage extends InstallPage
 
     protected function getFields()
     {
-        return array( "pageName", "backButton", "continueButton" );
+        return array( "pageName", "backButton", "continueButton",
+                      "databaseVersion" );
     }
 
     protected function preRender()
@@ -118,6 +140,7 @@ You are upgrading from version <?php echo( htmlentities( $this->storyVersion ));
 
 <div class="submit">
     <input type="hidden" name="pageName" value="VersionConfirmation">
+    <input type="hidden" name="databaseVersion" value="<?php echo( htmlentities( $this->databaseVersion )); ?>">
     <input type="submit" name="backButton" value="Back">
 
 <?php
