@@ -138,6 +138,11 @@ class DataLossWarningPage extends InstallPage
     losing data. We strongly suggest performing a backup before you proceed.
 </p>
 
+<p>
+    If you are upgrading an existing Extend-A-Story database, go back and select <em>Upgrade Existing Database</em>
+    instead.
+</p>
+
 <?php
 
         }
