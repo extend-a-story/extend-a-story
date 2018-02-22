@@ -67,6 +67,8 @@ class UpgradeConfirmationPage extends InstallPage
             else throw new StoryException( "Unrecognized database version." );
         }
 
+        if ( isset( $this->continueButton )) return new CompletedPage();
+
         throw new StoryException( "Unrecognized navigation from upgrade confirmation page." );
     }
 

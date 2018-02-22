@@ -30,10 +30,12 @@ namespace Extend_A_Story\Pages\Install;
 
 use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\StoryException;
+use \Extend_A_Story\Upgrade\Version;
 use \Extend_A_Story\Util;
 
 class CompletedPage extends InstallPage
 {
+    private $task;
     private $databaseHost;
     private $databaseUsername;
     private $databasePassword;
@@ -41,19 +43,46 @@ class CompletedPage extends InstallPage
 
     public function validate()
     {
-        $result = StorySettingsPage::validatePage();
-        if ( isset( $result )) return $result;
+        $task = Util::getStringParam( $_POST, "task" );
+        if ( $task === "install" )
+        {
+            $result = StorySettingsPage::validatePage();
+            if ( isset( $result )) return $result;
+        }
+        else if ( $task === "upgrade" )
+        {
+            $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
+            if ( $databaseVersion === 1 )
+            {
+                $result = AdminAccountPage::validatePage();
+                if ( isset( $result )) return $result;
+            }
+            else if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 ))
+            {
+                $result = VersionConfirmationPage::validatePage();
+                if ( isset( $result )) return $result;
+            }
+            else throw new StoryException( "Unrecognized database version." );
+        }
+        else throw new StoryException( "Unrecognized task." );
+
         return $this;
     }
 
     protected function getNextPage()
     {
-        throw new StoryException( "Unrecognized navigation from install completed page." );
+        throw new StoryException( "Unrecognized navigation from completed page." );
     }
 
     protected function getSubtitle()
     {
-        return "Install Completed";
+        $task = Util::getStringParam( $_POST, "task" );
+        switch ( $task )
+        {
+            case "install" : return "Install Completed";
+            case "upgrade" : return "Upgrade Completed";
+            default : throw new StoryException( "Unrecognized task." );
+        }
     }
 
     protected function getFields()
@@ -63,28 +92,10 @@ class CompletedPage extends InstallPage
 
     protected function preRender()
     {
-        $this->databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
-        $this->databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
-        $this->databasePassword = Util::getStringParamDefault( $_POST, "databasePassword",       "" );
-        $this->databaseName     = Util::getStringParamDefault( $_POST, "databaseName",           "" );
-        $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
-        $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
-        $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
-        $settingsSiteHome       = Util::getStringParamDefault( $_POST, "settingsSiteHome",       "" );
-        $settingsReadEpisodeUrl = Util::getStringParamDefault( $_POST, "settingsReadEpisodeUrl", "" );
-        $settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
-        $settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
-        $settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
-        $adminLoginName         = Util::getStringParamDefault( $_POST, "adminLoginName",         "" );
-        $adminDisplayName       = Util::getStringParamDefault( $_POST, "adminDisplayName",       "" );
-        $adminPassword          = Util::getStringParamDefault( $_POST, "adminPassword1",         "" );
-
-        Database::createDatabase();
-        Database::populateDatabase( $settingsStoryName, $settingsSiteName,
-                                    $settingsStoryHome, $settingsSiteHome,
-                                    $settingsReadEpisodeUrl, $settingsAdminEmail,
-                                    $settingsMaxLinks, $settingsMaxEditDays,
-                                    $adminLoginName, $adminDisplayName, $adminPassword );
+        $this->task = Util::getStringParam( $_POST, "task" );
+        if ( $this->task === "install" ) $this->installDatabase();
+        else if ( $this->task === "upgrade" ) $this->upgradeDatabase();
+        else throw new StoryException( "Unrecognized task." );
     }
 
     protected function renderMain()
@@ -93,8 +104,9 @@ class CompletedPage extends InstallPage
 ?>
 
 <p>
-    Your Extend-A-Story database has been installed. To finish your installation, you must update your configuration
-    file. This is the location of your configuration file:
+    Your Extend-A-Story database has been <?php echo( $this->task === "install" ? "installed" : "upgraded" ); ?>. To
+    finish your <?php echo( $this->task === "install" ? "installation" : "upgrade" ); ?>, you must update your
+    configuration file. This is the location of your configuration file:
 </p>
 
 <pre>
@@ -124,6 +136,46 @@ $configStoryEnabled     = true;
 
 <?php
 
+    }
+
+    private function installDatabase()
+    {
+        $this->databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
+        $this->databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
+        $this->databasePassword = Util::getStringParamDefault( $_POST, "databasePassword",       "" );
+        $this->databaseName     = Util::getStringParamDefault( $_POST, "databaseName",           "" );
+        $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
+        $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
+        $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
+        $settingsSiteHome       = Util::getStringParamDefault( $_POST, "settingsSiteHome",       "" );
+        $settingsReadEpisodeUrl = Util::getStringParamDefault( $_POST, "settingsReadEpisodeUrl", "" );
+        $settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
+        $settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
+        $settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
+        $adminLoginName         = Util::getStringParamDefault( $_POST, "adminLoginName",         "" );
+        $adminDisplayName       = Util::getStringParamDefault( $_POST, "adminDisplayName",       "" );
+        $adminPassword          = Util::getStringParamDefault( $_POST, "adminPassword1",         "" );
+
+        Database::createDatabase();
+        Database::populateDatabase( $settingsStoryName, $settingsSiteName,
+                                    $settingsStoryHome, $settingsSiteHome,
+                                    $settingsReadEpisodeUrl, $settingsAdminEmail,
+                                    $settingsMaxLinks, $settingsMaxEditDays,
+                                    $adminLoginName, $adminDisplayName, $adminPassword );
+    }
+
+    private function upgradeDatabase()
+    {
+        $upgradeData = array();
+        $version = Version::getVersion();
+
+        if ( $version->getDatabaseVersion() === 1 )
+        {
+            $upgradeData[ "adminLoginName"   ] = Util::getStringParam( $_POST, "adminLoginName"   );
+            $upgradeData[ "adminDisplayName" ] = Util::getStringParam( $_POST, "adminDisplayName" );
+        }
+
+        $version->upgradeDatabase( $upgradeData );
     }
 }
 

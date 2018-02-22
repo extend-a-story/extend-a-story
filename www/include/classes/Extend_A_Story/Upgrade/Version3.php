@@ -29,6 +29,7 @@ http://www.sir-toby.com/extend-a-story/
 namespace Extend_A_Story\Upgrade;
 
 use \Extend_A_Story\Data\Database;
+use \Extend_A_Story\Util;
 
 class Version3 extends Version
 {
@@ -41,5 +42,18 @@ class Version3 extends Version
                                 "EpisodeEditLog", "LinkEditLog", "Scheme", "Image" );
         $databaseTables = Database::getDatabaseTableNames();
         return empty( array_diff( $versionTables, $databaseTables ));
+    }
+
+    public function upgradeDatabase( $upgradeData )
+    {
+        $this->alterUserTable();
+    }
+
+    private function alterUserTable()
+    {
+        $dbConnection = Util::getDbConnection();
+        $sql = "ALTER TABLE User MODIFY COLUMN Password  VARCHAR( 255 )  NOT NULL";
+        $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->execute();
     }
 }

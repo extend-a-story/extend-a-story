@@ -29,6 +29,7 @@ http://www.sir-toby.com/extend-a-story/
 namespace Extend_A_Story\Upgrade;
 
 use \Extend_A_Story\Data\Database;
+use \Extend_A_Story\StoryException;
 
 class Version4 extends Version
 {
@@ -41,5 +42,10 @@ class Version4 extends Version
                                 "EpisodeEditLog", "LinkEditLog", "Scheme", "Image" );
         $databaseTables = Database::getDatabaseTableNames();
         return empty( array_diff( $versionTables, $databaseTables ));
+    }
+
+    public function upgradeDatabase( $upgradeData )
+    {
+        throw new StoryException( "No upgrade needed." );
     }
 }
