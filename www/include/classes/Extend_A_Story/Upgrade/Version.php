@@ -33,10 +33,6 @@ use \Extend_A_Story\StoryException;
 
 abstract class Version
 {
-    public abstract function getDatabaseVersion();
-    public abstract function getStoryVersion();
-    public abstract function checkDatabase();
-
     public static function getVersion()
     {
         $databaseVersion = Database::getDatabaseVersion();
@@ -49,4 +45,8 @@ abstract class Version
             default : throw new StoryException( "Unrecognized database version." );
         }
     }
+
+    public abstract function getDatabaseVersion();
+    public abstract function getStoryVersion();
+    public abstract function checkDatabase();
 }
