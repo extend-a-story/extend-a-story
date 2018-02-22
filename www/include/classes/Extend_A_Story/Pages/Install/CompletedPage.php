@@ -32,7 +32,7 @@ use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
-class InstallCompletedPage extends InstallPage
+class CompletedPage extends InstallPage
 {
     private $databaseHost;
     private $databaseUsername;
