@@ -40,7 +40,7 @@ class DatabaseConnectionPage extends InstallPage
 {
     public static function validatePage()
     {
-        $result = DisableStoryPage::validatePage();
+        $result = StartPage::validatePage();
         if ( isset( $result )) return $result;
 
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
@@ -111,7 +111,7 @@ class DatabaseConnectionPage extends InstallPage
 
     public function validate()
     {
-        $result = DisableStoryPage::validatePage();
+        $result = StartPage::validatePage();
         if ( isset( $result )) return $result;
         return $this;
     }

@@ -35,6 +35,13 @@ use \Extend_A_Story\Util;
 
 class InstallConfirmationPage extends InstallPage
 {
+    public static function validatePage()
+    {
+        $result = StorySettingsPage::validatePage();
+        if ( isset( $result )) return $result;
+        return null;
+    }
+
     private $databaseHost;
     private $databaseUsername;
     private $databaseName;

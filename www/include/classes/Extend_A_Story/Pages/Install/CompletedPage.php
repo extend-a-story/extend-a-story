@@ -46,23 +46,13 @@ class CompletedPage extends InstallPage
         $task = Util::getStringParam( $_POST, "task" );
         if ( $task === "install" )
         {
-            $result = StorySettingsPage::validatePage();
+            $result = InstallConfirmationPage::validatePage();
             if ( isset( $result )) return $result;
         }
         else if ( $task === "upgrade" )
         {
-            $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
-            if ( $databaseVersion === 1 )
-            {
-                $result = AdminAccountPage::validatePage();
-                if ( isset( $result )) return $result;
-            }
-            else if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 ))
-            {
-                $result = VersionConfirmationPage::validatePage();
-                if ( isset( $result )) return $result;
-            }
-            else throw new StoryException( "Unrecognized database version." );
+            $result = UpgradeConfirmationPage::validatePage();
+            if ( isset( $result )) return $result;
         }
         else throw new StoryException( "Unrecognized task." );
 

@@ -36,6 +36,13 @@ use \Extend_A_Story\Util;
 
 class SelectTaskPage extends InstallPage
 {
+    public static function validatePage()
+    {
+        $result = DatabaseConnectionPage::validatePage();
+        if ( isset( $result )) return $result;
+        return null;
+    }
+
     private $installTaskRadioButton;
     private $upgradeTaskRadioButton;
 

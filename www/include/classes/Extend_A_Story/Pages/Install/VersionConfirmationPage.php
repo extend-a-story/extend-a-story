@@ -36,7 +36,7 @@ class VersionConfirmationPage extends InstallPage
 {
     public static function validatePage()
     {
-        $result = DatabaseConnectionPage::validatePage();
+        $result = SelectTaskPage::validatePage();
         if ( isset( $result )) return $result;
 
         $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
@@ -52,7 +52,7 @@ class VersionConfirmationPage extends InstallPage
 
     public function validate()
     {
-        $result = DatabaseConnectionPage::validatePage();
+        $result = SelectTaskPage::validatePage();
         if ( isset( $result )) return $result;
         return $this;
     }

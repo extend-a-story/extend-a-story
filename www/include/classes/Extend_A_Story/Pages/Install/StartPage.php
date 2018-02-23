@@ -32,6 +32,13 @@ use \Extend_A_Story\StoryException;
 
 class StartPage extends InstallPage
 {
+    public static function validatePage()
+    {
+        $result = DisableStoryPage::validatePage();
+        if ( isset( $result )) return $result;
+        return null;
+    }
+
     public function validate()
     {
         $result = DisableStoryPage::validatePage();

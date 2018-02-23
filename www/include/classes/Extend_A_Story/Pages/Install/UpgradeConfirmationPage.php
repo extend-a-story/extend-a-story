@@ -34,6 +34,24 @@ use \Extend_A_Story\Util;
 
 class UpgradeConfirmationPage extends InstallPage
 {
+    public static function validatePage()
+    {
+        $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
+        if ( $databaseVersion === 1 )
+        {
+            $result = AdminAccountPage::validatePage();
+            if ( isset( $result )) return $result;
+        }
+        else if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 ))
+        {
+            $result = VersionConfirmationPage::validatePage();
+            if ( isset( $result )) return $result;
+        }
+        else throw new StoryException( "Unrecognized database version." );
+
+        return null;
+    }
+
     private $databaseVersion;
     private $storyVersion;
     private $adminLoginName;
