@@ -34,6 +34,13 @@ class StartPage extends InstallPage
 {
     public static function validatePage()
     {
+        $result = StartPage::validatePreviousPage();
+        if ( isset( $result )) return $result;
+        return null;
+    }
+
+    private static function validatePreviousPage()
+    {
         $result = DisableStoryPage::validatePage();
         if ( isset( $result )) return $result;
         return null;
@@ -41,7 +48,7 @@ class StartPage extends InstallPage
 
     public function validate()
     {
-        $result = DisableStoryPage::validatePage();
+        $result = StartPage::validatePreviousPage();
         if ( isset( $result )) return $result;
         return $this;
     }

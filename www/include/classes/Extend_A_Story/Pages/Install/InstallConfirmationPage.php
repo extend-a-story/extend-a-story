@@ -37,6 +37,13 @@ class InstallConfirmationPage extends InstallPage
 {
     public static function validatePage()
     {
+        $result = InstallConfirmationPage::validatePreviousPage();
+        if ( isset( $result )) return $result;
+        return null;
+    }
+
+    private static function validatePreviousPage()
+    {
         $result = StorySettingsPage::validatePage();
         if ( isset( $result )) return $result;
         return null;
@@ -59,7 +66,7 @@ class InstallConfirmationPage extends InstallPage
 
     public function validate()
     {
-        $result = StorySettingsPage::validatePage();
+        $result = InstallConfirmationPage::validatePreviousPage();
         if ( isset( $result )) return $result;
         return $this;
     }

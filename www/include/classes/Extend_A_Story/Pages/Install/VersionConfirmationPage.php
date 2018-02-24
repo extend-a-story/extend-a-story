@@ -36,7 +36,7 @@ class VersionConfirmationPage extends InstallPage
 {
     public static function validatePage()
     {
-        $result = SelectTaskPage::validatePage();
+        $result = VersionConfirmationPage::validatePreviousPage();
         if ( isset( $result )) return $result;
 
         $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
@@ -46,13 +46,20 @@ class VersionConfirmationPage extends InstallPage
         return null;
     }
 
+    private static function validatePreviousPage()
+    {
+        $result = SelectTaskPage::validatePage();
+        if ( isset( $result )) return $result;
+        return null;
+    }
+
     private $databaseVersion;
     private $databaseExists;
     private $storyVersion;
 
     public function validate()
     {
-        $result = SelectTaskPage::validatePage();
+        $result = VersionConfirmationPage::validatePreviousPage();
         if ( isset( $result )) return $result;
         return $this;
     }

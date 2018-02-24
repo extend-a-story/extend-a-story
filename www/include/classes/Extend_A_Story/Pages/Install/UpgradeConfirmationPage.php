@@ -36,6 +36,13 @@ class UpgradeConfirmationPage extends InstallPage
 {
     public static function validatePage()
     {
+        $result = UpgradeConfirmationPage::validatePreviousPage();
+        if ( isset( $result )) return $result;
+        return null;
+    }
+
+    private static function validatePreviousPage()
+    {
         $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
         if ( $databaseVersion === 1 )
         {
@@ -59,19 +66,8 @@ class UpgradeConfirmationPage extends InstallPage
 
     public function validate()
     {
-        $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
-        if ( $databaseVersion === 1 )
-        {
-            $result = AdminAccountPage::validatePage();
-            if ( isset( $result )) return $result;
-        }
-        else if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 ))
-        {
-            $result = VersionConfirmationPage::validatePage();
-            if ( isset( $result )) return $result;
-        }
-        else throw new StoryException( "Unrecognized database version." );
-
+        $result = UpgradeConfirmationPage::validatePreviousPage();
+        if ( isset( $result )) return $result;
         return $this;
     }
 

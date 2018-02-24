@@ -39,7 +39,7 @@ class DataLossWarningPage extends InstallPage
 {
     public static function validatePage()
     {
-        $result = SelectTaskPage::validatePage();
+        $result = DataLossWarningPage::validatePreviousPage();
         if ( isset( $result )) return $result;
 
         $tableNames = Database::getConflictingTableNames();
@@ -65,6 +65,13 @@ class DataLossWarningPage extends InstallPage
         return null;
     }
 
+    private static function validatePreviousPage()
+    {
+        $result = SelectTaskPage::validatePage();
+        if ( isset( $result )) return $result;
+        return null;
+    }
+
     private $allowDataLossCheckbox;
 
     public function __construct( $error = null )
@@ -74,7 +81,7 @@ class DataLossWarningPage extends InstallPage
 
     public function validate()
     {
-        $result = SelectTaskPage::validatePage();
+        $result = DataLossWarningPage::validatePreviousPage();
         if ( isset( $result )) return $result;
         return $this;
     }

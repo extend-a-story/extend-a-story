@@ -38,18 +38,8 @@ class AdminAccountPage extends InstallPage
 {
     public static function validatePage()
     {
-        $task = Util::getStringParam( $_POST, "task" );
-        if ( $task === "install" )
-        {
-            $result = DataLossWarningPage::validatePage();
-            if ( isset( $result )) return $result;
-        }
-        else if ( $task === "upgrade" )
-        {
-            $result = VersionConfirmationPage::validatePage();
-            if ( isset( $result )) return $result;
-        }
-        else throw new StoryException( "Unrecognized task." );
+        $result = AdminAccountPage::validatePreviousPage();
+        if ( isset( $result )) return $result;
 
         $adminLoginName   = Util::getStringParamDefault( $_POST, "adminLoginName",   "" );
         $adminDisplayName = Util::getStringParamDefault( $_POST, "adminDisplayName", "" );
@@ -86,17 +76,7 @@ class AdminAccountPage extends InstallPage
         return null;
     }
 
-    private $adminLoginNameField;
-    private $adminDisplayNameField;
-    private $adminPassword1Field;
-    private $adminPassword2Field;
-
-    public function __construct( $error = null )
-    {
-        parent::__construct( $error );
-    }
-
-    public function validate()
+    private static function validatePreviousPage()
     {
         $task = Util::getStringParam( $_POST, "task" );
         if ( $task === "install" )
@@ -111,6 +91,23 @@ class AdminAccountPage extends InstallPage
         }
         else throw new StoryException( "Unrecognized task." );
 
+        return null;
+    }
+
+    private $adminLoginNameField;
+    private $adminDisplayNameField;
+    private $adminPassword1Field;
+    private $adminPassword2Field;
+
+    public function __construct( $error = null )
+    {
+        parent::__construct( $error );
+    }
+
+    public function validate()
+    {
+        $result = AdminAccountPage::validatePreviousPage();
+        if ( isset( $result )) return $result;
         return $this;
     }
 

@@ -38,6 +38,13 @@ class SelectTaskPage extends InstallPage
 {
     public static function validatePage()
     {
+        $result = SelectTaskPage::validatePreviousPage();
+        if ( isset( $result )) return $result;
+        return null;
+    }
+
+    private static function validatePreviousPage()
+    {
         $result = DatabaseConnectionPage::validatePage();
         if ( isset( $result )) return $result;
         return null;
@@ -53,7 +60,7 @@ class SelectTaskPage extends InstallPage
 
     public function validate()
     {
-        $result = DatabaseConnectionPage::validatePage();
+        $result = SelectTaskPage::validatePreviousPage();
         if ( isset( $result )) return $result;
         return $this;
     }

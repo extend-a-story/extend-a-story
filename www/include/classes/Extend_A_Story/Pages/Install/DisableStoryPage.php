@@ -37,7 +37,7 @@ class DisableStoryPage extends InstallPage
 {
     public static function validatePage()
     {
-        $result = AuthorizationPage::validatePage();
+        $result = DisableStoryPage::validatePreviousPage();
         if ( isset( $result )) return $result;
 
         // allow installation to proceed if the story is disabled
@@ -55,6 +55,13 @@ class DisableStoryPage extends InstallPage
 
         // force the user to disable the story
         return new DisableStoryPage( $error );
+    }
+
+    private static function validatePreviousPage()
+    {
+        $result = AuthorizationPage::validatePage();
+        if ( isset( $result )) return $result;
+        return null;
     }
 
     public function __construct( $error = null )

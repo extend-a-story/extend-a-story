@@ -35,13 +35,7 @@ use \Extend_A_Story\Util;
 
 class CompletedPage extends InstallPage
 {
-    private $task;
-    private $databaseHost;
-    private $databaseUsername;
-    private $databasePassword;
-    private $databaseName;
-
-    public function validate()
+    private static function validatePreviousPage()
     {
         $task = Util::getStringParam( $_POST, "task" );
         if ( $task === "install" )
@@ -56,6 +50,19 @@ class CompletedPage extends InstallPage
         }
         else throw new StoryException( "Unrecognized task." );
 
+        return null;
+    }
+
+    private $task;
+    private $databaseHost;
+    private $databaseUsername;
+    private $databasePassword;
+    private $databaseName;
+
+    public function validate()
+    {
+        $result = CompletedPage::validatePreviousPage();
+        if ( isset( $result )) return $result;
         return $this;
     }
 
