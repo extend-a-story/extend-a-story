@@ -37,25 +37,28 @@ class AuthorizationPage extends InstallPage
 {
     public static function validatePage()
     {
-        global $configInstallToken;
         $installTokenPost   = Util::getStringParamDefault( $_POST,   "installToken", null );
         $installTokenCookie = Util::getStringParamDefault( $_COOKIE, "installToken", null );
         $installTokenLocal  = isset( $installTokenPost ) ? $installTokenPost : $installTokenCookie;
 
-        // allow installation to proceed if the install token is configured and matches
-        if (( isset( $configInstallToken )) && ( $configInstallToken === $installTokenLocal )) return null;
-
-        $error = null;
-
-        $pageName = Util::getStringParamDefault( $_POST, "pageName", null );
-        if ( $pageName === "Authorization" )
+        // force the user to configure the install token if the installation token is not set or does not match
+        global $configInstallToken;
+        if (( !isset( $configInstallToken )) or ( $configInstallToken !== $installTokenLocal ))
         {
-            $message = "You must verify that you are the owner of this site.";
-            $error = new UnorderedList( [ new RawText( $message ) ] );
+            $error = null;
+
+            $pageName = Util::getStringParamDefault( $_POST, "pageName", null );
+            if ( $pageName === "Authorization" )
+            {
+                $message = "You must verify that you are the owner of this site.";
+                $error = new UnorderedList( [ new RawText( $message ) ] );
+            }
+
+            return new AuthorizationPage( $error );
         }
 
-        // force the user to configure the install token
-        return new AuthorizationPage( $error );
+        // allow installation to proceed
+        return null;
     }
 
     public function __construct( $error = null )

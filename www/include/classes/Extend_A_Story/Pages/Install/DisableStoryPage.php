@@ -40,21 +40,24 @@ class DisableStoryPage extends InstallPage
         $result = DisableStoryPage::validatePreviousPage();
         if ( isset( $result )) return $result;
 
-        // allow installation to proceed if the story is disabled
+        // force the user to disable the story if the story is enabled
         global $configStoryEnabled;
-        if ( !$configStoryEnabled ) return null;
-
-        $error = null;
-
-        $pageName = Util::getStringParamDefault( $_POST, "pageName", null );
-        if ( $pageName === "DisableStory" )
+        if (( !isset( $configStoryEnabled )) or ( $configStoryEnabled ))
         {
-            $message = "You must disable Extend-A-Story.";
-            $error = new UnorderedList( [ new RawText( $message ) ] );
+            $error = null;
+
+            $pageName = Util::getStringParamDefault( $_POST, "pageName", null );
+            if ( $pageName === "DisableStory" )
+            {
+                $message = "You must disable Extend-A-Story.";
+                $error = new UnorderedList( [ new RawText( $message ) ] );
+            }
+
+            return new DisableStoryPage( $error );
         }
 
-        // force the user to disable the story
-        return new DisableStoryPage( $error );
+        // allow installation to proceed
+        return null;
     }
 
     private static function validatePreviousPage()
