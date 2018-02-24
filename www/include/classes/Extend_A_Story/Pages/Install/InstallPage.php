@@ -83,7 +83,10 @@ abstract class InstallPage
         $this->installTokenCookie = Util::getStringParamDefault( $_COOKIE, "installToken",   null );
     }
 
-    public abstract function validate();
+    public function validate()
+    {
+        throw new StoryException( "This function is not implemented." );
+    }
 
     public function render()
     {

@@ -66,11 +66,6 @@ class AuthorizationPage extends InstallPage
         parent::__construct( $error );
     }
 
-    public function validate()
-    {
-        return $this;
-    }
-
     protected function getNextPage()
     {
         if ( isset( $this->continueButton )) return new StartPage();
