@@ -89,7 +89,12 @@ class CompletedPage extends InstallPage
 
     protected function preRender()
     {
-        $this->task = Util::getStringParam( $_POST, "task" );
+        $this->task             = Util::getStringParamDefault( $_POST, "task",                   "" );
+        $this->databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
+        $this->databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
+        $this->databasePassword = Util::getStringParamDefault( $_POST, "databasePassword",       "" );
+        $this->databaseName     = Util::getStringParamDefault( $_POST, "databaseName",           "" );
+
         if ( $this->task === "install" ) $this->installDatabase();
         else if ( $this->task === "upgrade" ) $this->upgradeDatabase();
         else throw new StoryException( "Unrecognized task." );
@@ -137,10 +142,6 @@ $configStoryEnabled     = true;
 
     private function installDatabase()
     {
-        $this->databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
-        $this->databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
-        $this->databasePassword = Util::getStringParamDefault( $_POST, "databasePassword",       "" );
-        $this->databaseName     = Util::getStringParamDefault( $_POST, "databaseName",           "" );
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
         $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
         $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
