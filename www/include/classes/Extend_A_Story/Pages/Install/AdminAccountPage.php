@@ -124,7 +124,7 @@ class AdminAccountPage extends InstallPage
         else if ( $task === "upgrade" )
         {
             if ( isset( $this->backButton )) return new VersionConfirmationPage();
-            if ( isset( $this->continueButton )) return new UpgradeConfirmationPage();
+            if ( isset( $this->continueButton )) return new ConfirmationPage();
         }
         else throw new StoryException( "Unrecognized task." );
 

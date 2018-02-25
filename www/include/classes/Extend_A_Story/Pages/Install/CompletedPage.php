@@ -37,19 +37,8 @@ class CompletedPage extends InstallPage
 {
     private static function validatePreviousPage()
     {
-        $task = Util::getStringParam( $_POST, "task" );
-        if ( $task === "install" )
-        {
-            $result = InstallConfirmationPage::validatePage();
-            if ( isset( $result )) return $result;
-        }
-        else if ( $task === "upgrade" )
-        {
-            $result = UpgradeConfirmationPage::validatePage();
-            if ( isset( $result )) return $result;
-        }
-        else throw new StoryException( "Unrecognized task." );
-
+        ConfirmationPage::validatePage();
+        if ( isset( $result )) return $result;
         return null;
     }
 

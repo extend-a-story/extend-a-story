@@ -31,24 +31,47 @@ namespace Extend_A_Story\Pages\Install;
 use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\HtmlElements\UnorderedList;
 use \Extend_A_Story\StoryException;
+use \Extend_A_Story\Upgrade\Version;
 use \Extend_A_Story\Util;
 
-class InstallConfirmationPage extends InstallPage
+class ConfirmationPage extends InstallPage
 {
     public static function validatePage()
     {
-        $result = InstallConfirmationPage::validatePreviousPage();
+        $result = ConfirmationPage::validatePreviousPage();
         if ( isset( $result )) return $result;
         return null;
     }
 
     private static function validatePreviousPage()
     {
-        $result = StorySettingsPage::validatePage();
-        if ( isset( $result )) return $result;
+        $task = Util::getStringParam( $_POST, "task" );
+        if ( $task === "install" )
+        {
+            $result = StorySettingsPage::validatePage();
+            if ( isset( $result )) return $result;
+        }
+        else if ( $task === "upgrade" )
+        {
+            $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
+            if ( $databaseVersion === 1 )
+            {
+                $result = AdminAccountPage::validatePage();
+                if ( isset( $result )) return $result;
+            }
+            else if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 ))
+            {
+                $result = VersionConfirmationPage::validatePage();
+                if ( isset( $result )) return $result;
+            }
+            else throw new StoryException( "Unrecognized database version." );
+        }
+        else throw new StoryException( "Unrecognized task." );
+
         return null;
     }
 
+    private $task;
     private $databaseHost;
     private $databaseUsername;
     private $databaseName;
@@ -63,24 +86,50 @@ class InstallConfirmationPage extends InstallPage
     private $settingsMaxLinks;
     private $settingsMaxEditDays;
     private $tables;
+    private $databaseVersion;
+    private $storyVersion;
 
     public function validate()
     {
-        $result = InstallConfirmationPage::validatePreviousPage();
+        $result = ConfirmationPage::validatePreviousPage();
         if ( isset( $result )) return $result;
         return $this;
     }
 
     protected function getNextPage()
     {
-        if ( isset( $this->backButton     )) return new StorySettingsPage();
-        if ( isset( $this->continueButton )) return new CompletedPage();
-        throw new StoryException( "Unrecognized navigation from install confirmation page." );
+        $task = Util::getStringParam( $_POST, "task" );
+        if ( $task === "install" )
+        {
+            if ( isset( $this->backButton     )) return new StorySettingsPage();
+            if ( isset( $this->continueButton )) return new CompletedPage();
+        }
+        else if ( $task === "upgrade" )
+        {
+            if ( isset( $this->backButton ))
+            {
+                $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
+                if ( $databaseVersion === 1 ) return new AdminAccountPage();
+                if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 )) return new VersionConfirmationPage();
+                else throw new StoryException( "Unrecognized database version." );
+            }
+
+            if ( isset( $this->continueButton )) return new CompletedPage();
+        }
+        else throw new StoryException( "Unrecognized task." );
+
+        throw new StoryException( "Unrecognized navigation from confirmation page." );
     }
 
     protected function getSubtitle()
     {
-        return "Install Confirmation";
+        $task = Util::getStringParam( $_POST, "task" );
+        switch ( $task )
+        {
+            case "install" : return "Install Confirmation";
+            case "upgrade" : return "Upgrade Confirmation";
+            default : throw new StoryException( "Unrecognized task." );
+        }
     }
 
     protected function getFields()
@@ -90,6 +139,7 @@ class InstallConfirmationPage extends InstallPage
 
     protected function preRender()
     {
+        $this->task                   = Util::getStringParamDefault( $_POST, "task",                   "" );
         $this->databaseHost           = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
         $this->databaseUsername       = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
         $this->databaseName           = Util::getStringParamDefault( $_POST, "databaseName",           "" );
@@ -104,12 +154,21 @@ class InstallConfirmationPage extends InstallPage
         $this->settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
         $this->settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
         $this->tables                 = null;
+        $this->databaseVersion        = null;
+        $this->storyVersion           = null;
 
-        $tableNames = Database::getConflictingTableNames();
-        if ( count( $tableNames ) > 0 )
+        if ( $this->task === "install" )
         {
-            $this->tables = UnorderedList::buildFromStringArray( $tableNames );
+            $tableNames = Database::getConflictingTableNames();
+            if ( count( $tableNames ) > 0 ) $this->tables = UnorderedList::buildFromStringArray( $tableNames );
         }
+        else if ( $this->task === "upgrade" )
+        {
+            $version = Version::getVersion();
+            $this->databaseVersion = $version->getDatabaseVersion();
+            $this->storyVersion    = $version->getStoryVersion();
+        }
+        else throw new StoryException( "Unrecognized task." );
     }
 
     protected function renderMain()
@@ -118,8 +177,9 @@ class InstallConfirmationPage extends InstallPage
 ?>
 
 <p>
-    We have gathered all of the information we need to install your new Extend-A-Story database. Verify that your
-    information is correct. Once you are ready to proceed, click the <em>Install</em> button.
+    We have gathered all of the information we need to <?php echo( htmlentities( $this->task )); ?> your Extend-A-Story
+    database. Verify that your information is correct. Once you are ready to proceed, click the
+    <em><?php echo( $this->task === "install" ? "Install" : "Upgrade" ); ?></em> button.
 </p>
 
 <table>
@@ -142,6 +202,15 @@ class InstallConfirmationPage extends InstallPage
         <td class="header">Database</td>
         <td><?php echo( htmlentities( $this->databaseName )); ?></td>
     </tr>
+
+<?php
+
+        if (( $this->task === "install" ) or
+            (( $this->task === "upgrade" ) and
+             ( $this->databaseVersion === 1 )))
+        {
+?>
+
     <tr>
         <td colspan="2"><hr></td>
     </tr>
@@ -160,6 +229,16 @@ class InstallConfirmationPage extends InstallPage
         <td class="header">Password</td>
         <td>**********</td>
     </tr>
+
+<?php
+
+        }
+
+        if ( $this->task === "install" )
+        {
+
+?>
+
     <tr>
         <td colspan="2"><hr></td>
     </tr>
@@ -198,16 +277,50 @@ class InstallConfirmationPage extends InstallPage
         <td class="header">Max Edit Days</td>
         <td><?php echo( htmlentities( $this->settingsMaxEditDays )); ?></td>
     </tr>
+
+<?php
+
+        }
+
+        if ( $this->task === "upgrade" )
+        {
+
+?>
+
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
+    <tr>
+        <td colspan="2" class="sectionHeader">Version</td>
+    </tr>
+    <tr>
+        <td class="header">Current Version</td>
+        <td><?php echo( htmlentities( $this->storyVersion )); ?></td>
+    </tr>
+
+<?php
+
+        }
+
+?>
+
 </table>
 
 <?php
 
-        if ( isset( $this->tables ))
+        if (( $this->task === "upgrade" ) or ( isset( $this->tables )))
         {
 
 ?>
 
 <div class="dataLossWarning">
+
+<?php
+
+            if ( isset( $this->tables ))
+            {
+
+?>
 
     <p>!!! YOU WILL LOSE DATA IF YOU PROCEED !!!</p>
 
@@ -215,7 +328,8 @@ class InstallConfirmationPage extends InstallPage
 
 <?php
 
-            $this->tables->render();
+                $this->tables->render();
+            }
 
 ?>
 
@@ -230,9 +344,10 @@ class InstallConfirmationPage extends InstallPage
 ?>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="InstallConfirmation">
+    <input type="hidden" name="pageName" value="Confirmation">
     <input type="submit" name="backButton" value="Back">
-    <input type="submit" name="continueButton" value="Install">
+    <input type="submit" name="continueButton"
+           value="<?php echo( $this->task === "install" ? "Install" : "Upgrade" ); ?>">
 </div>
 
 <?php

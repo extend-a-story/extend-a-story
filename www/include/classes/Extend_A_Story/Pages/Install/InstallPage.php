@@ -49,9 +49,8 @@ abstract class InstallPage
                 case "DataLossWarning"     : $page = new DataLossWarningPage();     break;
                 case "AdminAccount"        : $page = new AdminAccountPage();        break;
                 case "StorySettings"       : $page = new StorySettingsPage();       break;
-                case "InstallConfirmation" : $page = new InstallConfirmationPage(); break;
                 case "VersionConfirmation" : $page = new VersionConfirmationPage(); break;
-                case "UpgradeConfirmation" : $page = new UpgradeConfirmationPage(); break;
+                case "Confirmation"        : $page = new ConfirmationPage();        break;
                 default : throw new StoryException( "Unrecognized page." );
             }
 

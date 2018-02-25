@@ -147,7 +147,7 @@ class StorySettingsPage extends InstallPage
     protected function getNextPage()
     {
         if ( isset( $this->backButton     )) return new AdminAccountPage();
-        if ( isset( $this->continueButton )) return new InstallConfirmationPage();
+        if ( isset( $this->continueButton )) return new ConfirmationPage();
         throw new StoryException( "Unrecognized navigation from story settings page." );
     }
 
