@@ -56,7 +56,7 @@ class ConfirmationPage extends InstallPage
             $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
             if ( $databaseVersion === 1 )
             {
-                $result = AdminAccountPage::validatePage();
+                $result = StorySettingsPage::validatePage();
                 if ( isset( $result )) return $result;
             }
             else if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 ))
@@ -109,7 +109,7 @@ class ConfirmationPage extends InstallPage
             if ( isset( $this->backButton ))
             {
                 $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
-                if ( $databaseVersion === 1 ) return new AdminAccountPage();
+                if ( $databaseVersion === 1 ) return new StorySettingsPage();
                 if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 )) return new VersionConfirmationPage();
                 else throw new StoryException( "Unrecognized database version." );
             }
@@ -234,7 +234,9 @@ class ConfirmationPage extends InstallPage
 
         }
 
-        if ( $this->task === "install" )
+        if (( $this->task === "install" ) or
+            (( $this->task === "upgrade" ) and
+             ( $this->databaseVersion === 1 )))
         {
 
 ?>
@@ -245,6 +247,14 @@ class ConfirmationPage extends InstallPage
     <tr>
         <td colspan="2" class="sectionHeader">Story Settings</td>
     </tr>
+
+<?php
+
+            if ( $this->task === "install" )
+            {
+
+?>
+
     <tr>
         <td class="header">Story Name</td>
         <td><?php echo( htmlentities( $this->settingsStoryName )); ?></td>
@@ -273,6 +283,13 @@ class ConfirmationPage extends InstallPage
         <td class="header">Max Links</td>
         <td><?php echo( htmlentities( $this->settingsMaxLinks )); ?></td>
     </tr>
+
+<?php
+
+            }
+
+?>
+
     <tr>
         <td class="header">Max Edit Days</td>
         <td><?php echo( htmlentities( $this->settingsMaxEditDays )); ?></td>

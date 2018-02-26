@@ -158,8 +158,9 @@ $configStoryEnabled     = true;
 
         if ( $version->getDatabaseVersion() === 1 )
         {
-            $upgradeData[ "adminLoginName"   ] = Util::getStringParam( $_POST, "adminLoginName"   );
-            $upgradeData[ "adminDisplayName" ] = Util::getStringParam( $_POST, "adminDisplayName" );
+            $upgradeData[ "adminLoginName"      ] = Util::getStringParamDefault( $_POST, "adminLoginName",      "" );
+            $upgradeData[ "adminDisplayName"    ] = Util::getStringParamDefault( $_POST, "adminDisplayName",    "" );
+            $upgradeData[ "settingsMaxEditDays" ] = Util::getStringParamDefault( $_POST, "settingsMaxEditDays", "" );
         }
 
         $version->upgradeDatabase( $upgradeData );

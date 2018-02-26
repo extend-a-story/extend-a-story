@@ -53,7 +53,7 @@ class Version1 extends Version
         $this->createLinkEditLogTable();
         $this->alterSessionTable();
         $this->createUser( $upgradeData );
-        $this->setMaxEditDays();
+        $this->setMaxEditDays( $upgradeData );
 
         $version2 = new Version2();
         $version2->upgradeDatabase( $upgradeData );
@@ -165,11 +165,12 @@ SQL;
         if ( $dbStatement->rowCount() !== 1 ) throw new StoryException( "Failed to insert user." );
     }
 
-    private function setMaxEditDays()
+    private function setMaxEditDays( $upgradeData )
     {
         $dbConnection = Util::getDbConnection();
-        $sql = "INSERT INTO ExtendAStoryVariable VALUES ( 'MaxEditDays', 30, NULL )";
+        $sql = "INSERT INTO ExtendAStoryVariable VALUES ( 'MaxEditDays', :maxEditDays, NULL )";
         $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->bindParam( ":maxEditDays", $upgradeData[ "settingsMaxEditDays" ], PDO::PARAM_INT );
         $dbStatement->execute();
         if ( $dbStatement->rowCount() !== 1 ) throw new StoryException( "Failed to insert MaxEditDays." );
     }

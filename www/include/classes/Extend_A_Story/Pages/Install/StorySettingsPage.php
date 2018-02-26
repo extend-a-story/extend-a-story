@@ -52,47 +52,51 @@ class StorySettingsPage extends InstallPage
 
         $errors = array();
 
-        if ( strlen( $settingsStoryName ) == 0 )
+        $task = Util::getStringParam( $_POST, "task" );
+        if ( $task === "install" )
         {
-            $errors[] = new RawText( "Story name must be set." );
-        }
+            if ( strlen( $settingsStoryName ) == 0 )
+            {
+                $errors[] = new RawText( "Story name must be set." );
+            }
 
-        if ( strlen( $settingsSiteName ) == 0 )
-        {
-            $errors[] = new RawText( "Site name must be set." );
-        }
+            if ( strlen( $settingsSiteName ) == 0 )
+            {
+                $errors[] = new RawText( "Site name must be set." );
+            }
 
-        if ( strlen( $settingsStoryHome ) == 0 )
-        {
-            $errors[] = new RawText( "Story home must be set." );
-        }
+            if ( strlen( $settingsStoryHome ) == 0 )
+            {
+                $errors[] = new RawText( "Story home must be set." );
+            }
 
-        if ( strlen( $settingsSiteHome ) == 0 )
-        {
-            $errors[] = new RawText( "Site home must be set." );
-        }
+            if ( strlen( $settingsSiteHome ) == 0 )
+            {
+                $errors[] = new RawText( "Site home must be set." );
+            }
 
-        if ( strlen( $settingsReadEpisodeUrl ) == 0 )
-        {
-            $errors[] = new RawText( "Read episode URL must be set." );
-        }
+            if ( strlen( $settingsReadEpisodeUrl ) == 0 )
+            {
+                $errors[] = new RawText( "Read episode URL must be set." );
+            }
 
-        if ( strlen( $settingsAdminEmail ) == 0 )
-        {
-            $errors[] = new RawText( "Admin email must be set." );
-        }
+            if ( strlen( $settingsAdminEmail ) == 0 )
+            {
+                $errors[] = new RawText( "Admin email must be set." );
+            }
 
-        if ( strlen( $settingsMaxLinks ) == 0 )
-        {
-            $errors[] = new RawText( "Max links must be set." );
-        }
-        else if ( !ctype_digit( $settingsMaxLinks ))
-        {
-            $errors[] = new RawText( "Max links must be a positive integer." );
-        }
-        else if (( (int) $settingsMaxLinks ) <= 0 )
-        {
-            $errors[] = new RawText( "Max links must be greater than zero." );
+            if ( strlen( $settingsMaxLinks ) == 0 )
+            {
+                $errors[] = new RawText( "Max links must be set." );
+            }
+            else if ( !ctype_digit( $settingsMaxLinks ))
+            {
+                $errors[] = new RawText( "Max links must be a positive integer." );
+            }
+            else if (( (int) $settingsMaxLinks ) <= 0 )
+            {
+                $errors[] = new RawText( "Max links must be greater than zero." );
+            }
         }
 
         if ( strlen( $settingsMaxEditDays ) == 0 )
@@ -123,6 +127,7 @@ class StorySettingsPage extends InstallPage
         return null;
     }
 
+    private $task;
     private $settingsStoryNameField;
     private $settingsSiteNameField;
     private $settingsStoryHomeField;
@@ -167,6 +172,7 @@ class StorySettingsPage extends InstallPage
 
     protected function preRender()
     {
+        $this->task             = Util::getStringParamDefault( $_POST, "task",                   "" );
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
         $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
         $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
@@ -225,13 +231,17 @@ class StorySettingsPage extends InstallPage
 
 <?php
 
-        $this->settingsStoryNameField->render();
-        $this->settingsSiteNameField->render();
-        $this->settingsStoryHomeField->render();
-        $this->settingsSiteHomeField->render();
-        $this->settingsReadEpisodeUrlField->render();
-        $this->settingsAdminEmailField->render();
-        $this->settingsMaxLinksField->render();
+        if ( $this->task === "install" )
+        {
+            $this->settingsStoryNameField->render();
+            $this->settingsSiteNameField->render();
+            $this->settingsStoryHomeField->render();
+            $this->settingsSiteHomeField->render();
+            $this->settingsReadEpisodeUrlField->render();
+            $this->settingsAdminEmailField->render();
+            $this->settingsMaxLinksField->render();
+        }
+
         $this->settingsMaxEditDaysField->render();
 
 ?>
