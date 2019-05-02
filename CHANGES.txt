@@ -1,6 +1,17 @@
-===== Changes between V 2.2.0 and V 3.0.0 =====
+===== Changes between V 2.2.1 and V 3.0.0 =====
 
 - Nothing yet.
+
+
+
+
+===== Changes between V 2.2.0 and V 2.2.1 =====
+
+- Replace calls to mysql library with calls to mysqli library.
+
+- Specify the latin1 character set for all database tables.
+
+- Fix error message typo: "longer then" to "longer than".
 
 
 
