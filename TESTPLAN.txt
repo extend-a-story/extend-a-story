@@ -237,7 +237,8 @@
 - clear.php:
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Access the page when the database is inaccessible.
-     [FAIL] - You see an error message regarding a wrong key rather than an inaccessible database.
+      - [FAIL] : Displays error message saying that the episode is not locked, rather than an error
+        about an inaccessible database.
    - Try to clear the lock on an episode when episode creation is disabled.
    - Try to clear the lock on an episode that is not locked.
    - Try to clear the lock on an episode that is locked by someone else.
@@ -262,13 +263,39 @@
       - Creating an episode.
       - Extending an episode.
    - Specify a scheme that does not exist.
-   - Create an episode that is already created or locked.
-   - Edit an episode that is already being edited and one that you cannot edit.
-   - When creating an episode that is not locked, preview and save the episode.
-   - When editing an episode that is not locked, preview and save the episode.
-   - When creating an episode that is locked by someone else, preview and save the episode.
-   - When editing an episode that is locked by someone else, preview and save the episode.
-   - Extend, preview, and save an episode with a parent that is not extendable.
+      - [FAIL] : This case is not handled gracefully.
+   - Creating episodes:
+      - For an episode that is not locked:
+         - Verify that you can start creating the episode.
+         - Verify that you cannot preview creating the episode.
+         - Verify that you cannot finish creating the episode.
+      - For an episode that is locked by someone else:
+         - Verify that you cannot start creating the episode.
+         - Verify that you cannot preview creating the episode.
+         - Verify that you cannot finish creating the episode.
+      - For an episode that is already created:
+         - Verify that you cannot start creating the episode.
+         - Verify that you cannot preview creating the episode.
+         - Verify that you cannot finish creating the episode.
+      - For an episode that is not extendable:
+         - Verify that you cannot start extending the episode.
+         - Verify that you cannot preview extending the episode.
+         - Verify that you cannot finish extending the episode.
+   - Editing episodes:
+      - For an episode that is not locked:
+         - Verify that you can start editing the episode.
+         - Verify that you cannot preview editing the episode.
+         - Verify that you cannot finish editing the episode.
+      - For an episode that is locked by someone else:
+         - Verify that you cannot start editing the episode.
+         - Verify that you cannot preview editing the episode.
+         - Verify that you cannot finish editing the episode.
+      - For an episode that you cannot edit:
+         - Verify that you cannot start editing the episode.
+         - Verify that you cannot preview editing the episode.
+            - [FAIL] : This is not prohibited.
+         - Verify that you cannot finish editing the episode.
+            - [FAIL] : This is not prohibited.
    - When creating, extending, or editing an episode:
       - Error cases:
          - For the title:
@@ -296,6 +323,7 @@
          - Back link to an episode that is not linkable.
          - Enter no options.
          - Specify two or more back links to the same episode.
+         - When extending, verify that you can back link to the episode you are extending.
       - Success cases:
          - Specify at least one back link.
          - Set the episode to be extendable and not.
@@ -305,7 +333,7 @@
       - Verify that the episode is saved correctly.
    - When creating or extending an episode:
       - Verify that the link from the parent episode to the new episode shows that the new episode
-         has been created.
+        has been created.
       - Verify that an extension notification is sent to the administrator.
       - Verify that an extension notification is sent to author of the parent episode.
    - When creating an episode:
@@ -329,8 +357,8 @@
    - Verify that the "episode" parameter defaults to 1 when it is not set.
    - Set the "command" parameter to an invalid value.
    - Access the page when the database is inaccessible.
-     [FAIL] - You see an error message regarding insufficient privileges rather than an inaccessible
-              database.
+     - [FAIL] : You see an error message regarding insufficient privileges rather than an
+       inaccessible database.
    - Access the page when episode creation is disabled.
    - Access the page when you are not logged in.
    - Access the page with insufficient privileges to use the advanced editing features.
@@ -511,8 +539,8 @@
 - view-edit.php
    - Verify that the "episodeEditLogID" parameter defaults to 1 when it is not set.
    - Access the page when the database is inaccessible.
-     [FAIL] - You see an error message regarding insufficient privileges rather than an inaccessible
-              database.
+     - [FAIL] : You see an error message regarding insufficient privileges rather than an
+       inaccessible database.
    - View an edit that does not exist.
    - View an edit for an episode when you don't have permission to edit the episode.
    - View edits with various schemes and verify that the schemes are displayed correctly.
