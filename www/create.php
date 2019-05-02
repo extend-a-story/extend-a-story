@@ -799,7 +799,7 @@ for ( $i = 0; $i < $linkCount; $i++ )
     if ( strlen( $$var1 ) > 255 )
     {
         $warning .= "The description for option " . ( $i + 1 ) .
-                    " cannot be longer then 255 characters.<BR>";
+                    " cannot be longer than 255 characters.<BR>";
     }
 
     if ( Util::maximumWordLength( $$var1 ) > 30 )

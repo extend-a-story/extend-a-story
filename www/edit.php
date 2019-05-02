@@ -326,7 +326,7 @@ if ( $command == "AddLinkSave" )
 
     if ( strlen( $linkDescription ) > 255 )
     {
-        $message .= "The link description cannot be longer then 255 characters.<BR>";
+        $message .= "The link description cannot be longer than 255 characters.<BR>";
     }
 
     if ( Util::maximumWordLength( $linkDescription ) > 30 )
