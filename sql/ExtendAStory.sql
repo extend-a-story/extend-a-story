@@ -37,7 +37,7 @@ CREATE TABLE ExtendAStoryVariable
     VariableName  VARCHAR( 255 )  NOT NULL  PRIMARY KEY,
     IntValue      INT UNSIGNED    NULL,
     StringValue   VARCHAR( 255 )  NULL
-);
+) DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE Session
@@ -46,7 +46,7 @@ CREATE TABLE Session
     UserID      INT UNSIGNED  NOT NULL,
     SessionKey  INT UNSIGNED  NOT NULL,
     AccessDate  DATETIME      NOT NULL
-);
+) DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE User
@@ -56,7 +56,7 @@ CREATE TABLE User
     LoginName        VARCHAR( 255 )    NOT NULL,
     Password         VARCHAR( 255 )    NOT NULL,
     UserName         VARCHAR( 255 )    NOT NULL
-);
+) DEFAULT CHARSET=latin1;
 
 
 # Description of PermissionLevel values:
@@ -87,7 +87,7 @@ CREATE TABLE Episode
     LockDate           VARCHAR( 255 )    NOT NULL,
     LockKey            INT     UNSIGNED  NOT NULL,
     CreationTimestamp  DATETIME          NULL
-);
+) DEFAULT CHARSET=latin1;
 
 
 # Description of Status values:
@@ -107,7 +107,7 @@ CREATE TABLE Link
     Description     VARCHAR( 255 )  NOT NULL,
     INDEX( SourceEpisodeID ),
     INDEX( TargetEpisodeID )
-);
+) DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE EpisodeEditLog
@@ -127,7 +127,7 @@ CREATE TABLE EpisodeEditLog
     EditDate          VARCHAR( 255 )  NOT NULL,
     EditLogEntry      VARCHAR( 255 )  NOT NULL,
     INDEX( EpisodeID )
-);
+) DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE LinkEditLog
@@ -138,7 +138,7 @@ CREATE TABLE LinkEditLog
     IsBackLink        CHAR   ( 1   )  NOT NULL,
     Description       VARCHAR( 255 )  NOT NULL,
     INDEX( EpisodeEditLogID )
-);
+) DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE Scheme
@@ -154,7 +154,7 @@ CREATE TABLE Scheme
     UncreatedLink   VARCHAR( 255 )  NOT NULL,
     CreatedLink     VARCHAR( 255 )  NOT NULL,
     BackLinkedLink  VARCHAR( 255 )  NOT NULL
-);
+) DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE Image
@@ -162,7 +162,7 @@ CREATE TABLE Image
     ImageID    INT UNSIGNED    NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
     ImageName  VARCHAR( 255 )  NOT NULL,
     ImageURL   VARCHAR( 255 )  NOT NULL
-);
+) DEFAULT CHARSET=latin1;
 
 
 INSERT INTO ExtendAStoryVariable VALUES ( "CountDate",      NULL, date_format( now(), '%c/%e/%Y %l:%i:%s %p' ));
