@@ -85,25 +85,25 @@ if ( empty( $error ))
 {
     if ( $method == "title" )
     {
-        $whereClause = "Title LIKE '%" . mysql_escape_string( $text ) . "%' " .
+        $whereClause = "Title LIKE '%" . mysqli_real_escape_string( $mysqli, $text ) . "%' " .
                    "AND ( Status = 2 OR Status = 3 )";
     }
 
     if ( $method == "text" )
     {
-        $whereClause = "Text LIKE '%" . mysql_escape_string( $text ) . "%' " .
+        $whereClause = "Text LIKE '%" . mysqli_real_escape_string( $mysqli, $text ) . "%' " .
                    "AND ( Status = 2 OR Status = 3 )";
     }
 
     if ( $method == "author" )
     {
-        $whereClause = "AuthorName LIKE '%" . mysql_escape_string( $text ) . "%' " .
+        $whereClause = "AuthorName LIKE '%" . mysqli_real_escape_string( $mysqli, $text ) . "%' " .
                    "AND ( Status = 2 OR Status = 3 )";
     }
 
     if ( $method == "time" )
     {
-        $whereClause = "CreationDate LIKE '%" . mysql_escape_string( $text ) . "%' " .
+        $whereClause = "CreationDate LIKE '%" . mysqli_real_escape_string( $mysqli, $text ) . "%' " .
                    "AND ( Status = 2 OR Status = 3 )";
     }
 
@@ -123,12 +123,13 @@ if ( empty( $error ))
                    "AND ( Status = 2 OR Status = 3 )";
     }
 
-    $result = mysql_query( "SELECT EpisodeID, " .
-                                  "Title, " .
-                                  "AuthorName " .
-                             "FROM Episode " .
-                            "WHERE " . $whereClause . " " .
-                            "ORDER BY EpisodeID" );
+    $result = mysqli_query( $mysqli,
+                            "SELECT EpisodeID, " .
+                                   "Title, " .
+                                   "AuthorName " .
+                              "FROM Episode " .
+                             "WHERE " . $whereClause . " " .
+                             "ORDER BY EpisodeID" );
 
     if ( ! $result )
     {
@@ -161,9 +162,9 @@ if ( ! empty( $error ))
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < mysqli_num_rows( $result ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     $displayedTitle      = htmlentities( $row[ 1 ] );
     $displayedAuthorName = htmlentities( $row[ 2 ] );

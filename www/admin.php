@@ -93,11 +93,12 @@ if (( $command == "login" ) && ( empty( $error )))
     prepareParam( $loginName );
     prepareParam( $password  );
 
-    $result = mysql_query(
+    $result = mysqli_query(
+            $mysqli,
             "SELECT UserID " .
               "FROM User " .
-             "WHERE LoginName = '" . mysql_escape_string( $loginName ) . "' " .
-               "AND Password = PASSWORD( '" . mysql_escape_string( $password ) . "' )" );
+             "WHERE LoginName = '" . mysqli_real_escape_string( $mysqli, $loginName ) . "' " .
+               "AND Password = PASSWORD( '" . mysqli_real_escape_string( $mysqli, $password ) . "' )" );
 
     if ( ! $result )
     {
@@ -106,7 +107,7 @@ if (( $command == "login" ) && ( empty( $error )))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -117,9 +118,10 @@ if (( $command == "login" ) && ( empty( $error )))
             $message = "Successfully logged in.";
             $userID = $row[ 0 ];
 
-            $result = mysql_query( "UPDATE Session " .
-                                      "SET UserID = " . $userID . " " .
-                                    "WHERE SessionID = " . $sessionID );
+            $result = mysqli_query( $mysqli,
+                                    "UPDATE Session " .
+                                       "SET UserID = " . $userID . " " .
+                                     "WHERE SessionID = " . $sessionID );
 
             if ( ! $result )
             {
@@ -132,7 +134,7 @@ if (( $command == "login" ) && ( empty( $error )))
 
 if (( $command == "logout" ) && ( empty( $error )))
 {
-    $result = mysql_query( "UPDATE Session SET UserID = 0 WHERE SessionID = " . $sessionID );
+    $result = mysqli_query( $mysqli, "UPDATE Session SET UserID = 0 WHERE SessionID = " . $sessionID );
 
     if ( ! $result )
     {
@@ -217,10 +219,11 @@ if (( $userID == 0 ) && empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT PermissionLevel, " .
-                                  "UserName " .
-                             "FROM User " .
-                            "WHERE UserID = " . $userID );
+    $result = mysqli_query( $mysqli,
+                            "SELECT PermissionLevel, " .
+                                   "UserName " .
+                              "FROM User " .
+                             "WHERE UserID = " . $userID );
 
     if ( ! $result )
     {
@@ -229,7 +232,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -272,11 +275,12 @@ if (( $command == "changePasswordSave" ) && ( empty( $error )))
     prepareParam( $newPassword1 );
     prepareParam( $newPassword2 );
 
-    $result = mysql_query(
+    $result = mysqli_query(
+            $mysqli,
             "SELECT COUNT( * ) " .
               "FROM User " .
              "WHERE UserID = " . $userID . " " .
-               "AND Password = PASSWORD( '" . mysql_escape_string( $curPassword ) . "' )" );
+               "AND Password = PASSWORD( '" . mysqli_real_escape_string( $mysqli, $curPassword ) . "' )" );
 
     if ( ! $result )
     {
@@ -285,7 +289,7 @@ if (( $command == "changePasswordSave" ) && ( empty( $error )))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -310,10 +314,11 @@ if (( $command == "changePasswordSave" ) && ( empty( $error )))
                 }
                 else
                 {
-                    $result = mysql_query(
+                    $result = mysqli_query(
+                            $mysqli,
                             "UPDATE User " .
                                "SET Password = PASSWORD( '" .
-                                               mysql_escape_string( $newPassword1 ) . "' ) " .
+                                               mysqli_real_escape_string( $mysqli, $newPassword1 ) . "' ) " .
                              "WHERE UserID = " . $userID );
 
                     if ( ! $result )
@@ -514,10 +519,11 @@ if (( $command == "addUserSave" ) && ( empty( $error )))
 
     $count = -1;
 
-    $result = mysql_query(
+    $result = mysqli_query(
+            $mysqli,
             "SELECT COUNT( * ) " .
               "FROM User " .
-             "WHERE LoginName = '" . mysql_escape_string( $newLoginName ) . "'" );
+             "WHERE LoginName = '" . mysqli_real_escape_string( $mysqli, $newLoginName ) . "'" );
 
     if ( ! $result )
     {
@@ -526,7 +532,7 @@ if (( $command == "addUserSave" ) && ( empty( $error )))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -588,11 +594,12 @@ if (( $command == "editUser"     ) ||
     }
     else
     {
-        $result = mysql_query( "SELECT PermissionLevel, " .
-                                      "LoginName, " .
-                                      "UserName " .
-                                 "FROM User " .
-                                "WHERE UserID = " . $editedUserID );
+        $result = mysqli_query( $mysqli,
+                                "SELECT PermissionLevel, " .
+                                       "LoginName, " .
+                                       "UserName " .
+                                  "FROM User " .
+                                 "WHERE UserID = " . $editedUserID );
 
         if ( ! $result )
         {
@@ -601,7 +608,7 @@ if (( $command == "editUser"     ) ||
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -699,10 +706,11 @@ if (( $command == "editUserSave" ) && ( empty( $error )))
     {
         $count = -1;
 
-        $result = mysql_query(
+        $result = mysqli_query(
+                $mysqli,
                 "SELECT COUNT( * ) " .
                   "FROM User " .
-                 "WHERE LoginName = '" . mysql_escape_string( $newLoginName ) . "'" );
+                 "WHERE LoginName = '" . mysqli_real_escape_string( $mysqli, $newLoginName ) . "'" );
 
         if ( ! $result )
         {
@@ -711,7 +719,7 @@ if (( $command == "editUserSave" ) && ( empty( $error )))
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -736,22 +744,22 @@ if (( $command == "editUserSave" ) && ( empty( $error )))
         {
             $sql = "UPDATE User " .
                       "SET PermissionLevel = "  . $newPermissionLevel                  .  ", " .
-                          "LoginName       = '" . mysql_escape_string( $newLoginName ) . "', " .
+                          "LoginName       = '" . mysqli_real_escape_string( $mysqli, $newLoginName ) . "', " .
                           "Password        = PASSWORD( '" .
-                                             mysql_escape_string( $newPassword1 ) . "' ), "    .
-                          "UserName        = '" . mysql_escape_string( $newUserName  ) . "' "  .
+                                             mysqli_real_escape_string( $mysqli, $newPassword1 ) . "' ), "    .
+                          "UserName        = '" . mysqli_real_escape_string( $mysqli, $newUserName  ) . "' "  .
                     "WHERE UserID = " . $editedUserID;
         }
         else
         {
             $sql = "UPDATE User " .
                       "SET PermissionLevel = "  . $newPermissionLevel                  .  ", " .
-                          "LoginName       = '" . mysql_escape_string( $newLoginName ) . "', " .
-                          "UserName        = '" . mysql_escape_string( $newUserName  ) . "' "  .
+                          "LoginName       = '" . mysqli_real_escape_string( $mysqli, $newLoginName ) . "', " .
+                          "UserName        = '" . mysqli_real_escape_string( $mysqli, $newUserName  ) . "' "  .
                     "WHERE UserID = " . $editedUserID;
         }
 
-        $result = mysql_query( $sql );
+        $result = mysqli_query( $mysqli, $sql );
 
         if ( ! $result )
         {
@@ -793,14 +801,14 @@ if (( $command == "deleteUserSave" ) && ( empty( $error )))
     }
     else
     {
-        $result = mysql_query( "DELETE FROM User WHERE UserID = " . $deletedUserID );
+        $result = mysqli_query( $mysqli, "DELETE FROM User WHERE UserID = " . $deletedUserID );
 
         if ( ! $result )
         {
             $error .= "Problem deleting user from the database.<BR>";
             $fatal = true;
         }
-        else if ( mysql_affected_rows() == 0 )
+        else if ( mysqli_affected_rows( $mysqli ) == 0 )
         {
             $message = "The specified user does not exist.";
         }
@@ -813,20 +821,21 @@ if (( $command == "deleteUserSave" ) && ( empty( $error )))
 
 if (( $command == "listOrphans" ) && ( empty( $error )))
 {
-    $orphans = mysql_query( "SELECT Episode.EpisodeID, " .
-                                   "Episode.Parent, " .
-                                   "Episode.Status, " .
-                                   "COUNT( * )" .
-                              "FROM Link " .
-                  "RIGHT OUTER JOIN Episode " .
-                                "ON Link.IsBackLink = 'N' " .
-                               "AND Link.TargetEpisodeID = Episode.EpisodeID " .
-                   "LEFT OUTER JOIN EpisodeEditLog " .
-                                "ON Episode.EpisodeID = EpisodeEditLog.EpisodeID " .
-                             "WHERE Link.LinkID IS NULL " .
-                               "AND Episode.EpisodeID != 1 " .
-                             "GROUP BY Episode.EpisodeID " .
-                             "ORDER BY Episode.EpisodeID" );
+    $orphans = mysqli_query( $mysqli,
+                             "SELECT Episode.EpisodeID, " .
+                                    "Episode.Parent, " .
+                                    "Episode.Status, " .
+                                    "COUNT( * )" .
+                               "FROM Link " .
+                   "RIGHT OUTER JOIN Episode " .
+                                 "ON Link.IsBackLink = 'N' " .
+                                "AND Link.TargetEpisodeID = Episode.EpisodeID " .
+                    "LEFT OUTER JOIN EpisodeEditLog " .
+                                 "ON Episode.EpisodeID = EpisodeEditLog.EpisodeID " .
+                              "WHERE Link.LinkID IS NULL " .
+                                "AND Episode.EpisodeID != 1 " .
+                              "GROUP BY Episode.EpisodeID " .
+                              "ORDER BY Episode.EpisodeID" );
 
     if ( ! $orphans )
     {
@@ -837,13 +846,14 @@ if (( $command == "listOrphans" ) && ( empty( $error )))
 
 if (( $command == "listDeadEnds" ) && ( empty( $error )))
 {
-    $deadEnds = mysql_query( "SELECT Episode.EpisodeID " .
-                             "FROM Link " .
-                 "RIGHT OUTER JOIN Episode " .
-                               "ON Link.SourceEpisodeID = Episode.EpisodeID " .
-                            "WHERE Link.LinkID IS NULL " .
-                              "AND ( Episode.Status = 2 OR Episode.Status = 3 ) " .
-                            "ORDER BY Episode.EpisodeID" );
+    $deadEnds = mysqli_query( $mysqli,
+                              "SELECT Episode.EpisodeID " .
+                                "FROM Link " .
+                    "RIGHT OUTER JOIN Episode " .
+                                  "ON Link.SourceEpisodeID = Episode.EpisodeID " .
+                               "WHERE Link.LinkID IS NULL " .
+                                 "AND ( Episode.Status = 2 OR Episode.Status = 3 ) " .
+                               "ORDER BY Episode.EpisodeID" );
 
     if ( ! $deadEnds )
     {
@@ -856,7 +866,7 @@ if ( $command == "listRecentEdits" )
 {
     if ( empty( $error ))
     {
-        $result = mysql_query( "SELECT MAX( EpisodeEditLogID ) FROM EpisodeEditLog" );
+        $result = mysqli_query( $mysqli, "SELECT MAX( EpisodeEditLogID ) FROM EpisodeEditLog" );
 
         if ( ! $result )
         {
@@ -865,7 +875,7 @@ if ( $command == "listRecentEdits" )
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -892,14 +902,15 @@ if ( $command == "listRecentEdits" )
         $start = $maxEpisodeEditLogID;
     }
 
-    $edits = mysql_query( "SELECT EpisodeEditLogID, " .
-                                 "EpisodeID, " .
-                                 "EditDate, " .
-                                 "EditLogEntry " .
-                            "FROM EpisodeEditLog " .
-                           "WHERE EpisodeEditLogID <= " . $start . " " .
-                           "ORDER BY EpisodeEditLogID DESC " .
-                           "LIMIT 20" );
+    $edits = mysqli_query( $mysqli,
+                           "SELECT EpisodeEditLogID, " .
+                                  "EpisodeID, " .
+                                  "EditDate, " .
+                                  "EditLogEntry " .
+                             "FROM EpisodeEditLog " .
+                            "WHERE EpisodeEditLogID <= " . $start . " " .
+                            "ORDER BY EpisodeEditLogID DESC " .
+                            "LIMIT 20" );
 
     if ( ! $edits )
     {
@@ -910,7 +921,7 @@ if ( $command == "listRecentEdits" )
 
 if ( empty( $error ))
 {
-    $users = mysql_query( "SELECT UserID, LoginName FROM User ORDER BY UserID" );
+    $users = mysqli_query( $mysqli, "SELECT UserID, LoginName FROM User ORDER BY UserID" );
 
     if ( ! $users )
     {
@@ -949,9 +960,9 @@ if ( $command == "listOrphans" )
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $orphans ); $i++ )
+    for ( $i = 0; $i < mysqli_num_rows( $orphans ); $i++ )
     {
-        $row = mysql_fetch_row( $orphans );
+        $row = mysqli_fetch_row( $orphans );
 
         $edits = (( $row[ 3 ] > 1 ) ?
                  "<A HREF=\"list-edits.php?episode=" .
@@ -1028,9 +1039,9 @@ if ( $command == "listDeadEnds" )
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $deadEnds ); $i++ )
+    for ( $i = 0; $i < mysqli_num_rows( $deadEnds ); $i++ )
     {
-        $row = mysql_fetch_row( $deadEnds );
+        $row = mysqli_fetch_row( $deadEnds );
 
 ?>
 
@@ -1088,9 +1099,9 @@ if ( $command == "listRecentEdits" )
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $edits ); $i++ )
+    for ( $i = 0; $i < mysqli_num_rows( $edits ); $i++ )
     {
-        $row = mysql_fetch_row( $edits );
+        $row = mysqli_fetch_row( $edits );
 
 ?>
 
@@ -1591,9 +1602,9 @@ Edit User -
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $users ); $i++ )
+    for ( $i = 0; $i < mysqli_num_rows( $users ); $i++ )
     {
-        $row = mysql_fetch_row( $users );
+        $row = mysqli_fetch_row( $users );
 
 ?>
 
@@ -1603,7 +1614,7 @@ Edit User -
 
     }
 
-    mysql_data_seek( $users, 0 );
+    mysqli_data_seek( $users, 0 );
 
 ?>
 
@@ -1619,9 +1630,9 @@ Delete User -
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $users ); $i++ )
+    for ( $i = 0; $i < mysqli_num_rows( $users ); $i++ )
     {
-        $row = mysql_fetch_row( $users );
+        $row = mysqli_fetch_row( $users );
 
 ?>
 

@@ -114,7 +114,7 @@ while ( count( $curEpisodes ) > 0 )
     {
         $episode = $curEpisodes[ $i ];
 
-        $result = mysql_query( "SELECT Title FROM Episode WHERE EpisodeID = " . $episode );
+        $result = mysqli_query( $mysqli, "SELECT Title FROM Episode WHERE EpisodeID = " . $episode );
 
         if ( ! $result )
         {
@@ -122,7 +122,7 @@ while ( count( $curEpisodes ) > 0 )
             exit;
         }
 
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -132,11 +132,12 @@ while ( count( $curEpisodes ) > 0 )
 
         $title  = $row[ 0 ];
 
-        $result = mysql_query( "SELECT SourceEpisodeID, " .
-                                      "IsBackLink " .
-                                 "FROM Link " .
-                                "WHERE TargetEpisodeID = " . $episode . " " .
-                                "ORDER BY SourceEpisodeID" );
+        $result = mysqli_query( $mysqli,
+                                "SELECT SourceEpisodeID, " .
+                                       "IsBackLink " .
+                                  "FROM Link " .
+                                 "WHERE TargetEpisodeID = " . $episode . " " .
+                                 "ORDER BY SourceEpisodeID" );
 
         if ( ! $result )
         {
@@ -146,9 +147,9 @@ while ( count( $curEpisodes ) > 0 )
 
         $children = "";
 
-        for ( $j = 0; $j < mysql_num_rows( $result ); $j++ )
+        for ( $j = 0; $j < mysqli_num_rows( $result ); $j++ )
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
             $target = $row[ 0 ];
             $visited = in_array( $target, $visitedEpisodes );
             $isBackLink = $row[ 1 ];

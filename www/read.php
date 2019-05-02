@@ -62,7 +62,7 @@ $permissionLevel = 0;
 
 if (( $userID != 0 ) && ( empty( $error )))
 {
-    $result = mysql_query( "SELECT PermissionLevel FROM User WHERE UserID = " . $userID );
+    $result = mysqli_query( $mysqli, "SELECT PermissionLevel FROM User WHERE UserID = " . $userID );
 
     if ( ! $result )
     {
@@ -71,7 +71,7 @@ if (( $userID != 0 ) && ( empty( $error )))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -87,7 +87,7 @@ if (( $userID != 0 ) && ( empty( $error )))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT COUNT( * ) FROM Link where TargetEpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli, "SELECT COUNT( * ) FROM Link where TargetEpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -95,7 +95,7 @@ if ( empty( $error ))
         $fatal = true;
     }
 
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     if ( ! $row )
     {
@@ -105,24 +105,25 @@ if ( empty( $error ))
 
     $linkCount = (int) $row[ 0 ];
 
-    $result = mysql_query( "SELECT Parent, " .
-                                  "AuthorSessionID, " .
-                                  "EditorSessionID, " .
-                                  "SchemeID, " .
-                                  "ImageID, " .
-                                  "Status, " .
-                                  "IsLinkable, " .
-                                  "IsExtendable, " .
-                                  "AuthorMailto, " .
-                                  "Title, " .
-                                  "Text, " .
-                                  "AuthorName, " .
-                                  "AuthorEmail, " .
-                                  "CreationDate, " .
-                                  "LockDate, " .
-                                  "LockKey " .
-                             "FROM Episode " .
-                            "WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "SELECT Parent, " .
+                                   "AuthorSessionID, " .
+                                   "EditorSessionID, " .
+                                   "SchemeID, " .
+                                   "ImageID, " .
+                                   "Status, " .
+                                   "IsLinkable, " .
+                                   "IsExtendable, " .
+                                   "AuthorMailto, " .
+                                   "Title, " .
+                                   "Text, " .
+                                   "AuthorName, " .
+                                   "AuthorEmail, " .
+                                   "CreationDate, " .
+                                   "LockDate, " .
+                                   "LockKey " .
+                              "FROM Episode " .
+                             "WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -131,7 +132,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -195,12 +196,13 @@ if ( empty( $error ))
             $authorSessionID = 0;
             $status = 0;
 
-            $result = mysql_query( "UPDATE Episode " .
-                                      "SET AuthorSessionID = 0, " .
-                                          "Status = 0, " .
-                                          "LockDate = '-', " .
-                                          "LockKey = 0 " .
-                                    "WHERE EpisodeID = " . $episode );
+            $result = mysqli_query( $mysqli,
+                                    "UPDATE Episode " .
+                                       "SET AuthorSessionID = 0, " .
+                                           "Status = 0, " .
+                                           "LockDate = '-', " .
+                                           "LockKey = 0 " .
+                                     "WHERE EpisodeID = " . $episode );
 
             if ( ! $result )
             {
@@ -213,17 +215,18 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT bgcolor, " .
-                                  "text, " .
-                                  "link, " .
-                                  "vlink, " .
-                                  "alink, " .
-                                  "background, " .
-                                  "UncreatedLink, " .
-                                  "CreatedLink, " .
-                                  "BackLinkedLink " .
-                             "FROM Scheme " .
-                            "WHERE SchemeID = " . $scheme );
+    $result = mysqli_query( $mysqli,
+                            "SELECT bgcolor, " .
+                                   "text, " .
+                                   "link, " .
+                                   "vlink, " .
+                                   "alink, " .
+                                   "background, " .
+                                   "UncreatedLink, " .
+                                   "CreatedLink, " .
+                                   "BackLinkedLink " .
+                              "FROM Scheme " .
+                             "WHERE SchemeID = " . $scheme );
 
     if ( ! $result )
     {
@@ -232,7 +235,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -264,7 +267,7 @@ if ( empty( $error ))
 
 if (( empty( $error )) && ( $image != 0 ))
 {
-    $result = mysql_query( "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
+    $result = mysqli_query( $mysqli, "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
 
     if ( ! $result )
     {
@@ -273,7 +276,7 @@ if (( empty( $error )) && ( $image != 0 ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -291,9 +294,10 @@ $canEdit = canEditEpisode( $sessionID, $userID, $episode );
 
 if (( $canEdit ) && ( empty( $error )))
 {
-    $result = mysql_query( "SELECT COUNT( * ) " .
-                             "FROM EpisodeEditLog " .
-                            "WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "SELECT COUNT( * ) " .
+                              "FROM EpisodeEditLog " .
+                             "WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -302,7 +306,7 @@ if (( $canEdit ) && ( empty( $error )))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -318,13 +322,14 @@ if (( $canEdit ) && ( empty( $error )))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT TargetEpisodeID, " .
-                                  "IsCreated, " .
-                                  "IsBackLink, " .
-                                  "Description " .
-                             "FROM Link " .
-                            "WHERE SourceEpisodeID = " . $episode . " " .
-                            "ORDER BY LinkID" );
+    $result = mysqli_query( $mysqli,
+                            "SELECT TargetEpisodeID, " .
+                                   "IsCreated, " .
+                                   "IsBackLink, " .
+                                   "Description " .
+                              "FROM Link " .
+                             "WHERE SourceEpisodeID = " . $episode . " " .
+                             "ORDER BY LinkID" );
 
     if ( ! $result )
     {
@@ -544,9 +549,9 @@ else
 
 <?php
 
-    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+    for ( $i = 0; $i < mysqli_num_rows( $result ); $i++ )
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         $description = $row[ 3 ];
         $description = htmlentities( $description );

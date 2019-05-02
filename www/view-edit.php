@@ -59,20 +59,21 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT EpisodeID, " .
-                                  "SchemeID, " .
-                                  "ImageID, " .
-                                  "IsLinkable, " .
-                                  "IsExtendable, " .
-                                  "AuthorMailto, " .
-                                  "AuthorNotify, " .
-                                  "Title, " .
-                                  "Text, " .
-                                  "AuthorName, " .
-                                  "AuthorEmail, " .
-                                  "EditDate " .
-                             "FROM EpisodeEditLog " .
-                            "WHERE EpisodeEditLogID = " . $episodeEditLogID );
+    $result = mysqli_query( $mysqli,
+                            "SELECT EpisodeID, " .
+                                   "SchemeID, " .
+                                   "ImageID, " .
+                                   "IsLinkable, " .
+                                   "IsExtendable, " .
+                                   "AuthorMailto, " .
+                                   "AuthorNotify, " .
+                                   "Title, " .
+                                   "Text, " .
+                                   "AuthorName, " .
+                                   "AuthorEmail, " .
+                                   "EditDate " .
+                              "FROM EpisodeEditLog " .
+                             "WHERE EpisodeEditLogID = " . $episodeEditLogID );
 
     if ( ! $result )
     {
@@ -81,7 +82,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -161,7 +162,7 @@ You do not have permission to view this edit log.
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT Parent FROM Episode WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli, "SELECT Parent FROM Episode WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -170,7 +171,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -186,7 +187,7 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT COUNT( * ) FROM Link WHERE TargetEpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli, "SELECT COUNT( * ) FROM Link WHERE TargetEpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -195,7 +196,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -218,17 +219,18 @@ $authorEmail = strtr( $authorEmail, getEmailAddressTranslationTable() );
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT bgcolor, " .
-                                  "text, " .
-                                  "link, " .
-                                  "vlink, " .
-                                  "alink, " .
-                                  "background, " .
-                                  "UncreatedLink, " .
-                                  "CreatedLink, " .
-                                  "BackLinkedLink " .
-                             "FROM Scheme " .
-                            "WHERE SchemeID = " . $scheme );
+    $result = mysqli_query( $mysqli,
+                            "SELECT bgcolor, " .
+                                   "text, " .
+                                   "link, " .
+                                   "vlink, " .
+                                   "alink, " .
+                                   "background, " .
+                                   "UncreatedLink, " .
+                                   "CreatedLink, " .
+                                   "BackLinkedLink " .
+                              "FROM Scheme " .
+                             "WHERE SchemeID = " . $scheme );
 
     if ( ! $result )
     {
@@ -237,7 +239,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -269,7 +271,7 @@ if ( empty( $error ))
 
 if (( empty( $error )) && ( $image != 0 ))
 {
-    $result = mysql_query( "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
+    $result = mysqli_query( $mysqli, "SELECT ImageURL FROM Image WHERE ImageID = " . $image );
 
     if ( ! $result )
     {
@@ -278,7 +280,7 @@ if (( empty( $error )) && ( $image != 0 ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -294,12 +296,13 @@ if (( empty( $error )) && ( $image != 0 ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT TargetEpisodeID, " .
-                                  "IsBackLink, " .
-                                  "Description " .
-                             "FROM LinkEditLog " .
-                            "WHERE EpisodeEditLogID = " . $episodeEditLogID . " " .
-                            "ORDER BY LinkEditLogID" );
+    $result = mysqli_query( $mysqli,
+                            "SELECT TargetEpisodeID, " .
+                                   "IsBackLink, " .
+                                   "Description " .
+                              "FROM LinkEditLog " .
+                             "WHERE EpisodeEditLogID = " . $episodeEditLogID . " " .
+                             "ORDER BY LinkEditLogID" );
 
     if ( ! $result )
     {
@@ -354,9 +357,9 @@ if ( ! empty( $image ))
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < mysqli_num_rows( $result ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     $description = $row[ 2 ];
     $description = htmlentities( $description );

@@ -110,10 +110,11 @@ while ( count( $curEpisodes ) > 0 )
     {
         $episode = $curEpisodes[ $i ];
 
-        $result = mysql_query( "SELECT Parent, " .
-                                      "Title " .
-                                 "FROM Episode " .
-                                "WHERE EpisodeID = " . $episode );
+        $result = mysqli_query( $mysqli,
+                                "SELECT Parent, " .
+                                       "Title " .
+                                  "FROM Episode " .
+                                 "WHERE EpisodeID = " . $episode );
 
         if ( ! $result )
         {
@@ -121,7 +122,7 @@ while ( count( $curEpisodes ) > 0 )
             exit;
         }
 
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -132,12 +133,13 @@ while ( count( $curEpisodes ) > 0 )
         $parent = $row[ 0 ];
         $title  = $row[ 1 ];
 
-        $result = mysql_query( "SELECT TargetEpisodeID, " .
-                                      "IsCreated, " .
-                                      "IsBackLink " .
-                                 "FROM Link " .
-                                "WHERE SourceEpisodeID = " . $episode . " " .
-                                "ORDER BY LinkID" );
+        $result = mysqli_query( $mysqli,
+                                "SELECT TargetEpisodeID, " .
+                                       "IsCreated, " .
+                                       "IsBackLink " .
+                                  "FROM Link " .
+                                 "WHERE SourceEpisodeID = " . $episode . " " .
+                                 "ORDER BY LinkID" );
 
         if ( ! $result )
         {
@@ -147,9 +149,9 @@ while ( count( $curEpisodes ) > 0 )
 
         $children = "";
 
-        for ( $j = 0; $j < mysql_num_rows( $result ); $j++ )
+        for ( $j = 0; $j < mysqli_num_rows( $result ); $j++ )
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             $target     = $row[ 0 ];
             $isCreated  = $row[ 1 ];

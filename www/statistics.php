@@ -52,7 +52,7 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT COUNT( * ) FROM Episode WHERE Status = 2 OR Status = 3" );
+    $result = mysqli_query( $mysqli, "SELECT COUNT( * ) FROM Episode WHERE Status = 2 OR Status = 3" );
 
     if ( ! $result )
     {
@@ -61,7 +61,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -77,7 +77,7 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT COUNT( * ) FROM Episode WHERE Status = 0 OR Status = 1" );
+    $result = mysqli_query( $mysqli, "SELECT COUNT( * ) FROM Episode WHERE Status = 0 OR Status = 1" );
 
     if ( ! $result )
     {
@@ -86,7 +86,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -102,7 +102,7 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT COUNT( * ) FROM Episode" );
+    $result = mysqli_query( $mysqli, "SELECT COUNT( * ) FROM Episode" );
 
     if ( ! $result )
     {
@@ -111,7 +111,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {

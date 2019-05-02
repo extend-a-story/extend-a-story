@@ -59,18 +59,19 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT SchemeName, " .
-                                  "bgcolor, " .
-                                  "text, " .
-                                  "link, " .
-                                  "vlink, " .
-                                  "alink, " .
-                                  "background, " .
-                                  "UncreatedLink, " .
-                                  "CreatedLink, " .
-                                  "BackLinkedLink " .
-                             "FROM Scheme " .
-                            "WHERE SchemeID = " . $scheme );
+    $result = mysqli_query( $mysqli,
+                            "SELECT SchemeName, " .
+                                   "bgcolor, " .
+                                   "text, " .
+                                   "link, " .
+                                   "vlink, " .
+                                   "alink, " .
+                                   "background, " .
+                                   "UncreatedLink, " .
+                                   "CreatedLink, " .
+                                   "BackLinkedLink " .
+                              "FROM Scheme " .
+                             "WHERE SchemeID = " . $scheme );
 
     if ( ! $result )
     {
@@ -79,7 +80,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -112,7 +113,7 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "select SchemeID, SchemeName from Scheme" );
+    $result = mysqli_query( $mysqli, "select SchemeID, SchemeName from Scheme" );
 
     if ( ! $result )
     {
@@ -164,9 +165,9 @@ Select another scheme to preview:<BR>
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < mysqli_num_rows( $result ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
     $selected = ( $scheme == $row[ 0 ] ) ? " SELECTED" : "";
 
 ?>

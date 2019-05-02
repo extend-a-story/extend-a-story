@@ -92,11 +92,12 @@ You are unable to clear locks while episode creation is disabled.
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT Parent, " .
-                                  "Status, " .
-                                  "LockKey " .
-                             "FROM Episode " .
-                            "WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "SELECT Parent, " .
+                                   "Status, " .
+                                   "LockKey " .
+                              "FROM Episode " .
+                             "WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -105,7 +106,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -196,12 +197,13 @@ if ( empty( $error ))
     $sessionColumn = ( $status == 1 ) ? "AuthorSessionID" : "EditorSessionID";
     $statusValue = ( $status == 1 ) ? 0 : 2;
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET " . $sessionColumn . " = 0, " .
-                                  "Status = " . $statusValue . ", " .
-                                  "LockDate = '-', " .
-                                  "LockKey = 0 " .
-                            "WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "UPDATE Episode " .
+                               "SET " . $sessionColumn . " = 0, " .
+                                   "Status = " . $statusValue . ", " .
+                                   "LockDate = '-', " .
+                                   "LockKey = 0 " .
+                             "WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {

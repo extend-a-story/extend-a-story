@@ -87,27 +87,26 @@ function connectToDatabase( &$error, &$fatal )
     global $user;
     global $password;
     global $database;
+    global $mysqli;
 
-    if ( ! mysql_connect( $host, $user, $password ))
+    $mysqli = mysqli_connect( $host, $user, $password, $database );
+    if ( !$mysqli )
     {
         $error .= "Unable to connect to database.<BR>";
         $fatal = true;
         return;
     }
-
-    if ( ! mysql_select_db( $database ))
-    {
-        $error .= "Unable to select ExtendAStory database.<BR>";
-        $fatal = true;
-    }
 }
 
 function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
 {
+    global $mysqli;
+
     // log out all users after one hour of inactivity
-    $result = mysql_query( "UPDATE Session " .
-                              "SET UserID = 0 " .
-                            "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 1 HOUR )" );
+    $result = mysqli_query( $mysqli,
+                            "UPDATE Session " .
+                               "SET UserID = 0 " .
+                             "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 1 HOUR )" );
 
     if ( ! $result )
     {
@@ -133,9 +132,10 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
     $actualUserID     = 0;
     $actualSessionKey = 0;
 
-    $result = mysql_query( "SELECT UserID, SessionKey " .
-                             "FROM Session " .
-                            "WHERE SessionID = " . $originalSessionID );
+    $result = mysqli_query( $mysqli,
+                            "SELECT UserID, SessionKey " .
+                              "FROM Session " .
+                             "WHERE SessionID = " . $originalSessionID );
 
     if ( ! $result )
     {
@@ -145,7 +145,7 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( $row )
         {
@@ -155,9 +155,10 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
                 $actualUserID     = $row[ 0 ];
                 $actualSessionKey = $originalSessionKey;
 
-                $result = mysql_query( "UPDATE Session " .
-                                          "SET AccessDate = NOW() " .
-                                        "WHERE SessionID = " . $originalSessionID );
+                $result = mysqli_query( $mysqli,
+                                        "UPDATE Session " .
+                                           "SET AccessDate = NOW() " .
+                                         "WHERE SessionID = " . $originalSessionID );
 
                 if ( ! $result )
                 {
@@ -174,19 +175,20 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
         $newSessionKey = mt_rand();
 
         // insert the session into the database
-        $result = mysql_query( "INSERT " .
-                                 "INTO Session " .
-                                      "( " .
-                                          "UserID, " .
-                                          "SessionKey, " .
-                                          "AccessDate " .
-                                      ") " .
-                               "VALUES ".
-                                      "( " .
-                                          "0, " .
-                                          $newSessionKey . ", " .
-                                          "NOW() " .
-                                      ")" );
+        $result = mysqli_query( $mysqli,
+                                "INSERT " .
+                                  "INTO Session " .
+                                       "( " .
+                                           "UserID, " .
+                                           "SessionKey, " .
+                                           "AccessDate " .
+                                       ") " .
+                                "VALUES ".
+                                       "( " .
+                                           "0, " .
+                                           $newSessionKey . ", " .
+                                           "NOW() " .
+                                       ")" );
 
         if ( ! $result )
         {
@@ -196,7 +198,7 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
         }
 
         // get the new SessionID from the database
-        $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+        $result = mysqli_query( $mysqli, "SELECT LAST_INSERT_ID()" );
 
         if ( ! $result )
         {
@@ -205,7 +207,7 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
             return;
         }
 
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -222,9 +224,10 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
     setcookie( "sessionKey", $actualSessionKey, time() + ( 60 * 60 * 24 * 370 ));
 
     // delete all sessions over 370 days old
-    $result = mysql_query( "DELETE " .
-                             "FROM Session " .
-                            "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 370 DAY )" );
+    $result = mysqli_query( $mysqli,
+                            "DELETE " .
+                              "FROM Session " .
+                             "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 370 DAY )" );
 
     if ( ! $result )
     {
@@ -239,10 +242,13 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
 
 function setStringValue( &$error, &$fatal, $variableName, $variableValue )
 {
-    $result = mysql_query(
+    global $mysqli;
+
+    $result = mysqli_query(
+            $mysqli,
             "UPDATE ExtendAStoryVariable " .
-               "SET StringValue = '" . mysql_escape_string( $variableValue ) . "' " .
-             "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+               "SET StringValue = '" . mysqli_real_escape_string( $mysqli, $variableValue ) . "' " .
+             "WHERE VariableName = '" . mysqli_real_escape_string( $mysqli, $variableName ) . "'" );
 
     if ( ! $result )
     {
@@ -253,10 +259,13 @@ function setStringValue( &$error, &$fatal, $variableName, $variableValue )
 
 function setIntValue( &$error, &$fatal, $variableName, $variableValue )
 {
-    $result = mysql_query(
+    global $mysqli;
+
+    $result = mysqli_query(
+            $mysqli,
             "UPDATE ExtendAStoryVariable " .
                "SET IntValue = " . $variableValue . " " .
-             "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+             "WHERE VariableName = '" . mysqli_real_escape_string( $mysqli, $variableName ) . "'" );
 
     if ( ! $result )
     {
@@ -267,12 +276,15 @@ function setIntValue( &$error, &$fatal, $variableName, $variableValue )
 
 function getStringValue( &$error, &$fatal, $variableName )
 {
+    global $mysqli;
+
     $returnValue = "";
 
-    $result = mysql_query(
+    $result = mysqli_query(
+            $mysqli,
             "SELECT StringValue " .
               "FROM ExtendAStoryVariable " .
-             "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+             "WHERE VariableName = '" . mysqli_real_escape_string( $mysqli, $variableName ) . "'" );
 
     if ( ! $result )
     {
@@ -281,7 +293,7 @@ function getStringValue( &$error, &$fatal, $variableName )
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -309,13 +321,16 @@ function getAndIncrementIntValue( &$error, &$fatal, $variableName )
 
 function getIntValueInternal( &$error, &$fatal, $variableName, $increment )
 {
+    global $mysqli;
+
     if ( $increment )
     {
         // increment the value
-        $result = mysql_query(
+        $result = mysqli_query(
+                $mysqli,
                 "UPDATE ExtendAStoryVariable " .
                    "SET IntValue = IntValue + 1 " .
-                 "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+                 "WHERE VariableName = '" . mysqli_real_escape_string( $mysqli, $variableName ) . "'" );
 
         if ( ! $result )
         {
@@ -328,10 +343,11 @@ function getIntValueInternal( &$error, &$fatal, $variableName, $increment )
 
     $returnValue = 0;
 
-    $result = mysql_query(
+    $result = mysqli_query(
+            $mysqli,
             "SELECT IntValue " .
               "FROM ExtendAStoryVariable " .
-             "WHERE VariableName = '" . mysql_escape_string( $variableName ) . "'" );
+             "WHERE VariableName = '" . mysqli_real_escape_string( $mysqli, $variableName ) . "'" );
 
     if ( ! $result )
     {
@@ -340,7 +356,7 @@ function getIntValueInternal( &$error, &$fatal, $variableName, $increment )
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -358,50 +374,53 @@ function getIntValueInternal( &$error, &$fatal, $variableName, $increment )
 
 function createEpisode( &$error, &$fatal, $parent, $scheme )
 {
+    global $mysqli;
+
     // insert the episode into the database
-    $result = mysql_query( "INSERT " .
-                             "INTO Episode " .
-                                  "( " .
-                                      "Parent, " .
-                                      "AuthorSessionID, " .
-                                      "EditorSessionID, " .
-                                      "SchemeID, " .
-                                      "ImageID, " .
-                                      "Status, " .
-                                      "IsLinkable, " .
-                                      "IsExtendable, " .
-                                      "AuthorMailto, " .
-                                      "AuthorNotify, " .
-                                      "Title, " .
-                                      "Text, " .
-                                      "AuthorName, " .
-                                      "AuthorEmail, " .
-                                      "CreationDate, " .
-                                      "LockDate, " .
-                                      "LockKey, " .
-                                      "CreationTimestamp " .
-                                  ") " .
-                           "VALUES " .
-                                  "( " .
-                                      $parent        . ", " .
-                                      "0"            . ", " .
-                                      "0"            . ", " .
-                                      $scheme        . ", " .
-                                      "0"            . ", " .
-                                      "0"            . ", " .
-                                      "'N'"          . ", " .
-                                      "'N'"          . ", " .
-                                      "'N'"          . ", " .
-                                      "'N'"          . ", " .
-                                      "'-'"          . ", " .
-                                      "'-'"          . ", " .
-                                      "'-'"          . ", " .
-                                      "'-'"          . ", " .
-                                      "'-'"          . ", " .
-                                      "'-'"          . ", " .
-                                      "0"            . ", " .
-                                      "null"         .  " " .
-                                  ")" );
+    $result = mysqli_query( $mysqli,
+                            "INSERT " .
+                              "INTO Episode " .
+                                   "( " .
+                                       "Parent, " .
+                                       "AuthorSessionID, " .
+                                       "EditorSessionID, " .
+                                       "SchemeID, " .
+                                       "ImageID, " .
+                                       "Status, " .
+                                       "IsLinkable, " .
+                                       "IsExtendable, " .
+                                       "AuthorMailto, " .
+                                       "AuthorNotify, " .
+                                       "Title, " .
+                                       "Text, " .
+                                       "AuthorName, " .
+                                       "AuthorEmail, " .
+                                       "CreationDate, " .
+                                       "LockDate, " .
+                                       "LockKey, " .
+                                       "CreationTimestamp " .
+                                   ") " .
+                            "VALUES " .
+                                   "( " .
+                                       $parent        . ", " .
+                                       "0"            . ", " .
+                                       "0"            . ", " .
+                                       $scheme        . ", " .
+                                       "0"            . ", " .
+                                       "0"            . ", " .
+                                       "'N'"          . ", " .
+                                       "'N'"          . ", " .
+                                       "'N'"          . ", " .
+                                       "'N'"          . ", " .
+                                       "'-'"          . ", " .
+                                       "'-'"          . ", " .
+                                       "'-'"          . ", " .
+                                       "'-'"          . ", " .
+                                       "'-'"          . ", " .
+                                       "'-'"          . ", " .
+                                       "0"            . ", " .
+                                       "null"         .  " " .
+                                   ")" );
 
     if ( ! $result )
     {
@@ -411,7 +430,7 @@ function createEpisode( &$error, &$fatal, $parent, $scheme )
     }
 
     // get the new EpisodeID from the database
-    $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+    $result = mysqli_query( $mysqli, "SELECT LAST_INSERT_ID()" );
 
     if ( ! $result )
     {
@@ -420,7 +439,7 @@ function createEpisode( &$error, &$fatal, $parent, $scheme )
         return;
     }
 
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     if ( ! $row )
     {
@@ -435,26 +454,29 @@ function createEpisode( &$error, &$fatal, $parent, $scheme )
 function createLink( &$error, &$fatal, $sourceEpisode, $targetEpisode, $description,
                      $isBackLink )
 {
-    $description = mysql_escape_string( $description );
+    global $mysqli;
+
+    $description = mysqli_real_escape_string( $mysqli, $description );
 
     // insert the link into the database
-    $result = mysql_query( "INSERT " .
-                             "INTO Link " .
-                                  "( " .
-                                      "SourceEpisodeID, " .
-                                      "TargetEpisodeID, " .
-                                      "IsCreated, " .
-                                      "IsBackLink, " .
-                                      "Description " .
-                                  ") " .
-                           "VALUES " .
-                                  "( " .
-                                              $sourceEpisode            .  ", " .
-                                              $targetEpisode            .  ", " .
-                                      "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
-                                      "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
-                                      "'" .   $description              . "' "  .
-                                  ")" );
+    $result = mysqli_query( $mysqli,
+                            "INSERT " .
+                              "INTO Link " .
+                                   "( " .
+                                       "SourceEpisodeID, " .
+                                       "TargetEpisodeID, " .
+                                       "IsCreated, " .
+                                       "IsBackLink, " .
+                                       "Description " .
+                                   ") " .
+                            "VALUES " .
+                                   "( " .
+                                               $sourceEpisode            .  ", " .
+                                               $targetEpisode            .  ", " .
+                                       "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
+                                       "'" . ( $isBackLink ? "Y" : "N" ) . "', " .
+                                       "'" .   $description              . "' "  .
+                                   ")" );
 
     if ( ! $result )
     {
@@ -466,11 +488,14 @@ function createLink( &$error, &$fatal, $sourceEpisode, $targetEpisode, $descript
 
 function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
 {
+    global $mysqli;
+
     // read the episode to log from the database
-    $result = mysql_query( "SELECT SchemeID, ImageID, IsLinkable, IsExtendable, " .
-                                  "AuthorMailto, AuthorNotify, Title, Text, AuthorName, " .
-                                  "AuthorEmail " .
-                             "FROM Episode WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "SELECT SchemeID, ImageID, IsLinkable, IsExtendable, " .
+                                   "AuthorMailto, AuthorNotify, Title, Text, AuthorName, " .
+                                   "AuthorEmail " .
+                              "FROM Episode WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -479,7 +504,7 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
         return;
     }
 
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     if ( ! $row )
     {
@@ -500,39 +525,40 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
     $authorEmail  = $row[ 9 ];
 
     // insert the episode edit log into the database
-    $result = mysql_query( "INSERT " .
-                             "INTO EpisodeEditLog " .
-                                  "( " .
-                                      "EpisodeID, " .
-                                      "SchemeID, " .
-                                      "ImageID, " .
-                                      "IsLinkable, " .
-                                      "IsExtendable, " .
-                                      "AuthorMailto, " .
-                                      "AuthorNotify, " .
-                                      "Title, " .
-                                      "Text, " .
-                                      "AuthorName, " .
-                                      "AuthorEmail, " .
-                                      "EditDate, " .
-                                      "EditLogEntry " .
-                                  ") " .
-                           "VALUES " .
-                                  "( " .
-                                            $episode                             .  ", " .
-                                            $schemeID                            .  ", " .
-                                            $imageID                             .  ", " .
-                                      "'" . $isLinkable                          . "', " .
-                                      "'" . $isExtendable                        . "', " .
-                                      "'" . $authorMailto                        . "', " .
-                                      "'" . $authorNotify                        . "', " .
-                                      "'" . mysql_escape_string( $title        ) . "', " .
-                                      "'" . mysql_escape_string( $text         ) . "', " .
-                                      "'" . mysql_escape_string( $authorName   ) . "', " .
-                                      "'" . mysql_escape_string( $authorEmail  ) . "', " .
-                                      "'" . date( "n/j/Y g:i:s A" )              . "', " .
-                                      "'" . mysql_escape_string( $editLogEntry ) . "' "  .
-                                  ")" );
+    $result = mysqli_query( $mysqli,
+                            "INSERT " .
+                              "INTO EpisodeEditLog " .
+                                   "( " .
+                                       "EpisodeID, " .
+                                       "SchemeID, " .
+                                       "ImageID, " .
+                                       "IsLinkable, " .
+                                       "IsExtendable, " .
+                                       "AuthorMailto, " .
+                                       "AuthorNotify, " .
+                                       "Title, " .
+                                       "Text, " .
+                                       "AuthorName, " .
+                                       "AuthorEmail, " .
+                                       "EditDate, " .
+                                       "EditLogEntry " .
+                                   ") " .
+                            "VALUES " .
+                                   "( " .
+                                             $episode                                            .  ", " .
+                                             $schemeID                                           .  ", " .
+                                             $imageID                                            .  ", " .
+                                       "'" . $isLinkable                                         . "', " .
+                                       "'" . $isExtendable                                       . "', " .
+                                       "'" . $authorMailto                                       . "', " .
+                                       "'" . $authorNotify                                       . "', " .
+                                       "'" . mysqli_real_escape_string( $mysqli, $title        ) . "', " .
+                                       "'" . mysqli_real_escape_string( $mysqli, $text         ) . "', " .
+                                       "'" . mysqli_real_escape_string( $mysqli, $authorName   ) . "', " .
+                                       "'" . mysqli_real_escape_string( $mysqli, $authorEmail  ) . "', " .
+                                       "'" . date( "n/j/Y g:i:s A" )                             . "', " .
+                                       "'" . mysqli_real_escape_string( $mysqli, $editLogEntry ) . "' "  .
+                                   ")" );
 
     if ( ! $result )
     {
@@ -542,7 +568,7 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
     }
 
     // get the new EpisodeEditLogID from the database
-    $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+    $result = mysqli_query( $mysqli, "SELECT LAST_INSERT_ID()" );
 
     if ( ! $result )
     {
@@ -551,7 +577,7 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
         return;
     }
 
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     if ( ! $row )
     {
@@ -563,12 +589,13 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
     $nextEpisodeEditLogID = $row[ 0 ];
 
     // read the options to log from the database
-    $result = mysql_query( "SELECT TargetEpisodeID, " .
-                                  "IsBackLink, " .
-                                  "Description " .
-                             "FROM Link " .
-                            "WHERE SourceEpisodeID = " . $episode . " " .
-                            "ORDER BY LinkID" );
+    $result = mysqli_query( $mysqli,
+                            "SELECT TargetEpisodeID, " .
+                                   "IsBackLink, " .
+                                   "Description " .
+                              "FROM Link " .
+                             "WHERE SourceEpisodeID = " . $episode . " " .
+                             "ORDER BY LinkID" );
 
     if ( ! $result )
     {
@@ -577,9 +604,9 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
         return;
     }
 
-    for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+    for ( $i = 0; $i < mysqli_num_rows( $result ); $i++ )
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
         createLinkEditLog( $error, $fatal, $nextEpisodeEditLogID,
                            $row[ 0 ], $row[ 1 ], $row[ 2 ] );
     }
@@ -590,22 +617,25 @@ function createEpisodeEditLog( &$error, &$fatal, $episode, $editLogEntry )
 function createLinkEditLog( &$error, &$fatal, $episodeEditLogID, $targetEpisodeID, $isBackLink,
                             $description )
 {
+    global $mysqli;
+
     // insert the link edit log into the database
-    $result = mysql_query( "INSERT " .
-                             "INTO LinkEditLog " .
-                                  "( " .
-                                      "EpisodeEditLogID, " .
-                                      "TargetEpisodeID, " .
-                                      "IsBackLink, " .
-                                      "Description " .
-                                  ") " .
-                           "VALUES " .
-                                  "( " .
-                                            $episodeEditLogID                   .  ", " .
-                                            $targetEpisodeID                    .  ", " .
-                                      "'" . $isBackLink                         . "', " .
-                                      "'" . mysql_escape_string( $description ) . "' " .
-                                  ")" );
+    $result = mysqli_query( $mysqli,
+                            "INSERT " .
+                              "INTO LinkEditLog " .
+                                   "( " .
+                                       "EpisodeEditLogID, " .
+                                       "TargetEpisodeID, " .
+                                       "IsBackLink, " .
+                                       "Description " .
+                                   ") " .
+                            "VALUES " .
+                                   "( " .
+                                             $episodeEditLogID                                  .  ", " .
+                                             $targetEpisodeID                                   .  ", " .
+                                       "'" . $isBackLink                                        . "', " .
+                                       "'" . mysqli_real_escape_string( $mysqli, $description ) . "' " .
+                                   ")" );
 
     if ( ! $result )
     {
@@ -615,7 +645,7 @@ function createLinkEditLog( &$error, &$fatal, $episodeEditLogID, $targetEpisodeI
     }
 
     // get the new LinkEditLogID from the database
-    $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+    $result = mysqli_query( $mysqli, "SELECT LAST_INSERT_ID()" );
 
     if ( ! $result )
     {
@@ -624,7 +654,7 @@ function createLinkEditLog( &$error, &$fatal, $episodeEditLogID, $targetEpisodeI
         return;
     }
 
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     if ( ! $row )
     {
@@ -638,22 +668,25 @@ function createLinkEditLog( &$error, &$fatal, $episodeEditLogID, $targetEpisodeI
 
 function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, $userName )
 {
+    global $mysqli;
+
     // insert the user into the database
-    $result = mysql_query( "INSERT " .
-                             "INTO User " .
-                                  "( " .
-                                      "PermissionLevel, " .
-                                      "LoginName, " .
-                                      "Password, " .
-                                      "UserName " .
-                                  ") " .
-                           "VALUES " .
-                                  "( " .
-                                                      $permissionLevel                  .    ", " .
-                                                "'" . mysql_escape_string( $loginName ) .   "', " .
-                                      "PASSWORD( '" . mysql_escape_string( $password  ) . "' ), " .
-                                                "'" . mysql_escape_string( $userName  ) .    "' " .
-                                  ")" );
+    $result = mysqli_query( $mysqli,
+                            "INSERT " .
+                              "INTO User " .
+                                   "( " .
+                                       "PermissionLevel, " .
+                                       "LoginName, " .
+                                       "Password, " .
+                                       "UserName " .
+                                   ") " .
+                            "VALUES " .
+                                   "( " .
+                                                       $permissionLevel                                 .    ", " .
+                                                 "'" . mysqli_real_escape_string( $mysqli, $loginName ) .   "', " .
+                                       "PASSWORD( '" . mysqli_real_escape_string( $mysqli, $password  ) . "' ), " .
+                                                 "'" . mysqli_real_escape_string( $mysqli, $userName  ) .    "' " .
+                                   ")" );
 
     if ( ! $result )
     {
@@ -663,7 +696,7 @@ function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, 
     }
 
     // get the new UserID from the database
-    $result = mysql_query( "SELECT LAST_INSERT_ID()" );
+    $result = mysqli_query( $mysqli, "SELECT LAST_INSERT_ID()" );
 
     if ( ! $result )
     {
@@ -672,7 +705,7 @@ function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, 
         return;
     }
 
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     if ( ! $row )
     {
@@ -754,21 +787,24 @@ function getEmailAddressTranslationTable()
 
 function canEditEpisode( $sessionID, $userID, $episodeID )
 {
+    global $mysqli;
+
     if ( $userID != 0 )
     {
         return true;
     }
 
-    $result = mysql_query( "SELECT AuthorSessionID, CreationDate " .
-                             "FROM Episode " .
-                            "WHERE EpisodeID = " . $episodeID );
+    $result = mysqli_query( $mysqli,
+                            "SELECT AuthorSessionID, CreationDate " .
+                              "FROM Episode " .
+                             "WHERE EpisodeID = " . $episodeID );
 
     if ( ! $result )
     {
         return false;
     }
 
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     if ( ! $row )
     {

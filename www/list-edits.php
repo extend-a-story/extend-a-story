@@ -59,12 +59,13 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT EpisodeEditLogID, " .
-                                  "EditDate, " .
-                                  "EditLogEntry " .
-                             "FROM EpisodeEditLog " .
-                            "WHERE EpisodeID = " . $episode . " " .
-                            "ORDER BY EpisodeEditLogID" );
+    $result = mysqli_query( $mysqli,
+                            "SELECT EpisodeEditLogID, " .
+                                   "EditDate, " .
+                                   "EditLogEntry " .
+                              "FROM EpisodeEditLog " .
+                             "WHERE EpisodeID = " . $episode . " " .
+                             "ORDER BY EpisodeEditLogID" );
 
     if ( ! $result )
     {
@@ -133,9 +134,9 @@ Clicking on a <I>View Edit</I> link views the episode as it was <B>before</B> th
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < mysqli_num_rows( $result ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
 ?>
 

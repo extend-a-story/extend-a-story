@@ -59,13 +59,14 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT Link.SourceEpisodeID, " .
-                                  "Episode.Title " .
-                             "FROM Link, " .
-                                  "Episode " .
-                            "WHERE Link.SourceEpisodeID = Episode.EpisodeID " .
-                              "AND Link.TargetEpisodeID = " . $episode . " " .
-                            "ORDER BY Episode.EpisodeID" );
+    $result = mysqli_query( $mysqli,
+                            "SELECT Link.SourceEpisodeID, " .
+                                   "Episode.Title " .
+                              "FROM Link, " .
+                                   "Episode " .
+                             "WHERE Link.SourceEpisodeID = Episode.EpisodeID " .
+                               "AND Link.TargetEpisodeID = " . $episode . " " .
+                             "ORDER BY Episode.EpisodeID" );
 
     if ( ! $result )
     {
@@ -95,9 +96,9 @@ if ( ! empty( $error ))
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < mysqli_num_rows( $result ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     $source = $row[ 0 ];
     $title  = $row[ 1 ];

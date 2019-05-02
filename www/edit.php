@@ -104,10 +104,11 @@ $permissionLevel = 0;
 
 if (( $userID != 0 ) && ( empty( $error )))
 {
-    $result = mysql_query( "SELECT PermissionLevel, " .
-                                  "UserName " .
-                             "FROM User " .
-                            "WHERE UserID = " . $userID );
+    $result = mysqli_query( $mysqli,
+                            "SELECT PermissionLevel, " .
+                                   "UserName " .
+                              "FROM User " .
+                             "WHERE UserID = " . $userID );
 
     if ( ! $result )
     {
@@ -116,7 +117,7 @@ if (( $userID != 0 ) && ( empty( $error )))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -167,11 +168,12 @@ You do not have permission to use the advanced editing features.
 
 $status = 0;
 
-$result = mysql_query( "SELECT SchemeID, " .
-                              "Status, " .
-                              "LockKey " .
-                         "FROM Episode " .
-                        "WHERE EpisodeID = " . $episode );
+$result = mysqli_query( $mysqli,
+                        "SELECT SchemeID, " .
+                               "Status, " .
+                               "LockKey " .
+                          "FROM Episode " .
+                         "WHERE EpisodeID = " . $episode );
 
 if ( ! $result )
 {
@@ -180,7 +182,7 @@ if ( ! $result )
 }
 else
 {
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
     if ( ! $row )
     {
@@ -238,12 +240,13 @@ You are trying to edit an episode that someone else is currently editing.
     {
         $lockKey = mt_rand();
 
-        $result = mysql_query( "UPDATE Episode " .
-                                  "SET EditorSessionID = "  . $sessionID              .  ", " .
-                                      "Status          = 3"                           .  ", " .
-                                      "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "', " .
-                                      "LockKey         = "  . $lockKey                .   " " .
-                                "WHERE EpisodeID = " . $episode );
+        $result = mysqli_query( $mysqli,
+                                "UPDATE Episode " .
+                                   "SET EditorSessionID = "  . $sessionID              .  ", " .
+                                       "Status          = 3"                           .  ", " .
+                                       "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "', " .
+                                       "LockKey         = "  . $lockKey                .   " " .
+                                 "WHERE EpisodeID = " . $episode );
 
         if ( ! $result )
         {
@@ -329,10 +332,11 @@ You are trying to edit an episode that has been locked, but not by you.
 
     if ( empty( $error ))
     {
-        $result = mysql_query( "UPDATE Episode " .
-                                  "SET EditorSessionID = "  . $sessionID              . ", " .
-                                      "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "' " .
-                                "WHERE EpisodeID = " . $episode );
+        $result = mysqli_query( $mysqli,
+                                "UPDATE Episode " .
+                                   "SET EditorSessionID = "  . $sessionID              . ", " .
+                                       "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "' " .
+                                 "WHERE EpisodeID = " . $episode );
 
         if ( ! $result )
         {
@@ -379,10 +383,11 @@ if ( $command == "AddLinkSave" )
             $message .= "The link cannot link back to the same episode you are editing.<BR>";
         }
 
-        $result = mysql_query( "SELECT COUNT( * ) " .
-                                 "FROM Link " .
-                                "WHERE SourceEpisodeID = " . $episode . " " .
-                                  "AND TargetEpisodeID = " . $linkEpisode );
+        $result = mysqli_query( $mysqli,
+                                "SELECT COUNT( * ) " .
+                                  "FROM Link " .
+                                 "WHERE SourceEpisodeID = " . $episode . " " .
+                                   "AND TargetEpisodeID = " . $linkEpisode );
 
         if ( ! $result )
         {
@@ -391,7 +396,7 @@ if ( $command == "AddLinkSave" )
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -408,9 +413,10 @@ if ( $command == "AddLinkSave" )
             }
         }
 
-        $result = mysql_query( "SELECT IsLinkable " .
-                                 "FROM Episode " .
-                                "WHERE EpisodeID = " . $linkEpisode );
+        $result = mysqli_query( $mysqli,
+                                "SELECT IsLinkable " .
+                                  "FROM Episode " .
+                                 "WHERE EpisodeID = " . $linkEpisode );
 
         if ( ! $result )
         {
@@ -420,7 +426,7 @@ if ( $command == "AddLinkSave" )
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -466,13 +472,14 @@ if ( $command == "AddLinkSave" )
 
         if ( empty( $error ))
         {
-            $result = mysql_query( "UPDATE Episode " .
-                                      "SET EditorSessionID   = "  . $sessionID .  ", " .
-                                          "Status            = 2, "  .
-                                          "LockDate          = '', " .
-                                          "LockKey           = 0, "  .
-                                          "CreationTimestamp = now() " .
-                                    "WHERE EpisodeID = " . $episode );
+            $result = mysqli_query( $mysqli,
+                                    "UPDATE Episode " .
+                                       "SET EditorSessionID   = " . $sessionID . ", " .
+                                           "Status            = 2, "  .
+                                           "LockDate          = '', " .
+                                           "LockKey           = 0, "  .
+                                           "CreationTimestamp = now() " .
+                                     "WHERE EpisodeID = " . $episode );
 
             if ( ! $result )
             {
@@ -496,12 +503,13 @@ if (( $command == "DeleteSelectedLink"     ) ||
 {
     $linkID = $_REQUEST[ "linkID" ];
 
-    $result = mysql_query( "SELECT SourceEpisodeID, " .
-                                  "IsCreated, " .
-                                  "IsBackLink, " .
-                                  "Description " .
-                             "FROM Link " .
-                            "WHERE LinkID = " . $linkID );
+    $result = mysqli_query( $mysqli,
+                            "SELECT SourceEpisodeID, " .
+                                   "IsCreated, " .
+                                   "IsBackLink, " .
+                                   "Description " .
+                              "FROM Link " .
+                             "WHERE LinkID = " . $linkID );
 
     if ( ! $result )
     {
@@ -510,7 +518,7 @@ if (( $command == "DeleteSelectedLink"     ) ||
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -553,7 +561,7 @@ if ( $command == "DeleteSelectedLinkSave" )
 
     if ( empty( $error ))
     {
-        $result = mysql_query( "DELETE FROM Link WHERE LinkID = " . $linkID );
+        $result = mysqli_query( $mysqli, "DELETE FROM Link WHERE LinkID = " . $linkID );
 
         if ( ! $result )
         {
@@ -564,13 +572,14 @@ if ( $command == "DeleteSelectedLinkSave" )
 
     if ( empty( $error ))
     {
-        $result = mysql_query( "UPDATE Episode " .
-                                  "SET EditorSessionID   = " . $sessionID . ", " .
-                                      "Status            = 2, "  .
-                                      "LockDate          = '', " .
-                                      "LockKey           = 0, "  .
-                                      "CreationTimestamp = now() " .
-                                "WHERE EpisodeID = " . $episode );
+        $result = mysqli_query( $mysqli,
+                                "UPDATE Episode " .
+                                   "SET EditorSessionID   = " . $sessionID . ", " .
+                                       "Status            = 2, "  .
+                                       "LockDate          = '', " .
+                                       "LockKey           = 0, "  .
+                                       "CreationTimestamp = now() " .
+                                 "WHERE EpisodeID = " . $episode );
 
         if ( ! $result )
         {
@@ -587,13 +596,14 @@ if ( $command == "DeleteLink" )
 {
     if ( empty( $error ))
     {
-        $links = mysql_query( "SELECT LinkID, " .
-                                     "IsBackLink, " .
-                                     "Description " .
-                                "FROM Link " .
-                               "WHERE SourceEpisodeID = " . $episode . " " .
-                                 "AND ( IsCreated = 'N' OR IsBackLink = 'Y' ) " .
-                               "ORDER BY LinkID" );
+        $links = mysqli_query( $mysqli,
+                               "SELECT LinkID, " .
+                                      "IsBackLink, " .
+                                      "Description " .
+                                 "FROM Link " .
+                                "WHERE SourceEpisodeID = " . $episode . " " .
+                                  "AND ( IsCreated = 'N' OR IsBackLink = 'Y' ) " .
+                                "ORDER BY LinkID" );
 
         if ( ! $links )
         {
@@ -610,9 +620,10 @@ if (( $command == "DeleteEpisode" ) || ( $command == "DeleteEpisodeSave" ))
 
     if ( empty( $error ))
     {
-        $result = mysql_query( "SELECT COUNT( * ) " .
-                                 "FROM Link " .
-                                "WHERE SourceEpisodeID = " . $episode );
+        $result = mysqli_query( $mysqli,
+                                "SELECT COUNT( * ) " .
+                                  "FROM Link " .
+                                 "WHERE SourceEpisodeID = " . $episode );
 
         if ( ! $result )
         {
@@ -621,7 +632,7 @@ if (( $command == "DeleteEpisode" ) || ( $command == "DeleteEpisodeSave" ))
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -637,11 +648,12 @@ if (( $command == "DeleteEpisode" ) || ( $command == "DeleteEpisodeSave" ))
 
     if ( empty( $error ))
     {
-        $backlinks = mysql_query( "SELECT SourceEpisodeID " .
-                                    "FROM Link " .
-                                   "WHERE TargetEpisodeID = " . $episode . " " .
-                                     "AND IsBackLink = 'Y' " .
-                                "ORDER BY SourceEpisodeID" );
+        $backlinks = mysqli_query( $mysqli,
+                                   "SELECT SourceEpisodeID " .
+                                     "FROM Link " .
+                                    "WHERE TargetEpisodeID = " . $episode . " " .
+                                      "AND IsBackLink = 'Y' " .
+                                 "ORDER BY SourceEpisodeID" );
 
         if ( ! $backlinks )
         {
@@ -650,7 +662,7 @@ if (( $command == "DeleteEpisode" ) || ( $command == "DeleteEpisodeSave" ))
         }
         else
         {
-            $backlinkCount = mysql_num_rows( $backlinks );
+            $backlinkCount = mysqli_num_rows( $backlinks );
         }
     }
 
@@ -669,24 +681,25 @@ if ( $command == "DeleteEpisodeSave" )
 
         if ( empty( $error ))
         {
-            $result = mysql_query( "UPDATE Episode " .
-                                      "SET AuthorSessionID   = 0, "   .
-                                          "EditorSessionID   = 0, "   .
-                                          "ImageID           = 0, "   .
-                                          "Status            = 0, "   .
-                                          "IsLinkable        = 'N', " .
-                                          "IsExtendable      = 'N', " .
-                                          "AuthorMailto      = 'N', " .
-                                          "AuthorNotify      = 'N', " .
-                                          "Title             = '-', " .
-                                          "Text              = '-', " .
-                                          "AuthorName        = '-', " .
-                                          "AuthorEmail       = '-', " .
-                                          "CreationDate      = '-', " .
-                                          "LockDate          = '-', " .
-                                          "LockKey           = 0, "   .
-                                          "CreationTimestamp = NULL " .
-                                    "WHERE EpisodeID = " . $episode );
+            $result = mysqli_query( $mysqli,
+                                    "UPDATE Episode " .
+                                       "SET AuthorSessionID   = 0, "   .
+                                           "EditorSessionID   = 0, "   .
+                                           "ImageID           = 0, "   .
+                                           "Status            = 0, "   .
+                                           "IsLinkable        = 'N', " .
+                                           "IsExtendable      = 'N', " .
+                                           "AuthorMailto      = 'N', " .
+                                           "AuthorNotify      = 'N', " .
+                                           "Title             = '-', " .
+                                           "Text              = '-', " .
+                                           "AuthorName        = '-', " .
+                                           "AuthorEmail       = '-', " .
+                                           "CreationDate      = '-', " .
+                                           "LockDate          = '-', " .
+                                           "LockKey           = 0, "   .
+                                           "CreationTimestamp = NULL " .
+                                     "WHERE EpisodeID = " . $episode );
 
             if ( ! $result )
             {
@@ -697,9 +710,10 @@ if ( $command == "DeleteEpisodeSave" )
 
         if ( ! $error )
         {
-            $result = mysql_query( "UPDATE Link " .
-                                      "SET IsCreated = 'N' " .
-                                    "WHERE TargetEpisodeID = " . $episode );
+            $result = mysqli_query( $mysqli,
+                                    "UPDATE Link " .
+                                       "SET IsCreated = 'N' " .
+                                     "WHERE TargetEpisodeID = " . $episode );
 
             if ( ! $result )
             {
@@ -727,14 +741,15 @@ if ( $command == "RevokeAuthorSave" )
 
     if ( empty( $error ))
     {
-        $result = mysql_query( "UPDATE Episode " .
-                                  "SET AuthorSessionID   = 0, " .
-                                      "EditorSessionID   = " . $sessionID . ", " .
-                                      "Status            = 2, " .
-                                      "LockDate          = '', " .
-                                      "LockKey           = 0, " .
-                                      "CreationTimestamp = now() " .
-                                "WHERE EpisodeID = " . $episode );
+        $result = mysqli_query( $mysqli,
+                                "UPDATE Episode " .
+                                   "SET AuthorSessionID   = 0, " .
+                                       "EditorSessionID   = " . $sessionID . ", " .
+                                       "Status            = 2, " .
+                                       "LockDate          = '', " .
+                                       "LockKey           = 0, " .
+                                       "CreationTimestamp = now() " .
+                                 "WHERE EpisodeID = " . $episode );
 
         if ( ! $result )
         {
@@ -939,7 +954,7 @@ yet.
 
 <?php
 
-    if ( mysql_num_rows( $links ) > 0 )
+    if ( mysqli_num_rows( $links ) > 0 )
     {
 
 ?>
@@ -950,9 +965,9 @@ Select a link to delete:
 
 <?php
 
-        for ( $i = 0; $i < mysql_num_rows( $links ); $i++ )
+        for ( $i = 0; $i < mysqli_num_rows( $links ); $i++ )
         {
-            $row = mysql_fetch_row( $links );
+            $row = mysqli_fetch_row( $links );
 
             $description = $row[ 2 ];
             $description = htmlentities( $description );
@@ -1069,7 +1084,7 @@ This episode has back links leading to it from the following episodes that must 
 
         for ( $i = 0; $i < $backlinkCount; $i++ )
         {
-            $row = mysql_fetch_row( $backlinks );
+            $row = mysqli_fetch_row( $backlinks );
 
 ?>
 

@@ -52,10 +52,11 @@ if ( empty( $error ))
 
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT EpisodeID " .
-                             "FROM Episode " .
-                            "WHERE Status = 1 " .
-                            "ORDER BY EpisodeID" );
+    $result = mysqli_query( $mysqli,
+                            "SELECT EpisodeID " .
+                              "FROM Episode " .
+                             "WHERE Status = 1 " .
+                             "ORDER BY EpisodeID" );
 
     if ( ! $result )
     {
@@ -83,9 +84,9 @@ if ( ! empty( $error ))
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $result ); $i++ )
+for ( $i = 0; $i < mysqli_num_rows( $result ); $i++ )
 {
-    $row = mysql_fetch_row( $result );
+    $row = mysqli_fetch_row( $result );
 
 ?>
 

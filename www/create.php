@@ -246,9 +246,10 @@ You are unable to create episodes while episode creation is disabled.
 
 if (( empty( $error )) && ( $command == "Lock" ) && ( $episode != 1 ))
 {
-    $result = mysql_query( "SELECT COUNT( * ) " .
-                             "FROM Link " .
-                            "WHERE TargetEpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "SELECT COUNT( * ) " .
+                              "FROM Link " .
+                             "WHERE TargetEpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -257,7 +258,7 @@ if (( empty( $error )) && ( $command == "Lock" ) && ( $episode != 1 ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -305,9 +306,10 @@ The episode you are trying to create is an orphan (has no links to it) and canno
 
 if ( empty( $error ))
 {
-    $schemeList = mysql_query( "SELECT SchemeID, " .
-                                      "SchemeName " .
-                                 "FROM Scheme" );
+    $schemeList = mysqli_query( $mysqli,
+                                "SELECT SchemeID, " .
+                                       "SchemeName " .
+                                  "FROM Scheme" );
 
     if ( ! $schemeList )
     {
@@ -317,21 +319,22 @@ if ( empty( $error ))
 
     if ( $command == "Edit" )
     {
-        $result = mysql_query( "SELECT Parent, "       .
-                                      "SchemeID, "     .
-                                      "Status, "       .
-                                      "IsLinkable, "   .
-                                      "IsExtendable, " .
-                                      "AuthorMailto, " .
-                                      "AuthorNotify, " .
-                                      "Title, "        .
-                                      "Text, "         .
-                                      "AuthorName, "   .
-                                      "AuthorEmail, "  .
-                                      "CreationDate, " .
-                                      "LockKey "       .
-                                 "FROM Episode "       .
-                                "WHERE EpisodeID = " . $episode );
+        $result = mysqli_query( $mysqli,
+                                "SELECT Parent, "       .
+                                       "SchemeID, "     .
+                                       "Status, "       .
+                                       "IsLinkable, "   .
+                                       "IsExtendable, " .
+                                       "AuthorMailto, " .
+                                       "AuthorNotify, " .
+                                       "Title, "        .
+                                       "Text, "         .
+                                       "AuthorName, "   .
+                                       "AuthorEmail, "  .
+                                       "CreationDate, " .
+                                       "LockKey "       .
+                                  "FROM Episode "       .
+                                 "WHERE EpisodeID = " . $episode );
 
         if ( ! $result )
         {
@@ -340,7 +343,7 @@ if ( empty( $error ))
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -372,14 +375,15 @@ if ( empty( $error ))
     }
     else
     {
-        $result = mysql_query( "SELECT Parent, "       .
-                                      "SchemeID, "     .
-                                      "Status, "       .
-                                      "IsExtendable, " .
-                                      "CreationDate, " .
-                                      "LockKey "       .
-                                 "FROM Episode "       .
-                                "WHERE EpisodeID = " . $episode );
+        $result = mysqli_query( $mysqli,
+                                "SELECT Parent, "       .
+                                       "SchemeID, "     .
+                                       "Status, "       .
+                                       "IsExtendable, " .
+                                       "CreationDate, " .
+                                       "LockKey "       .
+                                  "FROM Episode "       .
+                                 "WHERE EpisodeID = " . $episode );
 
         if ( ! $result )
         {
@@ -388,7 +392,7 @@ if ( empty( $error ))
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -418,9 +422,10 @@ $canEdit = canEditEpisode( $sessionID, $userID, $episode );
 // verify that the selected scheme is in the database
 if ( empty( $error ))
 {
-    $result = mysql_query( "SELECT SchemeName " .
-                             "FROM Scheme " .
-                            "WHERE SchemeID = " . $scheme );
+    $result = mysqli_query( $mysqli,
+                            "SELECT SchemeName " .
+                              "FROM Scheme " .
+                             "WHERE SchemeID = " . $scheme );
 
     if ( ! $result )
     {
@@ -429,7 +434,7 @@ if ( empty( $error ))
     }
     else
     {
-        $row = mysql_fetch_row( $result );
+        $row = mysqli_fetch_row( $result );
 
         if ( ! $row )
         {
@@ -841,13 +846,14 @@ if ( empty( $error ))
 {
     if ( $editing )
     {
-        $result = mysql_query( "SELECT LinkID, " .
-                                      "TargetEpisodeID, " .
-                                      "IsBacklink, " .
-                                      "Description " .
-                                 "FROM Link " .
-                                "WHERE SourceEpisodeID = " . $episode . " " .
-                                "ORDER BY LinkID" );
+        $result = mysqli_query( $mysqli,
+                                "SELECT LinkID, " .
+                                       "TargetEpisodeID, " .
+                                       "IsBacklink, " .
+                                       "Description " .
+                                  "FROM Link " .
+                                 "WHERE SourceEpisodeID = " . $episode . " " .
+                                 "ORDER BY LinkID" );
 
         if ( ! $result )
         {
@@ -856,11 +862,11 @@ if ( empty( $error ))
         }
         else
         {
-            $linkCount = mysql_num_rows( $result );
+            $linkCount = mysqli_num_rows( $result );
 
             for ( $i = 0; $i < $linkCount; $i++ )
             {
-                $row = mysql_fetch_row( $result );
+                $row = mysqli_fetch_row( $result );
 
                 $var1 = "linkID"          . $i;
                 $var2 = "targetEpisodeID" . $i;
@@ -964,9 +970,10 @@ for ( $i = 0; $i < $linkCount; $i++ )
 
         if ( empty( $error ))
         {
-            $result = mysql_query( "SELECT IsLinkable " .
-                                     "FROM Episode " .
-                                    "WHERE EpisodeID = " . $$var2 );
+            $result = mysqli_query( $mysqli,
+                                    "SELECT IsLinkable " .
+                                      "FROM Episode " .
+                                     "WHERE EpisodeID = " . $$var2 );
 
             if ( ! $result )
             {
@@ -976,7 +983,7 @@ for ( $i = 0; $i < $linkCount; $i++ )
             }
             else
             {
-                $row = mysql_fetch_row( $result );
+                $row = mysqli_fetch_row( $result );
 
                 if ( ! $row )
                 {
@@ -1079,12 +1086,13 @@ if (( $command == "Lock" ) && ( empty( $error )))
 {
     $lockKey = mt_rand();
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET AuthorSessionID = "  . $sessionID              .  ", " .
-                                  "Status          = 1, " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "', " .
-                                  "LockKey         = "  . $lockKey                .   " " .
-                            "WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "UPDATE Episode " .
+                               "SET AuthorSessionID = "  . $sessionID              .  ", " .
+                                   "Status          = 1, " .
+                                   "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "', " .
+                                   "LockKey         = "  . $lockKey                .   " " .
+                             "WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -1095,10 +1103,11 @@ if (( $command == "Lock" ) && ( empty( $error )))
 
 if (( $command == "Preview" ) && ( empty( $error )))
 {
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET AuthorSessionID = "  . $sessionID              . ", " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "' " .
-                            "WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "UPDATE Episode " .
+                               "SET AuthorSessionID = "  . $sessionID              . ", " .
+                                   "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "' " .
+                             "WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -1111,12 +1120,13 @@ if (( $command == "Edit" ) && ( empty( $error )))
 {
     $lockKey = mt_rand();
 
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET EditorSessionID = "  . $sessionID              .  ", " .
-                                  "Status          = 3, " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "', " .
-                                  "LockKey         = "  . $lockKey                .   " " .
-                            "WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "UPDATE Episode " .
+                               "SET EditorSessionID = "  . $sessionID              .  ", " .
+                                   "Status          = 3, " .
+                                   "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "', " .
+                                   "LockKey         = "  . $lockKey                .   " " .
+                             "WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -1127,10 +1137,11 @@ if (( $command == "Edit" ) && ( empty( $error )))
 
 if (( $command == "EditPreview" ) && ( empty( $error )))
 {
-    $result = mysql_query( "UPDATE Episode " .
-                              "SET EditorSessionID = "  . $sessionID              . ", " .
-                                  "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "' " .
-                            "WHERE EpisodeID = " . $episode );
+    $result = mysqli_query( $mysqli,
+                            "UPDATE Episode " .
+                               "SET EditorSessionID = "  . $sessionID              . ", " .
+                                   "LockDate        = '" . date( "n/j/Y g:i:s A" ) . "' " .
+                             "WHERE EpisodeID = " . $episode );
 
     if ( ! $result )
     {
@@ -1154,20 +1165,21 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
         $parentToUpdate = $parent;
     }
 
-    $result = mysql_query(
+    $result = mysqli_query(
+            $mysqli,
             "UPDATE Episode " .
-               "SET AuthorSessionID   = "  . $sessionID                          .  ", " .
-                   "SchemeID          = "  . $scheme                             .  ", " .
+               "SET AuthorSessionID   = "  . $sessionID                                         .  ", " .
+                   "SchemeID          = "  . $scheme                                            .  ", " .
                    "Status            = 2, " .
-                   "IsLinkable        = '" . ( $linkable   == 1 ? "Y" : "N" )    . "', " .
-                   "IsExtendable      = '" . ( $extendable == 1 ? "Y" : "N" )    . "', " .
-                   "AuthorMailto      = '" . ( $mailto     == 1 ? "Y" : "N" )    . "', " .
-                   "AuthorNotify      = '" . ( $notify     == 1 ? "Y" : "N" )    . "', " .
-                   "Title             = '" . mysql_escape_string( $title       ) . "', " .
-                   "Text              = '" . mysql_escape_string( $text        ) . "', " .
-                   "AuthorName        = '" . mysql_escape_string( $authorName  ) . "', " .
-                   "AuthorEmail       = '" . mysql_escape_string( $authorEmail ) . "', " .
-                   "CreationDate      = '" . date( "n/j/Y g:i:s A" )             . "', " .
+                   "IsLinkable        = '" . ( $linkable   == 1 ? "Y" : "N" )                   . "', " .
+                   "IsExtendable      = '" . ( $extendable == 1 ? "Y" : "N" )                   . "', " .
+                   "AuthorMailto      = '" . ( $mailto     == 1 ? "Y" : "N" )                   . "', " .
+                   "AuthorNotify      = '" . ( $notify     == 1 ? "Y" : "N" )                   . "', " .
+                   "Title             = '" . mysqli_real_escape_string( $mysqli, $title       ) . "', " .
+                   "Text              = '" . mysqli_real_escape_string( $mysqli, $text        ) . "', " .
+                   "AuthorName        = '" . mysqli_real_escape_string( $mysqli, $authorName  ) . "', " .
+                   "AuthorEmail       = '" . mysqli_real_escape_string( $mysqli, $authorEmail ) . "', " .
+                   "CreationDate      = '" . date( "n/j/Y g:i:s A" )                            . "', " .
                    "LockDate          = '', " .
                    "LockKey           = 0, " .
                    "CreationTimestamp = now() " .
@@ -1179,10 +1191,11 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
         $fatal = true;
     }
 
-    $result = mysql_query( "UPDATE Link " .
-                              "SET IsCreated = 'Y' " .
-                            "WHERE SourceEpisodeID = " . $parentToUpdate . " " .
-                              "AND TargetEpisodeID = " . $episodeToUpdate );
+    $result = mysqli_query( $mysqli,
+                            "UPDATE Link " .
+                               "SET IsCreated = 'Y' " .
+                             "WHERE SourceEpisodeID = " . $parentToUpdate . " " .
+                               "AND TargetEpisodeID = " . $episodeToUpdate );
 
     if ( ! $result )
     {
@@ -1216,10 +1229,11 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
                 $error, $fatal, $adminEmail, $parentToUpdate, $episodeToUpdate, $authorName );
 
         // send a notification email (if applicable) to the author of the parent episode
-        $result = mysql_query( "SELECT AuthorNotify, " .
-                                      "AuthorEmail " .
-                                 "FROM Episode " .
-                                "WHERE EpisodeID = " . $parentToUpdate );
+        $result = mysqli_query( $mysqli,
+                                "SELECT AuthorNotify, " .
+                                       "AuthorEmail " .
+                                  "FROM Episode " .
+                                 "WHERE EpisodeID = " . $parentToUpdate );
 
         if ( ! $result )
         {
@@ -1228,7 +1242,7 @@ if ((( $command == "Save" ) || ( $command == "ExtendSave" )) && ( empty( $error 
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -1255,7 +1269,7 @@ if (( $command == "EditSave" ) && ( empty( $error )))
     // if the editor is a user, look up their name for the edit log
     if ( $userID != 0 )
     {
-        $result = mysql_query( "SELECT UserName FROM User WHERE UserID = " . $userID );
+        $result = mysqli_query( $mysqli, "SELECT UserName FROM User WHERE UserID = " . $userID );
 
         if ( ! $result )
         {
@@ -1264,7 +1278,7 @@ if (( $command == "EditSave" ) && ( empty( $error )))
         }
         else
         {
-            $row = mysql_fetch_row( $result );
+            $row = mysqli_fetch_row( $result );
 
             if ( ! $row )
             {
@@ -1285,19 +1299,20 @@ if (( $command == "EditSave" ) && ( empty( $error )))
     // save the previous episode into the edit log
     createEpisodeEditLog( $error, $fatal, $episode, "Edited by " . $userName . "." );
 
-    $result = mysql_query(
+    $result = mysqli_query(
+            $mysqli,
             "UPDATE Episode " .
-               "SET EditorSessionID   = "  . $sessionID                          .  ", " .
-                   "SchemeID          = "  . $scheme                             .  ", " .
+               "SET EditorSessionID   = "  . $sessionID                                         .  ", " .
+                   "SchemeID          = "  . $scheme                                            .  ", " .
                    "Status            = 2, " .
-                   "IsLinkable        = '" . ( $linkable   == 1 ? "Y" : "N" )    . "', " .
-                   "IsExtendable      = '" . ( $extendable == 1 ? "Y" : "N" )    . "', " .
-                   "AuthorMailto      = '" . ( $mailto     == 1 ? "Y" : "N" )    . "', " .
-                   "AuthorNotify      = '" . ( $notify     == 1 ? "Y" : "N" )    . "', " .
-                   "Title             = '" . mysql_escape_string( $title       ) . "', " .
-                   "Text              = '" . mysql_escape_string( $text        ) . "', " .
-                   "AuthorName        = '" . mysql_escape_string( $authorName  ) . "', " .
-                   "AuthorEmail       = '" . mysql_escape_string( $authorEmail ) . "', " .
+                   "IsLinkable        = '" . ( $linkable   == 1 ? "Y" : "N" )                   . "', " .
+                   "IsExtendable      = '" . ( $extendable == 1 ? "Y" : "N" )                   . "', " .
+                   "AuthorMailto      = '" . ( $mailto     == 1 ? "Y" : "N" )                   . "', " .
+                   "AuthorNotify      = '" . ( $notify     == 1 ? "Y" : "N" )                   . "', " .
+                   "Title             = '" . mysqli_real_escape_string( $mysqli, $title       ) . "', " .
+                   "Text              = '" . mysqli_real_escape_string( $mysqli, $text        ) . "', " .
+                   "AuthorName        = '" . mysqli_real_escape_string( $mysqli, $authorName  ) . "', " .
+                   "AuthorEmail       = '" . mysqli_real_escape_string( $mysqli, $authorEmail ) . "', " .
                    "LockDate          = '', " .
                    "LockKey           = 0, " .
                    "CreationTimestamp = now() " .
@@ -1319,18 +1334,18 @@ if (( $command == "EditSave" ) && ( empty( $error )))
         if ( $$var2 == "Y" )
         {
             $queryString = "UPDATE Link " .
-                              "SET TargetEpisodeID = "  . $$var4                        . ", " .
-                                  "Description     = '" . mysql_escape_string( $$var3 ) . "' " .
+                              "SET TargetEpisodeID = "  . $$var4                                       . ", " .
+                                  "Description     = '" . mysqli_real_escape_string( $mysqli, $$var3 ) . "' " .
                             "WHERE LinkID = " . $$var1;
         }
         else
         {
             $queryString = "UPDATE Link " .
-                              "SET Description = '" . mysql_escape_string( $$var3 ) . "' " .
+                              "SET Description = '" . mysqli_real_escape_string( $mysqli, $$var3 ) . "' " .
                             "WHERE LinkID = " . $$var1;
         }
 
-        $result = mysql_query( $queryString );
+        $result = mysqli_query( $mysqli, $queryString );
 
         if ( ! $result )
         {
@@ -1846,9 +1861,9 @@ Select a scheme for this episode:<BR>
 
 <?php
 
-for ( $i = 0; $i < mysql_num_rows( $schemeList ); $i++ )
+for ( $i = 0; $i < mysqli_num_rows( $schemeList ); $i++ )
 {
-    $row = mysql_fetch_row( $schemeList );
+    $row = mysqli_fetch_row( $schemeList );
 
     $selected = ( $scheme == $row[ 0 ] ) ? " SELECTED" : "";
 
