@@ -28,7 +28,7 @@ CREATE TABLE User
     LoginName        VARCHAR( 255 )    NOT NULL,
     Password         CHAR   ( 16  )    NOT NULL,
     UserName         VARCHAR( 255 )    NOT NULL
-);
+) DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE EpisodeEditLog
@@ -48,7 +48,7 @@ CREATE TABLE EpisodeEditLog
     EditDate          VARCHAR( 255 )  NOT NULL,
     EditLogEntry      VARCHAR( 255 )  NOT NULL,
     INDEX( EpisodeID )
-);
+) DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE LinkEditLog
@@ -59,7 +59,7 @@ CREATE TABLE LinkEditLog
     IsBackLink        CHAR   ( 1   )  NOT NULL,
     Description       VARCHAR( 255 )  NOT NULL,
     INDEX( EpisodeEditLogID )
-);
+) DEFAULT CHARSET=latin1;
 
 
 ALTER TABLE Session ADD COLUMN UserID  INT UNSIGNED  NOT NULL  AFTER SessionID;

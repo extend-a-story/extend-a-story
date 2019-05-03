@@ -72,7 +72,7 @@ class Version1 extends Version
                 LoginName        VARCHAR( 255 )    NOT NULL,
                 Password         CHAR   ( 16  )    NOT NULL,
                 UserName         VARCHAR( 255 )    NOT NULL
-            )
+            ) DEFAULT CHARSET=latin1
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );
@@ -108,7 +108,7 @@ SQL;
                 EditDate          VARCHAR( 255 )  NOT NULL,
                 EditLogEntry      VARCHAR( 255 )  NOT NULL,
                 INDEX( EpisodeID )
-            )
+            ) DEFAULT CHARSET=latin1
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );
@@ -134,7 +134,7 @@ SQL;
                 IsBackLink        CHAR   ( 1   )  NOT NULL,
                 Description       VARCHAR( 255 )  NOT NULL,
                 INDEX( EpisodeEditLogID )
-            )
+            ) DEFAULT CHARSET=latin1
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );
