@@ -51,7 +51,7 @@ class Link
                 Description     VARCHAR( 255 )  NOT NULL,
                 INDEX( SourceEpisodeID ),
                 INDEX( TargetEpisodeID )
-            ) DEFAULT CHARSET=latin1;
+            ) DEFAULT CHARSET=latin1
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

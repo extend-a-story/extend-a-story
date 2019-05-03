@@ -48,7 +48,7 @@ class ExtendAStoryVariable
                 VariableName  VARCHAR( 255 )  NOT NULL  PRIMARY KEY,
                 IntValue      INT UNSIGNED    NULL,
                 StringValue   VARCHAR( 255 )  NULL
-            ) DEFAULT CHARSET=latin1;
+            ) DEFAULT CHARSET=latin1
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

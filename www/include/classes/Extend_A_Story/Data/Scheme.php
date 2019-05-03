@@ -54,7 +54,7 @@ class Scheme
                 UncreatedLink   VARCHAR( 255 )  NOT NULL,
                 CreatedLink     VARCHAR( 255 )  NOT NULL,
                 BackLinkedLink  VARCHAR( 255 )  NOT NULL
-            ) DEFAULT CHARSET=latin1;
+            ) DEFAULT CHARSET=latin1
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

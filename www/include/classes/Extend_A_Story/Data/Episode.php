@@ -62,7 +62,7 @@ class Episode
                 LockDate           VARCHAR( 255 )    NOT NULL,
                 LockKey            INT     UNSIGNED  NOT NULL,
                 CreationTimestamp  DATETIME          NULL
-            ) DEFAULT CHARSET=latin1;
+            ) DEFAULT CHARSET=latin1
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

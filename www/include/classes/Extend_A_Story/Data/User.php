@@ -51,7 +51,7 @@ class User
                 LoginName        VARCHAR( 255 )    NOT NULL,
                 Password         VARCHAR( 255 )    NOT NULL,
                 UserName         VARCHAR( 255 )    NOT NULL
-            ) DEFAULT CHARSET=latin1;
+            ) DEFAULT CHARSET=latin1
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

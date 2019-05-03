@@ -58,7 +58,7 @@ class EpisodeEditLog
                 EditDate          VARCHAR( 255 )  NOT NULL,
                 EditLogEntry      VARCHAR( 255 )  NOT NULL,
                 INDEX( EpisodeID )
-            ) DEFAULT CHARSET=latin1;
+            ) DEFAULT CHARSET=latin1
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );
