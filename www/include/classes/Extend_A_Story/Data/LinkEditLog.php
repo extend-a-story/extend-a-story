@@ -49,7 +49,7 @@ class LinkEditLog
                 IsBackLink        CHAR   ( 1   )  NOT NULL,
                 Description       VARCHAR( 255 )  NOT NULL,
                 INDEX( EpisodeEditLogID )
-            )
+            ) DEFAULT CHARSET=latin1;
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

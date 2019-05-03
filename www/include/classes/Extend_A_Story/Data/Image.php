@@ -46,7 +46,7 @@ class Image
                 ImageID    INT UNSIGNED    NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
                 ImageName  VARCHAR( 255 )  NOT NULL,
                 ImageURL   VARCHAR( 255 )  NOT NULL
-            )
+            ) DEFAULT CHARSET=latin1;
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

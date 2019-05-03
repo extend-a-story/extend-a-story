@@ -47,7 +47,7 @@ class Session
                 UserID      INT UNSIGNED  NOT NULL,
                 SessionKey  INT UNSIGNED  NOT NULL,
                 AccessDate  DATETIME      NOT NULL
-            )
+            ) DEFAULT CHARSET=latin1;
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );
