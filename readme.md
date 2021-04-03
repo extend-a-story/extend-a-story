@@ -8,7 +8,7 @@ It is written in PHP and uses a MySQL database.
 This is a development version of Extend-A-Story that may not be stable or function at all.
 Download a stable version of Extend-A-Story from our releases page:
 
-[Extend-A-Story Releases](extend-a-story/extend-a-story/releases)
+[Extend-A-Story Releases](https://github.com/extend-a-story/extend-a-story/releases)
 
 ## Installation
 
