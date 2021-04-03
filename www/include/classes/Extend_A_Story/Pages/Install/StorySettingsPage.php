@@ -3,7 +3,7 @@
 /*
 
 Extend-A-Story - Interactive, Extendable, Choose Your Own Adventure Story
-Copyright (C) 2002-2019 Jeffrey J. Weston <jjweston@gmail.com>
+Copyright (C) 2002-2021 Jeffrey J. Weston <jjweston@gmail.com>
 
 
 This program is free software; you can redistribute it and/or modify
