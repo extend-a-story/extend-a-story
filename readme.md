@@ -6,9 +6,9 @@ It is written in PHP and uses a MySQL database.
 ## Under Development
 
 This is a development version of Extend-A-Story that may not be stable or function at all.
-Download a stable version of Extend-A-Story from our releases page:
+Download a stable version of Extend-A-Story from our tags page:
 
-[Extend-A-Story Releases](https://github.com/extend-a-story/extend-a-story/releases)
+[Extend-A-Story Tags](https://github.com/extend-a-story/extend-a-story/tags)
 
 ## Installation
 
