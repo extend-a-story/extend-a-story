@@ -26,15 +26,44 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-function loadClass( $className )
+namespace Extend_A_Story;
+
+require(  __DIR__ . "/../../../www/include/ClassLoader.php" );
+
+use PHPUnit\Framework\TestCase;
+
+use \Extend_A_Story\StoryException;
+use \Extend_A_Story\Util;
+
+final class UtilTest extends TestCase
+
 {
-    // skip if class is not in our namespace
-    if ( strpos( $className, "Extend_A_Story\\" ) !== 0 ) return;
+    /**
+     * @test
+     */
+    public function getStringParam_parameterNotSet()
+    {
+        $this->expectException( StoryException::class );
+        $this->expectExceptionMessage( "Parameter \"missing\" is not set." );
+        Util::getStringParam( $this->getSampleParams(), "missing" );
+    }
 
-    $className = str_replace( "\\", "/", $className );
-    require( __DIR__ . "/classes/" . $className . ".php" );
+    /**
+     * @test
+     */
+    public function getStringParam_parameterSet()
+    {
+        $this->assertSame( "Bravo", Util::getStringParam( $this->getSampleParams(), "bar" ));
+    }
+
+    private function getSampleParams()
+    {
+        $params = array();
+        $params[ "foo" ] = "Alpha";
+        $params[ "bar" ] = "Bravo";
+        $params[ "baz" ] = "Charlie";
+        return $params;
+    }
 }
-
-spl_autoload_register( "loadClass" );
 
 ?>
