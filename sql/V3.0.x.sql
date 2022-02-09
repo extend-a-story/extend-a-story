@@ -21,6 +21,9 @@
 # http://www.sir-toby.com/extend-a-story/
 
 
+# This creates a database for version 3.0.x of Extend-A-Story.
+
+
 DROP TABLE IF EXISTS ExtendAStoryVariable;
 DROP TABLE IF EXISTS Session;
 DROP TABLE IF EXISTS User;
