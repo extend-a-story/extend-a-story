@@ -32,10 +32,12 @@ GRANT ALL ON StoryDatabase.* TO "StoryUser"@"localhost";
 Take the contents of the `www` directory and place them in a directory accessible to your web server.
 We will refer to this directory as `<story-root>`.
 
-Use your web browser to open `install.php` in the `<story-root>` directory.
+Use your web browser to open the install page, `install.php`, in the `<story-root>` directory.
 For example, if your website is `https://example.com/` and
 `<story-root>` is a directory called `story` in the root directory of your website,
-this is the URL you would use: `https://example.com/story/install.php`
+you would use this URL:
+
+`https://example.com/story/install.php`
 
 The install page will guide you through the install process.
 You will be asked to make changes to your Extend-A-Story configuration file.
