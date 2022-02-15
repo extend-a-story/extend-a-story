@@ -41,7 +41,10 @@ you would use this URL:
 
 The install page will guide you through the install process.
 You will be asked to make changes to your Extend-A-Story configuration file.
-This file is located at: `<story-root>/include/config/Configuration.php`.
+This file is located at:
+
+`<story-root>/include/config/Configuration.php`
+
 You will need to know the connection settings for the database you created above.
 You will also be prompted to create an administrator account for your story and configure your story settings.
 
