@@ -5,7 +5,8 @@ It is written in PHP and uses a MySQL database.
 
 ## Under Development
 
-This is a development version of Extend-A-Story that may not be stable or function at all.
+**This version of Extend-A-Story is under development and may not be stable or work correctly.**
+
 Download a stable version of Extend-A-Story from our tags page:
 
 [Extend-A-Story Tags](https://github.com/extend-a-story/extend-a-story/tags)
