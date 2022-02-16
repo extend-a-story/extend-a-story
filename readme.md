@@ -155,6 +155,10 @@ Set `Is Writeable` to `Yes` and click `Save`.
 Follow the same instructions as above to set up multiple stories on your website,
 but note that each story will need its own database and directory.
 
+## Release Notes
+
+[Extend-A-Story Release Notes](release-notes.md)
+
 ## Database Maintenance
 
 Although I've tried my best to ensure that Extend-A-Story is bug free,
