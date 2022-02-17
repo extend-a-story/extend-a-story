@@ -48,9 +48,12 @@ Make a note of your current database connection settings in your Extend-A-Story 
 The location and content of the Extend-A-Story configuration file is different in this version.
 The upgrade process will guide you through setting up your configuration file for this version.
 
-## Upgrade Story Directory
+## Upgrade Story Root Directory
 
-Replace the contents of your `<story-root>` directory with the contents of the `www` directory for this version.
+Extend-A-Story is installed in a directory that your web server can access.
+We refer to this directory as the `<story-root>` directory.
+
+Replace the contents of the `<story-root>` directory with the contents of the `www` directory for this version.
 
 ## Run Upgrade Process
 

@@ -15,10 +15,12 @@ CREATE USER "StoryUser"@"localhost" IDENTIFIED BY "StoryPassword";
 GRANT ALL ON StoryDatabase.* TO "StoryUser"@"localhost";
 ```
 
-## Install Story Directory
+## Create Story Root Directory
 
-Take the contents of the `www` directory and place them in a directory accessible to your web server.
-We will refer to this directory as `<story-root>`.
+Extend-A-Story must be installed in a directory that your web server can access.
+We refer to this directory as the `<story-root>` directory.
+
+Take the contents of the `www` directory and place them in the `<story-root>` directory.
 
 ## Run Install Process
 
