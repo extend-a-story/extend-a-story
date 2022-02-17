@@ -1,0 +1,562 @@
+# Extend-A-Story Test Plan
+
+This document contains the test plan for Extend-A-Story
+to ensure that everything is working correctly before releasing a new version.
+
+- admin.php:
+    - Set the `command` parameter to an invalid value.
+    - Access the page when the database is inaccessible.
+    - Log in:
+        - Specify an invalid user name.
+        - Specify an invalid password.
+        - Log in successfully and verify that it works.
+        - Verify that you can log in using a password with more than 255 characters.
+    - Log out and verify that it works.
+    - Permission check:
+        - While logged out:
+            - Verify that you cannot list recent edits.
+            - Verify that you cannot list orphaned episodes.
+            - Verify that you cannot list dead ends.
+            - Verify that you cannot start configuring the story settings.
+            - Verify that you cannot finish configuring the story settings.
+            - Verify that you cannot start adding a user.
+            - Verify that you cannot finish adding a user.
+            - Verify that you cannot start editing a user.
+            - Verify that you cannot finish editing a user.
+            - Verify that you cannot start deleting a user.
+            - Verify that you cannot finish deleting a user.
+            - Verify that you cannot start changing your password.
+            - Verify that you cannot finish changing your password.
+            - Verify that you can log out.
+        - As a moderator:
+            - Verify that you can view the link to list recent edits.
+            - Verify that you can view the form to view the edits for an episode.
+            - Verify that you cannot view the link to list orphaned episodes.
+            - Verify that you cannot view the link to list dead ends.
+            - Verify that you cannot view the link to configure the story settings.
+            - Verify that you cannot view the link to add a user.
+            - Verify that you cannot view the form to edit a user.
+            - Verify that you cannot view the form to delete a user.
+            - Verify that you can view the link to change your password.
+            - Verify that you can view the link to log out.
+            - Verify that you can list recent edits.
+            - Verify that you cannot list orphaned episodes.
+            - Verify that you cannot list dead ends.
+            - Verify that you cannot start configuring the story settings.
+            - Verify that you cannot finish configuring the story settings.
+            - Verify that you cannot start adding a user.
+            - Verify that you cannot finish adding a user.
+            - Verify that you cannot start editing a user.
+            - Verify that you cannot finish editing a user.
+            - Verify that you cannot start deleting a user.
+            - Verify that you cannot finish deleting a user.
+            - Verify that you can start changing your password.
+            - Verify that you can finish changing your password.
+            - Verify that you can log out.
+        - As a super moderator:
+            - Verify that you can view the link to list recent edits.
+            - Verify that you can view the form to view the edits for an episode.
+            - Verify that you can view the link to list orphaned episodes.
+            - Verify that you can view the link to list dead ends.
+            - Verify that you cannot view the link to configure the story settings.
+            - Verify that you cannot view the link to add a user.
+            - Verify that you cannot view the form to edit a user.
+            - Verify that you cannot view the form to delete a user.
+            - Verify that you can view the link to change your password.
+            - Verify that you can view the link to log out.
+            - Verify that you can list recent edits.
+            - Verify that you can list orphaned episodes.
+            - Verify that you can list dead ends.
+            - Verify that you cannot start configuring the story settings.
+            - Verify that you cannot finish configuring the story settings.
+            - Verify that you cannot start adding a user.
+            - Verify that you cannot finish adding a user.
+            - Verify that you cannot start editing a user.
+            - Verify that you cannot finish editing a user.
+            - Verify that you cannot start deleting a user.
+            - Verify that you cannot finish deleting a user.
+            - Verify that you can start changing your password.
+            - Verify that you can finish changing your password.
+            - Verify that you can log out.
+        - As a manager:
+            - Verify that you can view the link to list recent edits.
+            - Verify that you can view the form to view the edits for an episode.
+            - Verify that you can view the link to list orphaned episodes.
+            - Verify that you can view the link to list dead ends.
+            - Verify that you can view the link to configure the story settings.
+            - Verify that you cannot view the link to add a user.
+            - Verify that you cannot view the form to edit a user.
+            - Verify that you cannot view the form to delete a user.
+            - Verify that you can view the link to change your password.
+            - Verify that you can view the link to log out.
+            - Verify that you can list recent edits.
+            - Verify that you can list orphaned episodes.
+            - Verify that you can list dead ends.
+            - Verify that you can start configuring the story settings.
+            - Verify that you can finish configuring the story settings.
+            - Verify that you cannot start adding a user.
+            - Verify that you cannot finish adding a user.
+            - Verify that you cannot start editing a user.
+            - Verify that you cannot finish editing a user.
+            - Verify that you cannot start deleting a user.
+            - Verify that you cannot finish deleting a user.
+            - Verify that you can start changing your password.
+            - Verify that you can finish changing your password.
+            - Verify that you can log out.
+        - As an administrator:
+            - Verify that you can view the link to list recent edits.
+            - Verify that you can view the form to view the edits for an episode.
+            - Verify that you can view the link to list orphaned episodes.
+            - Verify that you can view the link to list dead ends.
+            - Verify that you can view the link to configure the story settings.
+            - Verify that you can view the link to add a user.
+            - Verify that you can view the form to edit a user.
+            - Verify that you can view the form to delete a user.
+            - Verify that you can view the link to change your password.
+            - Verify that you can view the link to log out.
+            - Verify that you can list recent edits.
+            - Verify that you can list orphaned episodes.
+            - Verify that you can list dead ends.
+            - Verify that you can start configuring the story settings.
+            - Verify that you can finish configuring the story settings.
+            - Verify that you can start adding a user.
+            - Verify that you can finish adding a user.
+            - Verify that you can start editing a user.
+            - Verify that you can finish editing a user.
+            - Verify that you can start deleting a user.
+            - Verify that you can finish deleting a user.
+            - Verify that you can start changing your password.
+            - Verify that you can finish changing your password.
+            - Verify that you can log out.
+    - Change your password:
+        - Specify an invalid current password.
+        - Enter a blank password for both of the new password inputs.
+        - Enter a blank password for the first new password input
+          and a non-blank password for the second new password input.
+        - Enter a non-blank password for the first new password input
+          and a blank password for the second new password input.
+        - Enter non-blank, non-identical passwords for both new password inputs.
+        - Change your password successfully and verify that it works.
+        - Verify that you can change your password when your current password is longer than 255 characters.
+        - Verify that you can change your password to a password with more than 255 characters.
+    - Configure story settings:
+        - Verify that the current story settings are populated correctly.
+        - Enter a blank story name.
+        - Enter a blank site name.
+        - Enter a blank story home.
+        - Enter a blank site home.
+        - Enter a blank read episode URL.
+        - Enter a blank admin email.
+        - Enter more than 255 characters for the story name.
+        - Enter more than 255 characters for the site name.
+        - Enter more than 255 characters for the story home.
+        - Enter more than 255 characters for the site home.
+        - Enter more than 255 characters for the read episode URL.
+        - Enter more than 255 characters for the admin email.
+        - Select an invalid value for the `is writeable` setting.
+        - Enter a number smaller than 1 for max links.
+        - Enter a number smaller than 1 for max edit days.
+        - Configure the story settings successfully and verify that it works.
+    - Add a user:
+        - Enter a blank login name.
+        - Enter a blank user name.
+        - Enter a blank password for both password inputs.
+        - Enter more than 255 characters for the login name.
+        - Enter more than 255 characters for the user name.
+        - Enter a blank password for the first password input and a non-blank password for the second password input.
+        - Enter a non-blank password for the first password input and a blank password for the second password input.
+        - Enter non-blank and non-identical passwords for both password inputs.
+        - Select an invalid value for the permission level.
+        - Enter a duplicate login name.
+        - Add a user successfully and verify that it works.
+        - Verify that you can specify a password with more than 255 characters.
+    - Select a user to edit:
+        - Do not select a user.
+        - Select an invalid user.
+    - Select a user to delete:
+        - Do not select a user.
+        - Select yourself.
+        - Select an invalid user.
+    - Edit a user:
+        - Verify that the current user details are populated correctly.
+        - Do not set the `userID` parameter.
+        - Specify an invalid user.
+        - Enter a blank login name.
+        - Enter a blank user name.
+        - Enter more than 255 characters for the login name.
+        - Enter more than 255 characters for the user name.
+        - With the `set new password` checkbox unchecked:
+            - Enter a blank password for both password inputs.
+            - Enter a blank password for the first password input
+              and a non-blank password for the second password input.
+            - Enter a non-blank password for the first password input
+              and a blank password for the second password input.
+            - Enter non-blank, non-identical passwords for both password inputs.
+            - Verify that the password is not changed when saving.
+        - With the `set new password` checkbox checked:
+            - Enter a blank password for both password inputs.
+            - Enter a blank password for the first password input
+              and a non-blank password for the second password input.
+            - Enter a non-blank password for the first password input
+              and a blank password for the second password input.
+            - Enter non-blank and non-identical passwords for both password inputs.
+            - Verify that the password is changed when saving.
+            - Verify that you can specify a password with more than 255 characters.
+        - When editing yourself:
+            - Select a permission level that is different than the current permission level.
+            - Change your password.
+            - Verify that you can change your login name and user name.
+        - Select an invalid value for the permission level.
+        - Enter a duplicate login name that is not the current login name of the user.
+        - Edit a user successfully and verify that it works.
+    - Delete a user:
+        - Do not set the `userID` parameter.
+        - Specify an invalid user.
+        - Specify your user.
+        - Verify that the user is deleted when you select the `yes` button.
+        - Verify that the user is not deleted when you select the `no` button.
+    - List orphaned episodes:
+        - Verify that orphaned episodes are displayed correctly.
+        - Verify that the `edited` column correctly displays the number of edits
+          and links to the episode edit log for all orphaned episodes that have been edited.
+    - Verify that listing dead ends works correctly.
+    - List recent edits:
+        - Verify that recent edits are displayed correctly.
+        - Verify that the listing defaults to starting at the most recent edit.
+        - Verify that the `previous 20 edits` link is displayed when there are older edits available.
+        - Verify that the `previous 20 edits` link is not displayed when there are no older edits available.
+        - Verify that the `previous 20 edits` link works correctly.
+- backstory-tree.php:
+    - Verify that the `episode` parameter defaults to `1` when it is not set.
+    - Access the page when the database is inaccessible.
+    - View a back-story tree that includes more than one level.
+    - Verify that parent episodes show up with the right color:
+        - Green for the first time they are encountered.
+        - Red for subsequent encounters.
+    - Verify that the true parent of each episode shows up in bold.
+    - Verify that the parents of an episode with no parents are displayed correctly.
+- clear.php:
+    - Verify that the `episode` parameter defaults to `1` when it is not set.
+    - Access the page when the database is inaccessible.
+        - **Failure** : Displays error message saying that the episode is not locked,
+        rather than an error about an inaccessible database.
+    - Try to clear the lock on an episode when episode creation is disabled.
+    - Try to clear the lock on an episode that is not locked.
+    - Try to clear the lock on an episode that is locked by someone else.
+    - Clear the `create` lock on an episode.
+    - Clear the `edit` lock on an episode.
+- create.php:
+    - Verify that the `episode` parameter defaults to `1` when it is not set.
+    - Verify that the `scheme` parameter defaults to `1` when it is not set.
+    - Set the `command` parameter to an invalid value.
+    - Extend an episode to completion.
+    - Edit an episode to completion, changing all values.
+    - Create an episode to completion.
+    - Access the page when the database is inaccessible.
+    - Access the page when episode creation is disabled.
+    - Create an episode that is an orphan.
+    - Edit an episode that:
+        - Is linkable and is not.
+        - Is extendable and is not.
+        - Makes the author's signature a mailto link and does not.
+        - Mails the author on extension and does not.
+    - Verify that the scheme defaults to the scheme of the parent episode when:
+        - Creating an episode.
+        - Extending an episode.
+    - Specify a scheme that does not exist.
+        - **Failure** : This case is not handled gracefully.
+    - Creating episodes:
+        - For an episode that is not locked:
+            - Verify that you can start creating the episode.
+            - Verify that you cannot preview creating the episode.
+            - Verify that you cannot finish creating the episode.
+        - For an episode that is locked by someone else:
+            - Verify that you cannot start creating the episode.
+            - Verify that you cannot preview creating the episode.
+            - Verify that you cannot finish creating the episode.
+        - For an episode that is already created:
+            - Verify that you cannot start creating the episode.
+            - Verify that you cannot preview creating the episode.
+            - Verify that you cannot finish creating the episode.
+        - For an episode that is not extendable:
+            - Verify that you cannot start extending the episode.
+            - Verify that you cannot preview extending the episode.
+            - Verify that you cannot finish extending the episode.
+    - Editing episodes:
+        - For an episode that is not locked:
+            - Verify that you can start editing the episode.
+            - Verify that you cannot preview editing the episode.
+            - Verify that you cannot finish editing the episode.
+        - For an episode that is locked by someone else:
+            - Verify that you cannot start editing the episode.
+            - Verify that you cannot preview editing the episode.
+            - Verify that you cannot finish editing the episode.
+        - For an episode that you cannot edit:
+            - Verify that you cannot start editing the episode.
+            - Verify that you cannot preview editing the episode.
+                - **Failure** : This is not prohibited.
+            - Verify that you cannot finish editing the episode.
+                - **Failure** : This is not prohibited.
+    - When creating, extending, or editing an episode:
+        - Error cases:
+            - For the title:
+                - Leave it blank.
+                - Enter more than 255 characters.
+                - Use a word with more than 30 characters.
+            - For the episode description:
+                - Leave it blank.
+                - Enter more than 65535 characters.
+                - Use a word with more than 30 characters.
+            - For the author name:
+                - Leave it blank
+                  when specifying that the author name be turned into a mailto link to the author's email address.
+                - Enter more than 255 characters.
+                - Use a word with more than 30 characters.
+            - For the author email:
+                - Leave it blank
+                  when specifying that the author name be turned into a mailto link to the author's email address.
+                - Leave blank when specifying that the author be notified of extensions.
+                - Enter more than 255 characters.
+            - Specify an option with more than 255 characters.
+            - Specify an option with a word with more than 30 characters.
+            - Specify no option text for a back link.
+            - Back link to an episode that does not exist.
+            - Back link to an episode that is not linkable.
+            - Enter no options.
+            - Specify two or more back links to the same episode.
+            - When extending, verify that you can back link to the episode you are extending.
+        - Success cases:
+            - Specify at least one back link.
+            - Set the episode to be extendable and not.
+            - Set the episode to be linkable and not.
+            - Set the author's signature to be a mailto link and not.
+            - Set the extension notification flag and not.
+        - Verify that the episode is saved correctly.
+    - When creating or extending an episode:
+        - Verify that the link from the parent episode to the new episode shows that the new episode has been created.
+        - Verify that an extension notification is sent to the administrator.
+        - Verify that an extension notification is sent to author of the parent episode.
+    - When creating an episode:
+        - Verify that you cannot save when problems exist during the preview.
+        - Verify that previewing the episode updates the lock date on the episode.
+    - When extending an episode:
+        - For the description for the new option:
+            - Leave it blank.
+            - Enter more than 255 characters.
+            - Use a word with more than 30 characters.
+        - Verify that you cannot save when problems exist during the preview.
+    - When editing an episode:
+        - Leave one of the options blank.
+        - Update a back link to point to the same episode you are editing.
+        - Verify that you cannot save when problems exist during the preview.
+        - Verify that previewing the episode updates the lock date on the episode.
+        - Edit the episode as a user.
+        - Edit the episode as the author.
+        - Verify that the episode edit log is updated correctly.
+- edit.php:
+    - Verify that the `episode` parameter defaults to `1` when it is not set.
+    - Set the `command` parameter to an invalid value.
+    - Access the page when the database is inaccessible.
+        - **Failure** : You see an error message regarding insufficient privileges rather than an inaccessible database.
+    - Access the page when episode creation is disabled.
+    - Access the page when you are not logged in.
+    - Access the page with insufficient privileges to use the advanced editing features.
+    - With an episode that is not locked, try to:
+        - Finish adding a link.
+        - Select a link to delete.
+        - Finish deleting a link.
+        - Finish deleting the episode.
+        - Finish revoking the author's edit permission.
+    - With an episode that is locked by someone else, try to:
+        - Start adding a link.
+        - Finish adding a link.
+        - Start deleting a link.
+        - Select a link to delete.
+        - Finish deleting a link.
+        - Start deleting the episode.
+        - Finish deleting the episode.
+        - Start revoking the author's edit permission.
+        - Finish revoking the author's edit permission.
+    - When adding a link:
+        - Enter a blank description.
+        - Enter more than 255 characters for the description.
+        - Enter a word with more than 30 characters for the description.
+        - Enter the current episode as the linked episode.
+        - Enter a linked episode that already has a link from the episode you are editing.
+        - Enter a linked episode that does not exist.
+        - Enter a linked episode that is not linkable.
+        - Add a link.
+        - Add a back link.
+        - Verify that links are correctly added.
+        - Very that the episode edit log is updated correctly.
+    - When selecting a link to delete:
+        - Try to delete a link from an episode that has no links.
+        - Verify that only uncreated links and back links are displayed.
+        - Specify a link that does not belong the the episode you are editing.
+        - Specify a non-back link that leads to an episode that is created.
+    - When deleting a link:
+        - Specify a link that does not belong the the episode you are editing.
+        - Specify a link that leads to an episode that is created.
+        - Delete a link.
+        - Delete a back link.
+        - Verify that links are correctly deleted.
+        - Very that the episode edit log is updated correctly.
+    - When starting the deletion of an episode:
+        - Try to delete an episode that has links.
+        - Try to delete an episode that has back links to it.
+    - When finishing the deletion of an episode:
+        - Try to delete an episode that has links.
+        - Try to delete an episode that has back links to it.
+        - Delete an episode.
+        - Verify that the link from the parent episode to the deleted episode
+          shows that the deleted episode is no longer created.
+        - Verify that episode is correctly deleted.
+        - Very that the episode edit log is updated correctly.
+    - When revoking the author's edit permission:
+        - Verify that author's edit permission was revoked correctly.
+        - Very that the episode edit log is updated correctly.
+- general.php:
+    - Verify that users are logged out after one hour of inactivity.
+    - Verify that your session access data is correctly updated.
+    - Create a new session.
+    - Verify that sessions older than 370 days are deleted.
+    - Verify that you can edit an episode when logged in.
+    - Verify that you can edit an episode when you are the author and within the edit window.
+    - Verify that you cannot edit an episode when the above conditions are not met.
+- link-trace.php:
+    - Verify that the `episode` parameter defaults to `1` when it is not set.
+    - Access the page when the database is inaccessible.
+    - View the link trace on an episode.
+- list-edits.php:
+    - Verify that the `episode` parameter defaults to `1` when it is not set.
+    - Access the page when the database is inaccessible.
+    - Try to view the edits for an episode that you don't have permission to edit.
+    - View the edits for an episode.
+- list-locked.php:
+    - Access the page when the database is inaccessible.
+    - Verify that locked episodes are listed correctly.
+- results.php:
+    - Set the `method` parameter to an invalid value.
+    - Access the page when the database is inaccessible.
+    - Verify that a search by episode title works correctly.
+    - Verify that a search by episode body works correctly.
+    - Verify that a search by author name works correctly.
+    - Verify that a search by creation time works correctly.
+    - Verify that a search for extendable episodes works correctly.
+    - Verify that a search for linkable episodes works correctly.
+    - Verify that a search for episodes created within the specified number of days works correctly.
+- read.php:
+    - Verify that the `episode` parameter defaults to `1` when it is not set.
+    - Access the page when the database is inaccessible.
+    - Read an episode that does not exist.
+    - Read an uncreated episode that was locked more than five hours ago and verify that it is automatically unlocked.
+    - When episode creation is disabled:
+        - Read an episode that is not created and not locked.
+        - Read an episode that is not created and locked.
+        - Read an episode that is extendable and verify that you are not allowed to add a new option.
+        - Read an episode that you have permission to edit and verify that you are not allowed to edit the episode.
+    - Read an episode that is not created and not locked.
+    - Read an episode that is not created and locked:
+        - Locked by you.
+        - Locked by someone else less than one hour ago.
+        - Locked by someone else more than one hour ago but less than five hours ago.
+    - Read episodes with various schemes and verify that the schemes are displayed correctly.
+    - Read an episode with a scheme that does not specify a background image.
+    - Read an episode with a scheme that does specify a background image.
+    - Read an episode with an image.
+    - Read an episode without an image.
+    - Verify that the three types of links show up correctly:
+        - Link to uncreated episode.
+        - Link to created episode.
+        - Back link.
+    - Read an episode that is extendable and verify that you are prompted to add a new option.
+    - When reading episode 1, verify that you do not have a link to `go back`.
+    - When reading any episode besides episode 1, verify that you have a link to `go back`.
+    - When reading episode 1, verify that you have options to view the backward and forward story trees.
+    - When reading any episode, besides episode 1,
+      verify that you have options to view the backward and forward story trees.
+    - Read an episode with zero back links leading to it
+      and verify that you are not prompted to view all links to the episode.
+    - Ensure episode 1 has exactly one back link leading to it.
+      Read episode 1 and verify that you are prompted to view the single link to the episode.
+    - Read an episode, other than episode 1, with one or more back links leading to it
+      and verify that you are prompted to view all links to the episode.
+    - Read an episode where the author's name is not displayed.
+    - Read an episode where the author's name is displayed:
+        - Author's name is a mailto link.
+        - Author's name is not a mailto link.
+    - Read an episode where linking is enabled and verify that `linking enabled` is displayed.
+    - Read an episode where linking is disabled and verify that `linking enabled` is not displayed.
+    - Read an episode where extending is enabled and verify that `extending enabled` is displayed.
+    - Read an episode where extending is disabled and verify that `extending enabled` is not displayed.
+    - Verify that the episode view count is incremented each time you read an episode.
+    - If you don't have permission to edit an episode:
+        - Verify that you are not allowed to edit the episode.
+        - Verify that the advanced editing functions are not displayed.
+        - Verify that the option to view the edit log is not displayed.
+    - If you have permission to edit an episode:
+        - Verify that you are allowed to edit the episode.
+        - Read an episode that is locked for editing:
+            - Locked by you.
+            - Locked by someone else less than one hour ago.
+            - Locked by someone else more than one hour ago.
+        - If you don't have permission to use the advanced editing functions:
+            - Verify that the advanced editing functions are not displayed.
+        - If you have permission to use the advanced editing functions:
+            - Verify that the advanced editing functions are displayed.
+            - Verify that the option for revoking an author's edit permission is not displayed
+              if the author's edit permission has already been revoked.
+        - Verify that the option to view the edit log is displayed correctly if the episode has been edited once.
+        - Verify that the option to view the edit log is displayed correctly
+          if the episode has been edited more than once.
+        - Verify that the option to view the edit log is not displayed if the episode has not been edited.
+- scheme-preview.php:
+    - Verify that the `scheme` parameter defaults to `1` when it is not set.
+    - Access the page when the database is inaccessible.
+    - Verify that schemes are displayed correctly.
+- search.php:
+    - Access the page when the database is inaccessible.
+    - Verify that the search form is displayed correctly.
+- statistics.php:
+    - Access the page when the database is inaccessible.
+    - Verify that the statistics are displayed correctly.
+- story-tree.php:
+    - Verify that the `episode` parameter defaults to `1` when it is not set.
+    - Access the page when the database is inaccessible.
+    - View a story tree that includes more than one level.
+    - Verify that child episodes show up with the right color:
+        - Green for created episodes.
+        - Red for non-created episodes.
+        - Blue for back-linked episodes.
+    - Verify that the children of an episode with no children are displayed correctly.
+- view-edit.php
+    - Verify that the `episodeEditLogID` parameter defaults to `1` when it is not set.
+    - Access the page when the database is inaccessible.
+        - **Failure** : You see an error message regarding insufficient privileges rather than an inaccessible database.
+    - View an edit that does not exist.
+    - View an edit for an episode when you don't have permission to edit the episode.
+    - View edits with various schemes and verify that the schemes are displayed correctly.
+    - View an edit with a scheme that does not specify a background image.
+    - View an edit with a scheme that does specify a background image.
+    - View an edit with an image.
+    - View an edit without an image.
+    - Verify that links show up correctly:
+        - Normal links (both created and uncreated links show up as uncreated).
+        - Back links.
+    - View an edit that is extendable and verify that you are prompted to add a new option.
+    - When viewing an edit for episode 1, verify that you do not have a link to `go back`.
+    - When viewing an edit for any episode, besides episode 1, verify that you have a link to `go back`.
+    - View an edit for an episode with zero back links leading to it
+      and verify that you are not prompted to view all links to the episode.
+    - Ensure episode 1 has exactly one back link leading to it.
+      View an edit for episode 1 and verify that you are prompted to view the single link to the episode.
+    - View an edit for an episode, other than episode 1, with one or more back links leading to it
+      and verify that you are prompted to view all links to the episode.
+    - View an edit for an episode where the author's name is not displayed.
+    - View an edit for an episode where the author's name is displayed:
+        - Author's name is a mailto link.
+        - Author's name is not a mailto link.
+    - View an edit for an episode where linking is enabled and verify that `Is Linkable` is shown as `Y`.
+    - View an edit for an episode where linking is disabled and verify that `Is Linkable` is shown as `N`.
+    - View an edit for an episode where extending is enabled and verify that `Is Extendable` is shown as `Y`.
+    - View an edit for an episode where extending is disabled and verify that `Is Extendable` is shown as `N`.

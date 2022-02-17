@@ -17,3 +17,4 @@ Download a stable version of Extend-A-Story from our tags page:
 - [Upgrade](upgrade.md)
 - [Release Notes](release-notes.md)
 - [Database Maintenance](database-maintenance.md)
+- [Test Plan](test-plan.md)
