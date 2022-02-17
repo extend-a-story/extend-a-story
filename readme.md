@@ -13,9 +13,9 @@ Download a stable version of Extend-A-Story from our tags page:
 
 ## Documentation
 
-- [Install Extend-A-Story](install.md)
-- [Upgrade Extend-A-Story](upgrade.md)
-- [Extend-A-Story Release Notes](release-notes.md)
+- [Install](install.md)
+- [Upgrade](upgrade.md)
+- [Release Notes](release-notes.md)
 
 ## Database Maintenance
 
