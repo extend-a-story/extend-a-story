@@ -90,6 +90,12 @@ Place your desired page footer in the footer file:
 
 `<story-root>/include/config/Footer.php`
 
+### Multiple Stories
+
+You may have multiple stories on your website, but you need a separate install of Extend-A-Story for each story.
+Follow the above instructions to install Extend-A-Story for each story.
+Each story needs its own database and directory on your web server.
+
 ## Upgrading
 
 Follow these steps to upgrade from a previous version of Extend-A-Story to this version.
@@ -170,11 +176,6 @@ Use your web browser to open `admin.php` in the `<story-root>` directory.
 Log in using an account with the `Manager` or `Administrator` permission level.
 Click `Configure Story Settings`.
 Set `Is Writeable` to `Yes` and click `Save`.
-
-## Multiple Stories
-
-Follow the same instructions as above to set up multiple stories on your website,
-but note that each story will need its own database and directory.
 
 ## Release Notes
 
