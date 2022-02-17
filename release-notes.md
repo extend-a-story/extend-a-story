@@ -44,7 +44,7 @@ This document contains the release notes for all Extend-A-Story versions since 2
     - Keep a log of all editing done to each episode.
 - Add ability to view the story tree from any starting episode.
 - Add the ability to view the back story tree of an episode.
-This maps out all the episodes you can reach from an episode by following all back links that link to it.
+  This maps out all the episodes you can reach from an episode by following all back links that link to it.
 - Include the author name in extension notification email messages.
 - Obfuscate email addresses that are displayed publicly.
 - Require the use of a form button to create episodes.
