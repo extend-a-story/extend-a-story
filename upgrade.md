@@ -58,6 +58,12 @@ Replace the contents of the `<story-root>` directory with the contents of the `w
 ## Run Upgrade Process
 
 Use your web browser to open the install page, `install.php`, in the `<story-root>` directory.
+For example, if your website is `https://example.com/` and
+`<story-root>` is a directory called `story` in the root directory of your website,
+you would use this URL:
+
+`https://example.com/story/install.php`
+
 The install page will guide you through the upgrade process.
 You will need the database connection settings that we referenced above.
 
