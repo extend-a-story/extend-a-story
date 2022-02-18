@@ -21,7 +21,7 @@
 # http://www.sir-toby.com/extend-a-story/
 
 
-# This creates a database for version 3.0.x of Extend-A-Story.
+# This creates version 4 of the Extend-A-Story database to test the upgrade process.
 
 
 DROP TABLE IF EXISTS ExtendAStoryVariable;
