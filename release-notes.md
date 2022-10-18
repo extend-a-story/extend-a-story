@@ -8,6 +8,11 @@ This document contains the release notes for all Extend-A-Story versions since 2
 
 - Add web interface for installing or upgrading Extend-A-Story.
 
+## 2.2.2
+
+- Use the SHA2() MySQL function instead of PASSWORD().
+- Remove call to get_magic_quotes_gpc() function.
+
 ## 2.2.1
 
 - Replace calls to `mysql` library with calls to `mysqli` library.
