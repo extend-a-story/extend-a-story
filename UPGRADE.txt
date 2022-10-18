@@ -1,3 +1,32 @@
+===== Upgrading from V 2.2.1 to V 2.2.2 =====
+
+There are no database changes for this release.
+
+The code has changed for this release. Simply replace the story code on
+your web server with the contents of the 'www' directory.
+
+There are no documentation changes for this release.
+
+This version changes how user passwords are hashed in the database. You
+must manually reset the password for all users in your Extend-A-Story
+database. To do so, run the following SQL statement in your
+Extend-A-Story database for each of your users:
+
+  UPDATE User
+     SET Password = SHA2( '<new password>', 256 )
+   WHERE LoginName = '<username>';
+
+For example, to change the password of the admin account to the
+'change-me' password, you would run the following statement in your
+Extend-A-Story database:
+
+  UPDATE User
+    SET Password = SHA2( 'change-me', 256 )
+  WHERE LoginName = 'admin';
+
+
+
+
 ===== Upgrading from V 2.2.0 to V 2.2.1 =====
 
 There are no database changes for this release.

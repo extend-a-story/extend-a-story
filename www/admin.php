@@ -98,7 +98,7 @@ if (( $command == "login" ) && ( empty( $error )))
             "SELECT UserID " .
               "FROM User " .
              "WHERE LoginName = '" . mysqli_real_escape_string( $mysqli, $loginName ) . "' " .
-               "AND Password = PASSWORD( '" . mysqli_real_escape_string( $mysqli, $password ) . "' )" );
+               "AND Password = SHA2( '" . mysqli_real_escape_string( $mysqli, $password ) . "', 256 )" );
 
     if ( ! $result )
     {
@@ -280,7 +280,7 @@ if (( $command == "changePasswordSave" ) && ( empty( $error )))
             "SELECT COUNT( * ) " .
               "FROM User " .
              "WHERE UserID = " . $userID . " " .
-               "AND Password = PASSWORD( '" . mysqli_real_escape_string( $mysqli, $curPassword ) . "' )" );
+               "AND Password = SHA2( '" . mysqli_real_escape_string( $mysqli, $curPassword ) . "', 256 )" );
 
     if ( ! $result )
     {
@@ -317,8 +317,8 @@ if (( $command == "changePasswordSave" ) && ( empty( $error )))
                     $result = mysqli_query(
                             $mysqli,
                             "UPDATE User " .
-                               "SET Password = PASSWORD( '" .
-                                               mysqli_real_escape_string( $mysqli, $newPassword1 ) . "' ) " .
+                               "SET Password = SHA2( '" .
+                                               mysqli_real_escape_string( $mysqli, $newPassword1 ) . "', 256 ) " .
                              "WHERE UserID = " . $userID );
 
                     if ( ! $result )
@@ -743,11 +743,11 @@ if (( $command == "editUserSave" ) && ( empty( $error )))
         if ( $setNewPassword == 1 )
         {
             $sql = "UPDATE User " .
-                      "SET PermissionLevel = "  . $newPermissionLevel                  .  ", " .
-                          "LoginName       = '" . mysqli_real_escape_string( $mysqli, $newLoginName ) . "', " .
-                          "Password        = PASSWORD( '" .
-                                             mysqli_real_escape_string( $mysqli, $newPassword1 ) . "' ), "    .
-                          "UserName        = '" . mysqli_real_escape_string( $mysqli, $newUserName  ) . "' "  .
+                      "SET PermissionLevel = "  . $newPermissionLevel                                   .  ", " .
+                          "LoginName       = '" . mysqli_real_escape_string( $mysqli, $newLoginName )   . "', " .
+                          "Password        = SHA2( '" .
+                                             mysqli_real_escape_string( $mysqli, $newPassword1 ) . "', 256 ), " .
+                          "UserName        = '" . mysqli_real_escape_string( $mysqli, $newUserName  )   . "' "  .
                     "WHERE UserID = " . $editedUserID;
         }
         else

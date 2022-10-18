@@ -190,7 +190,7 @@ INSERT INTO User
             (
                 4,
                 "admin",
-                PASSWORD( "change-me" ),
+                SHA2( "change-me", 256 ),
                 "Administrator"
             );
 

@@ -682,10 +682,10 @@ function createUser( &$error, &$fatal, $permissionLevel, $loginName, $password, 
                                    ") " .
                             "VALUES " .
                                    "( " .
-                                                       $permissionLevel                                 .    ", " .
-                                                 "'" . mysqli_real_escape_string( $mysqli, $loginName ) .   "', " .
-                                       "PASSWORD( '" . mysqli_real_escape_string( $mysqli, $password  ) . "' ), " .
-                                                 "'" . mysqli_real_escape_string( $mysqli, $userName  ) .    "' " .
+                                                   $permissionLevel                                 .         ", " .
+                                             "'" . mysqli_real_escape_string( $mysqli, $loginName ) .        "', " .
+                                       "SHA2( '" . mysqli_real_escape_string( $mysqli, $password  ) . "', 256 ), " .
+                                             "'" . mysqli_real_escape_string( $mysqli, $userName  ) .         "' " .
                                    ")" );
 
     if ( ! $result )
