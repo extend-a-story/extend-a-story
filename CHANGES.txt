@@ -2,6 +2,8 @@
 
 - Use the SHA2() MySQL function instead of PASSWORD().
 
+- Remove call to get_magic_quotes_gpc() function.
+
 
 
 
