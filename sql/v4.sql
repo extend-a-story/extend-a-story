@@ -193,7 +193,7 @@ INSERT INTO User
             (
                 4,
                 "admin",
-                PASSWORD( "change-me" ),
+                "change-me",
                 "Administrator"
             );
 
