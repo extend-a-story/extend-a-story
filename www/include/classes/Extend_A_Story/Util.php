@@ -331,7 +331,7 @@ class Util
         return Util::getIntValueInternal( $variableName, true );
     }
 
-    function getIntValueInternal( $variableName, $increment )
+    private static function getIntValueInternal( $variableName, $increment )
     {
         if ( $increment )
         {
