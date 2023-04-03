@@ -77,7 +77,7 @@ if ( $command == "login" )
             "SELECT UserID " .
               "FROM User " .
              "WHERE LoginName = :loginName " .
-               "AND Password = PASSWORD( :password )" );
+               "AND Password = SHA2( :password, 256 )" );
 
     $dbStatement->bindParam( ":loginName", $loginName, PDO::PARAM_STR );
     $dbStatement->bindParam( ":password",  $password,  PDO::PARAM_STR );
@@ -246,7 +246,7 @@ if ( $command == "changePasswordSave" )
             "SELECT COUNT( * ) " .
               "FROM User " .
              "WHERE UserID = :userID " .
-               "AND Password = PASSWORD( :curPassword )" );
+               "AND Password = SHA2( :curPassword, 256 )" );
 
     $dbStatement->bindParam( ":userID",      $userID,      PDO::PARAM_INT );
     $dbStatement->bindParam( ":curPassword", $curPassword, PDO::PARAM_STR );
@@ -277,7 +277,7 @@ if ( $command == "changePasswordSave" )
         {
             $dbStatement = Util::getDbConnection()->prepare(
                     "UPDATE User " .
-                       "SET Password = PASSWORD( :newPassword1 ) " .
+                       "SET Password = SHA2( :newPassword1, 256 ) " .
                      "WHERE UserID = :userID" );
 
             $dbStatement->bindParam( ":newPassword1", $newPassword1, PDO::PARAM_STR );
@@ -646,7 +646,7 @@ if ( $command == "editUserSave" )
                     "UPDATE User " .
                        "SET PermissionLevel = :newPermissionLevel, " .
                            "LoginName       = :newLoginName, " .
-                           "Password        = PASSWORD( :newPassword1 ), " .
+                           "Password        = SHA2( :newPassword1, 256 ), " .
                            "UserName        = :newUserName " .
                      "WHERE UserID = :editedUserID" );
 

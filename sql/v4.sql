@@ -193,7 +193,7 @@ INSERT INTO User
             (
                 4,
                 "admin",
-                "change-me",
+                SHA2( "change-me", 256 ),
                 "Administrator"
             );
 

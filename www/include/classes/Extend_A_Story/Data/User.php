@@ -86,7 +86,7 @@ SQL;
 <<<SQL
             INSERT INTO User
                         ( PermissionLevel, LoginName, Password, UserName )
-                 VALUES ( :permissionLevel, :loginName, PASSWORD( :password ), :userName )
+                 VALUES ( :permissionLevel, :loginName, SHA2( :password, 256 ), :userName )
 SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );

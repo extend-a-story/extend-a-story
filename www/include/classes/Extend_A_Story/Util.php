@@ -419,7 +419,7 @@ class Util
                        "( " .
                            ":permissionLevel, " .
                            ":loginName, " .
-                           "PASSWORD( :password ), " .
+                           "SHA2( :password, 256 ), " .
                            ":userName " .
                        ")" );
 
