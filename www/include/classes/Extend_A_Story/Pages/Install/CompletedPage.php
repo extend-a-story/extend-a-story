@@ -72,11 +72,11 @@ class CompletedPage extends InstallPage
 
     protected function preRender()
     {
-        $this->databaseExists   = Util::getBoolParamDefault  ( $_POST, "databaseExists",   false );
-        $this->databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     ""    );
-        $this->databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", ""    );
-        $this->databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", ""    );
-        $this->databaseName     = Util::getStringParamDefault( $_POST, "databaseName",     ""    );
+        $this->databaseExists   = Util::getBoolParam  ( $_POST, "databaseExists"   );
+        $this->databaseHost     = Util::getStringParam( $_POST, "databaseHost"     );
+        $this->databaseUsername = Util::getStringParam( $_POST, "databaseUsername" );
+        $this->databasePassword = Util::getStringParam( $_POST, "databasePassword" );
+        $this->databaseName     = Util::getStringParam( $_POST, "databaseName"     );
 
         if ( $this->databaseExists ) $this->upgradeDatabase();
         else $this->installDatabase();
@@ -125,17 +125,17 @@ $configStoryEnabled     = true;
 
     private function installDatabase()
     {
-        $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
-        $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
-        $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
-        $settingsSiteHome       = Util::getStringParamDefault( $_POST, "settingsSiteHome",       "" );
-        $settingsReadEpisodeUrl = Util::getStringParamDefault( $_POST, "settingsReadEpisodeUrl", "" );
-        $settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
-        $settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
-        $settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
-        $adminLoginName         = Util::getStringParamDefault( $_POST, "adminLoginName",         "" );
-        $adminDisplayName       = Util::getStringParamDefault( $_POST, "adminDisplayName",       "" );
-        $adminPassword          = Util::getStringParamDefault( $_POST, "adminPassword1",         "" );
+        $settingsStoryName      = Util::getStringParam( $_POST, "settingsStoryName"      );
+        $settingsSiteName       = Util::getStringParam( $_POST, "settingsSiteName"       );
+        $settingsStoryHome      = Util::getStringParam( $_POST, "settingsStoryHome"      );
+        $settingsSiteHome       = Util::getStringParam( $_POST, "settingsSiteHome"       );
+        $settingsReadEpisodeUrl = Util::getStringParam( $_POST, "settingsReadEpisodeUrl" );
+        $settingsAdminEmail     = Util::getStringParam( $_POST, "settingsAdminEmail"     );
+        $settingsMaxLinks       = Util::getStringParam( $_POST, "settingsMaxLinks"       );
+        $settingsMaxEditDays    = Util::getStringParam( $_POST, "settingsMaxEditDays"    );
+        $adminLoginName         = Util::getStringParam( $_POST, "adminLoginName"         );
+        $adminDisplayName       = Util::getStringParam( $_POST, "adminDisplayName"       );
+        $adminPassword          = Util::getStringParam( $_POST, "adminPassword1"         );
 
         Database::createDatabase();
         Database::populateDatabase( $settingsStoryName, $settingsSiteName,
@@ -152,10 +152,10 @@ $configStoryEnabled     = true;
 
         if ( $version->getDatabaseVersion() === 1 )
         {
-            $upgradeData[ "settingsMaxEditDays" ] = Util::getStringParamDefault( $_POST, "settingsMaxEditDays", "" );
-            $upgradeData[ "adminLoginName"      ] = Util::getStringParamDefault( $_POST, "adminLoginName",      "" );
-            $upgradeData[ "adminDisplayName"    ] = Util::getStringParamDefault( $_POST, "adminDisplayName",    "" );
-            $upgradeData[ "adminPassword"       ] = Util::getStringParamDefault( $_POST, "adminPassword1",      "" );
+            $upgradeData[ "settingsMaxEditDays" ] = Util::getStringParam( $_POST, "settingsMaxEditDays" );
+            $upgradeData[ "adminLoginName"      ] = Util::getStringParam( $_POST, "adminLoginName"      );
+            $upgradeData[ "adminDisplayName"    ] = Util::getStringParam( $_POST, "adminDisplayName"    );
+            $upgradeData[ "adminPassword"       ] = Util::getStringParam( $_POST, "adminPassword1"      );
         }
 
         $version->upgradeDatabase( $upgradeData );

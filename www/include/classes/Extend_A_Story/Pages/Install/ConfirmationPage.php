@@ -69,6 +69,9 @@ class ConfirmationPage extends InstallPage
         return null;
     }
 
+    private $databaseExists;
+    private $databaseVersion;
+    private $storyVersion;
     private $databaseHost;
     private $databaseUsername;
     private $databaseName;
@@ -83,9 +86,6 @@ class ConfirmationPage extends InstallPage
     private $settingsMaxLinks;
     private $settingsMaxEditDays;
     private $conflictingTables;
-    private $databaseExists;
-    private $databaseVersion;
-    private $storyVersion;
 
     public function validate()
     {
@@ -125,24 +125,33 @@ class ConfirmationPage extends InstallPage
 
     protected function preRender()
     {
-        $this->databaseHost           = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
-        $this->databaseUsername       = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
-        $this->databaseName           = Util::getStringParamDefault( $_POST, "databaseName",           "" );
-        $this->adminLoginName         = Util::getStringParamDefault( $_POST, "adminLoginName",         "" );
-        $this->adminDisplayName       = Util::getStringParamDefault( $_POST, "adminDisplayName",       "" );
-        $this->settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
-        $this->settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
-        $this->settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
-        $this->settingsSiteHome       = Util::getStringParamDefault( $_POST, "settingsSiteHome",       "" );
-        $this->settingsReadEpisodeUrl = Util::getStringParamDefault( $_POST, "settingsReadEpisodeUrl", "" );
-        $this->settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
-        $this->settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
-        $this->settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
-
         $version = Version::getVersion();
         $this->databaseVersion = $version->getDatabaseVersion();
         $this->databaseExists  = $version->checkDatabase();
         $this->storyVersion    = $version->getStoryVersion();
+
+        $this->databaseHost     = Util::getStringParam( $_POST, "databaseHost"     );
+        $this->databaseUsername = Util::getStringParam( $_POST, "databaseUsername" );
+        $this->databaseName     = Util::getStringParam( $_POST, "databaseName"     );
+
+        if (( !$this->databaseExists ) or ( $this->databaseVersion === 1 ))
+        {
+            $this->adminLoginName   = Util::getStringParam( $_POST, "adminLoginName"   );
+            $this->adminDisplayName = Util::getStringParam( $_POST, "adminDisplayName" );
+
+            if ( !$this->databaseExists )
+            {
+                $this->settingsStoryName      = Util::getStringParam( $_POST, "settingsStoryName"      );
+                $this->settingsSiteName       = Util::getStringParam( $_POST, "settingsSiteName"       );
+                $this->settingsStoryHome      = Util::getStringParam( $_POST, "settingsStoryHome"      );
+                $this->settingsSiteHome       = Util::getStringParam( $_POST, "settingsSiteHome"       );
+                $this->settingsReadEpisodeUrl = Util::getStringParam( $_POST, "settingsReadEpisodeUrl" );
+                $this->settingsAdminEmail     = Util::getStringParam( $_POST, "settingsAdminEmail"     );
+                $this->settingsMaxLinks       = Util::getStringParam( $_POST, "settingsMaxLinks"       );
+            }
+
+            $this->settingsMaxEditDays = Util::getStringParam( $_POST, "settingsMaxEditDays" );
+        }
 
         // determine if any of the tables that we are going to add already exist in the database
         $addedTableNames = $this->databaseExists ? $version->getAddedTableNames() : Database::getStoryTableNames();

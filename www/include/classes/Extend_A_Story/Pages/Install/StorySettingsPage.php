@@ -171,7 +171,7 @@ class StorySettingsPage extends InstallPage
 
     protected function preRender()
     {
-        $this->databaseExists = Util::getBoolParamDefault( $_POST, "databaseExists", false );
+        $this->databaseExists = Util::getBoolParam( $_POST, "databaseExists" );
 
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
         $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
