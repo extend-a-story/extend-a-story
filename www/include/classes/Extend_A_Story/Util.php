@@ -321,42 +321,6 @@ class Util
         return Util::getIntValueInternal( $variableName, true );
     }
 
-    private static function getIntValueInternal( $variableName, $increment )
-    {
-        if ( $increment )
-        {
-            $dbStatement = Util::getDbConnection()->prepare(
-                    "UPDATE ExtendAStoryVariable " .
-                       "SET IntValue = IntValue + 1 " .
-                     "WHERE VariableName = :variableName" );
-
-            $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
-            $dbStatement->execute();
-
-            if ( $dbStatement->rowCount() != 1 )
-            {
-                throw new StoryException(
-                        "Unable to increment \"" . $variableName . "\" int value." );
-            }
-        }
-
-        $dbStatement = Util::getDbConnection()->prepare( "SELECT IntValue " .
-                                                           "FROM ExtendAStoryVariable " .
-                                                          "WHERE VariableName = :variableName" );
-
-        $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
-        $dbStatement->execute();
-        $row = $dbStatement->fetch( PDO::FETCH_NUM );
-
-        if ( !$row )
-        {
-            throw new StoryException(
-                    "Unable to fetch \"" . $variableName . "\" int value." );
-        }
-
-        return $row[ 0 ];
-    }
-
     public static function setStringValue( $variableName, $stringValue )
     {
         $dbStatement = Util::getDbConnection()->prepare(
@@ -672,6 +636,42 @@ class Util
         }
 
         return false;
+    }
+
+    private static function getIntValueInternal( $variableName, $increment )
+    {
+        if ( $increment )
+        {
+            $dbStatement = Util::getDbConnection()->prepare(
+                    "UPDATE ExtendAStoryVariable " .
+                       "SET IntValue = IntValue + 1 " .
+                     "WHERE VariableName = :variableName" );
+
+            $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
+            $dbStatement->execute();
+
+            if ( $dbStatement->rowCount() != 1 )
+            {
+                throw new StoryException(
+                        "Unable to increment \"" . $variableName . "\" int value." );
+            }
+        }
+
+        $dbStatement = Util::getDbConnection()->prepare( "SELECT IntValue " .
+                                                           "FROM ExtendAStoryVariable " .
+                                                          "WHERE VariableName = :variableName" );
+
+        $dbStatement->bindParam( ":variableName", $variableName, PDO::PARAM_STR );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
+
+        if ( !$row )
+        {
+            throw new StoryException(
+                    "Unable to fetch \"" . $variableName . "\" int value." );
+        }
+
+        return $row[ 0 ];
     }
 }
 
