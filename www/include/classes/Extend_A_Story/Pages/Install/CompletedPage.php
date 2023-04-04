@@ -37,7 +37,7 @@ class CompletedPage extends InstallPage
 {
     private static function validatePreviousPage()
     {
-        ConfirmationPage::validatePage();
+        $result = ConfirmationPage::validatePage();
         if ( isset( $result )) return $result;
         return null;
     }
