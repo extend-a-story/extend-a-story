@@ -35,6 +35,7 @@ class Version4 extends Version
 {
     public function getDatabaseVersion() { return 4; }
     public function getStoryVersion() { return "2.2.x"; }
+    public function getAddedTableNames() { return []; }
 
     public function checkDatabase()
     {

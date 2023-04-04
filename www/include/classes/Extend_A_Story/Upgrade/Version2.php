@@ -37,6 +37,12 @@ class Version2 extends Version
     public function getDatabaseVersion() { return 2; }
     public function getStoryVersion() { return "2.1.x"; }
 
+    public function getAddedTableNames()
+    {
+        $version3 = new Version3();
+        return $version3->getAddedTableNames();
+    }
+
     public function checkDatabase()
     {
         $versionTables = array( "ExtendAStoryVariable", "Session", "User", "Episode", "Link",

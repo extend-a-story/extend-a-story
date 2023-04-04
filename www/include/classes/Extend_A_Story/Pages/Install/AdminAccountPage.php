@@ -78,18 +78,8 @@ class AdminAccountPage extends InstallPage
 
     private static function validatePreviousPage()
     {
-        $task = Util::getStringParam( $_POST, "task" );
-        if ( $task === "install" )
-        {
-            $result = DataLossWarningPage::validatePage();
-            if ( isset( $result )) return $result;
-        }
-        else if ( $task === "upgrade" )
-        {
-            $result = VersionConfirmationPage::validatePage();
-            if ( isset( $result )) return $result;
-        }
-        else throw new StoryException( "Unrecognized task." );
+        $result = VersionConfirmationPage::validatePage();
+        if ( isset( $result )) return $result;
 
         return null;
     }
@@ -113,20 +103,8 @@ class AdminAccountPage extends InstallPage
 
     protected function getNextPage()
     {
-        $task = Util::getStringParam( $_POST, "task" );
-        if ( $task === "install" )
-        {
-            $allowDataLoss = Util::getStringParamDefault( $_POST, "allowDataLoss", null );
-            if (( isset( $this->backButton )) and ( isset( $allowDataLoss ))) return new DataLossWarningPage();
-            if (( isset( $this->backButton )) and ( !isset( $allowDataLoss ))) return new SelectTaskPage();
-            if ( isset( $this->continueButton )) return new StorySettingsPage();
-        }
-        else if ( $task === "upgrade" )
-        {
-            if ( isset( $this->backButton )) return new VersionConfirmationPage();
-            if ( isset( $this->continueButton )) return new StorySettingsPage();
-        }
-        else throw new StoryException( "Unrecognized task." );
+        if ( isset( $this->backButton     )) return new VersionConfirmationPage();
+        if ( isset( $this->continueButton )) return new StorySettingsPage();
 
         throw new StoryException( "Unrecognized navigation from admin account page." );
     }

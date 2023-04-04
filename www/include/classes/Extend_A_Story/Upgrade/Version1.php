@@ -39,6 +39,13 @@ class Version1 extends Version
     public function getDatabaseVersion() { return 1; }
     public function getStoryVersion() { return "2.0.x"; }
 
+    public function getAddedTableNames()
+    {
+        $addedTables = [ "User", "EpisodeEditLog", "LinkEditLog" ];
+        $version2 = new Version2();
+        return array_unique( [ ...$addedTables, ...$version2->getAddedTableNames() ] );
+    }
+
     public function checkDatabase()
     {
         $versionTables = array( "ExtendAStoryVariable", "Session", "Episode", "Link", "Scheme", "Image" );
@@ -63,6 +70,9 @@ class Version1 extends Version
     {
         $dbConnection = Util::getDbConnection();
 
+        $dbStatement = $dbConnection->prepare( "DROP TABLE IF EXISTS User" );
+        $dbStatement->execute();
+
         $sql =
 <<<SQL
             CREATE TABLE User
@@ -82,12 +92,14 @@ SQL;
         $dbStatement = $dbConnection->prepare( $sql );
         $dbStatement->execute();
         if ( $dbStatement->rowCount() !== 1 ) throw new StoryException( "Failed to insert NextUserID." );
-
     }
 
     private function createEpisodeEditLogTable()
     {
         $dbConnection = Util::getDbConnection();
+
+        $dbStatement = $dbConnection->prepare( "DROP TABLE IF EXISTS EpisodeEditLog" );
+        $dbStatement->execute();
 
         $sql =
 <<<SQL
@@ -123,6 +135,9 @@ SQL;
     private function createLinkEditLogTable()
     {
         $dbConnection = Util::getDbConnection();
+
+        $dbStatement = $dbConnection->prepare( "DROP TABLE IF EXISTS LinkEditLog" );
+        $dbStatement->execute();
 
         $sql =
 <<<SQL

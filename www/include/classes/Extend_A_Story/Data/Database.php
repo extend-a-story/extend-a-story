@@ -44,20 +44,17 @@ class Database
                                              "Scheme",
                                              "Image" );
 
-    public static function getConflictingTableNames()
+    public static function getStoryTableNames()
     {
-        $conflictingTableNames = array();
-        $databaseTableNames = Database::getDatabaseTableNames();
-
-        foreach ( $databaseTableNames as $databaseTableName )
-        {
-            if ( in_array( $databaseTableName, Database::$storyTableNames, true ))
-            {
-                $conflictingTableNames[] = $databaseTableName;
-            }
-        }
-
-        return $conflictingTableNames;
+        return [ "ExtendAStoryVariable",
+                 "Session",
+                 "User",
+                 "Episode",
+                 "Link",
+                 "EpisodeEditLog",
+                 "LinkEditLog",
+                 "Scheme",
+                 "Image" ];
     }
 
     public static function createDatabase()

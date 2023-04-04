@@ -95,57 +95,47 @@ class Util
     public static function getStringParam( $array, $name )
     {
         $value = Util::getStringParamDefault( $array, $name, null );
-
-        if ( !isset( $value ))
-        {
-            throw new StoryException( "Parameter \"" . $name . "\" is not set." );
-        }
-
+        if ( !isset( $value )) throw new StoryException( "Parameter \"" . $name . "\" is not set." );
         return $value;
     }
 
     public static function getStringParamDefault( $array, $name, $defaultValue )
     {
-        if ( !isset( $array[ $name ] ))
-        {
-            return $defaultValue;
-        }
-
+        if ( !isset( $array[ $name ] )) return $defaultValue;
         return trim( $array[ $name ] );
     }
 
     public static function getIntParam( $array, $name )
     {
         $value = Util::getIntParamDefault( $array, $name, null );
-
-        if ( !isset( $value ))
-        {
-            throw new StoryException( "Parameter \"" . $name . "\" is not set." );
-        }
-
+        if ( !isset( $value )) throw new StoryException( "Parameter \"" . $name . "\" is not set." );
         return $value;
     }
 
     public static function getIntParamDefault( $array, $name, $defaultValue )
     {
-        if ( !isset( $array[ $name ] ))
-        {
-            return $defaultValue;
-        }
-
+        if ( !isset( $array[ $name ] )) return $defaultValue;
         $value = trim( $array[ $name ] );
-
-        if ( empty( $value ))
-        {
-            return $defaultValue;
-        }
-
-        if ( !ctype_digit( $value ))
-        {
-            throw new StoryException( "Parameter \"" . $name . "\" is not an integer." );
-        }
-
+        if ( empty( $value )) return $defaultValue;
+        if ( !ctype_digit( $value )) throw new StoryException( "Parameter \"" . $name . "\" is not an integer." );
         return (int) $value;
+    }
+
+    public static function getBoolParam( $array, $name )
+    {
+        $value = Util::getBoolParamDefault( $array, $name, null );
+        if ( !isset( $value )) throw new StoryException( "Parameter \"" . $name . "\" is not set." );
+        return $value;
+    }
+
+    public static function getBoolParamDefault( $array, $name, $defaultValue )
+    {
+        if ( !isset( $array[ $name ] )) return $defaultValue;
+        $value = strtolower( trim( $array[ $name ] ));
+        if ( empty( $value )) return $defaultValue;
+        if (( $value === "true"  ) or ( $value === "1" )) return true;
+        if (( $value === "false" ) or ( $value === "0" )) return false;
+        throw new StoryException( "Parameter \"" . $name . "\" is not a boolean." );
     }
 
     public static function maximumWordLength( $input )

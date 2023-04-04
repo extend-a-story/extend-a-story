@@ -48,6 +48,7 @@ abstract class Version
 
     public abstract function getDatabaseVersion();
     public abstract function getStoryVersion();
+    public abstract function getAddedTableNames();
     public abstract function checkDatabase();
     public abstract function upgradeDatabase( $upgradeData );
 }

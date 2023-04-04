@@ -28,6 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Pages\Install;
 
+use \Extend_A_Story\HtmlElements\RawText;
+use \Extend_A_Story\HtmlElements\UnorderedList;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Upgrade\Version;
 use \Extend_A_Story\Util;
@@ -39,16 +41,24 @@ class VersionConfirmationPage extends InstallPage
         $result = VersionConfirmationPage::validatePreviousPage();
         if ( isset( $result )) return $result;
 
-        $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
         $version = Version::getVersion();
-        if ( $databaseVersion !== $version->getDatabaseVersion() ) return new VersionConfirmationPage();
+
+        // return to the version confirmation page if the database version or its creation status changed
+        if (( Util::getIntParam ( $_POST, "databaseVersion" ) !== $version->getDatabaseVersion() ) or
+            ( Util::getBoolParam( $_POST, "databaseExists"  ) !== $version->checkDatabase()      ))
+        {
+            $message = "The status of your database has changed. " .
+                       "Verify that everything is as you expect before proceeding.";
+            $error = new UnorderedList( [ new RawText( $message ) ] );
+            return new VersionConfirmationPage( $error );
+        }
 
         return null;
     }
 
     private static function validatePreviousPage()
     {
-        $result = SelectTaskPage::validatePage();
+        $result = DatabaseConnectionPage::validatePage();
         if ( isset( $result )) return $result;
         return null;
     }
@@ -56,6 +66,11 @@ class VersionConfirmationPage extends InstallPage
     private $databaseVersion;
     private $databaseExists;
     private $storyVersion;
+
+    public function __construct( $error = null )
+    {
+        parent::__construct( $error );
+    }
 
     public function validate()
     {
@@ -66,7 +81,7 @@ class VersionConfirmationPage extends InstallPage
 
     protected function getNextPage()
     {
-        if ( isset( $this->backButton )) return new SelectTaskPage();
+        if ( isset( $this->backButton )) return new DatabaseConnectionPage();
 
         if ( isset( $this->continueButton ))
         {
@@ -87,7 +102,7 @@ class VersionConfirmationPage extends InstallPage
     protected function getFields()
     {
         return array( "pageName", "backButton", "continueButton",
-                      "databaseVersion" );
+                      "databaseVersion", "databaseExists" );
     }
 
     protected function preRender()
@@ -112,8 +127,8 @@ class VersionConfirmationPage extends InstallPage
 
 ?>
 
-An Extend-A-Story database was not found. Check your database connection settings. If you are installing Extend-A-Story
-into an empty database, go back and select <em>Install New Database</em> instead.
+We did not find an Extend-A-Story database.
+We will proceed with installing a new Extend-A-Story database.
 
 <?php
 
@@ -125,7 +140,8 @@ into an empty database, go back and select <em>Install New Database</em> instead
 
 ?>
 
-Your Extend-A-Story database is already the latest version. There is no need to upgrade.
+We found an Extend-A-Story database that is already the current version.
+There is nothing for us to do.
 
 <?php
 
@@ -135,7 +151,8 @@ Your Extend-A-Story database is already the latest version. There is no need to 
 
 ?>
 
-You are upgrading from version <?php echo( htmlentities( $this->storyVersion )); ?> of Extend-A-Story.
+We found an Extend-A-Story database for version <?php echo( htmlentities( $this->storyVersion )); ?> of Extend-A-Story.
+We will proceed with upgrading your database to the current version.
 
 <?php
 
@@ -146,14 +163,17 @@ You are upgrading from version <?php echo( htmlentities( $this->storyVersion ));
 
 </p>
 
+<p>If this is not what you expected, go back and check your database connection settings.</p>
+
 <div class="submit">
     <input type="hidden" name="pageName" value="VersionConfirmation">
-    <input type="hidden" name="databaseVersion" value="<?php echo( htmlentities( $this->databaseVersion )); ?>">
+    <input type="hidden" name="databaseVersion" value="<?php echo( htmlentities( $this->databaseVersion    )); ?>">
+    <input type="hidden" name="databaseExists"  value="<?php echo( $this->databaseExists ? "true" : "false" ); ?>">
     <input type="submit" name="backButton" value="Back">
 
 <?php
 
-        if (( $this->databaseExists ) and ( $this->databaseVersion !== 4 ))
+        if ( $this->databaseVersion !== 4 )
         {
 
 ?>

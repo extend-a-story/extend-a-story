@@ -52,8 +52,7 @@ class StorySettingsPage extends InstallPage
 
         $errors = array();
 
-        $task = Util::getStringParam( $_POST, "task" );
-        if ( $task === "install" )
+        if ( !Util::getBoolParam( $_POST, "databaseExists" ))
         {
             if ( strlen( $settingsStoryName ) == 0 )
             {
@@ -127,7 +126,7 @@ class StorySettingsPage extends InstallPage
         return null;
     }
 
-    private $task;
+    private $databaseExists;
     private $settingsStoryNameField;
     private $settingsSiteNameField;
     private $settingsStoryHomeField;
@@ -172,7 +171,8 @@ class StorySettingsPage extends InstallPage
 
     protected function preRender()
     {
-        $this->task             = Util::getStringParamDefault( $_POST, "task",                   "" );
+        $this->databaseExists = Util::getBoolParamDefault( $_POST, "databaseExists", false );
+
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
         $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
         $settingsStoryHome      = Util::getStringParamDefault( $_POST, "settingsStoryHome",      "" );
@@ -231,7 +231,7 @@ class StorySettingsPage extends InstallPage
 
 <?php
 
-        if ( $this->task === "install" )
+        if ( !$this->databaseExists )
         {
             $this->settingsStoryNameField->render();
             $this->settingsSiteNameField->render();

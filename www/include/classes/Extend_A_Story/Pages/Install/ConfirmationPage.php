@@ -45,13 +45,12 @@ class ConfirmationPage extends InstallPage
 
     private static function validatePreviousPage()
     {
-        $task = Util::getStringParam( $_POST, "task" );
-        if ( $task === "install" )
+        if ( !Util::getBoolParam( $_POST, "databaseExists" ))
         {
             $result = StorySettingsPage::validatePage();
             if ( isset( $result )) return $result;
         }
-        else if ( $task === "upgrade" )
+        else
         {
             $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
             if ( $databaseVersion === 1 )
@@ -66,12 +65,10 @@ class ConfirmationPage extends InstallPage
             }
             else throw new StoryException( "Unrecognized database version." );
         }
-        else throw new StoryException( "Unrecognized task." );
 
         return null;
     }
 
-    private $task;
     private $databaseHost;
     private $databaseUsername;
     private $databaseName;
@@ -85,7 +82,8 @@ class ConfirmationPage extends InstallPage
     private $settingsAdminEmail;
     private $settingsMaxLinks;
     private $settingsMaxEditDays;
-    private $tables;
+    private $conflictingTables;
+    private $databaseExists;
     private $databaseVersion;
     private $storyVersion;
 
@@ -98,38 +96,26 @@ class ConfirmationPage extends InstallPage
 
     protected function getNextPage()
     {
-        $task = Util::getStringParam( $_POST, "task" );
-        if ( $task === "install" )
+        if ( isset( $this->continueButton )) return new CompletedPage();
+
+        if ( isset( $this->backButton ))
         {
-            if ( isset( $this->backButton     )) return new StorySettingsPage();
-            if ( isset( $this->continueButton )) return new CompletedPage();
-        }
-        else if ( $task === "upgrade" )
-        {
-            if ( isset( $this->backButton ))
+            if ( !Util::getBoolParam( $_POST, "databaseExists" )) return new StorySettingsPage();
+            else
             {
                 $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
                 if ( $databaseVersion === 1 ) return new StorySettingsPage();
                 if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 )) return new VersionConfirmationPage();
                 else throw new StoryException( "Unrecognized database version." );
             }
-
-            if ( isset( $this->continueButton )) return new CompletedPage();
         }
-        else throw new StoryException( "Unrecognized task." );
 
         throw new StoryException( "Unrecognized navigation from confirmation page." );
     }
 
     protected function getSubtitle()
     {
-        $task = Util::getStringParam( $_POST, "task" );
-        switch ( $task )
-        {
-            case "install" : return "Install Confirmation";
-            case "upgrade" : return "Upgrade Confirmation";
-            default : throw new StoryException( "Unrecognized task." );
-        }
+        return $this->databaseExists ? "Upgrade Confirmation" : "Install Confirmation";
     }
 
     protected function getFields()
@@ -139,7 +125,6 @@ class ConfirmationPage extends InstallPage
 
     protected function preRender()
     {
-        $this->task                   = Util::getStringParamDefault( $_POST, "task",                   "" );
         $this->databaseHost           = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
         $this->databaseUsername       = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
         $this->databaseName           = Util::getStringParamDefault( $_POST, "databaseName",           "" );
@@ -153,22 +138,18 @@ class ConfirmationPage extends InstallPage
         $this->settingsAdminEmail     = Util::getStringParamDefault( $_POST, "settingsAdminEmail",     "" );
         $this->settingsMaxLinks       = Util::getStringParamDefault( $_POST, "settingsMaxLinks",       "" );
         $this->settingsMaxEditDays    = Util::getStringParamDefault( $_POST, "settingsMaxEditDays",    "" );
-        $this->tables                 = null;
-        $this->databaseVersion        = null;
-        $this->storyVersion           = null;
 
-        if ( $this->task === "install" )
-        {
-            $tableNames = Database::getConflictingTableNames();
-            if ( count( $tableNames ) > 0 ) $this->tables = UnorderedList::buildFromStringArray( $tableNames );
-        }
-        else if ( $this->task === "upgrade" )
-        {
-            $version = Version::getVersion();
-            $this->databaseVersion = $version->getDatabaseVersion();
-            $this->storyVersion    = $version->getStoryVersion();
-        }
-        else throw new StoryException( "Unrecognized task." );
+        $version = Version::getVersion();
+        $this->databaseVersion = $version->getDatabaseVersion();
+        $this->databaseExists  = $version->checkDatabase();
+        $this->storyVersion    = $version->getStoryVersion();
+
+        // determine if any of the tables that we are going to add already exist in the database
+        $addedTableNames = $this->databaseExists ? $version->getAddedTableNames() : Database::getStoryTableNames();
+        $conflictingTableNames = array_intersect( $addedTableNames, Database::getDatabaseTableNames() );
+        sort( $conflictingTableNames );
+        $this->conflictingTables =
+                empty( $conflictingTableNames ) ? null : UnorderedList::buildFromStringArray( $conflictingTableNames );
     }
 
     protected function renderMain()
@@ -177,9 +158,11 @@ class ConfirmationPage extends InstallPage
 ?>
 
 <p>
-    We have gathered all of the information we need to <?php echo( htmlentities( $this->task )); ?> your Extend-A-Story
-    database. Verify that your information is correct. Once you are ready to proceed, click the
-    <em><?php echo( $this->task === "install" ? "Install" : "Upgrade" ); ?></em> button.
+    We have gathered all of the information we need to
+    <?php echo( $this->databaseExists ? "upgrade" : "install" ); ?> your Extend-A-Story database.
+    Verify that your information is correct.
+    Once you are ready to proceed, click the
+    <em><?php echo( $this->databaseExists ? "Upgrade" : "Install" ); ?></em> button.
 </p>
 
 <table>
@@ -205,9 +188,7 @@ class ConfirmationPage extends InstallPage
 
 <?php
 
-        if (( $this->task === "install" ) or
-            (( $this->task === "upgrade" ) and
-             ( $this->databaseVersion === 1 )))
+        if (( !$this->databaseExists ) or ( $this->databaseVersion === 1 ))
         {
 ?>
 
@@ -234,9 +215,7 @@ class ConfirmationPage extends InstallPage
 
         }
 
-        if (( $this->task === "install" ) or
-            (( $this->task === "upgrade" ) and
-             ( $this->databaseVersion === 1 )))
+        if (( !$this->databaseExists ) or ( $this->databaseVersion === 1 ))
         {
 
 ?>
@@ -250,7 +229,7 @@ class ConfirmationPage extends InstallPage
 
 <?php
 
-            if ( $this->task === "install" )
+            if ( !$this->databaseExists )
             {
 
 ?>
@@ -299,7 +278,7 @@ class ConfirmationPage extends InstallPage
 
         }
 
-        if ( $this->task === "upgrade" )
+        if ( $this->databaseExists )
         {
 
 ?>
@@ -325,7 +304,7 @@ class ConfirmationPage extends InstallPage
 
 <?php
 
-        if (( $this->task === "upgrade" ) or ( isset( $this->tables )))
+        if (( $this->databaseExists ) or ( isset( $this->conflictingTables )))
         {
 
 ?>
@@ -334,18 +313,16 @@ class ConfirmationPage extends InstallPage
 
 <?php
 
-            if ( isset( $this->tables ))
+            if ( isset( $this->conflictingTables ))
             {
 
 ?>
 
-    <p>!!! YOU WILL LOSE DATA IF YOU PROCEED !!!</p>
-
-    <p>The following tables will be deleted:</p>
+    <p>Data in the following tables will be deleted if you proceed:</p>
 
 <?php
 
-                $this->tables->render();
+                $this->conflictingTables->render();
             }
 
 ?>
@@ -363,8 +340,7 @@ class ConfirmationPage extends InstallPage
 <div class="submit">
     <input type="hidden" name="pageName" value="Confirmation">
     <input type="submit" name="backButton" value="Back">
-    <input type="submit" name="continueButton"
-           value="<?php echo( $this->task === "install" ? "Install" : "Upgrade" ); ?>">
+    <input type="submit" name="continueButton" value="<?php echo( $this->databaseExists ? "Upgrade" : "Install" ); ?>">
 </div>
 
 <?php

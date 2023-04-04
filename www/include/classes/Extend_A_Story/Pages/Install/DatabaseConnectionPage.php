@@ -126,7 +126,7 @@ class DatabaseConnectionPage extends InstallPage
     protected function getNextPage()
     {
         if ( isset( $this->backButton )) return new StartPage();
-        if ( isset( $this->continueButton )) return new SelectTaskPage();
+        if ( isset( $this->continueButton )) return new VersionConfirmationPage();
         throw new StoryException( "Unrecognized navigation from database connection page." );
     }
 

@@ -42,7 +42,7 @@ class CompletedPage extends InstallPage
         return null;
     }
 
-    private $task;
+    private $databaseExists;
     private $databaseHost;
     private $databaseUsername;
     private $databasePassword;
@@ -62,13 +62,7 @@ class CompletedPage extends InstallPage
 
     protected function getSubtitle()
     {
-        $task = Util::getStringParam( $_POST, "task" );
-        switch ( $task )
-        {
-            case "install" : return "Install Completed";
-            case "upgrade" : return "Upgrade Completed";
-            default : throw new StoryException( "Unrecognized task." );
-        }
+        return $this->databaseExists ? "Upgrade Completed" : "Install Completed";
     }
 
     protected function getFields()
@@ -78,15 +72,14 @@ class CompletedPage extends InstallPage
 
     protected function preRender()
     {
-        $this->task             = Util::getStringParamDefault( $_POST, "task",                   "" );
-        $this->databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",           "" );
-        $this->databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername",       "" );
-        $this->databasePassword = Util::getStringParamDefault( $_POST, "databasePassword",       "" );
-        $this->databaseName     = Util::getStringParamDefault( $_POST, "databaseName",           "" );
+        $this->databaseExists   = Util::getBoolParamDefault  ( $_POST, "databaseExists",   false );
+        $this->databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     ""    );
+        $this->databaseUsername = Util::getStringParamDefault( $_POST, "databaseUsername", ""    );
+        $this->databasePassword = Util::getStringParamDefault( $_POST, "databasePassword", ""    );
+        $this->databaseName     = Util::getStringParamDefault( $_POST, "databaseName",     ""    );
 
-        if ( $this->task === "install" ) $this->installDatabase();
-        else if ( $this->task === "upgrade" ) $this->upgradeDatabase();
-        else throw new StoryException( "Unrecognized task." );
+        if ( $this->databaseExists ) $this->upgradeDatabase();
+        else $this->installDatabase();
     }
 
     protected function renderMain()
@@ -95,9 +88,10 @@ class CompletedPage extends InstallPage
 ?>
 
 <p>
-    Your Extend-A-Story database has been <?php echo( $this->task === "install" ? "installed" : "upgraded" ); ?>. To
-    finish your <?php echo( $this->task === "install" ? "installation" : "upgrade" ); ?>, you must update your
-    configuration file. This is the location of your configuration file:
+    Your Extend-A-Story database has been <?php echo( $this->databaseExists ? "upgraded" : "installed" ); ?>.
+    To finish your <?php echo( $this->databaseExists ? "upgrade" : "installation" ); ?>,
+    you must update your configuration file.
+    This is the location of your configuration file:
 </p>
 
 <pre>
