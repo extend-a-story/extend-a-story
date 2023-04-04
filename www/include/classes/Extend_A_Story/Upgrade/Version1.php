@@ -59,7 +59,6 @@ class Version1 extends Version
         $this->createEpisodeEditLogTable();
         $this->createLinkEditLogTable();
         $this->alterSessionTable();
-        $this->createUser( $upgradeData );
         $this->setMaxEditDays( $upgradeData );
 
         $version2 = new Version2();
@@ -167,17 +166,6 @@ SQL;
         $sql = "ALTER TABLE Session ADD COLUMN UserID  INT UNSIGNED  NOT NULL  AFTER SessionID";
         $dbStatement = $dbConnection->prepare( $sql );
         $dbStatement->execute();
-    }
-
-    private function createUser( $upgradeData )
-    {
-        $dbConnection = Util::getDbConnection();
-        $sql = "INSERT INTO User VALUES ( 1, 4, :loginName, 'invalid', :userName )";
-        $dbStatement = $dbConnection->prepare( $sql );
-        $dbStatement->bindParam( ":loginName", $upgradeData[ "adminLoginName"   ], PDO::PARAM_STR );
-        $dbStatement->bindParam( ":userName",  $upgradeData[ "adminDisplayName" ], PDO::PARAM_STR );
-        $dbStatement->execute();
-        if ( $dbStatement->rowCount() !== 1 ) throw new StoryException( "Failed to insert user." );
     }
 
     private function setMaxEditDays( $upgradeData )

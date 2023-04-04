@@ -147,14 +147,15 @@ $configStoryEnabled     = true;
 
     private function upgradeDatabase()
     {
-        $upgradeData = array();
+        $upgradeData = [];
         $version = Version::getVersion();
 
         if ( $version->getDatabaseVersion() === 1 )
         {
+            $upgradeData[ "settingsMaxEditDays" ] = Util::getStringParamDefault( $_POST, "settingsMaxEditDays", "" );
             $upgradeData[ "adminLoginName"      ] = Util::getStringParamDefault( $_POST, "adminLoginName",      "" );
             $upgradeData[ "adminDisplayName"    ] = Util::getStringParamDefault( $_POST, "adminDisplayName",    "" );
-            $upgradeData[ "settingsMaxEditDays" ] = Util::getStringParamDefault( $_POST, "settingsMaxEditDays", "" );
+            $upgradeData[ "adminPassword"       ] = Util::getStringParamDefault( $_POST, "adminPassword1",      "" );
         }
 
         $version->upgradeDatabase( $upgradeData );

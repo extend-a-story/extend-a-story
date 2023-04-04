@@ -28,6 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Upgrade;
 
+use \PDO;
+
 use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
@@ -61,6 +63,8 @@ class Version2 extends Version
         $this->alterLinkEditLogTable();
         $this->alterSchemeTable();
         $this->alterImageTable();
+
+        if ( isset( $upgradeData[ "adminLoginName" ] )) $this->createUser( $upgradeData );
 
         $version3 = new Version3();
         $version3->upgradeDatabase( $upgradeData );
@@ -180,5 +184,17 @@ class Version2 extends Version
         $dbStatement = $dbConnection->prepare( $sql );
         $dbStatement->execute();
         if ( $dbStatement->rowCount() !== 1 ) throw new StoryException( "Failed to delete NextImageID." );
+    }
+
+    private function createUser( $upgradeData )
+    {
+        $dbConnection = Util::getDbConnection();
+        $sql = "INSERT INTO User VALUES ( 1, 4, :loginName, SHA2( :password, 256 ), :userName )";
+        $dbStatement = $dbConnection->prepare( $sql );
+        $dbStatement->bindParam( ":loginName", $upgradeData[ "adminLoginName"   ], PDO::PARAM_STR );
+        $dbStatement->bindParam( ":password",  $upgradeData[ "adminPassword"    ], PDO::PARAM_STR );
+        $dbStatement->bindParam( ":userName",  $upgradeData[ "adminDisplayName" ], PDO::PARAM_STR );
+        $dbStatement->execute();
+        if ( $dbStatement->rowCount() !== 1 ) throw new StoryException( "Failed to insert user." );
     }
 }
