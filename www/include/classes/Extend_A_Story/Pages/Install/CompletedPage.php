@@ -87,9 +87,11 @@ class CompletedPage extends InstallPage
 
 ?>
 
-<p>
-    Your Extend-A-Story database has been <?php echo( $this->databaseExists ? "upgraded" : "installed" ); ?>.
-    To finish your <?php echo( $this->databaseExists ? "upgrade" : "installation" ); ?>,
+<p>Your Extend-A-Story database has been <?php echo( $this->databaseExists ? "upgraded" : "installed" ); ?>.</p>
+
+<h3>Update Configuration</h3>
+
+    To finish your <?php echo( $this->databaseExists ? "upgrade" : "installation" ); ?>
     you must update your configuration file.
     This is the location of your configuration file:
 </p>
@@ -98,17 +100,13 @@ class CompletedPage extends InstallPage
 <?php echo( htmlentities( realpath( __DIR__ . "/../../../../config/Configuration.php" ))); ?>
 </pre>
 
-<p>
-    Near the end of the file you will find a section that begins with:
-</p>
+<p>Near the end of the file you will find a section that begins with:</p>
 
 <pre>
 $configInstallToken = "<?php echo( htmlentities( $this->installToken )); ?>";
 </pre>
 
-<p>
-    Change that section to read as follows:
-</p>
+<p>Change that section to read as follows:</p>
 
 <pre>
 $configInstallToken     = null;
@@ -121,6 +119,37 @@ $configStoryEnabled     = true;
 
 <?php
 
+        if ( !$this->databaseExists )
+        {
+
+?>
+
+<h3>Create First Episode</h3>
+
+<p>
+    You must enable episode creation before you can create the first episode of your story.
+    Navigate to your Extend-A-Story admninistration page:
+    <a href="admin.php" target="_blank">Extend-A-Story Admninistration</a>
+</p>
+
+<p>
+    Log in using the administrator account we created during installation,
+    click <em>Configure Story Settings</em>,
+    set <em>Is Writeable</em> to <em>Yes</em>,
+    and click <em>Save</em>.
+</p>
+
+<p>
+    Now you can create the first episode of your story.
+    Navigate to your Extend-A-Story page for reading episodes:
+    <a href="read.php" target="_blank">Read Episode</a>
+</p>
+
+<p>Follow the prompts to create the first episode and any subsequent episodes you wish to create.</p>
+
+<?php
+
+        }
     }
 
     private function installDatabase()
