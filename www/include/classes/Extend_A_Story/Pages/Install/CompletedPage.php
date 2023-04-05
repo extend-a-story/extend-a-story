@@ -47,6 +47,7 @@ class CompletedPage extends InstallPage
     private $databaseUsername;
     private $databasePassword;
     private $databaseName;
+    private $isWriteable;
 
     public function validate()
     {
@@ -80,6 +81,8 @@ class CompletedPage extends InstallPage
 
         if ( $this->databaseExists ) $this->upgradeDatabase();
         else $this->installDatabase();
+
+        $this->isWriteable = Util::getStringValue( "IsWriteable" );
     }
 
     protected function renderMain()
@@ -146,6 +149,29 @@ $configStoryEnabled     = true;
 </p>
 
 <p>Follow the prompts to create the first episode and any subsequent episodes you wish to create.</p>
+
+<?php
+
+        }
+        else if ( $this->isWriteable === "N" )
+        {
+
+?>
+
+<h3>Enable Episode Creation</h3>
+
+<p>
+    Episode creation is currently disabled and must be enabled before new episodes can be created.
+    Navigate to your Extend-A-Story admninistration page:
+    <a href="admin.php" target="_blank">Extend-A-Story Admninistration</a>
+</p>
+
+<p>
+    Log in using your administrator account,
+    click <em>Configure Story Settings</em>,
+    set <em>Is Writeable</em> to <em>Yes</em>,
+    and click <em>Save</em>.
+</p>
 
 <?php
 
