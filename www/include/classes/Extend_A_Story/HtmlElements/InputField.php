@@ -59,6 +59,8 @@ class InputField extends HtmlElement
         <label for="<?php echo( htmlentities( $this->name )); ?>">
             <?php echo( htmlentities( $this->label )); ?>:
         </label>
+
+        <span class="helpIcon" title="<?php echo( htmlentities( $this->helpText )); ?>">?</span>
     </div>
 
     <input type    = "<?php echo( htmlentities( $this->type     )); ?>"
@@ -69,8 +71,6 @@ class InputField extends HtmlElement
                          '<?php echo( htmlentities( $this->name )); ?>',
                           <?php echo( isset( $this->limit     ) ? htmlentities( $this->limit     ) : "null" ); ?>,
                           <?php echo( isset( $this->threshold ) ? htmlentities( $this->threshold ) : "null" ); ?> )">
-
-    <span class="helpIcon" title="<?php echo( htmlentities( $this->helpText )); ?>">?</span>
 
 <?php
 
