@@ -24,20 +24,6 @@ http://www.sir-toby.com/extend-a-story/
 
 */
 
-function toggleVisibility( id )
-{
-    const element = document.getElementById( id );
-
-    if ( element.style.display == "none" )
-    {
-        element.style.display = "";
-    }
-    else
-    {
-        element.style.display = "none";
-    }
-}
-
 function updateInputFieldLimit( inputFieldId, limit, threshold )
 {
     if ( limit === null ) return;

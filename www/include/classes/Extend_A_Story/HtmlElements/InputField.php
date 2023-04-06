@@ -60,22 +60,17 @@ class InputField extends HtmlElement
             <?php echo( htmlentities( $this->label )); ?>:
         </label>
     </div>
-    <div>
-        <span onclick="toggleVisibility( '<?php echo( htmlentities( $this->name )); ?>-help' );"
-              class="inputFieldHelpButton">Help</span>
-    </div>
-    <div id="<?php echo( htmlentities( $this->name )); ?>-help"
-         class="inputFieldHelpContents" style="display: none;">
-        <?php echo( htmlentities( $this->helpText )); ?>
-    </div>
-    <input type="<?php echo( htmlentities( $this->type )); ?>"
-           id="<?php echo( htmlentities( $this->name )); ?>"
-           name="<?php echo( htmlentities( $this->name )); ?>"
-           value="<?php echo( htmlentities( $this->value )); ?>"
-           oninput="updateInputFieldLimit(
-                           '<?php echo( htmlentities( $this->name )); ?>',
-                            <?php echo( isset( $this->limit     ) ? htmlentities( $this->limit     ) : "null" ); ?>,
-                            <?php echo( isset( $this->threshold ) ? htmlentities( $this->threshold ) : "null" ); ?> )">
+
+    <input type    = "<?php echo( htmlentities( $this->type     )); ?>"
+           id      = "<?php echo( htmlentities( $this->name     )); ?>"
+           name    = "<?php echo( htmlentities( $this->name     )); ?>"
+           value   = "<?php echo( htmlentities( $this->value    )); ?>"
+           oninput = "updateInputFieldLimit(
+                         '<?php echo( htmlentities( $this->name )); ?>',
+                          <?php echo( isset( $this->limit     ) ? htmlentities( $this->limit     ) : "null" ); ?>,
+                          <?php echo( isset( $this->threshold ) ? htmlentities( $this->threshold ) : "null" ); ?> )">
+
+    <span class="helpIcon" title="<?php echo( htmlentities( $this->helpText )); ?>">?</span>
 
 <?php
 

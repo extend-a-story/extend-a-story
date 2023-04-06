@@ -64,13 +64,6 @@ div.inputField
     margin:           0em 0em 0em 0em;
 }
 
-div.inputFieldHelpContents
-{
-    background-color: #CCCCCC;
-    padding:          0.25em;
-    margin:           0.25em 0.25em 0.25em 1em;
-}
-
 div.main
 {
     border:           1px solid #3333FF;
@@ -128,12 +121,23 @@ pre
     margin:           1em 0em 1em 2em;
 }
 
-span.inputFieldHelpButton
+span.helpIcon
 {
-    margin:           0em 0em 0em 1em;
-    color:            #0000FF;
-    text-decoration:  underline;
-    cursor:           pointer;
+    display:          inline-block;
+    width:            1em;
+    height:           1em;
+    text-align:       center;
+    line-height:      1em;
+    background-color: #CCCCCC;
+    border:           1px solid #777777;
+    border-radius:    50%;
+    cursor:           help;
+}
+
+span.helpIcon:hover
+{
+    background-color: #DDDDDD;
+    border-color:     #888888;
 }
 
 td.header

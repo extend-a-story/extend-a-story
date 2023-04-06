@@ -60,14 +60,7 @@ class Checkbox extends HtmlElement
         <label for="<?php echo( htmlentities( $this->name )); ?>">
             <?php echo( htmlentities( $this->label )); ?>
         </label>
-    </div>
-    <div>
-        <span onclick="toggleVisibility( '<?php echo( htmlentities( $this->name )); ?>-help' );"
-              class="inputFieldHelpButton">Help</span>
-    </div>
-    <div id="<?php echo( htmlentities( $this->name )); ?>-help"
-         class="inputFieldHelpContents" style="display: none;">
-        <?php echo( htmlentities( $this->helpText )); ?>
+        <span class="helpIcon" title="<?php echo( htmlentities( $this->helpText )); ?>">?</span>
     </div>
 </div>
 
