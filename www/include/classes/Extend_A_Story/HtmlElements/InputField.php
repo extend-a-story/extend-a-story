@@ -34,16 +34,18 @@ class InputField extends HtmlElement
     private $label;
     private $type;
     private $value;
+    private $width;
     private $limit;
     private $threshold;
     private $helpText;
 
-    public function __construct( $name, $label, $type, $value, $limit, $threshold, $helpText )
+    public function __construct( $name, $label, $type, $value, $width, $limit, $threshold, $helpText )
     {
         $this->name      = $name;
         $this->label     = $label;
         $this->type      = $type;
         $this->value     = $value;
+        $this->width     = isset( $width ) ? $width . "ch" : "100%";
         $this->limit     = $limit;
         $this->threshold = isset( $threshold ) ? $threshold : $this->limit;
         $this->helpText  = $helpText;
@@ -67,6 +69,7 @@ class InputField extends HtmlElement
            id      = "<?php echo( htmlentities( $this->name     )); ?>"
            name    = "<?php echo( htmlentities( $this->name     )); ?>"
            value   = "<?php echo( htmlentities( $this->value    )); ?>"
+           style   = "width: <?php echo( htmlentities( $this->width )); ?>; box-sizing: border-box;"
            oninput = "updateInputFieldLimit(
                          '<?php echo( htmlentities( $this->name )); ?>',
                           <?php echo( isset( $this->limit     ) ? htmlentities( $this->limit     ) : "null" ); ?>,

@@ -32,6 +32,9 @@ use \PDO;
 
 class Util
 {
+    const smallInputWidth  = 5;
+    const mediumInputWidth = 20;
+
     private static $dbConnection = null;
 
     public static function verifyDbConfiguration()

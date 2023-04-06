@@ -118,21 +118,21 @@ class AdminAccountPage extends InstallPage
 
         $this->adminLoginNameField = new InputField(
                 "adminLoginName", "Login Name", "text", $adminLoginName,
-                User::loginNameLimit, User::loginNameThreshold,
+                Util::mediumInputWidth, User::loginNameLimit, User::loginNameThreshold,
                 "This is the login name for the initial administrator account for your story." );
 
         $this->adminDisplayNameField = new InputField(
                 "adminDisplayName", "Display Name", "text", $adminDisplayName,
-                User::userNameLimit, User::userNameThreshold,
+                Util::mediumInputWidth, User::userNameLimit, User::userNameThreshold,
                 "This is the display name for the initial administrator account for your story. This name will be " .
                 "publicly displayed on any moderation activity performed by that account in your story." );
 
         $this->adminPassword1Field = new InputField(
-                "adminPassword1", "Pasword", "password", $adminPassword1, null, null,
+                "adminPassword1", "Pasword", "password", $adminPassword1, Util::mediumInputWidth, null, null,
                 "This is the password for the initial administrator account for your story." );
 
         $this->adminPassword2Field = new InputField(
-                "adminPassword2", "Confirm Password", "password", $adminPassword2, null, null,
+                "adminPassword2", "Confirm Password", "password", $adminPassword2, Util::mediumInputWidth, null, null,
                 "Please confirm the password for the initial administrator account for your story." );
     }
 

@@ -173,40 +173,40 @@ class StorySettingsPage extends InstallPage
         $threshold = ExtendAStoryVariable::stringValueThreshold;
 
         $this->settingsStoryNameField = new InputField(
-                "settingsStoryName", "Story Name", "text", $settingsStoryName, $limit, $threshold,
+                "settingsStoryName", "Story Name", "text", $settingsStoryName, null, $limit, $threshold,
                 "This is the name of your story. This name will be used in page titles and links to the home page of " .
                 "your story." );
 
         $this->settingsSiteNameField = new InputField(
-                "settingsSiteName", "Site Name", "text", $settingsSiteName, $limit, $threshold,
+                "settingsSiteName", "Site Name", "text", $settingsSiteName, null, $limit, $threshold,
                 "This is the name of your web site. This name will be used in links to the home page of your web " .
                 "site." );
 
         $this->settingsStoryHomeField = new InputField(
-                "settingsStoryHome", "Story Home", "text", $settingsStoryHome, $limit, $threshold,
+                "settingsStoryHome", "Story Home", "text", $settingsStoryHome, null, $limit, $threshold,
                 "This is the URL for the home page of your story. All story pages will provide a link to this URL." );
 
         $this->settingsSiteHomeField = new InputField(
-                "settingsSiteHome", "Site Home", "text", $settingsSiteHome, $limit, $threshold,
+                "settingsSiteHome", "Site Home", "text", $settingsSiteHome, null, $limit, $threshold,
                 "This is the URL for the home page of your web site. All story pages will provide a link to this " .
                 "URL." );
 
         $this->settingsReadEpisodeUrlField = new InputField(
-                "settingsReadEpisodeUrl", "Read Episode URL", "text", $settingsReadEpisodeUrl, $limit, $threshold,
+                "settingsReadEpisodeUrl", "Read Episode URL", "text", $settingsReadEpisodeUrl, null, $limit, $threshold,
                 "This is the URL to the \"read.php\" script for this story on your web site. Email notifications of " .
                 "newly created episodes will use this URL to provide a link to the newly created episode." );
 
         $this->settingsAdminEmailField = new InputField(
-                "settingsAdminEmail", "Admin Email", "text", $settingsAdminEmail, $limit, $threshold,
+                "settingsAdminEmail", "Admin Email", "text", $settingsAdminEmail, null, $limit, $threshold,
                 "This is the email address from which email notifications of newly created episodes will be sent. " .
                 "This email address will also receive an email notification for every episode that is created." );
 
         $this->settingsMaxLinksField = new InputField(
-                "settingsMaxLinks", "Max Links", "text", $settingsMaxLinks, null, null,
+                "settingsMaxLinks", "Max Links", "text", $settingsMaxLinks, Util::smallInputWidth, null, null,
                 "This is the maximum number of links an author is allowed to specify when creating an episode." );
 
         $this->settingsMaxEditDaysField = new InputField(
-                "settingsMaxEditDays", "Max Edit Days", "text", $settingsMaxEditDays, null, null,
+                "settingsMaxEditDays", "Max Edit Days", "text", $settingsMaxEditDays, Util::smallInputWidth, null, null,
                 "This is the number of days for which an author is allowed to edit an epiosde that they created." );
     }
 
