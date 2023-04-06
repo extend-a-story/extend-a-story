@@ -35,6 +35,11 @@ use \Extend_A_Story\Util;
 
 class User
 {
+    const loginNameLimit     = 255;
+    const loginNameThreshold = 100;
+    const userNameLimit      = 255;
+    const userNameThreshold  = 100;
+
     public static function createTable()
     {
         $dbConnection = Util::getDbConnection();

@@ -61,7 +61,7 @@ div.error
 
 div.inputField
 {
-    margin:           1em 0em 0em 0em;
+    margin:           0em 0em 0em 0em;
 }
 
 div.inputFieldHelpContents
@@ -147,4 +147,15 @@ td.sectionHeader
     font-style:       italic;
     font-weight:      bold;
     text-align:       center;
+}
+
+div.limit-under
+{
+    font-size: small;
+}
+
+div.limit-over
+{
+    font-size: small;
+    color: #FF0000;
 }

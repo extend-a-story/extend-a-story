@@ -26,7 +26,7 @@ http://www.sir-toby.com/extend-a-story/
 
 function toggleVisibility( id )
 {
-    var element = document.getElementById( id );
+    const element = document.getElementById( id );
 
     if ( element.style.display == "none" )
     {
@@ -35,5 +35,30 @@ function toggleVisibility( id )
     else
     {
         element.style.display = "none";
+    }
+}
+
+function updateInputFieldLimit( inputFieldId, limit, threshold )
+{
+    if ( limit === null ) return;
+
+    const inputField = document.getElementById( inputFieldId            );
+    const limitDiv   = document.getElementById( inputFieldId + "-limit" );
+
+    const limitRemaining = limit - inputField.value.length;
+
+    if ( limitRemaining > threshold )
+    {
+        limitDiv.innerHTML = "&nbsp;";
+    }
+    else if ( limitRemaining >= 0 )
+    {
+        limitDiv.innerHTML = "Remain: " + limitRemaining;
+        limitDiv.className = "limit-under";
+    }
+    else
+    {
+        limitDiv.innerHTML = "Over: " + ( -limitRemaining );
+        limitDiv.className = "limit-over";
     }
 }

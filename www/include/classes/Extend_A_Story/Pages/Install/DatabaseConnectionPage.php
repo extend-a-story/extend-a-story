@@ -161,23 +161,23 @@ class DatabaseConnectionPage extends InstallPage
         if ( !isset( $databaseName     )) $databaseName     = "";
 
         $this->databaseHostField = new InputField(
-                "databaseHost", "Host", "text", $databaseHost,
+                "databaseHost", "Host", "text", $databaseHost, null, null,
                 "This is the hostname for your database server. If your database server and your web server are " .
                 "running on the same machine, use \"localhost\". If you are running Extend-A-Story in a shared " .
                 "hosting environment, your hosting provider will provide you with the hostname for your database " .
                 "server." );
 
         $this->databaseUsernameField = new InputField(
-                "databaseUsername", "Username", "text", $databaseUsername,
+                "databaseUsername", "Username", "text", $databaseUsername, null, null,
                 "This is the username for connecting to your database server. This user needs full permissions to " .
                 "your Extend-A-Story database." );
 
         $this->databasePasswordField = new InputField(
-                "databasePassword", "Password", "password", $databasePassword,
+                "databasePassword", "Password", "password", $databasePassword, null, null,
                 "This is the password for connecting to your database server." );
 
         $this->databaseNameField = new InputField(
-                "databaseName", "Database", "text", $databaseName,
+                "databaseName", "Database", "text", $databaseName, null, null,
                 "This is the name of your Extend-A-Story database." );
     }
 

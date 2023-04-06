@@ -34,15 +34,19 @@ class InputField extends HtmlElement
     private $label;
     private $type;
     private $value;
+    private $limit;
+    private $threshold;
     private $helpText;
 
-    public function __construct( $name, $label, $type, $value, $helpText )
+    public function __construct( $name, $label, $type, $value, $limit, $threshold, $helpText )
     {
-        $this->name     = $name;
-        $this->label    = $label;
-        $this->type     = $type;
-        $this->value    = $value;
-        $this->helpText = $helpText;
+        $this->name      = $name;
+        $this->label     = $label;
+        $this->type      = $type;
+        $this->value     = $value;
+        $this->limit     = $limit;
+        $this->threshold = isset( $threshold ) ? $threshold : $this->limit;
+        $this->helpText  = $helpText;
     }
 
     public function render()
@@ -67,7 +71,41 @@ class InputField extends HtmlElement
     <input type="<?php echo( htmlentities( $this->type )); ?>"
            id="<?php echo( htmlentities( $this->name )); ?>"
            name="<?php echo( htmlentities( $this->name )); ?>"
-           value="<?php echo( htmlentities( $this->value )); ?>">
+           value="<?php echo( htmlentities( $this->value )); ?>"
+           oninput="updateInputFieldLimit(
+                           '<?php echo( htmlentities( $this->name )); ?>',
+                            <?php echo( isset( $this->limit     ) ? htmlentities( $this->limit     ) : "null" ); ?>,
+                            <?php echo( isset( $this->threshold ) ? htmlentities( $this->threshold ) : "null" ); ?> )">
+
+<?php
+
+        $limitId = $this->name . "-limit";
+        $limitClass = "limit-under";
+        $limitContent = null;
+
+        if ( isset( $this->limit ))
+        {
+            $limitRemaining = $this->limit - strlen( $this->value );
+
+            if ( $limitRemaining <= $this->threshold )
+            {
+                if ( $limitRemaining >= 0 )
+                {
+                    $limitContent = "Remain: " . $limitRemaining;
+                }
+                else
+                {
+                    $limitClass = "limit-over";
+                    $limitContent = "Over: " . ( -$limitRemaining );
+                }
+            }
+        }
+
+?>
+
+    <div id="<?php echo( htmlentities( $limitId )); ?>" class="<?php echo( htmlentities( $limitClass )); ?>">
+        <?php echo( isset( $limitContent ) ? htmlentities( $limitContent ) : "&nbsp;" ); ?>
+    </div>
 </div>
 
 <?php

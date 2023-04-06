@@ -34,6 +34,9 @@ use \Extend_A_Story\Util;
 
 class ExtendAStoryVariable
 {
+    const stringValueLimit     = 255;
+    const stringValueThreshold = 100;
+
     public static function createTable()
     {
         $dbConnection = Util::getDbConnection();
