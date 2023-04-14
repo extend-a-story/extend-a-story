@@ -66,21 +66,7 @@ class AuthorizationPage extends InstallPage
         parent::__construct( $error );
     }
 
-    protected function getNextPage()
-    {
-        if ( isset( $this->continueButton )) return new StartPage();
-        throw new StoryException( "Unrecognized navigation from authorization page." );
-    }
-
-    protected function getSubtitle()
-    {
-        return "Authorization Required";
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton" );
-    }
+    protected function getPageTitle() { return "Authorization Required"; }
 
     protected function renderMain()
     {
@@ -109,8 +95,8 @@ $configInstallToken = "<?php echo( htmlentities( $this->installToken )); ?>";
 </p>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="Authorization">
-    <input type="submit" name="continueButton" value="Continue">
+    <input type="hidden" name="pageName"    value="Authorization">
+    <input type="submit" name="startButton" value="Continue"     >
 </div>
 
 <?php

@@ -36,9 +36,16 @@ use \Extend_A_Story\Util;
 
 class VersionConfirmationPage extends InstallPage
 {
+    public static function validate()
+    {
+        $result = DatabaseConnectionPage::validatePage();
+        if ( isset( $result )) return $result;
+        return new VersionConfirmationPage();
+    }
+
     public static function validatePage()
     {
-        $result = VersionConfirmationPage::validatePreviousPage();
+        $result = DatabaseConnectionPage::validatePage();
         if ( isset( $result )) return $result;
 
         $version = Version::getVersion();
@@ -56,54 +63,18 @@ class VersionConfirmationPage extends InstallPage
         return null;
     }
 
-    private static function validatePreviousPage()
-    {
-        $result = DatabaseConnectionPage::validatePage();
-        if ( isset( $result )) return $result;
-        return null;
-    }
-
     private $databaseVersion;
     private $databaseExists;
     private $storyVersion;
+    private $nextButton;
 
     public function __construct( $error = null )
     {
         parent::__construct( $error );
     }
 
-    public function validate()
-    {
-        $result = VersionConfirmationPage::validatePreviousPage();
-        if ( isset( $result )) return $result;
-        return $this;
-    }
-
-    protected function getNextPage()
-    {
-        if ( isset( $this->backButton )) return new DatabaseConnectionPage();
-
-        if ( isset( $this->continueButton ))
-        {
-            $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
-            if ( $databaseVersion === 1 ) return new AdminAccountPage();
-            if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 )) return new ConfirmationPage();
-            else throw new StoryException( "Unrecognized database version." );
-        }
-
-        throw new StoryException( "Unrecognized navigation from version confirmation page." );
-    }
-
-    protected function getSubtitle()
-    {
-        return "Version Confirmation";
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton",
-                      "databaseVersion", "databaseExists" );
-    }
+    protected function getPageTitle() { return "Version Confirmation"; }
+    protected function getPageFields() { return [ "databaseVersion", "databaseExists" ]; }
 
     protected function preRender()
     {
@@ -111,6 +82,10 @@ class VersionConfirmationPage extends InstallPage
         $this->databaseVersion = $version->getDatabaseVersion();
         $this->databaseExists  = $version->checkDatabase();
         $this->storyVersion    = $version->getStoryVersion();
+
+        // determine the next page
+        if (( !$this->databaseExists ) || ( $this->databaseVersion === 1 )) $this->nextButton = "adminAccountButton";
+        if (( $this->databaseVersion === 2 ) || ( $this->databaseVersion === 3 )) $this->nextButton = "confirmationButton";
     }
 
     protected function renderMain()
@@ -166,19 +141,18 @@ We will proceed with upgrading your database to the current version.
 <p>If this is not what you expected, go back and check your database connection settings.</p>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="VersionConfirmation">
-    <input type="hidden" name="databaseVersion" value="<?php echo( htmlentities( $this->databaseVersion    )); ?>">
-    <input type="hidden" name="databaseExists"  value="<?php echo( $this->databaseExists ? "true" : "false" ); ?>">
-    <input type="submit" name="backButton" value="Back">
+    <input type="hidden" name="databaseVersion"          value="<?php echo( htmlentities( $this->databaseVersion    )); ?>">
+    <input type="hidden" name="databaseExists"           value="<?php echo( $this->databaseExists ? "true" : "false" ); ?>">
+    <input type="submit" name="databaseConnectionButton" value="Back"                                                      >
 
 <?php
 
-        if ( $this->databaseVersion !== 4 )
+        if ( isset( $this->nextButton ))
         {
 
 ?>
 
-    <input type="submit" name="continueButton" value="Continue">
+    <input type="submit" name="<?php echo( htmlentities( $this->nextButton )); ?>" value="Continue">
 
 <?php
 

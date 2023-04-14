@@ -36,36 +36,17 @@ use \Extend_A_Story\Util;
 
 class ConfirmationPage extends InstallPage
 {
-    public static function validatePage()
+    public static function validate()
     {
-        $result = ConfirmationPage::validatePreviousPage();
+        $result = StorySettingsPage::validatePage();
         if ( isset( $result )) return $result;
-        return null;
+        return new ConfirmationPage();
     }
 
-    private static function validatePreviousPage()
+    public static function validatePage()
     {
-        if ( !Util::getBoolParam( $_POST, "databaseExists" ))
-        {
-            $result = StorySettingsPage::validatePage();
-            if ( isset( $result )) return $result;
-        }
-        else
-        {
-            $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
-            if ( $databaseVersion === 1 )
-            {
-                $result = StorySettingsPage::validatePage();
-                if ( isset( $result )) return $result;
-            }
-            else if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 ))
-            {
-                $result = VersionConfirmationPage::validatePage();
-                if ( isset( $result )) return $result;
-            }
-            else throw new StoryException( "Unrecognized database version." );
-        }
-
+        $result = StorySettingsPage::validatePage();
+        if ( isset( $result )) return $result;
         return null;
     }
 
@@ -86,42 +67,9 @@ class ConfirmationPage extends InstallPage
     private $settingsMaxLinks;
     private $settingsMaxEditDays;
     private $conflictingTables;
+    private $previousButton;
 
-    public function validate()
-    {
-        $result = ConfirmationPage::validatePreviousPage();
-        if ( isset( $result )) return $result;
-        return $this;
-    }
-
-    protected function getNextPage()
-    {
-        if ( isset( $this->continueButton )) return new CompletedPage();
-
-        if ( isset( $this->backButton ))
-        {
-            if ( !Util::getBoolParam( $_POST, "databaseExists" )) return new StorySettingsPage();
-            else
-            {
-                $databaseVersion = Util::getIntParam( $_POST, "databaseVersion" );
-                if ( $databaseVersion === 1 ) return new StorySettingsPage();
-                if (( $databaseVersion > 1 ) and ( $databaseVersion < 4 )) return new VersionConfirmationPage();
-                else throw new StoryException( "Unrecognized database version." );
-            }
-        }
-
-        throw new StoryException( "Unrecognized navigation from confirmation page." );
-    }
-
-    protected function getSubtitle()
-    {
-        return $this->databaseExists ? "Upgrade Confirmation" : "Install Confirmation";
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton" );
-    }
+    protected function getPageTitle() { return ( $this->databaseExists ? "Upgrade" : "Install" ) . " Confirmation"; }
 
     protected function preRender()
     {
@@ -157,8 +105,11 @@ class ConfirmationPage extends InstallPage
         $addedTableNames = $this->databaseExists ? $version->getAddedTableNames() : Database::getStoryTableNames();
         $conflictingTableNames = array_intersect( $addedTableNames, Database::getDatabaseTableNames() );
         sort( $conflictingTableNames );
-        $this->conflictingTables =
-                empty( $conflictingTableNames ) ? null : UnorderedList::buildFromStringArray( $conflictingTableNames );
+        $this->conflictingTables = empty( $conflictingTableNames ) ? null : UnorderedList::buildFromStringArray( $conflictingTableNames );
+
+        // determine the previous page
+        $this->previousButton =
+                (( !$this->databaseExists ) || ( $this->databaseVersion === 1 )) ? "storySettingsButton" : "versionConfirmationButton";
     }
 
     protected function renderMain()
@@ -347,9 +298,8 @@ class ConfirmationPage extends InstallPage
 ?>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="Confirmation">
-    <input type="submit" name="backButton" value="Back">
-    <input type="submit" name="continueButton" value="<?php echo( $this->databaseExists ? "Upgrade" : "Install" ); ?>">
+    <input type="submit" name="<?php echo( htmlentities( $this->previousButton )); ?>" value="Back">
+    <input type="submit" name="completedButton" value="<?php echo( $this->databaseExists ? "Upgrade" : "Install" ); ?>">
 </div>
 
 <?php

@@ -32,42 +32,21 @@ use \Extend_A_Story\StoryException;
 
 class StartPage extends InstallPage
 {
-    public static function validatePage()
+    public static function validate()
     {
-        $result = StartPage::validatePreviousPage();
+        $result = DisableStoryPage::validatePage();
         if ( isset( $result )) return $result;
-        return null;
+        return new StartPage();
     }
 
-    private static function validatePreviousPage()
+    public static function validatePage()
     {
         $result = DisableStoryPage::validatePage();
         if ( isset( $result )) return $result;
         return null;
     }
 
-    public function validate()
-    {
-        $result = StartPage::validatePreviousPage();
-        if ( isset( $result )) return $result;
-        return $this;
-    }
-
-    protected function getNextPage()
-    {
-        if ( isset( $this->continueButton )) return new DatabaseConnectionPage();
-        throw new StoryException( "Unrecognized navigation from start page." );
-    }
-
-    protected function getSubtitle()
-    {
-        return "Welcome to Extend-A-Story";
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton" );
-    }
+    protected function getPageTitle() { return "Welcome to Extend-A-Story"; }
 
     protected function renderMain()
     {
@@ -79,8 +58,7 @@ class StartPage extends InstallPage
 </p>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="Start">
-    <input type="submit" name="continueButton" value="Continue">
+    <input type="submit" name="databaseConnectionButton" value="Continue">
 </div>
 
 <?php

@@ -35,35 +35,16 @@ abstract class InstallPage
 {
     public static function getPage()
     {
-        $pageName = Util::getStringParamDefault( $_POST, "pageName", null );
+        if ( Util::getStringParamDefault( $_POST, "adminAccountButton",        null ) !== null ) return AdminAccountPage       ::validate();
+        if ( Util::getStringParamDefault( $_POST, "completedButton",           null ) !== null ) return CompletedPage          ::validate();
+        if ( Util::getStringParamDefault( $_POST, "confirmationButton",        null ) !== null ) return ConfirmationPage       ::validate();
+        if ( Util::getStringParamDefault( $_POST, "databaseConnectionButton",  null ) !== null ) return DatabaseConnectionPage ::validate();
+        if ( Util::getStringParamDefault( $_POST, "storySettingsButton",       null ) !== null ) return StorySettingsPage      ::validate();
+        if ( Util::getStringParamDefault( $_POST, "versionConfirmationButton", null ) !== null ) return VersionConfirmationPage::validate();
 
-        if ( isset( $pageName ))
-        {
-            switch ( $pageName )
-            {
-                case "Authorization"       : $page = new AuthorizationPage();       break;
-                case "DisableStory"        : $page = new DisableStoryPage();        break;
-                case "Start"               : $page = new StartPage();               break;
-                case "DatabaseConnection"  : $page = new DatabaseConnectionPage();  break;
-                case "VersionConfirmation" : $page = new VersionConfirmationPage(); break;
-                case "AdminAccount"        : $page = new AdminAccountPage();        break;
-                case "StorySettings"       : $page = new StorySettingsPage();       break;
-                case "Confirmation"        : $page = new ConfirmationPage();        break;
-                default : throw new StoryException( "Unrecognized page." );
-            }
-
-            $page = $page->getNextPage();
-        }
-        else
-        {
-            $page = new StartPage();
-        }
-
-        return $page;
+        return StartPage::validate();
     }
 
-    protected $backButton;
-    protected $continueButton;
     protected $installToken;
 
     private $error;
@@ -74,15 +55,8 @@ abstract class InstallPage
     {
         $this->error = $error;
 
-        $this->backButton         = Util::getStringParamDefault( $_POST,   "backButton",     null );
-        $this->continueButton     = Util::getStringParamDefault( $_POST,   "continueButton", null );
-        $this->installTokenPost   = Util::getStringParamDefault( $_POST,   "installToken",   null );
-        $this->installTokenCookie = Util::getStringParamDefault( $_COOKIE, "installToken",   null );
-    }
-
-    public function validate()
-    {
-        throw new StoryException( "This function is not implemented." );
+        $this->installTokenPost   = Util::getStringParamDefault( $_POST,   "installToken", null );
+        $this->installTokenCookie = Util::getStringParamDefault( $_COOKIE, "installToken", null );
     }
 
     public function render()
@@ -100,7 +74,7 @@ abstract class InstallPage
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link rel="stylesheet" type="text/css" href="style.css">
         <script src="script.js"></script>
-        <title><?php echo( htmlentities( $title )); ?> - <?php echo( htmlentities( $this->getSubtitle() )); ?></title>
+        <title><?php echo( htmlentities( $title )); ?> - <?php echo( htmlentities( $this->getPageTitle() )); ?></title>
     </head>
     <body>
         <form action="install.php" method="post">
@@ -149,10 +123,7 @@ abstract class InstallPage
         }
 
         // add hidden input for the install token, if it doesn't exist
-        if ( !in_array( "installToken", $keys ))
-        {
-            $this->renderHiddenInput( "installToken", $this->installToken );
-        }
+        if ( !in_array( "installToken", $keys )) $this->renderHiddenInput( "installToken", $this->installToken );
 
 ?>
 
@@ -160,7 +131,7 @@ abstract class InstallPage
 
                 <div class="main">
 
-                    <h2><?php echo( htmlentities( $this->getSubtitle() )); ?></h2>
+                    <h2><?php echo( htmlentities( $this->getPageTitle() )); ?></h2>
 
 <?php
 
@@ -192,17 +163,19 @@ abstract class InstallPage
 
     }
 
-    protected abstract function getNextPage();
-
-    protected abstract function getSubtitle();
-
-    protected abstract function getFields();
-
-    protected function preRender()
-    {
-    }
-
+    protected abstract function getPageTitle();
+    protected function getPageFields() { return []; }
+    protected function preRender() {}
     protected abstract function renderMain();
+
+    private function getFields()
+    {
+        $fields = [ "adminAccountButton", "completedButton", "confirmationButton",
+                    "databaseConnectionButton", "storySettingsButton", "versionConfirmationButton",
+                    "pageName" ];
+
+        return array_unique( [ ...$fields, ...$this->getPageFields() ] );
+    }
 
     private function handleInstallToken()
     {
@@ -218,12 +191,7 @@ abstract class InstallPage
     {
         $bytes = random_bytes( 16 );
         $result = "";
-
-        for ( $i = 0; $i < strlen( $bytes ); $i++ )
-        {
-            $result .= sprintf( "%02x", ord( $bytes[ $i ] ));
-        }
-
+        for ( $i = 0; $i < strlen( $bytes ); $i++ ) $result .= sprintf( "%02x", ord( $bytes[ $i ] ));
         return $result;
     }
 
@@ -232,9 +200,7 @@ abstract class InstallPage
 
 ?>
 
-                <input type="hidden"
-                       name="<?php echo( htmlentities( $name )); ?>"
-                       value="<?php echo( htmlentities( $value )); ?>">
+<input type="hidden" name="<?php echo( htmlentities( $name )); ?>" value="<?php echo( htmlentities( $value )); ?>">
 
 <?php
 

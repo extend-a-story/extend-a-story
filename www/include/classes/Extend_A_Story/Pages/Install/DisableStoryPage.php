@@ -37,7 +37,7 @@ class DisableStoryPage extends InstallPage
 {
     public static function validatePage()
     {
-        $result = DisableStoryPage::validatePreviousPage();
+        $result = AuthorizationPage::validatePage();
         if ( isset( $result )) return $result;
 
         // force the user to disable the story if the story is enabled
@@ -60,33 +60,12 @@ class DisableStoryPage extends InstallPage
         return null;
     }
 
-    private static function validatePreviousPage()
-    {
-        $result = AuthorizationPage::validatePage();
-        if ( isset( $result )) return $result;
-        return null;
-    }
-
     public function __construct( $error = null )
     {
         parent::__construct( $error );
     }
 
-    protected function getNextPage()
-    {
-        if ( isset( $this->continueButton )) return new StartPage();
-        throw new StoryException( "Unrecognized navigation from disable story page." );
-    }
-
-    protected function getSubtitle()
-    {
-        return "Disable Extend-A-Story";
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton" );
-    }
+    protected function getPageTitle() { return "Disable Extend-A-Story"; }
 
     protected function renderMain()
     {
@@ -115,8 +94,8 @@ $configStoryEnabled = false;
 </p>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="DisableStory">
-    <input type="submit" name="continueButton" value="Continue">
+    <input type="hidden" name="pageName"    value="DisableStory">
+    <input type="submit" name="startButton" value="Continue"    >
 </div>
 
 <?php

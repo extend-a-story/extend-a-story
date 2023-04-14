@@ -37,10 +37,22 @@ use \Extend_A_Story\Util;
 
 class StorySettingsPage extends InstallPage
 {
+    public static function validate()
+    {
+        $result = AdminAccountPage::validatePage();
+        if ( isset( $result )) return $result;
+        return new StorySettingsPage();
+    }
+
     public static function validatePage()
     {
-        $result = StorySettingsPage::validatePreviousPage();
+        $result = AdminAccountPage::validatePage();
         if ( isset( $result )) return $result;
+
+        // skip validation if the database exists and is a version that already has story settings
+        $databaseExists  = Util::getBoolParam( $_POST, "databaseExists"  );
+        $databaseVersion = Util::getIntParam ( $_POST, "databaseVersion" );
+        if (( $databaseExists ) && ( $databaseVersion > 1 )) return null;
 
         $settingsStoryName      = Util::getStringParamDefault( $_POST, "settingsStoryName",      "" );
         $settingsSiteName       = Util::getStringParamDefault( $_POST, "settingsSiteName",       "" );
@@ -53,7 +65,7 @@ class StorySettingsPage extends InstallPage
 
         $errors = [];
 
-        if ( !Util::getBoolParam( $_POST, "databaseExists" ))
+        if ( !$databaseExists )
         {
             $max = ExtendAStoryVariable::stringValueLimit;
 
@@ -75,41 +87,16 @@ class StorySettingsPage extends InstallPage
             if ( strlen( $settingsAdminEmail ) == 0   ) $errors[] = new RawText( "Admin email must be set." );
             if ( strlen( $settingsAdminEmail ) > $max ) $errors[] = new RawText( "Admin email is too long." );
 
-            if ( strlen( $settingsMaxLinks ) == 0 )
-            {
-                $errors[] = new RawText( "Max links must be set." );
-            }
-            else if ( !ctype_digit( $settingsMaxLinks ))
-            {
-                $errors[] = new RawText( "Max links must be a positive integer." );
-            }
-            else if (( (int) $settingsMaxLinks ) <= 0 )
-            {
-                $errors[] = new RawText( "Max links must be greater than zero." );
-            }
+            if ( strlen( $settingsMaxLinks ) == 0 )      $errors[] = new RawText( "Max links must be set."                );
+            else if ( !ctype_digit( $settingsMaxLinks )) $errors[] = new RawText( "Max links must be a positive integer." );
+            else if (( (int) $settingsMaxLinks ) <= 0 )  $errors[] = new RawText( "Max links must be greater than zero."  );
         }
 
-        if ( strlen( $settingsMaxEditDays ) == 0 )
-        {
-            $errors[] = new RawText( "Max edit days must be set." );
-        }
-        else if ( !ctype_digit( $settingsMaxEditDays ))
-        {
-            $errors[] = new RawText( "Max edit days must be a positive integer." );
-        }
-        else if (( (int) $settingsMaxEditDays ) <= 0 )
-        {
-            $errors[] = new RawText( "Max edit days must be greater than zero." );
-        }
+        if ( strlen( $settingsMaxEditDays ) == 0 )      $errors[] = new RawText( "Max edit days must be set."                );
+        else if ( !ctype_digit( $settingsMaxEditDays )) $errors[] = new RawText( "Max edit days must be a positive integer." );
+        else if (( (int) $settingsMaxEditDays ) <= 0 )  $errors[] = new RawText( "Max edit days must be greater than zero."  );
 
         if ( count( $errors ) > 0 ) return new StorySettingsPage( new UnorderedList( $errors ));
-        return null;
-    }
-
-    private static function validatePreviousPage()
-    {
-        $result = AdminAccountPage::validatePage();
-        if ( isset( $result )) return $result;
         return null;
     }
 
@@ -128,32 +115,12 @@ class StorySettingsPage extends InstallPage
         parent::__construct( $error );
     }
 
-    public function validate()
-    {
-        $result = StorySettingsPage::validatePreviousPage();
-        if ( isset( $result )) return $result;
-        return $this;
-    }
+    protected function getPageTitle() { return "Story Settings"; }
 
-    protected function getNextPage()
+    protected function getPageFields()
     {
-        if ( isset( $this->backButton     )) return new AdminAccountPage();
-        if ( isset( $this->continueButton )) return new ConfirmationPage();
-        throw new StoryException( "Unrecognized navigation from story settings page." );
-    }
-
-    protected function getSubtitle()
-    {
-        return "Story Settings";
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton",
-                      "settingsStoryName", "settingsSiteName",
-                      "settingsStoryHome", "settingsSiteHome",
-                      "settingsReadEpisodeUrl", "settingsAdminEmail",
-                      "settingsMaxLinks", "settingsMaxEditDays" );
+        return [ "settingsStoryName", "settingsSiteName", "settingsStoryHome", "settingsSiteHome",
+                 "settingsReadEpisodeUrl", "settingsAdminEmail", "settingsMaxLinks", "settingsMaxEditDays" ];
     }
 
     protected function preRender()
@@ -237,9 +204,8 @@ class StorySettingsPage extends InstallPage
 ?>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="StorySettings">
-    <input type="submit" name="backButton" value="Back">
-    <input type="submit" name="continueButton" value="Continue">
+    <input type="submit" name="adminAccountButton" value="Back"    >
+    <input type="submit" name="confirmationButton" value="Continue">
 </div>
 
 <?php

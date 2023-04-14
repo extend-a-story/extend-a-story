@@ -30,8 +30,6 @@ require(  __DIR__ . "/include/Extend-A-Story.php" );
 
 use \Extend_A_Story\Pages\Install\InstallPage;
 
-$page = InstallPage::getPage();
-$page = $page->validate();
-$page->render();
+InstallPage::getPage()->render();
 
 ?>

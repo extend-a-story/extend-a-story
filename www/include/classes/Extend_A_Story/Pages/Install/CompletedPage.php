@@ -35,11 +35,11 @@ use \Extend_A_Story\Util;
 
 class CompletedPage extends InstallPage
 {
-    private static function validatePreviousPage()
+    public static function validate()
     {
         $result = ConfirmationPage::validatePage();
         if ( isset( $result )) return $result;
-        return null;
+        return new CompletedPage();
     }
 
     private $databaseExists;
@@ -49,27 +49,7 @@ class CompletedPage extends InstallPage
     private $databaseName;
     private $isWriteable;
 
-    public function validate()
-    {
-        $result = CompletedPage::validatePreviousPage();
-        if ( isset( $result )) return $result;
-        return $this;
-    }
-
-    protected function getNextPage()
-    {
-        throw new StoryException( "Unrecognized navigation from completed page." );
-    }
-
-    protected function getSubtitle()
-    {
-        return $this->databaseExists ? "Upgrade Completed" : "Install Completed";
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton" );
-    }
+    protected function getPageTitle() { return ( $this->databaseExists ? "Upgrade" : "Install" ) . " Completed"; }
 
     protected function preRender()
     {

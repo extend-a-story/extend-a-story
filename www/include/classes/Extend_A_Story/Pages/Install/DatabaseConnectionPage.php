@@ -38,9 +38,16 @@ use \Extend_A_Story\Util;
 
 class DatabaseConnectionPage extends InstallPage
 {
+    public static function validate()
+    {
+        $result = StartPage::validatePage();
+        if ( isset( $result )) return $result;
+        return new DatabaseConnectionPage();
+    }
+
     public static function validatePage()
     {
-        $result = DatabaseConnectionPage::validatePreviousPage();
+        $result = StartPage::validatePage();
         if ( isset( $result )) return $result;
 
         $databaseHost     = Util::getStringParamDefault( $_POST, "databaseHost",     "" );
@@ -50,30 +57,14 @@ class DatabaseConnectionPage extends InstallPage
 
         $errors = array();
 
-        if ( strlen( $databaseHost ) == 0 )
-        {
-            $errors[] = new RawText( "Host must be set." );
-        }
-
-        if ( strlen( $databaseUsername ) == 0 )
-        {
-            $errors[] = new RawText( "Username must be set." );
-        }
-
-        if ( strlen( $databasePassword ) == 0 )
-        {
-            $errors[] = new RawText( "Password must be set." );
-        }
-
-        if ( strlen( $databaseName ) == 0 )
-        {
-            $errors[] = new RawText( "Database must be set." );
-        }
+        if ( strlen( $databaseHost     ) == 0 ) $errors[] = new RawText( "Host must be set."     );
+        if ( strlen( $databaseUsername ) == 0 ) $errors[] = new RawText( "Username must be set." );
+        if ( strlen( $databasePassword ) == 0 ) $errors[] = new RawText( "Password must be set." );
+        if ( strlen( $databaseName     ) == 0 ) $errors[] = new RawText( "Database must be set." );
 
         if ( count( $errors ) == 0 )
         {
-            global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName,
-                   $configStoryEnabled;
+            global $configDatabaseHost, $configDatabaseUsername, $configDatabasePassword, $configDatabaseName, $configStoryEnabled;
 
             $configDatabaseHost     = $databaseHost;
             $configDatabaseUsername = $databaseUsername;
@@ -91,18 +82,7 @@ class DatabaseConnectionPage extends InstallPage
             }
         }
 
-        if ( count( $errors ) > 0 )
-        {
-            return new DatabaseConnectionPage( new UnorderedList( $errors ));
-        }
-
-        return null;
-    }
-
-    private static function validatePreviousPage()
-    {
-        $result = StartPage::validatePage();
-        if ( isset( $result )) return $result;
+        if ( count( $errors ) > 0 ) return new DatabaseConnectionPage( new UnorderedList( $errors ));
         return null;
     }
 
@@ -116,30 +96,8 @@ class DatabaseConnectionPage extends InstallPage
         parent::__construct( $error );
     }
 
-    public function validate()
-    {
-        $result = DatabaseConnectionPage::validatePreviousPage();
-        if ( isset( $result )) return $result;
-        return $this;
-    }
-
-    protected function getNextPage()
-    {
-        if ( isset( $this->backButton )) return new StartPage();
-        if ( isset( $this->continueButton )) return new VersionConfirmationPage();
-        throw new StoryException( "Unrecognized navigation from database connection page." );
-    }
-
-    protected function getSubtitle()
-    {
-        return "Database Connection";
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton",
-                      "databaseHost", "databaseUsername", "databasePassword", "databaseName" );
-    }
+    protected function getPageTitle() { return "Database Connection"; }
+    protected function getPageFields() { return [ "databaseHost", "databaseUsername", "databasePassword", "databaseName" ]; }
 
     protected function preRender()
     {
@@ -200,9 +158,8 @@ class DatabaseConnectionPage extends InstallPage
 ?>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="DatabaseConnection">
-    <input type="submit" name="backButton" value="Back">
-    <input type="submit" name="continueButton" value="Continue">
+    <input type="submit" name="startButton"               value="Back"    >
+    <input type="submit" name="versionConfirmationButton" value="Continue">
 </div>
 
 <?php

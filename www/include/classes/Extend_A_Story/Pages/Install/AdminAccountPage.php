@@ -37,10 +37,22 @@ use \Extend_A_Story\Util;
 
 class AdminAccountPage extends InstallPage
 {
+    public static function validate()
+    {
+        $result = VersionConfirmationPage::validatePage();
+        if ( isset( $result )) return $result;
+        return new AdminAccountPage();
+    }
+
     public static function validatePage()
     {
-        $result = AdminAccountPage::validatePreviousPage();
+        $result = VersionConfirmationPage::validatePage();
         if ( isset( $result )) return $result;
+
+        // skip validation if the database exists and is a version that already has an admin account
+        $databaseExists  = Util::getBoolParam( $_POST, "databaseExists"  );
+        $databaseVersion = Util::getIntParam ( $_POST, "databaseVersion" );
+        if (( $databaseExists ) && ( $databaseVersion > 1 )) return null;
 
         $adminLoginName   = Util::getStringParamDefault( $_POST, "adminLoginName",   "" );
         $adminDisplayName = Util::getStringParamDefault( $_POST, "adminDisplayName", "" );
@@ -55,21 +67,11 @@ class AdminAccountPage extends InstallPage
         if ( strlen( $adminDisplayName ) == 0                  ) $errors[] = new RawText( "Display name must be set." );
         if ( strlen( $adminDisplayName ) > User::userNameLimit ) $errors[] = new RawText( "Display name is too long." );
 
-        if (( strlen( $adminPassword1 ) == 0 ) && ( strlen( $adminPassword2 ) == 0 ))
-        {
-            $errors[] = new RawText( "Password must be set." );
-        }
+        if (( strlen( $adminPassword1 ) == 0 ) && ( strlen( $adminPassword2 ) == 0 )) $errors[] = new RawText( "Password must be set." );
 
         if ( $adminPassword1 != $adminPassword2 ) $errors[] = new RawText( "Paswords do not match." );
 
         if ( count( $errors ) > 0 ) return new AdminAccountPage( new UnorderedList( $errors ));
-        return null;
-    }
-
-    private static function validatePreviousPage()
-    {
-        $result = VersionConfirmationPage::validatePage();
-        if ( isset( $result )) return $result;
         return null;
     }
 
@@ -83,31 +85,8 @@ class AdminAccountPage extends InstallPage
         parent::__construct( $error );
     }
 
-    public function validate()
-    {
-        $result = AdminAccountPage::validatePreviousPage();
-        if ( isset( $result )) return $result;
-        return $this;
-    }
-
-    protected function getNextPage()
-    {
-        if ( isset( $this->backButton     )) return new VersionConfirmationPage();
-        if ( isset( $this->continueButton )) return new StorySettingsPage();
-
-        throw new StoryException( "Unrecognized navigation from admin account page." );
-    }
-
-    protected function getSubtitle()
-    {
-        return "Administrator Account";
-    }
-
-    protected function getFields()
-    {
-        return array( "pageName", "backButton", "continueButton",
-                      "adminLoginName", "adminDisplayName", "adminPassword1", "adminPassword2" );
-    }
+    protected function getPageTitle() { return "Administrator Account"; }
+    protected function getPageFields() { return [ "adminLoginName", "adminDisplayName", "adminPassword1", "adminPassword2" ]; }
 
     protected function preRender()
     {
@@ -155,9 +134,8 @@ class AdminAccountPage extends InstallPage
 ?>
 
 <div class="submit">
-    <input type="hidden" name="pageName" value="AdminAccount">
-    <input type="submit" name="backButton" value="Back">
-    <input type="submit" name="continueButton" value="Continue">
+    <input type="submit" name="versionConfirmationButton" value="Back"    >
+    <input type="submit" name="storySettingsButton"       value="Continue">
 </div>
 
 <?php
