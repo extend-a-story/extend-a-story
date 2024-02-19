@@ -133,8 +133,15 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
 {
     global $mysqli;
 
-    logOutInactiveUsers( $error, $fatal );
-    deleteOldSessions( $error, $fatal );
+    // log out inactive users and delete old sessions only once per day
+    $lastSessionPurge = getStringValue( $error, $fatal, "LastSessionPurge" );
+    $today = date( "n/j/Y" );
+    if ( $lastSessionPurge !== $today )
+    {
+        logOutInactiveUsers( $error, $fatal );
+        deleteOldSessions( $error, $fatal );
+        setStringValue( $error, $fatal, "LastSessionPurge", $today );
+    }
 
     $originalSessionID  = 0;
     $originalSessionKey = 0;
@@ -147,6 +154,20 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
     if ( isset( $_COOKIE[ "sessionKey" ] ))
     {
         $originalSessionKey = (int) $_COOKIE[ "sessionKey" ];
+    }
+
+    // log out the current user after one hour of inactivity
+    $result = mysqli_query( $mysqli,
+                            "UPDATE Session " .
+                               "SET UserID = 0 " .
+                             "WHERE SessionID = " . $originalSessionID . " " .
+                              "AND AccessDate < SUBDATE( NOW(), INTERVAL 1 HOUR )" );
+
+    if ( ! $result )
+    {
+        $error .= "Unable to logout inactive user.<BR>";
+        $fatal = true;
+        return;
     }
 
     $actualSessionID  = 0;

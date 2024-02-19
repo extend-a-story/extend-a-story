@@ -1,3 +1,10 @@
+===== Changes between V 2.2.2 and V 2.3.0 =====
+
+- Log out inactive users and delete old sessions only once per day.
+
+
+
+
 ===== Changes between V 2.2.1 and V 2.2.2 =====
 
 - Use the SHA2() MySQL function instead of PASSWORD().

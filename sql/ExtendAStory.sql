@@ -178,6 +178,8 @@ INSERT INTO ExtendAStoryVariable VALUES ( "IsWriteable",    NULL, "N"  );
 INSERT INTO ExtendAStoryVariable VALUES ( "MaxLinks",       10,   NULL );
 INSERT INTO ExtendAStoryVariable VALUES ( "MaxEditDays",    30,   NULL );
 
+INSERT INTO ExtendAStoryVariable VALUES ( "LastSessionPurge", NULL, "-" );
+
 
 INSERT INTO User
             (

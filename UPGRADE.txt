@@ -1,3 +1,24 @@
+===== Upgrading from V 2.2.2 to V 2.3.0 =====
+
+The database has changed for this release. You may want to disable
+episode creation before upgrading the database to ensure that the
+database remains in a consistent state while upgrading. To do so, log in
+to the Extend-A-Story admin interface, select 'Configure Story
+Settings', and set 'Is Writeable' to 'No'. You may want to make a backup
+of the database before upgrading it, just in case you have any problems.
+To upgrade the database, run the database upgrade script
+'2.2.2_to_2.3.0.sql' in the existing database. If you disabled episode
+creation prior to upgrading the database, be sure to enable episode
+creation after upgrading the database.
+
+The code has changed for this release. Simply replace the story code on
+your web server with the contents of the 'www' directory.
+
+There are no documentation changes for this release.
+
+
+
+
 ===== Upgrading from V 2.2.1 to V 2.2.2 =====
 
 There are no database changes for this release.
