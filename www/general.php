@@ -93,7 +93,7 @@ function connectToDatabase( &$error, &$fatal )
     }
 }
 
-function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
+function logOutInactiveUsers( &$error, &$fatal )
 {
     global $mysqli;
 
@@ -109,6 +109,32 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
         $fatal = true;
         return;
     }
+}
+
+function deleteOldSessions( &$error, &$fatal )
+{
+    global $mysqli;
+
+    // delete all sessions over 370 days old
+    $result = mysqli_query( $mysqli,
+                            "DELETE " .
+                              "FROM Session " .
+                             "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 370 DAY )" );
+
+    if ( ! $result )
+    {
+        $error .= "Unable to delete old sessions from the database.<BR>";
+        $fatal = true;
+        return;
+    }
+}
+
+function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
+{
+    global $mysqli;
+
+    logOutInactiveUsers( $error, $fatal );
+    deleteOldSessions( $error, $fatal );
 
     $originalSessionID  = 0;
     $originalSessionKey = 0;
@@ -217,19 +243,6 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
 
     setcookie( "sessionID",  $actualSessionID,  time() + ( 60 * 60 * 24 * 370 ));
     setcookie( "sessionKey", $actualSessionKey, time() + ( 60 * 60 * 24 * 370 ));
-
-    // delete all sessions over 370 days old
-    $result = mysqli_query( $mysqli,
-                            "DELETE " .
-                              "FROM Session " .
-                             "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 370 DAY )" );
-
-    if ( ! $result )
-    {
-        $error .= "Unable to delete old sessions from the database.<BR>";
-        $fatal = true;
-        return;
-    }
 
     $sessionID = $actualSessionID;
     $userID    = $actualUserID;
