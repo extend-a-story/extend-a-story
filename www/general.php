@@ -138,9 +138,9 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
     $today = date( "n/j/Y" );
     if ( $lastSessionPurge !== $today )
     {
+        setStringValue( $error, $fatal, "LastSessionPurge", $today );
         logOutInactiveUsers( $error, $fatal );
         deleteOldSessions( $error, $fatal );
-        setStringValue( $error, $fatal, "LastSessionPurge", $today );
     }
 
     $originalSessionID  = 0;
