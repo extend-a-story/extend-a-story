@@ -133,7 +133,7 @@ function getSessionAndUserIDs( &$error, &$fatal, &$sessionID, &$userID )
 {
     global $mysqli;
 
-    // log out inactive users and delete old sessions only once per day
+    // log out inactive users and delete old sessions once per day
     $lastSessionPurge = getStringValue( $error, $fatal, "LastSessionPurge" );
     $today = date( "n/j/Y" );
     if ( $lastSessionPurge !== $today )
