@@ -8,6 +8,10 @@ This document contains the release notes for all Extend-A-Story versions since 2
 
 - Add web interface for installing or upgrading Extend-A-Story.
 
+## 2.3.0
+
+- Log out inactive users and delete old sessions only once per day.
+
 ## 2.2.2
 
 - Use the SHA2() MySQL function instead of PASSWORD().
