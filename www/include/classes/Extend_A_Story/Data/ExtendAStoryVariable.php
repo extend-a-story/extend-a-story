@@ -64,16 +64,17 @@ SQL;
                                           $settingsMaxLinks, $settingsMaxEditDays )
     {
         ExtendAStoryVariable::populateCountDate();
-        ExtendAStoryVariable::populateIntValue(    "CountValue",     0                       );
-        ExtendAStoryVariable::populateStringValue( "StoryName",      $settingsStoryName      );
-        ExtendAStoryVariable::populateStringValue( "SiteName",       $settingsSiteName       );
-        ExtendAStoryVariable::populateStringValue( "StoryHome",      $settingsStoryHome      );
-        ExtendAStoryVariable::populateStringValue( "SiteHome",       $settingsSiteHome       );
-        ExtendAStoryVariable::populateStringValue( "ReadEpisodeURL", $settingsReadEpisodeUrl );
-        ExtendAStoryVariable::populateStringValue( "AdminEmail",     $settingsAdminEmail     );
-        ExtendAStoryVariable::populateStringValue( "IsWriteable",    "N"                     );
-        ExtendAStoryVariable::populateIntValue(    "MaxLinks",       $settingsMaxLinks       );
-        ExtendAStoryVariable::populateIntValue(    "MaxEditDays",    $settingsMaxEditDays    );
+        ExtendAStoryVariable::populateIntValue(    "CountValue",       0                       );
+        ExtendAStoryVariable::populateStringValue( "StoryName",        $settingsStoryName      );
+        ExtendAStoryVariable::populateStringValue( "SiteName",         $settingsSiteName       );
+        ExtendAStoryVariable::populateStringValue( "StoryHome",        $settingsStoryHome      );
+        ExtendAStoryVariable::populateStringValue( "SiteHome",         $settingsSiteHome       );
+        ExtendAStoryVariable::populateStringValue( "ReadEpisodeURL",   $settingsReadEpisodeUrl );
+        ExtendAStoryVariable::populateStringValue( "AdminEmail",       $settingsAdminEmail     );
+        ExtendAStoryVariable::populateStringValue( "IsWriteable",      "N"                     );
+        ExtendAStoryVariable::populateIntValue(    "MaxLinks",         $settingsMaxLinks       );
+        ExtendAStoryVariable::populateIntValue(    "MaxEditDays",      $settingsMaxEditDays    );
+        ExtendAStoryVariable::populateStringValue( "LastSessionPurge", "-"                     );
     }
 
     private static function populateCountDate()

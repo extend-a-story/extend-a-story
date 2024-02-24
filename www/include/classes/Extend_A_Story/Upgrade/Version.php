@@ -42,6 +42,7 @@ abstract class Version
             case 2 : return new Version2();
             case 3 : return new Version3();
             case 4 : return new Version4();
+            case 5 : return new Version5();
             default : throw new StoryException( "Unrecognized database version." );
         }
     }

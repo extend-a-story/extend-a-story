@@ -85,7 +85,7 @@ class VersionConfirmationPage extends InstallPage
 
         // determine the next page
         if (( !$this->databaseExists ) || ( $this->databaseVersion === 1 )) $this->nextButton = "adminAccountButton";
-        if (( $this->databaseVersion === 2 ) || ( $this->databaseVersion === 3 )) $this->nextButton = "confirmationButton";
+        if (( $this->databaseVersion >= 2 ) && ( $this->databaseVersion <= 4 )) $this->nextButton = "confirmationButton";
     }
 
     protected function renderMain()
@@ -110,7 +110,7 @@ We will proceed with installing a new Extend-A-Story database.
         }
         else
         {
-            if ( $this->databaseVersion === 4 )
+            if ( $this->databaseVersion === 5 )
             {
 
 ?>

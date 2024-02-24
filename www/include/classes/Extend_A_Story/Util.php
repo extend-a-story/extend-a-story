@@ -205,16 +205,38 @@ class Util
 
     public static function getSessionAndUserIDs( &$sessionID, &$userID )
     {
-        // log out all users after one hour of inactivity
-        $dbStatement = Util::getDbConnection()->prepare(
-                "UPDATE Session " .
-                   "SET UserID = 0 " .
-                 "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 1 HOUR )" );
+        // log out inactive users and delete old sessions once per day
+        $lastSessionPurge = Util::getStringValue( "LastSessionPurge" );
+        $today = date( "n/j/Y" );
+        if ( $lastSessionPurge !== $today )
+        {
+            Util::setStringValue( "LastSessionPurge", $today );
 
-        $dbStatement->execute();
+            // log out all users after one hour of inactivity
+            $dbStatement = Util::getDbConnection()->prepare(
+                    "UPDATE Session " .
+                       "SET UserID = 0 " .
+                     "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 1 HOUR )" );
+            $dbStatement->execute();
+
+            // delete all sessions over 370 days old
+            $dbStatement = Util::getDbConnection()->prepare(
+                    "DELETE " .
+                      "FROM Session " .
+                     "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 370 DAY )" );
+            $dbStatement->execute();
+        }
 
         $originalSessionID  = Util::getIntParamDefault( $_COOKIE, "sessionID",  0 );
         $originalSessionKey = Util::getIntParamDefault( $_COOKIE, "sessionKey", 0 );
+
+        // log out the current user after one hour of inactivity
+        $dbStatement = Util::getDbConnection()->prepare( "UPDATE Session " .
+                                                            "SET UserID = 0 " .
+                                                          "WHERE SessionID = :originalSessionID " .
+                                                          "AND AccessDate < SUBDATE( NOW(), INTERVAL 1 HOUR )" );
+        $dbStatement->bindParam( ":originalSessionID", $originalSessionID, PDO::PARAM_INT );
+        $dbStatement->execute();
 
         $actualSessionID  = 0;
         $actualUserID     = 0;
@@ -282,14 +304,6 @@ class Util
 
         setcookie( "sessionID",  $actualSessionID,  time() + ( 60 * 60 * 24 * 370 ));
         setcookie( "sessionKey", $actualSessionKey, time() + ( 60 * 60 * 24 * 370 ));
-
-        // delete all sessions over 370 days old
-        $dbStatement = Util::getDbConnection()->prepare(
-                "DELETE " .
-                  "FROM Session " .
-                 "WHERE AccessDate < SUBDATE( NOW(), INTERVAL 370 DAY )" );
-
-        $dbStatement->execute();
 
         $sessionID = $actualSessionID;
         $userID    = $actualUserID;

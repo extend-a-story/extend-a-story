@@ -30,18 +30,12 @@ namespace Extend_A_Story\Upgrade;
 
 use \Extend_A_Story\Data\Database;
 use \Extend_A_Story\StoryException;
-use \Extend_A_Story\Util;
 
-class Version4 extends Version
+class Version5 extends Version
 {
-    public function getDatabaseVersion() { return 4; }
-    public function getStoryVersion() { return "2.2.x"; }
-
-    public function getAddedTableNames()
-    {
-        $version5 = new Version5();
-        return $version5->getAddedTableNames();
-    }
+    public function getDatabaseVersion() { return 5; }
+    public function getStoryVersion() { return "2.3.x"; }
+    public function getAddedTableNames() { return []; }
 
     public function checkDatabase()
     {
@@ -53,14 +47,6 @@ class Version4 extends Version
 
     public function upgradeDatabase( $upgradeData )
     {
-        $this->addLastSessionPurgeVariable();
-    }
-
-    private function addLastSessionPurgeVariable()
-    {
-        $dbConnection = Util::getDbConnection();
-        $dbStatement = $dbConnection->prepare( "INSERT INTO ExtendAStoryVariable VALUES ( 'LastSessionPurge', NULL, '-' )" );
-        $dbStatement->execute();
-        if ( $dbStatement->rowCount() !== 1 ) throw new StoryException( "Failed to insert LastSessionPurge." );
+        throw new StoryException( "No upgrade needed." );
     }
 }

@@ -101,8 +101,14 @@ class Database
         // check length of Password column in User table; assume version 3 if Password column length is not 255
         if ( $passwordColumn !== "varchar(255)" ) return 3;
 
-        // otherwise, assume version 4
-        return 4;
+        // check for the LastSessionPurge variable; assume version 4 if the variable is absent
+        $dbStatement = Util::getDbConnection()->prepare( "SELECT COUNT( * ) FROM ExtendAStoryVariable WHERE VariableName = 'LastSessionPurge'" );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
+        if ( $row[ 0 ] === 0 ) return 4;
+
+        // otherwise, assume version 5
+        return 5;
     }
 
     public static function getDatabaseTableNames()

@@ -53,6 +53,9 @@ class Version3 extends Version
     public function upgradeDatabase( $upgradeData )
     {
         $this->alterUserTable();
+
+        $version4 = new Version4();
+        $version4->upgradeDatabase( $upgradeData );
     }
 
     private function alterUserTable()
