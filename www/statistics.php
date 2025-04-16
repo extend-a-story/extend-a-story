@@ -38,8 +38,6 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-//$dbStatement = Util::getDbConnection()->prepare( "SELECT * FROM Episode WHERE 1=2" );
-
 $dbStatement = Util::getDbConnection()->prepare(
         "SELECT COUNT( * ) FROM Episode WHERE Status = 2 OR Status = 3" );
 $dbStatement->execute();
