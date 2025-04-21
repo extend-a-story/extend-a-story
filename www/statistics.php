@@ -39,9 +39,9 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$created = Episode::getCreatedCount();
-$empty = Episode::getEmptyCount();
-$count = Episode::getTotalCount();
+$createdCount = Episode::getCreatedCount();
+$emptyCount   = Episode::getEmptyCount();
+$totalCount   = Episode::getTotalCount();
 
 ?>
 
@@ -51,9 +51,9 @@ $count = Episode::getTotalCount();
 
 <CENTER>
 <H1><?php echo( $storyName ); ?>: Statistics</H1>
-<H2>Created Episodes: <?php echo( $created ); ?></H2>
-<H2>Empty Episodes:   <?php echo( $empty   ); ?></H2>
-<H2>Total Episodes:   <?php echo( $count   ); ?></H2>
+<H2>Created Episodes: <?php echo( $createdCount ); ?></H2>
+<H2>Empty Episodes:   <?php echo( $emptyCount   ); ?></H2>
+<H2>Total Episodes:   <?php echo( $totalCount   ); ?></H2>
 
 <A HREF="<?php echo( $storyHome ); ?>"><?php echo( $storyName ); ?> Home</A>
 <P>
