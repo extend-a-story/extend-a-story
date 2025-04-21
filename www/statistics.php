@@ -51,9 +51,9 @@ $totalCount   = Episode::getTotalCount();
 
 <CENTER>
 <H1><?php echo( $storyName ); ?>: Statistics</H1>
-<H2>Created Episodes: <?php echo( $createdCount ); ?></H2>
-<H2>Empty Episodes:   <?php echo( $emptyCount   ); ?></H2>
-<H2>Total Episodes:   <?php echo( $totalCount   ); ?></H2>
+<H2>Created Episodes: <?php echo( number_format( $createdCount )); ?></H2>
+<H2>Empty Episodes:   <?php echo( number_format( $emptyCount   )); ?></H2>
+<H2>Total Episodes:   <?php echo( number_format( $totalCount   )); ?></H2>
 
 <A HREF="<?php echo( $storyHome ); ?>"><?php echo( $storyName ); ?> Home</A>
 <P>
