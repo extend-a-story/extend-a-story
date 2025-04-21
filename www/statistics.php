@@ -28,6 +28,7 @@ http://www.sir-toby.com/extend-a-story/
 
 require(  __DIR__ . "/include/Extend-A-Story.php" );
 
+use \Extend_A_Story\Data\Episode;
 use \Extend_A_Story\StoryException;
 use \Extend_A_Story\Util;
 
@@ -38,17 +39,7 @@ $siteName  = Util::getStringValue( "SiteName"  );
 $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
-$dbStatement = Util::getDbConnection()->prepare(
-        "SELECT COUNT( * ) FROM Episode WHERE Status = 2 OR Status = 3" );
-$dbStatement->execute();
-$row = $dbStatement->fetch( PDO::FETCH_NUM );
-
-if ( !$row )
-{
-    throw new StoryException( "Problem fetching created episode count row from the database." );
-}
-
-$created = $row[ 0 ];
+$created = Episode::getCreatedCount();
 
 $dbStatement = Util::getDbConnection()->prepare(
         "SELECT COUNT( * ) FROM Episode WHERE Status = 0 OR Status = 1" );

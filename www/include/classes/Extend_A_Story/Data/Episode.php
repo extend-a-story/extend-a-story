@@ -28,6 +28,8 @@ http://www.sir-toby.com/extend-a-story/
 
 namespace Extend_A_Story\Data;
 
+use \PDO;
+
 use \Extend_A_Story\Util;
 
 class Episode
@@ -85,6 +87,21 @@ SQL;
 
         $dbStatement = $dbConnection->prepare( $sql );
         $dbStatement->execute();
+    }
+
+    public static function getCreatedCount()
+    {
+        $dbStatement = Util::getDbConnection()->prepare(
+                "SELECT COUNT( * ) FROM Episode WHERE Status = 2 OR Status = 3" );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
+
+        if ( !$row )
+        {
+            throw new StoryException( "Problem fetching created episode count row from the database." );
+        }
+
+        return $row[ 0 ];
     }
 }
 
