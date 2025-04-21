@@ -40,18 +40,7 @@ $storyHome = Util::getStringValue( "StoryHome" );
 $siteHome  = Util::getStringValue( "SiteHome"  );
 
 $created = Episode::getCreatedCount();
-
-$dbStatement = Util::getDbConnection()->prepare(
-        "SELECT COUNT( * ) FROM Episode WHERE Status = 0 OR Status = 1" );
-$dbStatement->execute();
-$row = $dbStatement->fetch( PDO::FETCH_NUM );
-
-if ( !$row )
-{
-    throw new StoryException( "Problem fetching empty episode count row from the database." );
-}
-
-$empty = $row[ 0 ];
+$empty = Episode::getEmptyCount();
 
 $dbStatement = Util::getDbConnection()->prepare( "SELECT COUNT( * ) FROM Episode" );
 $dbStatement->execute();
