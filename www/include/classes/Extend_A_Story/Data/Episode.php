@@ -118,6 +118,20 @@ SQL;
 
         return $row[ 0 ];
     }
+
+    public static function getTotalCount()
+    {
+        $dbStatement = Util::getDbConnection()->prepare( "SELECT COUNT( * ) FROM Episode" );
+        $dbStatement->execute();
+        $row = $dbStatement->fetch( PDO::FETCH_NUM );
+
+        if ( !$row )
+        {
+            throw new StoryException( "Problem fetching total episode count row from the database." );
+        }
+
+        return $row[ 0 ];
+    }
 }
 
 ?>

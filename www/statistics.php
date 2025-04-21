@@ -41,17 +41,7 @@ $siteHome  = Util::getStringValue( "SiteHome"  );
 
 $created = Episode::getCreatedCount();
 $empty = Episode::getEmptyCount();
-
-$dbStatement = Util::getDbConnection()->prepare( "SELECT COUNT( * ) FROM Episode" );
-$dbStatement->execute();
-$row = $dbStatement->fetch( PDO::FETCH_NUM );
-
-if ( !$row )
-{
-    throw new StoryException( "Problem fetching episode count row from the database." );
-}
-
-$count = $row[ 0 ];
+$count = Episode::getTotalCount();
 
 ?>
 
