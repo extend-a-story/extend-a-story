@@ -45,22 +45,24 @@ $totalCount   = Episode::getTotalCount();
 
 ?>
 
-<HTML><HEAD>
-<TITLE><?php echo( $storyName ); ?>: Statistics</TITLE>
-</HEAD><BODY>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title><?php echo( $storyName ); ?>: Statistics</title>
+    </head>
+    <body>
 
-<CENTER>
-<H1><?php echo( $storyName ); ?>: Statistics</H1>
-<H2>Created Episodes: <?php echo( number_format( $createdCount )); ?></H2>
-<H2>Empty Episodes:   <?php echo( number_format( $emptyCount   )); ?></H2>
-<H2>Total Episodes:   <?php echo( number_format( $totalCount   )); ?></H2>
+        <div style="text-align: center;">
+            <h1><?php echo( $storyName ); ?>: Statistics</h1>
+            <h2>Created Episodes: <?php echo( number_format( $createdCount )); ?></h2>
+            <h2>Empty Episodes:   <?php echo( number_format( $emptyCount   )); ?></h2>
+            <h2>Total Episodes:   <?php echo( number_format( $totalCount   )); ?></h2>
 
-<A HREF="<?php echo( $storyHome ); ?>"><?php echo( $storyName ); ?> Home</A>
-<P>
-<A HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</A>
-
-</CENTER>
+            <p><a HREF="<?php echo( $storyHome ); ?>"><?php echo( $storyName ); ?> Home</a></p>
+            <p><a HREF="<?php echo( $siteHome ); ?>"><?php echo( $siteName ); ?> Home</a></p>
+        </div>
 
 <?php require( __DIR__ . "/include/config/Footer.php" ); ?>
 
-</BODY></HTML>
+    </body>
+</html>
