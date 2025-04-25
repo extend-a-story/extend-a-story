@@ -74,6 +74,7 @@ class CompletedPage extends InstallPage
 
 <h3>Update Configuration</h3>
 
+<p>
     To finish your <?php echo( $this->databaseExists ? "upgrade" : "installation" ); ?>
     you must update your configuration file.
     This is the location of your configuration file:
